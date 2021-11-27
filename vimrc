@@ -17,6 +17,8 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
 Plug 'tpope/vim-fugitive'
+Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
+let g:mkdp_auto_start = 1
 
 call plug#end()
 
@@ -43,7 +45,9 @@ set wildmenu
 
 " Visualize hidden chars: tabs, non-breaking spaces and trailing spaces
 set list
-set listchars=tab:▸\ ,nbsp:°,trail:·,eol:↲
+set listchars=tab:▸\ ,nbsp:°,trail:·
+autocmd InsertEnter * set listchars+=eol:↲
+autocmd InsertLeave * set listchars-=eol:↲
 hi SpecialKey ctermfg=244 guifg=#808080
 
 " Better searching
@@ -64,10 +68,17 @@ nnoremap <expr> j v:count == 0 ? 'gj' : 'j'
 nnoremap <expr> k v:count == 0 ? 'gk' : 'k'
 
 
+" For bash-like file autofill (not defaulting to the first option when `:e <prefix>)
+set wildmode=longest:full,full
+
+
+" when indenting with '>', use 4 spaces width
+set shiftwidth=4
+" On pressing tab, insert 4 spaces
+set expandtab
 " ---------------3. BASIC PERSONALISATIONS---------------
 
 " Leader keys
-
 map <leader>u :UndotreeToggle<CR>
 
 " Quickly write as sudo
@@ -82,6 +93,10 @@ nmap <leader>vs :source $MYVIMRC<CR><C-l>
 " Quickly subst
 nmap <leader>s :%s//g<Left><Left>
 vmap <leader>s "zy:%s/<C-r>z//g<Left><Left>
+
+" WORK IN PROGRESS: ONLY do subsittuion within selected visual line lines
+" vmap <expr> <leader>q mode() == 'v' ? "j" : "k"
+" map <leader>x :call feedkeys()
 
 " Modify put actions
 " noremap p P<Right>
@@ -175,7 +190,7 @@ function VimAu()
 endfunction
 
 
-" Enable terminal stuffs
+"Enable terminal stuffs
 set noequalalways
 map <silent> <leader><F1> :call NewTerm()<CR>
 tmap <leader><F1> <C-w><leader><F1>
@@ -200,7 +215,7 @@ function! Exec(...) " ExecV2
 	if a:0 == 0
 		if expand('%') == '' | echo "No filename" | return | endif
 		let filepath = expand('%:p')
-		let is_not_exec = system('test -x ' . filepath . '; echo $?')
+		let is_not_exec = system('test -x "' . filepath . '"; echo $?')
 		if is_not_exec && getline(1)[:1] != '#!'
 			let userinput = input('Interpreter: ')
 			echo "\n"
@@ -210,7 +225,7 @@ function! Exec(...) " ExecV2
 		endif
 		call add(msg, WriteIfModified())
 		if is_not_exec
-			call system('chmod +x ' . filepath)
+			call system('chmod +x "' . filepath . '"')
 			echo 'File automatically made executable.'
 		endif
 		let cmd = '"' . filepath . '"'
