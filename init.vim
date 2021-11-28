@@ -1,305 +1,422 @@
-" Fix encoding issues
-scriptencoding utf-8
-set encoding=utf-8
-" ---------------1. PLUGINS ENABLE AND CONFIG---------------
-call plug#begin()
-" Language
-Plug 'vim-syntastic/syntastic'
-" Completion
-" Plug 'Valloric/YouCompleteMe'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-" Code Display
-Plug 'Yggdroot/indentLine'
-Plug 'tomasiser/vim-code-dark'
-" Interface
-Plug 'mbbill/undotree'
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
+" ------------------------------ ------------------------------
+" ###############################################################################
+" ##                                                                           ##
+" ##                         1. PLUGINS CONFIGURATIONS                         ##
+" ##                                                                           ##
+" ###############################################################################
 
-Plug 'tpope/vim-fugitive'
+" -------------Auto install vim-plug (from github)------------
+let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
+if empty(glob(data_dir . '/autoload/plug.vim'))
+  silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
+
+call plug#begin()
+" -------------------------A. Language------------------------
+Plug 'neovim/nvim-lspconfig'                    " required for nvim LSP
+Plug 'williamboman/nvim-lsp-installer'          " manage LSP serversa
+" Plug 'vim-syntastic/syntastic'
+
+" ------------------------B. Completion-----------------------
+" Plug 'Valloric/YouCompleteMe'
+" Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+" -----------------------C. Code Display----------------------
+Plug 'Yggdroot/indentLine'                      " display indention with thin vertical lines
+Plug 'tomasiser/vim-code-dark'                  " dark color scheme like vscode
+
+" ------------------------D. Interface------------------------
+Plug 'mbbill/undotree'                          " visualise undo history with branches
+Plug 'vim-airline/vim-airline'                  " statusline
+Plug 'vim-airline/vim-airline-themes'           " theme statusline to match dark color scheme
+Plug 'tpope/vim-fugitive'                       " git integration
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
-let g:mkdp_auto_start = 1
 
 call plug#end()
 
-colorscheme codedark
-let g:syntastic_quiet_messages = {'regex': 'missing-module-docstring'}
-let g:syntastic_python_checkers = ['pylint']
-let g:syntastic_python_python_exec = 'python3'
-autocmd CompleteDone * pclose
-
-let g:airline_theme='minimalist'
-source $HOME/.vim/plug-config/coc.vim
-let g:airline#extensions#tabline#enabled = 1
-
-" ---------------2. BASIC VIM CONFIGURATIONS---------------
-imap jk <Esc><Right>
-set backspace=indent,eol,start
-
-" Vim user interface
-set number
-set relativenumber
-
-set showcmd
-set wildmenu
-
-" Visualize hidden chars: tabs, non-breaking spaces and trailing spaces
-set list
-set listchars=tab:▸\ ,nbsp:°,trail:·
-autocmd InsertEnter * set listchars+=eol:↲
-autocmd InsertLeave * set listchars-=eol:↲
-hi SpecialKey ctermfg=244 guifg=#808080
-
-" Better searching
-set ignorecase
-set smartcase
-set incsearch
-set hlsearch
-nnoremap <C-l> :nohlsearch<CR><C-l>
+" -------------------------A. Language------------------------
+" williamboman/nvim-lsp-installer
 "
-"Map Y to act like D and C instead of default yy
-noremap Y y$
+if has('nvim')
+lua << EOF
+local lsp_installer = require("nvim-lsp-installer")
 
-set showmatch
-set matchtime=0
+lsp_installer.on_server_ready(function(server)
+    local opts = {}
+    server:setup(opts)
+end)
+EOF
 
-"gj and gk
+endif
+
+" vim-syntastic/syntastic
+" let g:syntastic_quiet_messages = {'regex': 'missing-module-docstring'}
+" let g:syntastic_python_checkers = ['pylint']
+" let g:syntastic_python_python_exec = 'python3'
+" autocmd CompleteDone * pclose
+
+" ------------------------B. Completion-----------------------
+" -----------------------C. Code Display----------------------
+" tomasiser/vim-code-dark
+colorscheme codedark
+
+" ------------------------D. Interface------------------------
+" mbbill/undotree
+noremap <leader>u :UndotreeToggle<CR>
+
+" vim-airline/vim-airline
+let g:airline_theme='minimalist'
+let g:airline#extensions#tabline#enabled=1
+
+" iamcco/markdown-preview.nvim
+let g:mkdp_auto_start=1
+
+" ###############################################################################
+" ##                                                                           ##
+" ##                        2. BASIC VIM CONFIGURATIONS                        ##
+" ##                                                                           ##
+" ###############################################################################
+
+" ---------------------Absolute essentials!--------------------
+inoremap jk <Esc><Right>
+set mouse=a                                     " enable mouse in all modes
+let mapleader = "\<space>"                      " the easiest button to hit
+
+
+" ------------------------User interface-----------------------
+set number                                      " enable numbers on the left ...
+set relativenumber                              " ... but make current line 0
+set showcmd                                     " display last command  (default in nvim)
+set scrolloff=4                                 " keep cursor centered (4 lines from edges)
+set splitbelow                                  " natural splits - :sp places new win below
+set splitright                                  " natural splits - :vsp places new win right
+set wildmenu                                    " enable command line completion (default in nvim)
+set wildmode=longest:full,full                  " don't default to 1st option e.g. `:e` (like bash)
+" Visualize hidden chars
+set list
+set listchars=tab:▸\ ,trail:·,nbsp:°            " tabs, non-breaking spaces, trailing spaces
+augroup visualise_chars                         " only show eol when in insert mode
+    autocmd!
+    autocmd InsertEnter * set listchars+=eol:↲
+    autocmd InsertLeave * set listchars-=eol:↲
+augroup end
+if !has('nvim')                                 " make these chars display in gray instead of blue
+    hi SpecialKey ctermfg=244 guifg=#808080
+endif
+
+" --------------------------Searching--------------------------
+set ignorecase                                  " searches are case insensitive
+set smartcase                                   " search case sensitive if contains an uppercase letter
+set incsearch                                   " incremental search (default in nvim)
+set hlsearch                                    " highlight text while searching (default in nvim)
+if has('nvim')
+    set inccommand=nosplit                      " visual feedback while substituting
+endif
+" Allow quick clearing of highlighted search results
+nnoremap <Esc> :nohlsearch<CR>
+
+
+" -----------------------Tabs and spaces-----------------------
+" set backspace=indent,eol,start                " allow backspacing over everything in insert mode
+set shiftwidth=4                                " use 4 spaces width for indents
+set expandtab                                   " insert 4 spaces when tab pressed
+
+
+
+" ---------------------------Others---------------------------
+if has('nvim')                                  " vim and nvim uses different undofiles
+    set undofile                                " enable persistent undo
+    set undodir=/tmp                            " undo temp file directory
+endif
+
+
+
+
+" ###############################################################################
+" ##                                                                           ##
+" ##                         3. BASIC PERSONALISATIONS                         ##
+" ##                                                                           ##
+" ###############################################################################
+
+" ------------------------Simple things------------------------
+" context-based j and k - gj usually, but j if count is given
 nnoremap <expr> j v:count == 0 ? 'gj' : 'j'
 nnoremap <expr> k v:count == 0 ? 'gk' : 'k'
 
+" make Y more consistent - yank till end (like D and C)
+noremap Y y$
 
-" For bash-like file autofill (not defaulting to the first option when `:e <prefix>)
-set wildmode=longest:full,full
+" no more `how did we get here?`
+noremap Q :echo 'No more Ex mode!'<CR>
+
+" :w looks simple at first but it's not
+noremap <leader>w :w<CR>
+
+" cd vim into the directory of the current buffer
+nnoremap <leader>cd :cd %:p:h<CR>
+
+" Tabs to switch buffers
+nnoremap <Tab>   :bnext<CR>
+nnoremap <S-Tab> :bprevious<CR>
 
 
-" when indenting with '>', use 4 spaces width
-set shiftwidth=4
-" On pressing tab, insert 4 spaces
-set expandtab
-" ---------------3. BASIC PERSONALISATIONS---------------
-
-" Leader keys
-map <leader>u :UndotreeToggle<CR>
-
-" Quickly write as sudo
-map <leader>W :w !sudo tee %:p >/dev/null<CR>
+" -----------------[e]dit/[s]ource my [v]imrc------------------
+nnoremap <leader>ve :vsplit $MYVIMRC<CR>
+    " For some reason, source will cause highlighting of prev search, need Ctrl-L
+if !exists('g:vscode')
+    nnoremap <leader>vs :silent! call win_execute(win_findbuf(bufnr($MYVIMRC))[0], 'w') <bar> source $MYVIMRC<CR>
+else
+    nnoremap <leader>vs :source $MYVIMRC<CR>
+endif
 
 
-" Quickly [E]dit/[S]ource my vim[rc] file
-nmap <leader>ve :vsplit $MYVIMRC<CR>
-" For some reason, source will cause highlighting of prev search, need Ctrl-L
-nmap <leader>vs :source $MYVIMRC<CR><C-l>
+" -----------------------[s]ubstitutions-----------------------
+if !exists('g:vscode')
+    nnoremap <leader>s :%s//g<Left><Left>
+else
+    nnoremap <leader>s :call VSCodeNotify('editor.action.startFindReplaceAction')<CR>
+endif
+vnoremap <leader>s "zy:%s/<C-r>z//g<Left><Left>
 
-" Quickly subst
-nmap <leader>s :%s//g<Left><Left>
-vmap <leader>s "zy:%s/<C-r>z//g<Left><Left>
 
-" WORK IN PROGRESS: ONLY do subsittuion within selected visual line lines
-" vmap <expr> <leader>q mode() == 'v' ? "j" : "k"
-" map <leader>x :call feedkeys()
+" ----------------------Cut, copy, paste-----------------------
+noremap  <C-x> "+d
+noremap  <C-c> "+y
+noremap  <C-v> "+p
+inoremap <C-x> <C-o><C-x>
+inoremap <C-c> <C-o><C-c>
+inoremap <C-v> <C-r>+
+cnoremap <C-v> <C-r>+
 
-" Modify put actions
-" noremap p P<Right>
-" noremap P p<Right>
-
-" For cut, copy, paste
-set mouse=a
-map <C-x> "+d
-map <C-c> "+y
-map <C-v> "+p
-imap <C-x> <C-o><C-x>
-imap <C-c> <C-o><C-c>
-" imap <C-v> <Left><C-o><C-v>
-imap <C-v> <C-o><C-v>
-" Restores visual block mode. To enter, press S-v in any visual mode.
+" V-Block mode shadowed, instead press S-v in any visual mode to enter
 vnoremap <S-v> <C-v>
+
 " Restores decrementing of number (S changes entire line, use cc)
 nnoremap S <C-x>
 
-" ---------------4. ADVANCED PERSONALISATIONS---------------
 
-" Common function required for other customisation
+" -----------------------Splits controls----------------------
+" Switching between splits (ctrl + h,j,k,l)
+noremap <C-h>     <C-w>h
+noremap <C-j>     <C-w>j
+noremap <C-k>     <C-w>k
+noremap <C-l>     <C-w>l
+" Resizing splits (ctrl + arrows keys)
+noremap <C-Left>  <C-w><
+noremap <C-Right> <C-w>>
+noremap <C-Up>    <C-w>+
+noremap <C-Down>  <C-w>-
+
+
+" -------------Moving v-block selection (alt + j,k)------------
+vnoremap <A-j> :m '>+1<CR>gv=gv
+vnoremap <A-k> :m '<-2<CR>gv=gv
+
+
+" ----------------------------Others--------------------------
+" Quickly write as sudo (Doesn't work on nvim! waiting for a fix...)
+if !has('nvim')
+    noremap <leader>W :w !sudo tee %:p >/dev/null<CR>
+endif
+
+" TO DO: only do subst within selected visual-line lines
+" vmap <expr> <leader>q mode() == 'v' ? "j" : "k"
+" map <leader>x :call feedkeys()
+
+
+
+
+" ###############################################################################
+" ##                                                                           ##
+" ##                      4. THINGS THAT SHOULD BE PLUGINS                     ##
+" ##                                                                           ##
+" ###############################################################################
+
+" Comment lines (ctrl + /)
+noremap <C-_> :call Comment()<CR>
+function Comment()
+    if matchstr(getline(line('.')), '\S') == '' | return | endif
+
+    let ft = &filetype
+    function! s:inlist(list, item)
+        return index(a:list, a:item) >= 0
+    endfunction
+
+    if s:inlist(['php', 'ruby', 'sh', 'make', 'python', 'perl', 'awk', 'conf', 'zsh'], ft)
+        let b:comment_char = "#"
+    elseif s:inlist(['javascript', 'c', 'cpp', 'java', 'objc', 'scala', 'go'], ft)
+        let b:comment_char = "//"
+    elseif ft == 'tex'
+        let b:comment_char = "%"
+    elseif ft == 'vim'
+        let b:comment_char = '"'
+    else
+        echo 'Unknown lang.'
+        return
+    endif
+    if matchstr(getline(line('.')), '^\s*' . b:comment_char) == ''
+        execute 'substitute/\S\@=/' . b:comment_char . ' /'
+    else
+        execute 'substitute/' . b:comment_char . '\s*//'
+    endif
+endfunction
+
+
+" A useful function
 command WriteIfModified if getbufinfo(bufnr('%'))[0].changed | w | endif
 function WriteIfModified()
-	if getbufinfo(bufnr('%'))[0].changed
-		return execute('w')->split('\n')[0]
-	endif
-	return ''
+    if getbufinfo(bufnr('%'))[0].changed
+        " return execute('w')->split('\n')[0]
+        return split(execute('w'), '\n')[0]
+    endif
+    return ''
 endfunction
 
-" Quickly comment lines using Ctrl + /
-map <C-_> :call Comment()<CR>
-function Comment()
-	if matchstr(getline(line('.')), '\S') == '' | return | endif
 
-	let ft = &filetype
-	function! s:inlist(list, item)
-		return index(a:list, a:item) >= 0
-	endfunction
-
-	if s:inlist(['php', 'ruby', 'sh', 'make', 'python', 'perl', 'awk', 'conf', 'zsh'], ft)
-		let b:comment_char = "#"
-	elseif s:inlist(['javascript', 'c', 'cpp', 'java', 'objc', 'scala', 'go'], ft)
-		let b:comment_char = "//"
-	elseif ft == 'tex'
-		let b:comment_char = "%"
-	elseif ft == 'vim'
-		let b:comment_char = '"'
-	else
-		echo 'Unknown lang.'
-		return
-	endif
-	if matchstr(getline(line('.')), '^\s*' . b:comment_char) == ''
-		execute 'substitute/\S\@=/' . b:comment_char . ' /'
-	else
-		execute 'substitute/' . b:comment_char . '\s*//'
-	endif
-endfunction
-
-" Use F3 to F9 for custom functions defined in buffer
-for i in range(2, 9)
-	execute 'map <F' . i . '> :call CustomExec(' . i . ')<CR>'
-	execute 'imap <F' . i . '> <Esc><F' . i . '>'
+" Use <leader>1 to <leader>9 to run custom functions defined in buffer
+for i in range(1, 9)
+    execute 'noremap <leader>' . i . ' :call VimCmd(' . i . ')<CR>'
+    execute 'noremap <F' . i . '> :call VimCmd(' . i . ')<CR>'
+    execute 'inoremap <F' . i . '> <Esc><F' . i . '>'
 endfor
-function CustomExec(n)
-	for i in range(1, 9)
-		let cmd = getline(i)
-		if cmd[0:1] == '#!' | continue | endif
-		let output = matchstrpos(cmd, '\W\s\?[Vv]imF' . a:n)
-		if output[0] != ''
-			WriteIfModified
-			execute cmd[output[2]+1:]
-			return
-		endif
-	endfor
-	echo "No commands for F" . a:n . " found."
-endfunction
-
-" Autorun commands in file when file opened
-autocmd BufReadPost * call VimAu()
-function VimAu()
-	for i in range(1, 2)
-		let cmd = getline(i)
-		if cmd[0:1] == '#!' | continue | endif
-		let output = matchstrpos(cmd, '\W\s\?[Vv]imAu')
-		if output[0] != ''
-			execute cmd[output[2]+1:]
-			return
-		endif
-	endfor
+function! VimCmd(n)
+    for i in range(1, 9)
+        let line = getline(i)
+        if line[0:1] == '#!' | continue | endif
+            let output = matchstrpos(line, '\W\s\?[Vv]imCmd' . a:n)
+            if output[0] != ''
+                WriteIfModified
+                execute line[output[2]+1:]
+                return
+            elseif line != ''
+                break
+            endif
+    endfor
+    echo "No commands for VimCmd" . a:n . " found."
 endfunction
 
 
-"Enable terminal stuffs
-set noequalalways
-map <silent> <leader><F1> :call NewTerm()<CR>
-tmap <leader><F1> <C-w><leader><F1>
-map <F1> :call Exec()<CR>
-imap <F1> <Esc><F1>
-tmap <F1> <C-w><F1>
-
-function NewTerm()
-	let terms = uniq(map(filter(getwininfo(), 'v:val.terminal'), 'v:val.winid'))
-	if len(terms) == 0
-		execute 'botright term'
-		let bufs = uniq(map(filter(getwininfo(), 'v:val.terminal'), 'v:val.bufnr'))
-		let bufnr = bufs[0]
-		call setbufvar(bufnr, "&number", 0)
-		call setbufvar(bufnr, "&relativenumber", 0)
-	else
-		echo win_execute(terms[0], 'rightbelow vnew | term ++curwin')
-	endif
-endfunction
-function! Exec(...) " ExecV2
-	let msg = []
-	if a:0 == 0
-		if expand('%') == '' | echo "No filename" | return | endif
-		let filepath = expand('%:p')
-		let is_not_exec = system('test -x "' . filepath . '"; echo $?')
-		if is_not_exec && getline(1)[:1] != '#!'
-			let userinput = input('Interpreter: ')
-			echo "\n"
-			if userinput != ''
-				call append(0, '#!/usr/bin/env '. userinput)
-			endif
-		endif
-		call add(msg, WriteIfModified())
-		if is_not_exec
-			call system('chmod +x "' . filepath . '"')
-			echo 'File automatically made executable.'
-		endif
-		let cmd = '"' . filepath . '"'
-	else
-		let cmd = a:1
-	endif
-
-	if len(filter(getwininfo(), 'v:val.terminal')) == 0 | call NewTerm() | endif
-	let terms = uniq(map(filter(getwininfo(), 'v:val.terminal'), 'v:val.bufnr'))
-	let bufnr = terms[0]
-	if system('ps -eo ppid= | grep ' . term_getjob(bufnr)->split(' ')[1]) != ''
-		call term_sendkeys(bufnr, "\<C-c>\<CR>")
-		call add(msg, 'SIGINT sent to terminal')
-	endif
-	call term_sendkeys(bufnr, cmd . "\<CR>")
-	echo join(msg, ', ')
+" Autorun hook commands in buffer when file is opened
+autocmd BufReadPost * call VimHook()
+function! VimHook()
+    for i in range(1, 2)
+        let line = getline(i)
+        if line[0:1] == '#!' | continue | endif
+        let output = matchstrpos(line, '\W\s\?[Vv]imHook')
+        if output[0] != ''
+            execute line[output[2]+1:]
+            return
+        endif
+    endfor
 endfunction
 
 
-" Scrollable terminal - Adapted from https://github.com/vim/vim/issues/2490
-let s:term_pos = {} " { bufnr: [winheight, n visible lines] }
 
-tnoremap <silent> <ScrollWheelUp> <C-w>:call TermScrollUp()<CR>
-tnoremap <silent> <ScrollWheelDown> <C-w>:call TermScrollDown()<CR>
-nnoremap <silent> <ScrollWheelDown> <ScrollWheelDown>:call TermExitNormIfBottom()<CR>
-nnoremap <silent> <Up> <Up>:call TermExitNormIfArrow('Up')<CR>
-nnoremap <silent> <Down> <Down>:call TermExitNormIfArrow('Down')<CR>
-nnoremap <silent> <Left> <Left>:call TermExitNormIfArrow('Left')<CR>
-nnoremap <silent> <Right> <Right>:call TermExitNormIfArrow('Right')<CR>
 
-function TermSendSpecialKey(bufnr, key)
-	execute 'call term_sendkeys(' . a:bufnr . ', "\<' . a:key . '>")'
-endfunction
-function TermScrollUp()
-	if term_getaltscreen(bufnr()) == 1
-		for i in range(3)
-			call TermSendSpecialKey(bufnr(), 'Up')
-		endfor
-	else
-		call EnterTermNorm()
-	endif
-endfunction
-function TermScrollDown()
-	for i in range(3)
-		call TermSendSpecialKey(bufnr(), 'Down')
-	endfor
-endfunction
-function EnterTermNorm()
-	if &buftype != 'terminal' || mode('') != 't' | return | endif
-	call feedkeys("\<LeftMouse>\<c-w>N", 'x')
-	let s:term_pos[bufnr()] = [winheight(winnr()), line('$') - line('w0')]
-	call feedkeys("\<ScrollWheelUp>")
-endfunction
-function TermExitNormIfBottom()
-	if &buftype != 'terminal' || !(mode('') == 'n' || mode('') == 'v') | return | endif
-	let old_winheight = s:term_pos[bufnr()][0]
-	let old_n_visible = s:term_pos[bufnr()][1]
-	let n_visible = line('$') - line('w0')
-	let n_empty = winheight(winnr()) - n_visible
-	" if size has only expanded, match visible lines on entry
-	if old_n_visible <= winheight(winnr())
-		if n_visible <= old_n_visible | call feedkeys('i', 'x') | endif
-	" if size has shrunk, match visible empty lines on entry
-	else
-		let old_n_empty = old_winheight - old_n_visible
-		if n_empty >= old_n_empty || n_empty >= winheight(winnr())
-			call feedkeys('i', 'x')
-		endif
-	endif
-endfunction
-function TermExitNormIfArrow(key)
-	if &buftype != 'terminal' || !(mode('') == 'n' || mode('') == 'v') | return | endif
-	call feedkeys('i', 'x')
-	call TermSendSpecialKey(bufnr(), a:key)
-endfunction
+" ###############################################################################
+" ##                                                                           ##
+" ##                        5. TERMINAL AND REPL CONFIGS                       ##
+" ##                                                                           ##
+" ###############################################################################
 
-set viminfo+=n~/.vim/viminfo  " Put the .viminfo file in the .vim folder too
+" Easily escape terminal mode
+tnoremap <Esc> <C-\><C-n>
+
+" Simple scrolling in term
+tnoremap <S-Up>   <C-\><C-N><C-B>
+tnoremap <S-Down> <C-\><C-N><C-F>
+
+if has('nvim')  " These configs don't work for vim
+    noremap <leader><C-c> :execute 'call TermExec(TermGetFirst(), "\<' . 'C-c>")'<CR>
+
+    "Double-tap spacebar to run code!
+    noremap <leader><leader> :call RunCode()<CR>
+
+    " Make terminal in nvim more like vim
+    augroup terminal_setup
+        autocmd!
+        " Bypass normal mode when changing focus to terminal buffer (neovim things)
+        autocmd TermOpen * nnoremap <buffer><LeftRelease> <LeftRelease>i
+        " autocmd BufWinEnter,WinEnter term://* startinsert
+        " Toggle numbers off when in terminal mode, on when in normal mode
+        autocmd TermEnter term://* setlocal nonu nornu
+        autocmd TermLeave term://* setlocal nu rnu
+        " Immediately close terminal window when process finishes
+        autocmd TermClose term://* close
+    augroup end
+
+" -------------functions required by above mappings------------
+
+    function! NewTerm()
+        " Opens a term at the bottom of the screen, and go into insert mode
+
+        execute 'botright split term://zsh'
+        normal i
+    endfunction
+
+
+    function! TermGetFirst()
+        " Returns the bufnr of the first terminal
+
+        return uniq(map(filter(getwininfo(), 'v:val.terminal'), 'v:val.bufnr'))[0]
+    endfunction
+
+
+    function! TermExec(bufnr, cmd)
+        " Send command to the the terminal buffer
+
+        let jobid = filter(nvim_list_chans(), 'v:val.mode == "terminal" && v:val.buffer == ' . a:bufnr)[0]['id']
+        call chansend(jobid, [a:cmd, ''])
+    endfunction
+
+
+    function! TermCheckIfRunning(bufnr)
+        " Returns 1 if the terminal shell process still has running child processes
+
+        return system('ps -eo ppid= | grep -w ' . getbufvar(a:bufnr, 'terminal_job_pid')) != ''
+    endfunction
+
+
+    function! RunCode()
+        " Run code in the current buffer. Behaviour depends on if vscode is attached.
+
+        if !exists('g:vscode')
+            if expand('%') == '' | echo "Can't run code, no filename" | return | endif
+            let filepath = expand('%:p')
+            let is_not_executable = system('test -x "' . filepath . '"; echo $?')
+
+            if is_not_executable && getline(1)[:1] != '#!'
+                let userinput = input({'prompt': 'Interpreter: ', 'cancelreturn': "\<Esc>"})
+                echo "\n"
+                if userinput == "\<Esc>"
+                    echo 'Okay, cancelled'
+                    return
+                elseif userinput != ''
+                    call append(0, '#!/usr/bin/env '. userinput)
+                endif
+            endif
+
+            call WriteIfModified()
+            if is_not_executable
+                call system('chmod +x "' . filepath . '"')
+                echo 'File automatically made executable.'
+            endif
+            let cmd = '"' . filepath . '"'
+
+            if len(filter(getwininfo(), 'v:val.terminal')) == 0 | call NewTerm() | endif
+
+            let bufnr = TermGetFirst()
+            if TermCheckIfRunning(bufnr)
+                call TermExec(bufnr, "\<C-c>")
+                echo 'SIGINT sent to terminal'
+            endif
+            call TermExec(bufnr, cmd)
+        else
+            call VSCodeNotify('code-runner.run')
+        endif
+    endfunction
+
+
+endif
