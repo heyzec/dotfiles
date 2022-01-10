@@ -8,16 +8,23 @@
 " -------------Auto install vim-plug (from github)------------
 let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
 if empty(glob(data_dir . '/autoload/plug.vim'))
-  silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+    silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
 
 call plug#begin()
 " -------------------------A. Language------------------------
-Plug 'neovim/nvim-lspconfig'                    " required for nvim LSP
-Plug 'williamboman/nvim-lsp-installer'          " manage LSP serversa
-" Plug 'vim-syntastic/syntastic'
+if has('nvim')
+    Plug 'neovim/nvim-lspconfig'                    " required for nvim LSP
+    Plug 'williamboman/nvim-lsp-installer'          " manage LSP servers
+    Plug 'hrsh7th/cmp-nvim-lsp'
+    Plug 'hrsh7th/cmp-buffer'
+    Plug 'hrsh7th/cmp-path'
+    Plug 'hrsh7th/cmp-cmdline'
+    Plug 'hrsh7th/nvim-cmp'
+    Plug 'hrsh7th/lspkind-nvim'
+end
 
 " ------------------------B. Completion-----------------------
 " Plug 'Valloric/YouCompleteMe'
@@ -34,22 +41,26 @@ Plug 'vim-airline/vim-airline-themes'           " theme statusline to match dark
 Plug 'tpope/vim-fugitive'                       " git integration
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
 
+
+" -------------------------E. Commands------------------------
+Plug 'tpope/vim-commentary'                     " lightweight commenting plugin
+
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 call plug#end()
+
 
 " -------------------------A. Language------------------------
 " williamboman/nvim-lsp-installer
-"
+" Some Lua script needed for this plugin
 if has('nvim')
-lua << EOF
-local lsp_installer = require("nvim-lsp-installer")
-
-lsp_installer.on_server_ready(function(server)
-    local opts = {}
-    server:setup(opts)
-end)
-EOF
-
+    " echo expand('%')
+    " source expand('%:p:h') . '/lsp_init.lua'
+    runtime lsp_init.lua
+    " echo expand('%') . '/lsp_init.lua'
 endif
+set completeopt=menu,menuone,noselect
+
+
 
 " vim-syntastic/syntastic
 " let g:syntastic_quiet_messages = {'regex': 'missing-module-docstring'}
@@ -64,7 +75,8 @@ colorscheme codedark
 
 " ------------------------D. Interface------------------------
 " mbbill/undotree
-noremap <leader>u :UndotreeToggle<CR>
+noremap <leader>u :UndotreeToggle<CR>  
+" Problematic!!!
 
 " vim-airline/vim-airline
 let g:airline_theme='minimalist'
@@ -73,6 +85,10 @@ let g:airline#extensions#tabline#enabled=1
 " iamcco/markdown-preview.nvim
 let g:mkdp_auto_start=1
 
+" -------------------------E. Commands------------------------
+"
+"
+
 " ###############################################################################
 " ##                                                                           ##
 " ##                        2. BASIC VIM CONFIGURATIONS                        ##
@@ -80,7 +96,9 @@ let g:mkdp_auto_start=1
 " ###############################################################################
 
 " ---------------------Absolute essentials!--------------------
-inoremap jk <Esc><Right>
+if !exists('g:vscode')
+    inoremap jk <Esc><Right>
+end
 set mouse=a                                     " enable mouse in all modes
 let mapleader = "\<space>"                      " the easiest button to hit
 
@@ -89,7 +107,9 @@ let mapleader = "\<space>"                      " the easiest button to hit
 set number                                      " enable numbers on the left ...
 set relativenumber                              " ... but make current line 0
 set showcmd                                     " display last command  (default in nvim)
-set scrolloff=4                                 " keep cursor centered (4 lines from edges)
+if !exists('g:vscode')
+    set scrolloff=4                                 " keep cursor centered (4 lines from edges)
+endif
 set splitbelow                                  " natural splits - :sp places new win below
 set splitright                                  " natural splits - :vsp places new win right
 set wildmenu                                    " enable command line completion (default in nvim)
@@ -115,14 +135,13 @@ if has('nvim')
     set inccommand=nosplit                      " visual feedback while substituting
 endif
 " Allow quick clearing of highlighted search results
-nnoremap <Esc> :nohlsearch<CR>
+nnoremap <Esc><Esc> :nohlsearch<CR>
 
 
 " -----------------------Tabs and spaces-----------------------
 " set backspace=indent,eol,start                " allow backspacing over everything in insert mode
 set shiftwidth=4                                " use 4 spaces width for indents
 set expandtab                                   " insert 4 spaces when tab pressed
-
 
 
 " ---------------------------Others---------------------------
@@ -158,13 +177,17 @@ noremap <leader>w :w<CR>
 nnoremap <leader>cd :cd %:p:h<CR>
 
 " Tabs to switch buffers
-nnoremap <Tab>   :bnext<CR>
-nnoremap <S-Tab> :bprevious<CR>
+if !exists('g:vscode')
+    nnoremap <Tab>   :bnext<CR>
+    nnoremap <S-Tab> :bprevious<CR>
+else
+    nmap <Tab>   :tabnext<CR>
+    nmap <S-Tab> :tabprevious<CR>
+endif
 
 
 " -----------------[e]dit/[s]ource my [v]imrc------------------
 nnoremap <leader>ve :vsplit $MYVIMRC<CR>
-    " For some reason, source will cause highlighting of prev search, need Ctrl-L
 if !exists('g:vscode')
     nnoremap <leader>vs :silent! call win_execute(win_findbuf(bufnr($MYVIMRC))[0], 'w') <bar> source $MYVIMRC<CR>
 else
@@ -234,36 +257,6 @@ endif
 " ##                                                                           ##
 " ###############################################################################
 
-" Comment lines (ctrl + /)
-noremap <C-_> :call Comment()<CR>
-function Comment()
-    if matchstr(getline(line('.')), '\S') == '' | return | endif
-
-    let ft = &filetype
-    function! s:inlist(list, item)
-        return index(a:list, a:item) >= 0
-    endfunction
-
-    if s:inlist(['php', 'ruby', 'sh', 'make', 'python', 'perl', 'awk', 'conf', 'zsh'], ft)
-        let b:comment_char = "#"
-    elseif s:inlist(['javascript', 'c', 'cpp', 'java', 'objc', 'scala', 'go'], ft)
-        let b:comment_char = "//"
-    elseif ft == 'tex'
-        let b:comment_char = "%"
-    elseif ft == 'vim'
-        let b:comment_char = '"'
-    else
-        echo 'Unknown lang.'
-        return
-    endif
-    if matchstr(getline(line('.')), '^\s*' . b:comment_char) == ''
-        execute 'substitute/\S\@=/' . b:comment_char . ' /'
-    else
-        execute 'substitute/' . b:comment_char . '\s*//'
-    endif
-endfunction
-
-
 " A useful function
 command WriteIfModified if getbufinfo(bufnr('%'))[0].changed | w | endif
 function WriteIfModified()
@@ -285,14 +278,14 @@ function! VimCmd(n)
     for i in range(1, 9)
         let line = getline(i)
         if line[0:1] == '#!' | continue | endif
-            let output = matchstrpos(line, '\W\s\?[Vv]imCmd' . a:n)
-            if output[0] != ''
-                WriteIfModified
-                execute line[output[2]+1:]
-                return
-            elseif line != ''
-                break
-            endif
+        let output = matchstrpos(line, '\W\s\?[Vv]imCmd' . a:n)
+        if output[0] != ''
+            WriteIfModified
+            execute line[output[2]+1:]
+            return
+        elseif line != ''
+            break
+        endif
     endfor
     echo "No commands for VimCmd" . a:n . " found."
 endfunction
@@ -328,6 +321,14 @@ tnoremap <Esc> <C-\><C-n>
 tnoremap <S-Up>   <C-\><C-N><C-B>
 tnoremap <S-Down> <C-\><C-N><C-F>
 
+
+" TO DO - MAKE THIS A VIMSCRIPT PLUGINS
+" Add it to the vimrc README, state that this is yet another coderunner plugin
+" Created because I wanted a minimal plugin just for my needs
+" https://vimways.org/2019/writing-vim-plugin/
+"
+" also, make most functions script scoped, try function s:MyFunction?
+
 if has('nvim')  " These configs don't work for vim
     noremap <leader><C-c> :execute 'call TermExec(TermGetFirst(), "\<' . 'C-c>")'<CR>
 
@@ -347,7 +348,7 @@ if has('nvim')  " These configs don't work for vim
         autocmd TermClose term://* close
     augroup end
 
-" -------------functions required by above mappings------------
+    " -------------functions required by above mappings------------
 
     function! NewTerm()
         " Opens a term at the bottom of the screen, and go into insert mode
@@ -384,26 +385,32 @@ if has('nvim')  " These configs don't work for vim
 
         if !exists('g:vscode')
             if expand('%') == '' | echo "Can't run code, no filename" | return | endif
-            let filepath = expand('%:p')
-            let is_not_executable = system('test -x "' . filepath . '"; echo $?')
 
-            if is_not_executable && getline(1)[:1] != '#!'
-                let userinput = input({'prompt': 'Interpreter: ', 'cancelreturn': "\<Esc>"})
-                echo "\n"
-                if userinput == "\<Esc>"
-                    echo 'Okay, cancelled'
-                    return
-                elseif userinput != ''
-                    call append(0, '#!/usr/bin/env '. userinput)
+            let cmd = GetCodeRunCmd()
+            if cmd == ''
+                let filepath = expand('%:p')
+                let is_not_executable = system('test -x "' . filepath . '"; echo $?')
+
+                if is_not_executable && getline(1)[:1] != '#!'
+                    let userinput = input({'prompt': 'Interpreter: ', 'cancelreturn': "\<Esc>"})
+                    echo "\n"
+                    if userinput == "\<Esc>"
+                        echo 'Okay, cancelled'
+                        return
+                    elseif userinput != ''
+                        call append(0, '#!/usr/bin/env '. userinput)
+                    endif
                 endif
             endif
 
             call WriteIfModified()
-            if is_not_executable
-                call system('chmod +x "' . filepath . '"')
-                echo 'File automatically made executable.'
+            if cmd == ''
+                if is_not_executable
+                    call system('chmod +x "' . filepath . '"')
+                    echo 'File automatically made executable.'
+                endif
+                let cmd = '"' . filepath . '"'
             endif
-            let cmd = '"' . filepath . '"'
 
             if len(filter(getwininfo(), 'v:val.terminal')) == 0 | call NewTerm() | endif
 
@@ -419,4 +426,54 @@ if has('nvim')  " These configs don't work for vim
     endfunction
 
 
+
+
+    function! GetJsonLocation()
+        return '/home/heyzec/.config/nvim/coderun.json'
+    endfunction
+
+    function! GetCodeRunCmd()
+
+        function! Quote(str)
+            return '"' . a:str . '"'
+        endfunction
+
+        let filepath = expand('%:p')
+        let basename = expand('%:t')
+        let dirname = expand('%:p:h')
+        let ext = expand('%:e')
+        let stem = substitute(basename, '.' . ext, '', 'g')
+
+        let dict = json_decode(join(readfile(GetJsonLocation()), ''))
+        if !has_key(dict, &filetype)
+            return
+        endif
+
+        let cmd = dict[&filetype]
+        let cmd = substitute(cmd, '$filepath', Quote(filepath), 'g')
+        let cmd = substitute(cmd, '$basename', Quote(basename), 'g')
+        let cmd = substitute(cmd, '$dirname', Quote(dirname), 'g')
+        let cmd = substitute(cmd, '$ext', Quote(ext), 'g')
+        let cmd = substitute(cmd, '$stem', Quote(stem), 'g')
+        return cmd
+    endfunction
+
+
+
+
+
+
+
 endif
+
+
+map <leader>cs :echo CS2040Checkstyle()<CR>
+function! CS2040Checkstyle()
+    " Change the following three lines as necessary
+    let checkstyle_dir = fnameescape("/home/heyzec/Documents/NUS/CS2030S Programming Methodology II/checkstyle")
+    let checkstyle_exe = fnameescape("checkstyle-8.2-all.jar")
+    let checkstyle_xml = fnameescape("cs2030_checks.xml")
+
+    echo system('java -jar ' . checkstyle_dir . '/' . checkstyle_exe . ' -c ' . checkstyle_dir . '/' . checkstyle_exe . ' ' . fnameescape(expand('%:p')))
+endfunction
+
