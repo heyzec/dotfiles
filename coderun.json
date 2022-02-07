@@ -1,0 +1,5 @@
+{
+    "java":   "cd $dirname && javac $basename && java $stem",
+    "python": "cd $dirname && python3 $filepath",
+    "r":  "R --slave -e 'source(\"code.R\"); Sys.sleep(10)'"
+}
