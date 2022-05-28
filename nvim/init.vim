@@ -1,22 +1,25 @@
 " ------------------------------ ------------------------------
+
+" 1. PLUGIN LIST & CONFIGURATIONS {{{
 " ###############################################################################
 " ##                                                                           ##
-" ##                         1. PLUGINS CONFIGURATIONS                         ##
+" ##                      1. PLUGIN LIST & CONFIGURATIONS                      ##
 " ##                                                                           ##
 " ###############################################################################
 
 " -------------------Map the leader key first-----------------
 let mapleader = "\<space>"                      " the easiest button to hit
 
-
+" 1.1. vim-plug auto-installer {{{
 " -------------Auto install vim-plug (from github)------------
 let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
 if empty(glob(data_dir . '/autoload/plug.vim'))
     silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
     autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
+" }}}
 
-
+" 1.2. Plugin List {{{
 call plug#begin()
 " -------------------------A. Language------------------------
 if has('nvim')
@@ -46,7 +49,6 @@ Plug 'vim-airline/vim-airline-themes'           " theme statusline to match dark
 Plug 'tpope/vim-fugitive'                       " git integration
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
 
-
 " -------------------------E. Commands------------------------
 Plug 'tpope/vim-commentary'                     " lightweight commenting plugin
 
@@ -54,8 +56,9 @@ if has('nvim')
     Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 endif
 call plug#end()
+" }}} 1.2. Plugin List
 
-
+" 1.3. Plugin Configurations {{{
 " -------------------------A. Language------------------------
 " williamboman/nvim-lsp-installer
 " Some Lua script needed for this plugin
@@ -91,16 +94,18 @@ let g:airline#extensions#tabline#enabled=1
 let g:mkdp_auto_start=1
 
 " -------------------------E. Commands------------------------
+" }}} 1.3. Plugin Configurations
 
+" }}} 1. PLUGIN LIST & CONFIGURATIONS
 
-
+" 2. BASIC VIM CONFIGURATIONS {{{
 " ###############################################################################
 " ##                                                                           ##
 " ##                        2. BASIC VIM CONFIGURATIONS                        ##
 " ##                                                                           ##
 " ###############################################################################
 
-" ---------------------Absolute essentials!--------------------
+" Absolute essentials!: Escape mapping, enable mouse {{{
 if !exists('g:vscode')
     inoremap <silent> jk <Esc><Right>
 endif
@@ -109,23 +114,24 @@ if !has('nvim')
     set ttymouse=xterm2                         " allow mouse through tmux, ssh
 endif
 " let mapleader = "\<space>"                    " is set above in PLUGINS section
+" }}}
 
+" Appearance: Ruler, cursor and visualising chars {{{
+set showcmd                                     " display last command  (default in nvim)
 
-
-
-" ------------------------User interface-----------------------
+" ----------------------------Ruler----------------------------
 set number                                      " enable numbers on the left ...
 set relativenumber                              " ... but make current line 0
-set showcmd                                     " display last command  (default in nvim)
+
+" ----------------------------Cursor---------------------------
+set cursorline                                  " highlight current line
 if !exists('g:vscode')
     set scrolloff=4                             " keep cursor centered (4 lines from edges)
 endif
-set splitbelow                                  " natural splits - :sp places new win below
-set splitright                                  " natural splits - :vsp places new win right
-set wildmenu                                    " enable command line completion (default in nvim)
-set wildmode=longest:full,full                  " don't default to 1st option e.g. `:e` (like bash)
+let &t_SI = "\e[5 q"                            " change to i-beam cursor when entering insert mode
+let &t_EI = "\e[2 q"                            " change to block cursor when leaving insert mode
 
-" Visualize hidden chars
+" -------------------Visualize hidden chars--------------------
 set list
 set listchars=tab:▸\ ,trail:·,nbsp:°            " tabs, non-breaking spaces, trailing spaces
 augroup visualise_chars                         " only show eol when in insert mode
@@ -136,11 +142,9 @@ augroup end
 if !has('nvim')                                 " make these chars display in gray instead of blue
     hi SpecialKey ctermfg=244 guifg=#808080
 endif
+" }}} Appearance: Ruler, cursor and visualising chars
 
-set cursorline                                  " highlight current line
-let &t_SI = "\e[5 q"                            " change to i-beam cursor when entering insert mode
-let &t_EI = "\e[2 q"                            " change to block cursor when leaving insert mode
-
+" Editing: Search, splits and indentation {{{
 " --------------------------Searching--------------------------
 set ignorecase                                  " searches are case insensitive
 set smartcase                                   " search case sensitive if contains an uppercase letter
@@ -152,6 +156,12 @@ endif
 " Allow quick clearing of highlighted search results
 nnoremap <Esc><Esc> :nohlsearch<CR>
 
+set wildmenu                                    " enable command line completion (default in nvim)
+set wildmode=longest:full,full                  " don't default to 1st option e.g. `:e` (like bash)
+
+" ---------------------------Buffers---------------------------
+set splitbelow                                  " natural splits - :sp places new win below
+set splitright                                  " natural splits - :vsp places new win right
 
 " -----------------------Tabs and spaces-----------------------
 " set backspace=indent,eol,start                " allow backspacing over everything in insert mode
@@ -159,23 +169,24 @@ set tabstop=4
 set shiftwidth=4                                " use 4 spaces width for indents
 set expandtab                                   " insert 4 spaces when tab pressed
 
-
 " ---------------------------Others---------------------------
 if has('nvim')                                  " vim and nvim uses different undofiles
     set undofile                                " enable persistent undo
     set undodir=/tmp                            " undo temp file directory
 endif
+set foldmethod=marker
+" }}} Editing: Search, splits and indentation
 
+" }}} 2. BASIC VIM CONFIGURATIONS
 
-
-
+" 3. KEYMAPPINGS {{{
 " ###############################################################################
 " ##                                                                           ##
-" ##                         3. BASIC PERSONALISATIONS                         ##
+" ##                              3. KEYMAPPINGS                               ##
 " ##                                                                           ##
 " ###############################################################################
 
-" ------------------------Simple things------------------------
+" Basic keymappings {{{
 " context-based j and k - gj usually, but j if count is given
 nnoremap <expr> j v:count == 0 ? 'gj' : 'j'
 nnoremap <expr> k v:count == 0 ? 'gk' : 'k'
@@ -200,27 +211,27 @@ else
     nnoremap <Tab>   :tabnext<CR>
     nnoremap <S-Tab> :tabprevious<CR>
 endif
+" }}} Basic keymappings
 
-
-" -----------------[e]dit/[s]ource my [v]imrc------------------
+" [e]dit/[s]ource my [v]imrc {{{
 nnoremap <leader>ve :vsplit $MYVIMRC<CR>
 if !exists('g:vscode')
     nnoremap <leader>vs :silent! call win_execute(win_findbuf(bufnr($MYVIMRC))[0], 'w') <bar> source $MYVIMRC<CR>
 else
     nnoremap <leader>vs :source $MYVIMRC<CR>
 endif
+" }}}
 
-
-" -----------------------[s]ubstitutions-----------------------
+" [s]ubstitutions {{{
 if !exists('g:vscode')
     nnoremap <leader>s :%s//g<Left><Left>
 else
     nnoremap <leader>s :call VSCodeNotify('editor.action.startFindReplaceAction')<CR>
 endif
 vnoremap <leader>s "zy:%s/<C-r>z//g<Left><Left>
+" }}}
 
-
-" ----------------------Cut, copy, paste-----------------------
+" Cut, copy, paste {{{
 noremap  <C-x> "+d
 noremap  <C-c> "+y
 noremap  <C-v> "+p
@@ -234,23 +245,23 @@ vnoremap <S-v> <C-v>
 
 " Restores decrementing of number (S changes entire line, use cc)
 nnoremap S <C-x>
+" }}}
 
-
-" -----------------------Splits controls----------------------
+" Splits controls {{{
 " Switching between splits (ctrl + h,j,k,l)
 noremap <C-h>     <C-w>h
 noremap <C-j>     <C-w>j
 noremap <C-k>     <C-w>k
 noremap <C-l>     <C-w>l
+
 " Resizing splits (ctrl + arrows keys)
 noremap <C-Left>  <C-w><
 noremap <C-Right> <C-w>>
 noremap <C-Up>    <C-w>+
 noremap <C-Down>  <C-w>-
+" }}}
 
-
-" -------------Moving v-block selection (alt + j,k)------------
-
+" Moving v-block selection (alt + j,k) {{{
 " Let the Alt key be mappable (only need fix for vim)
 if !has('nvim')
     execute "set <A-j>=\ej"
@@ -259,9 +270,9 @@ endif
 
 vnoremap <A-j> :m '>+1<CR>gv=gv
 vnoremap <A-k> :m '<-2<CR>gv=gv
+" }}}
 
-
-" ----------------------------Others--------------------------
+" Others {{{
 " Quickly write as sudo (Doesn't work on nvim! waiting for a fix...)
 if !has('nvim')
     noremap <leader>W :w !sudo tee %:p >/dev/null<CR>
@@ -269,10 +280,11 @@ endif
 
 " TO DO: only do subst within selected visual-line lines
 " vmap <expr> <leader>q mode() == 'v' ? "j" : "k"
+" }}}
 
+" }}} 3. KEYMAPPINGS
 
-
-
+" 4. THINGS THAT SHOULD BE PLUGINS {{{
 " ###############################################################################
 " ##                                                                           ##
 " ##                      4. THINGS THAT SHOULD BE PLUGINS                     ##
@@ -327,3 +339,4 @@ function! VimHook()
     endfor
 endfunction
 
+" }}} 4. THINGS THAT SHOULD BE PLUGINS
