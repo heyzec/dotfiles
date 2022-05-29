@@ -1,17 +1,92 @@
+
+" 1. TERMINAL AND REPL CONFIGS {{{
 " ###############################################################################
 " ##                                                                           ##
 " ##                        1. TERMINAL AND REPL CONFIGS                       ##
 " ##                                                                           ##
 " ###############################################################################
 
-noremap <leader><C-c> :execute 'call TermExec(TermGetFirst(), "\<' . 'C-c>")'<CR>
+" Simple command to create a terminal split
+command! Term call NewTerm(<q-mods>)
+
+" Double-tap spacebar to open a terminal or run previous command!
+noremap <leader><leader> :call Double()<CR>
+
+" Stop running process even when not focused on the terminal
+noremap <leader>c :execute 'call TermExec(TermGetFirst(), "\<' . 'C-c>")'<CR>
+
+
+" Helper functions {{{
 
 "Double-tap spacebar to run code!
 noremap <leader><leader> :call RunCode()<CR>
+if has('nvim')
+    au TermOpen * let g:tb=bufnr()  
+    au TermClose * unlet g:tb
+else
+    au TerminalWinOpen * let g:tb=bufnr()
+endif
 
-command! Term call Term(<q-mods>)
+function Double()
+    if !exists('g:tb')
+        call NewTerm()
+        return
+    endif
+    call RunPrev()
+endfunction
+
+function RunPrev()
+    " Make terminal execute its previous command
+    if exists('g:vscode')
+        call VSCodeNotify('workbench.action.terminal.sendSequence', { "text": "\u001b[A\u000A" })
+        return
+    endif
+    if has('nvim')
+        let jobid = filter(nvim_list_chans(), 'v:val.mode == "terminal" && v:val.buffer == ' . g:tb)[0]['id']
+        call chansend(jobid, "\<Esc>[A\<CR>")
+    else
+        call term_sendkeys(g:tb, "\<Up>\<CR>")
+    end
+endfunction
 
 
+function! NewTerm(...)
+    " Opens a term at the bottom of the screen, and go into insert mode
+    let mods = a:0 >= 1 && a:1 != "" ? a:1 : 'botright'  " By default open term across splits below
+
+    if has('nvim')
+        execute mods 'split term://$SHELL'
+        normal i
+    else
+        execute mods 'term'
+    endif
+endfunction
+
+
+function! TermGetFirst()
+    " Returns the bufnr of the first terminal
+    return uniq(map(filter(getwininfo(), 'v:val.terminal'), 'v:val.bufnr'))[0]
+endfunction
+
+
+function! TermExec(bufnr, cmd)
+    " Send command to the the terminal buffer
+    if has('nvim')
+        let jobid = filter(nvim_list_chans(), 'v:val.mode == "terminal" && v:val.buffer == ' . a:bufnr)[0]['id']
+        call chansend(jobid, [a:cmd, ''])
+    else
+        call term_sendkeys(a:bufnr, a:cmd . "\<CR>")
+    endif
+endfunction
+
+
+function! TermCheckIfRunning(bufnr)
+    " Returns 1 if the terminal shell process still has running child processes
+    return system('ps -eo ppid= | grep -w ' . getbufvar(a:bufnr, 'terminal_job_pid')) != ''
+endfunction
+" }}} Helper functions
+
+" Change scrolling behaviour {{{
 if has('nvim')
     " Make terminal in nvim more like vim
     augroup terminal_setup
@@ -32,9 +107,7 @@ if has('nvim')
     " Simple scrolling in term
     tnoremap <S-Up>   <C-\><C-N><C-B>
     tnoremap <S-Down> <C-\><C-N><C-F>
-
 else
-
     " Scrollable terminal - Adapted from https://github.com/vim/vim/issues/2490
     let s:term_pos = {} " { bufnr: [winheight, n visible lines] }
 
@@ -91,64 +164,25 @@ else
         call feedkeys('i', 'x')
         call TermSendSpecialKey(bufnr(), a:key)
     endfunction
-
 endif
+" }}} Change scrolling behaviour
 
+" }}} 1. TERMINAL AND REPL CONFIGS
 
-function! Term(...)
-    " Opens a term at the bottom of the screen, and go into insert mode
-
-    let mods = a:0 >= 1 && a:1 != "" ? a:1 : 'botright'  " By default open term across splits below
-
-    if has('nvim')
-        execute mods 'split term://$SHELL'
-        normal i
-    else
-        execute mods 'term'
-    endif
-endfunction
-
-
-function! TermGetFirst()
-    " Returns the bufnr of the first terminal
-
-    return uniq(map(filter(getwininfo(), 'v:val.terminal'), 'v:val.bufnr'))[0]
-endfunction
-
-
-function! TermExec(bufnr, cmd)
-    " Send command to the the terminal buffer
-    if has('nvim')
-        let jobid = filter(nvim_list_chans(), 'v:val.mode == "terminal" && v:val.buffer == ' . a:bufnr)[0]['id']
-        call chansend(jobid, [a:cmd, ''])
-    else
-        call term_sendkeys(a:bufnr, a:cmd . "\<CR>")
-    endif
-endfunction
-
-
-function! TermCheckIfRunning(bufnr)
-    " Returns 1 if the terminal shell process still has running child processes
-
-    return system('ps -eo ppid= | grep -w ' . getbufvar(a:bufnr, 'terminal_job_pid')) != ''
-endfunction
-
-
-
-
+" 2. CODE RUNNER {{{
 " ###############################################################################
 " ##                                                                           ##
 " ##                               2. CODE RUNNER                              ##
 " ##                                                                           ##
 " ###############################################################################
-
-
+noremap <leader>r :call RunCode()<CR>
 
 function! RunCode()
     " Run code in the current buffer. Behaviour depends on if vscode is attached.
 
     if exists('g:vscode')
         call VSCodeNotify('code-runner.run')
+        return
     end
 
     if expand('%') == '' | echo "Can't run code, no filename" | return | endif
@@ -192,7 +226,10 @@ endfunction
 
 
 function! GetJsonLocation()
-    return expand('/home/$HOME/.config/nvim/coderun.json')
+    if isdirectory(expand('$HOME/.config/nvim'))
+        return expand('$HOME/.config/nvim/coderun.json')
+    endif
+    return expand('$HOME/.vim/coderun.json')
 endfunction
 
 
@@ -222,3 +259,4 @@ function! GetCodeRunCmd()
     return cmd
 endfunction
 
+" }}} 2. CODE RUNNER
