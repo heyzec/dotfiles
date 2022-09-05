@@ -1,0 +1,67 @@
+[user]
+	# email = ***
+	# name = ***
+[alias]
+    # Shorthands
+    a = add
+    aa = add --all
+
+    b = branch
+
+    c = commit
+    ca = commit --amend
+    cane = commit --amend --no-edit
+
+    cp = cherry-pick
+    cpa = cherry-pick --abort
+    cpc = cherry-pick --continue
+
+    cob = checkout -b
+    co = checkout
+
+    f = fetch
+
+    l = log
+
+    me = merge
+    mea = merge --abort
+
+    rb = rebase
+    rba = rebase --abort
+    rbc = rebase --continue
+    rbi = rebase --interactive
+
+    s = status
+
+    sw = switch
+
+    wt = worktree
+
+
+    # Plurals
+    aliases = "!git config -l | grep alias | cut -c 7-"
+    branches = branch -a
+    stashes = stash list
+    remotes = remote -v
+
+    ignore = update-index --assume-unchanged
+    unignore = update-index --no-assume-unchanged
+    ignored = !git ls-files -v | grep "^[[:lower:]]"
+
+    # Others
+    lg = log --graph --oneline --decorate --date=short --pretty=format:'%Cgreen%ad %Cred%h%Creset -%C(yellow)%d%Creset %s %Cblue[%cn]%Creset %Cblue%G?%Creset'
+    who = shortlog --summary --email --numbered --no-merges
+
+[init]
+    defaultBranch = main
+	templatedir = ~/.git-templates
+[pull]
+	ff = only
+[diff]
+	tool = nvimdiff
+[instaweb]
+	httpd = python
+[help]
+	autocorrect = 20
+[merge]
+	conflictstyle = diff3
