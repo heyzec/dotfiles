@@ -31,11 +31,13 @@ if has('nvim')
     Plug 'hrsh7th/cmp-cmdline'
     Plug 'hrsh7th/nvim-cmp'
     Plug 'hrsh7th/lspkind-nvim'
+
+    Plug 'nvim-lua/plenary.nvim'
+    Plug 'jose-elias-alvarez/null-ls.nvim'
+    Plug 'williamboman/mason.nvim'
 end
 
 " ------------------------B. Completion-----------------------
-" Plug 'Valloric/YouCompleteMe'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'Raimondi/delimitMate'
 
 " -----------------------C. Code Display----------------------
@@ -53,6 +55,7 @@ Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': 
 Plug 'tpope/vim-commentary'                     " lightweight commenting plugin
 
 if has('nvim')
+    " Automate updating of parsers on update
     Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 endif
 call plug#end()
@@ -133,7 +136,7 @@ let &t_EI = "\e[2 q"                            " change to block cursor when le
 
 " -------------------Visualize hidden chars--------------------
 set list
-set listchars=tab:▸\ ,trail:·,nbsp:°            " tabs, non-breaking spaces, trailing spaces
+set listchars=tab:\|\ ,trail:·,nbsp:⎵           " tabs, non-breaking spaces, trailing spaces
 augroup visualise_chars                         " only show eol when in insert mode
     autocmd!
     autocmd InsertEnter * set listchars+=eol:↲
@@ -231,28 +234,12 @@ endif
 vnoremap <leader>s "zy:%s/<C-r>z//g<Left><Left>
 " }}}
 
-" Cut, copy, paste {{{
-noremap  <C-x> "+d
-noremap  <C-c> "+y
-noremap  <C-v> "+p
-inoremap <C-x> <C-o><C-x>
-inoremap <C-c> <C-o><C-c>
-inoremap <C-v> <C-r>+
-cnoremap <C-v> <C-r>+
-
-" V-Block mode shadowed, instead press S-v in any visual mode to enter
-vnoremap <S-v> <C-v>
-
-" Restores decrementing of number (S changes entire line, use cc)
-nnoremap S <C-x>
-" }}}
-
 " Splits controls {{{
-" Switching between splits (ctrl + h,j,k,l)
-noremap <C-h>     <C-w>h
-noremap <C-j>     <C-w>j
-noremap <C-k>     <C-w>k
-noremap <C-l>     <C-w>l
+" Switching between splits (alt + h,j,k,l)
+noremap <A-h>     <C-w>h
+noremap <A-j>     <C-w>j
+noremap <A-k>     <C-w>k
+noremap <A-l>     <C-w>l
 
 " Resizing splits (ctrl + arrows keys)
 noremap <C-Left>  <C-w><
@@ -278,6 +265,7 @@ if !has('nvim')
     noremap <leader>W :w !sudo tee %:p >/dev/null<CR>
 endif
 
+noremap <leader>e :Lexplore<CR>
 " TO DO: only do subst within selected visual-line lines
 " vmap <expr> <leader>q mode() == 'v' ? "j" : "k"
 " }}}
