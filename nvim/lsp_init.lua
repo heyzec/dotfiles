@@ -1,37 +1,58 @@
-local cmp_kinds = {
-    Text = '  ',
-    Method = '  ',
-    Function = '  ',
-    Constructor = '  ',
-    Field = '  ',
-    Variable = '  ',
-    Class = '  ',
-    Interface = '  ',
-    Module = '  ',
-    Property = '  ',
-    Unit = '  ',
-    Value = '  ',
-    Enum = '  ',
-    Keyword = '  ',
-    Snippet = '  ',
-    Color = '  ',
-    File = '  ',
-    Reference = '  ',
-    Folder = '  ',
-    EnumMember = '  ',
-    Constant = '  ',
-    Struct = '  ',
-    Event = '  ',
-    Operator = '  ',
-    TypeParameter = '  ',
-}
+local Plug = vim.fn['plug#']
+-- vim.call('plug#begin')
+Plug 'neovim/nvim-lspconfig'                -- required for nvim LSP
+Plug 'williamboman/nvim-lsp-installer'      -- manage LSP servers
+Plug 'hrsh7th/cmp-nvim-lsp'
+Plug 'hrsh7th/cmp-buffer'
+Plug 'hrsh7th/cmp-path'
+Plug 'hrsh7th/cmp-cmdline'
+Plug 'hrsh7th/nvim-cmp'                     -- Autocompletion
+Plug 'hrsh7th/lspkind-nvim'
 
-local lsp_installer = require("nvim-lsp-installer")
+Plug 'nvim-lua/plenary.nvim'
+Plug 'jose-elias-alvarez/null-ls.nvim'
+Plug 'williamboman/mason.nvim'              -- Manage external editor tooling i.e LSP servers
 
-lsp_installer.on_server_ready(function(server)
+Plug('nvim-treesitter/nvim-treesitter',     -- Highlight, edit, and navigate code
+    {['do'] = ':TSUpdate'})                 -- Automate updating of parsers on update
+vim.call('plug#end')
+
+
+require("nvim-lsp-installer").on_server_ready(function(server)
     local opts = {}
     server:setup(opts)
 end)
+
+-- nvim-cmp {{{
+-- https://github.com/microsoft/vscode-codicons/blob/main/dist/codicon.ttf
+local cmp_kinds = {
+    Text          = '  ',
+    Method        = '  ',
+    Function      = '  ',
+    Constructor   = '  ',
+    Field         = '  ',
+    Variable      = '  ',
+    Class         = '  ',
+    Interface     = '  ',
+    Module        = '  ',
+    Property      = '  ',
+    Unit          = '  ',
+    Value         = '  ',
+    Enum          = '  ',
+    Keyword       = '  ',
+    Snippet       = '  ',
+    Color         = '  ',
+    File          = '  ',
+    Reference     = '  ',
+    Folder        = '  ',
+    EnumMember    = '  ',
+    Constant      = '  ',
+    Struct        = '  ',
+    Event         = '  ',
+    Operator      = '  ',
+    TypeParameter = '  ',
+}
+
 
 -- Setup nvim-cmp.
 local cmp = require'cmp'
@@ -106,7 +127,7 @@ cmp.setup.cmdline(':', {
     }, {
         { name = 'cmdline' }
     })
-})
+})-- }}}
 
 require'nvim-treesitter.configs'.setup {
   highlight = {
@@ -115,7 +136,9 @@ require'nvim-treesitter.configs'.setup {
   },
 }
 
+-- Setup mason so it can manage external tooling
 require("mason").setup()
+
 require("null-ls").setup({
     sources = {
         require("null-ls").builtins.formatting.stylua,

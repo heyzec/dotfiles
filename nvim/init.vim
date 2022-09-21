@@ -22,21 +22,6 @@ endif
 " 1.2. Plugin List {{{
 call plug#begin()
 " -------------------------A. Language------------------------
-if has('nvim')
-    Plug 'neovim/nvim-lspconfig'                    " required for nvim LSP
-    Plug 'williamboman/nvim-lsp-installer'          " manage LSP servers
-    Plug 'hrsh7th/cmp-nvim-lsp'
-    Plug 'hrsh7th/cmp-buffer'
-    Plug 'hrsh7th/cmp-path'
-    Plug 'hrsh7th/cmp-cmdline'
-    Plug 'hrsh7th/nvim-cmp'
-    Plug 'hrsh7th/lspkind-nvim'
-
-    Plug 'nvim-lua/plenary.nvim'
-    Plug 'jose-elias-alvarez/null-ls.nvim'
-    Plug 'williamboman/mason.nvim'
-end
-
 " ------------------------B. Completion-----------------------
 Plug 'Raimondi/delimitMate'
 
@@ -53,47 +38,32 @@ Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': 
 
 " -------------------------E. Commands------------------------
 Plug 'tpope/vim-commentary'                     " lightweight commenting plugin
-
-if has('nvim')
-    " Automate updating of parsers on update
-    Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-endif
-call plug#end()
 " }}} 1.2. Plugin List
 
 " 1.3. Plugin Configurations {{{
 " -------------------------A. Language------------------------
-" williamboman/nvim-lsp-installer
-" Some Lua script needed for this plugin
+" Enable and configure language-related plugins in separate lua script
 if has('nvim')
     runtime lsp_init.lua
+else
+    call plug#end()
 endif
 set completeopt=menu,menuone,noselect
 
-
-
-" vim-syntastic/syntastic
-" let g:syntastic_quiet_messages = {'regex': 'missing-module-docstring'}
-" let g:syntastic_python_checkers = ['pylint']
-" let g:syntastic_python_python_exec = 'python3'
-
 " ------------------------B. Completion-----------------------
-" autocmd CompleteDone * pclose
-
 " -----------------------C. Code Display----------------------
-" tomasiser/vim-code-dark
+" configure tomasiser/vim-code-dark
 colorscheme codedark
 
 " ------------------------D. Interface------------------------
-" mbbill/undotree
+" configure mbbill/undotree
 noremap <leader>u :UndotreeToggle<CR>
-" Problematic!!!
 
-" vim-airline/vim-airline
+" configure vim-airline/vim-airline
 let g:airline_theme='minimalist'
 let g:airline#extensions#tabline#enabled=1
 
-" iamcco/markdown-preview.nvim
+" configure iamcco/markdown-preview.nvim
 let g:mkdp_auto_start=1
 
 " -------------------------E. Commands------------------------
