@@ -119,6 +119,12 @@ endif
 
 " Editing: Search, splits and indentation {{{
 " --------------------------Searching--------------------------
+" set path+=**                                    " allow recursive :find
+" setglobal complete-=i
+set wildmenu                                    " enable command line completion (default in nvim)
+set wildmode=longest:full,full                  " don't default to 1st option e.g. `:e` (like bash)
+set wildignorecase                              " ignore case when searching
+
 set ignorecase                                  " searches are case insensitive
 set smartcase                                   " search case sensitive if contains an uppercase letter
 set incsearch                                   " incremental search (default in nvim)
@@ -127,7 +133,8 @@ if has('nvim')
     set inccommand=nosplit                      " visual feedback while substituting
 endif
 " Allow quick clearing of highlighted search results
-nnoremap <Esc><Esc> :nohlsearch<CR>
+" Using <Esc><Esc> as a vim mapping is glitchy, see online for reasons
+nnoremap <leader><Esc> :nohlsearch<CR>
 
 set wildmenu                                    " enable command line completion (default in nvim)
 set wildmode=longest:full,full                  " don't default to 1st option e.g. `:e` (like bash)
@@ -298,3 +305,4 @@ function! VimHook()
 endfunction
 
 " }}} 4. THINGS THAT SHOULD BE PLUGINS
+

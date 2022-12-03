@@ -1,4 +1,5 @@
 
+" Make nvim autoscroll output in terminal
 " 1. TERMINAL AND REPL CONFIGS {{{
 " ###############################################################################
 " ##                                                                           ##
@@ -51,6 +52,10 @@ endfunction
 
 
 function! NewTerm(...)
+    " if exists('g:vscode')
+    "     call VSCodeNotify('workbench.action.terminal.toggleTerminal')
+    "     return
+    " endif
     " Opens a term at the bottom of the screen, and go into insert mode
     let mods = a:0 >= 1 && a:1 != "" ? a:1 : 'botright'  " By default open term across splits below
 
@@ -260,3 +265,18 @@ function! GetCodeRunCmd()
 endfunction
 
 " }}} 2. CODE RUNNER
+
+
+" let s:comp = 0
+" set cot=menu,menuone,noinsert,noselect cpt-=u
+" au insertcharpre * call I()
+" au completedone * let s:comp = 0
+" ino <expr> <tab> pumvisible() \|\| getline('.')[:col('.')-2] !~ '^\s*$' ? "\<c-n>" : "\<tab>"
+
+" func I()  "InsertPre
+"     if !pumvisible() && !s:comp && v:char =~ '\K'
+"         let s:comp = 1
+"         call feedkeys("\<c-n>")
+"     end
+" endf
+
