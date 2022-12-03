@@ -11,3 +11,16 @@ alias reload="exec $SHELL -l"
 # For CTFs
 alias john='/opt/apps/john/john-shell'
 alias hydra='/opt/apps/hydra/bin/hydra'
+
+
+apt() {
+  command nala "$@"
+}
+sudo() {
+  if [ "$1" = "apt" ]; then
+    shift
+    command sudo nala "$@"
+  else
+    command sudo "$@"
+  fi
+}
