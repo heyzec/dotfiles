@@ -1,21 +1,17 @@
 #!/bin/bash
 
-# Setup script for arch box
+script_dir="$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
 
+source $script_dir/functions.sh
 
-
-# HANDLE LOCALE HERE
-
-
-# 2. Install graphical applications
-#
-
-
-
-# Loop through user input until the user gives a valid hostname, but allow the user to force save 
+section archsetup
+# Loop through user input until the user gives a valid hostname
+HOSTNAME=archie
+USERNAME=heyzec
 while true
 do 
+    break
     read -p "Please name your machine:" HOSTNAME
     # hostname regex (!!couldn't find spec for computer name!!)
     if [[ "${HOSTNAME,,}" =~ ^[a-z][a-z0-9_.-]{0,62}[a-z0-9]$ ]]
@@ -27,6 +23,7 @@ done
 # Loop through user input until the user gives a valid username
 while true
 do 
+    break
     read -p "Please enter username:" USERNAME
     # username regex per response here https://unix.stackexchange.com/questions/157426/what-is-the-regex-to-validate-linux-users
     # lowercase the username to test regex
@@ -37,39 +34,105 @@ do
     echo "Invalid username."
 done
 
-useradd -m -G wheel -s /bin/bash $USERNAME
+useradd -m -s /bin/bash $USERNAME
 
-echo "Please enter password twice:"
-passwd heyzec
+query "To set password of user, please enter password twice:"
+# This cannot fail
+while true; do
+    if passwd $USERNAME; then
+        break
+    fi
+done
+
+cat > /home/$USERNAME/.bashrc << END
+export XDG_RUNTIME_DIR=/run/user/1000
+export DISPLAY=:0
+exec 3>&1 4>&2 >bashrc.log 2>&1
+(
+until [ -f /bin/i3 ]; do
+    sleep 1
+done
+DISPLAY=:0 i3
+) & (
+until [ -f /bin/startx ] && [ -f /bin/xterm ]; do
+    sleep 1
+done
+startx
+)
+END
+
+mkdir /etc/systemd/system/getty@tty2.service.d/
+cat > /etc/systemd/system/getty@tty2.service.d/autologin.conf << END
+[Service]
+ExecStart=
+ExecStart=-/sbin/agetty -o '-p -f -- \\\\u' --noclear --autologin $USERNAME %I \$TERM
+END
+
+chvt 2
+
+until who | grep -P -q "$USERNAME\s+tty2"; do
+    sleep 1
+done
+chvt 1
+rm -rf /etc/systemd/system/getty@tty2.service.d/
+rm /home/$USERNAME/.bashrc
 
 
 
 
-
-# Multi-head setup
-
-# ?reflector --country Singapore --age 12 --protocol https --sort rate --save /etc/pacman.d/mirrorlist
-#
-script_dir="$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
-# SCRIPTS_DIR="$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"/scripts
-
-bash "$script_dir/scripts/1-setup.sh"
 
 SCRIPT_DIR=/home/$USERNAME/$(basename $script_dir)
 SCRIPTS_DIR=$SCRIPT_DIR/scripts
-mv $script_dir $SCRIPT_DIR
-echo chowning $SCRIPT_DIR
+
+
+# can remove
+cp -r $script_dir $SCRIPT_DIR
 chown -R $USERNAME $SCRIPT_DIR
 
 export HOSTNAME
 export USERNAME
+export SCRIPT_DIR
+export SCRIPTS_DIR
 
-runuser -u $USERNAME -- "$SCRIPTS_DIR/2-server.sh"
-runuser -u $USERNAME -- "$SCRIPTS_DIR/3-minimalhalf.sh"
-runuser -u $USERNAME -- "$SCRIPTS_DIR/4-windowed.sh"
-runuser -u $USERNAME -- "$SCRIPTS_DIR/5-eyecandy.sh"
-runuser -u $USERNAME -- "$SCRIPTS_DIR/6-max.sh"
+bash "$script_dir/scripts/0-internet.sh"
+pacman -S tmux --noconfirm --needed
+
+bash "$script_dir/scripts/1-mirrorlist.sh"
+bash "$script_dir/scripts/2-sudo.sh"
+
+info Allowing user to sudo without password
+sed -i 's/^# %wheel ALL=(ALL\(:ALL\)\?) NOPASSWD: ALL/%wheel ALL=(ALL) NOPASSWD: ALL/' /etc/sudoers
 
 
+export XDG_RUNTIME_DIR=/run/user/1000
+export DISPLAY=:0
+rm /tmp/archsetup-fifo
+runuser -u $USERNAME -- mkfifo /tmp/archsetup-fifo
+runuser -u $USERNAME -- tmux new-session -s sess "
+$(cat <<-END
+tmux set mouse on
+tmux split-window -t sess:0 "tail -f /tmp/archsetup-fifo"
+tmux rotate-window -t sess:0
+tmux resize-pane -t sess:0.0 -y 5
 
+bash "$SCRIPT_DIR/scripts/3-continue.sh"
+bash "$SCRIPT_DIR/scripts/4-server.sh"
+bash "$SCRIPT_DIR/scripts/5-minimalhalf.sh"
+bash "$SCRIPT_DIR/scripts/6-windowed.sh"
+bash "$SCRIPT_DIR/scripts/7-eyecandy.sh"
+bash "$SCRIPT_DIR/scripts/8-packages.sh"
+
+bash "$SCRIPT_DIR/scripts/tweaks-dotfiles.sh"
+bash "$SCRIPT_DIR/scripts/tweaks-intel.sh"
+bash "$SCRIPT_DIR/scripts/tweaks-network.sh"
+bash "$SCRIPT_DIR/scripts/tweaks-power-events.sh"
+
+info Sudo user must enter password
+sed -i 's/%wheel ALL=(ALL\(:ALL\)\?) NOPASSWD: ALL/%wheel ALL=(ALL): ALL/' /etc/sudoers
+
+# Stop X server from dying since X will exit once this process finishes
+bash
+END
+)
+"
 
