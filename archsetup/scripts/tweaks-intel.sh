@@ -2,8 +2,7 @@
 
 
 _ xf86-video-intel    : Xorg intel drivers
-
-cat > /etc/X11/xorg.conf.d/20-intel.conf << END
+sudo tee /etc/X11/xorg.conf.d/20-intel.conf << END > /dev/null
 Section "Device"
     Identifier    "Intel Graphics"
     Driver        "intel"

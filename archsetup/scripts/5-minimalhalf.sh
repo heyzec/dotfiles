@@ -26,11 +26,16 @@ section 3-minimalhalf: Setup sound
 # Display Manager: Starts the X-server
 info installing xorg-server
 sudo pacman -S xorg-server --noconfirm --needed
-info installing lightdm
-# Greeter required, can configure
-sudo pacman -S lightdm lightdm-gtk-greeter --noconfirm --needed
 
-echo "exec tmux attach" >> ~/.xinitrc
+cat > ~/.xinitrc << END
+if [ -d /etc/X11/xinit/xinitrc.d ]; then
+  for f in /etc/X11/xinit/xinitrc.d/*; do
+    [ -x "$f" ] && . "$f"
+  done
+  unset f
+fi
+exec tmux attach
+END
 
 info installing xinit
 sudo pacman -S xorg-xinit --noconfirm --needed
@@ -43,8 +48,12 @@ sleep 1
 xterm -e tmux attach &
 
 rm ~/.xinitrc
+echo i alr slept 1 sec, should work
+bash
 
 
-
+info installing lightdm
+# Greeter required, can configure
+sudo pacman -S lightdm lightdm-gtk-greeter --noconfirm --needed
 info enabling lightdm
 sudo systemctl enable lightdm

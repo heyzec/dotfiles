@@ -40,7 +40,7 @@ _() {
     if [[ -f /bin/yay ]]; then
         pm=yay
     else
-        pm=pacman
+        pm="sudo pacman"
     fi
 
     if [[ "$line" =~ ^\[.+\]* ]]; then
@@ -53,7 +53,7 @@ _() {
     package=`echo ${arr[0]}`
     description=`echo ${arr[1]}`
     info "installing $package - $description"
-    $pm -S $package --noconfirm
+    eval $pm -S $package --noconfirm
     # yay -S $package --noconfirm --clean
 }
 
