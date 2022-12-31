@@ -38,12 +38,14 @@ Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': 
 
 " -------------------------E. Commands------------------------
 Plug 'tpope/vim-commentary'                     " lightweight commenting plugin
+
+" Plug 'ThePrimeagen/vim-be-good'
 " }}} 1.2. Plugin List
 
 " 1.3. Plugin Configurations {{{
 " -------------------------A. Language------------------------
 " Enable and configure language-related plugins in separate lua script
-if has('nvim')
+if has('nvim') && !exists('g:vscode')
     runtime lsp_init.lua
 else
     call plug#end()
@@ -107,12 +109,14 @@ let &t_EI = "\e[2 q"                            " change to block cursor when le
 " -------------------Visualize hidden chars--------------------
 set list
 set listchars=tab:\|\ ,trail:·,nbsp:⎵           " tabs, non-breaking spaces, trailing spaces
-augroup visualise_chars                         " only show eol when in insert mode
-    autocmd!
-    autocmd InsertEnter * set listchars+=eol:↲
-    autocmd InsertLeave * set listchars-=eol:↲
-augroup end
-if !has('nvim')                                 " make these chars display in gray instead of blue
+if !has('g:vscode')                                 " make these chars display in gray instead of blue
+    augroup visualise_chars                         " only show eol when in insert mode
+        autocmd!
+        autocmd InsertEnter * set listchars+=eol:↲
+        autocmd InsertLeave * set listchars-=eol:↲
+    augroup end
+endif
+if !has('nvim')
     hi SpecialKey ctermfg=244 guifg=#808080
 endif
 " }}} Appearance: Ruler, cursor and visualising chars
