@@ -1,0 +1,5 @@
+#!/bin/sh
+
+export TERMINAL=/bin/tilix
+export EDITOR=/bin/nvim
+
