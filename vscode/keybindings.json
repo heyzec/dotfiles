@@ -1,0 +1,45 @@
+// Place your key bindings in this file to override the defaults
+[
+    // jk as escape (side-effect: jj, kk and kj also will be mapped) 
+    {
+        "command": "vscode-neovim.compositeEscape1", "key": "j",
+        "when": "neovim.mode == insert && editorTextFocus", "args": "j"
+    },
+    {
+        "command": "vscode-neovim.compositeEscape2", "key": "k",
+        "when": "neovim.mode == insert && editorTextFocus", "args": "k"
+    },
+    
+    // Suggestions
+    {
+        "key": "tab", "command": "selectNextSuggestion",
+        "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus"
+    },
+    {
+        "key": "down", "command": "-selectNextSuggestion",
+        "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus"
+    },
+    {
+        "key": "shift+tab", "command": "selectPrevSuggestion",
+        "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus"
+    },
+    {
+        "key": "up", "command": "-selectPrevSuggestion",
+        "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus"
+    },
+    // {   "key": "space", "command": "acceptSelectedSuggestion", "when": "editorTextFocus && suggestWidgetVisible" },
+    
+
+    // Restore Ctrl + C as copy
+    {
+        "command": "vscode-neovim.send",
+        "key": "ctrl+c",
+        "when": "editorTextFocus && neovim.mode == visual",
+        "args": "<C-c>"  // the input to send to neovim
+    },
+    {
+        "key": "ctrl+c", "command": "editor.action.clipboardCopyAction",
+        "when": "neovim.mode != visual"
+    },
+
+]

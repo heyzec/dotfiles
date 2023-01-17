@@ -1,0 +1,26 @@
+{
+    // Editor
+    "editor.tabCompletion": "on",
+    "editor.fontSize": 13,
+
+
+    // Files
+    "files.autoSave": "afterDelay",
+    "files.associations": {
+        "*.vim": "viml"
+    },
+
+
+    // Workbench
+    "workbench.editorAssociations": {
+        "*.ipynb": "jupyter.notebook.ipynb"
+    },
+
+
+    // Extensions
+    "code-runner.runInTerminal": true,
+    "code-runner.executorMap": {
+        "python": "python3"
+    },
+    "vscode-neovim.neovimExecutablePaths.linux": "/usr/bin/nvim"
+}
