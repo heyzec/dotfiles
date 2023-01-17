@@ -9,6 +9,8 @@ info installing wireplumber
 sudo pacman -S wireplumber --noconfirm --needed # provider for pipewire-session-manager
 info installing pipewire-jack
 sudo pacman -S pipewire-jack --noconfirm --needed # provider for jack
+sudo pacman -S pipewire-alsa --noconfirm --needed # provider for alsa
+sudo pacman -S pipewire-pulse --noconfirm --needed # provider for pulse
 
 # This not working
 speaker-test --test wav --channels 2 --nloop 2

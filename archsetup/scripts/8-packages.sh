@@ -12,6 +12,7 @@ _ playerctl       : media control
 _ flameshot       : screen capture
 _ xwallpaper      : wallpaper setter
 _ polybar         : taskbar
+_ dex             : XDG autostarter
 
 sudo usermod -aG video $USERNAME
 
