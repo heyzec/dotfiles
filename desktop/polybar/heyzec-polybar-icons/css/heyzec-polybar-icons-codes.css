@@ -3,7 +3,6 @@
 .icon-brightness-low:before { content: '\e0ca'; } /* '' */
 .icon-brightness-medium:before { content: '\e0cb'; } /* '' */
 .icon-brightness-high:before { content: '\e0cc'; } /* '' */
-.icon-volume-off-1:before { content: '\e808'; } /* '' */
 .icon-volume-off:before { content: '\f026'; } /* '' */
 .icon-volume-low:before { content: '\f027'; } /* '' */
 .icon-volume-high:before { content: '\f028'; } /* '' */
@@ -21,6 +20,7 @@
 .icon-memory:before { content: '\f2db'; } /* '' */
 .icon-microchip:before { content: '\f538'; } /* '' */
 .icon-volume-medium:before { content: '\f6a8'; } /* '' */
+.icon-volume-off-1:before { content: '\f6a9'; } /* '' */
 .icon-wifi-1:before { content: '\f6aa'; } /* '' */
 .icon-wifi-3:before { content: '\f6ab'; } /* '' */
 .icon-wifi-off:before { content: '\f6ac'; } /* '' */
