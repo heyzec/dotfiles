@@ -65,7 +65,8 @@ _ chromium               : open-source chrome
 _ [Fonts]
 _ ttf-roboto             : Google\'s sans-serif fonts
 _ ttf-roboto-mono        : Google\'s sans-serif monospace font
-_ noto-fonts             : Google\'s icons Emoji library
+_ noto-fonts             : Google\'s fonts
+_ noto-fonts-emoji       : Google\'s open-source Emoji 14.0
 
 
 _ [Other application package types]

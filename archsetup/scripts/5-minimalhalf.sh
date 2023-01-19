@@ -54,6 +54,10 @@ echo i alr slept 1 sec, should work
 bash
 
 
+sudo pacman -S polkit
+sudo pacman -S polkit-gnome  # a graphical authenticaion agent, to be autostarted by i3
+
+
 info installing lightdm
 # Greeter required, can configure
 sudo pacman -S lightdm lightdm-gtk-greeter --noconfirm --needed

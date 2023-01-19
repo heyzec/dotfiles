@@ -53,7 +53,7 @@ _() {
     package=`echo ${arr[0]}`
     description=`echo ${arr[1]}`
     info "installing $package - $description"
-    eval $pm -S $package --noconfirm
+    eval $pm -S $package --noconfirm --needed
     # yay -S $package --noconfirm --clean
 }
 

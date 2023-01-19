@@ -1,13 +1,12 @@
 # 1.5 some things meant for previously
-# List of time zones
-# To set the timezone automatically based on the IP address location, one can use a geolocation API to retrieve the timezone, for example curl https://ipapi.co/timezone, and pass the output to timedatectl set-timezone for automatic setting. Some geo-IP APIs that provide free or partly free services are listed below:
-# timedatectl list-timezones
-info Setting timezone
-sudo timedatectl set-timezone Asia/Singapore
-# tzselect has a good selector, but does not edit files directly
+info Determining timezone automatically
+# timezone=$(tzselect)
+timezone=$(curl -s "http://ip-api.com/csv/$(curl -s https://ipapi.co/ip)?fields=timezone")
+info Timezone is: $timezone. Setting timezone and syncing clocks.
+sudo timedatectl set-timezone "$timezone"
+sudo timedatectl set-ntp true
 sudo hwclock --systohc
-timedatectl status
-
+timedatectl timesync-status
 
 
 # 2. Set hostname

@@ -14,3 +14,8 @@ END
 # Use hardware video acceleration
 # https://wiki.archlinux.org/title/Hardware_video_acceleration#Intel
 _ intel-media-driver : driver for intel
+
+# Microcode
+# May need manual config of boot loader to use microcode 
+# https://wiki.archlinux.org/title/Microcode#Early_loading
+_ intel-ucode   : microcode patches for CPU

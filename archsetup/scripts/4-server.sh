@@ -18,6 +18,8 @@ _ openvpn          : client and server VPN functions
 _ ntfs-3g          : ntfs support
 
 
+_ plocate          : indexed file search
+updatedb
 
 # 4. Tooling more
 _ man-db           : documentation system accessed using the man command
