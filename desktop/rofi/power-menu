@@ -1,0 +1,68 @@
+#!/bin/bash
+
+# This script defines just a mode for rofi instead of being a self-contained
+# executable that launches rofi by itself. This makes it more flexible than
+# running rofi inside this script as now the user can call rofi as one pleases.
+# For instance:
+#
+#   rofi -show powermenu -modi powermenu:./power-menu
+#
+# See README.md for more information.
+
+# Adapted from https://github.com/jluttine/rofi-power-menu
+
+all=(shutdown reboot suspend hibernate logout lockscreen)
+
+declare -A texts
+texts[shutdown]="Shut down"
+texts[reboot]="Reboot"
+texts[suspend]="Sleep"
+texts[hibernate]="Hibernate"
+texts[logout]="Log out"
+texts[lockscreen]="Lock screen"
+
+# declare -A icons
+# icons[reboot]="\ufc07"
+# icons[suspend]="\uf9b1"
+# icons[hibernate]="\uf7c9"
+# icons[lockscreen]="\uf023"
+# icons[logout]="\uf842"
+
+declare -A actions
+actions[shutdown]="systemctl poweroff"
+actions[reboot]="systemctl reboot"
+actions[suspend]="systemctl suspend"
+actions[hibernate]="systemctl hibernate"
+actions[logout]="loginctl terminate-session ${XDG_SESSION_ID-}"
+# actions[lockscreen]="loginctl lock-session ${XDG_SESSION_ID-}"
+actions[lockscreen]="loginctl lock-session"
+
+declare -A show
+for entry in "${all[@]}"; do
+    show[$entry]="${texts[$entry]}${icons[$entry]}"
+done
+
+
+# If rofi calls script without arguments, give it the menu entries
+if [ $# -eq 0 ]; then
+    echo -e "\0prompt\x1fPower menu"
+    for entry in "${all[@]}"; do
+        echo -ne "${show[$entry]}\n"
+    done
+    exit 0
+fi
+
+
+# If rofi calls script with selected entry, perform corresponding action
+selection="${@}" 
+for entry in "${all[@]}"; do
+    if [[ "$selection" == "${show[$entry]}" ]]; then
+        # Perform the action
+        ${actions[$entry]}
+        exit 0
+    fi
+done
+
+# The selection didn't match anything, so raise an error
+echo "Invalid selection: $selection" >&2
+exit 1

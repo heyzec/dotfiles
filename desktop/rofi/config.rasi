@@ -1,0 +1,19 @@
+configuration {
+	modi: "window,run,ssh,drun";
+	show-icons: true;
+	icon-theme: "Papirus";
+	font: "mono 20", "Roboto 20";
+    sort: true;
+    drun-show-actions: true;
+    drun-match-fields: "name,generic,categories";
+  timeout {
+      action: "kb-cancel";
+      delay:  0;
+  }
+  filebrowser {
+      directories-first: true;
+      sorting-method:    "name";
+  }
+}
+@theme "Paper"
+
