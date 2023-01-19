@@ -22,7 +22,6 @@ exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
 # NetworkManager is the most popular way to manage wireless networks on Linux,
 # and nm-applet is a desktop environment-independent system tray GUI for it.
 
-
-
-exec nitrogen --restore
+# Set wallpaper using script
+exec_always $HOME/.config/i3/scripts/setwallpaper.sh
 
