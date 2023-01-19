@@ -58,8 +58,8 @@ unsetopt BEEP  # Disable beeping in zsh instead of globally in terminal
 autoload -z edit-command-line
 zle -N edit-command-line
 bindkey "^X^E" edit-command-line
-bindkey "$key[Up]" up-line-or-search
-bindkey "$key[Down]" down-line-or-search
+bindkey "^[[A" up-line-or-search
+bindkey "^[[B" down-line-or-search
 
 # Color support for ls and some other commands (use .dircolors)
 if [ -x /usr/bin/dircolors ]; then
