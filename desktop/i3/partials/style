@@ -1,0 +1,15 @@
+###############################################################################
+# i3-gaps Appearance and Behavior
+###############################################################################
+
+# Specify the distance between windows in pixels. (i3-gaps)
+gaps inner 10
+gaps outer -4
+
+# Only enable gaps on a workspace when there is at least one container
+smart_gaps on
+
+
+
+
+smart_borders on

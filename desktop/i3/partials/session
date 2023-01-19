@@ -1,0 +1,33 @@
+###############################################################################
+# Session Management
+###############################################################################
+
+## Session // Exit App // <><Shift> q ##
+bindsym $mod+BackSpace kill
+bindsym $mod+Shift+q kill
+
+## Session // Reload i3 Config // <><Shift> c ##
+bindsym $mod+Shift+c reload
+
+## Session // Power Menu // <> Escape ##
+bindsym $mod+shift+x exec rofi -show power-menu -modi power-menu:"$HOME/.config/rofi/power-menu" -width 20 -lines 6
+
+
+
+## Session // Refresh Session // <><Shift> r ##
+bindsym $mod+Shift+r restart
+
+## Session // Restart i3 // <><Ctrl> r ##
+
+## Session // Logout // <><Shift> e ##
+# exit i3 (logs you out of your X session)
+bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
+
+
+## Session // Reboot // <><Shift> b ##
+
+## Session // Power Down // <><Shift> p ##
+
+
+## Session // Sleep // <><Shift> s ##
+

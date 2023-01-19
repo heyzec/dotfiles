@@ -1,0 +1,5 @@
+nvim $HOME/dotfiles/nvim/init.vim
+i3 $HOME/.config/i3/config
+polybar $HOME/.config/polybar/config.ini
+zsh $HOME/dotfiles/zsh/zshrc
+picom $HOME/.config/picom.conf

@@ -1,0 +1,27 @@
+###############################################################################
+# Launcher dialogs
+###############################################################################
+
+## Launch // Terminal // <> Enter ##
+bindsym $mod+Return exec i3-sensible-terminal
+
+## Launch // Browser // <><Shift> Enter ##
+bindsym $mod+Shift+Return exec --no-startup-id gtk-launch $(xdg-settings get default-web-browser)
+
+## Launch // Application // <> Space ##
+bindsym $mod+space exec --no-startup-id rofi -show drun
+
+## Launch // Command // <><Shift> Space ##
+
+## Launch // Keybinding Viewer // <><Shift> ? ##
+
+## Navigate // Window by Name // <><Ctrl> Space ##
+bindsym $mod+Control+space exec --no-startup-id rofi -show window
+
+## Launch // File Search // <><Alt> Space ##
+
+## Launch // Look Selector // <><Alt> l ##
+
+
+
+bindsym $mod+o exec $HOME/.config/i3/scripts/dotsmenu.sh
