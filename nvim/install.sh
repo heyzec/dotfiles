@@ -1,4 +1,5 @@
 cd "$(dirname "$0")"
 
 ln -s init.vim vimrc
-ln -s $(realpath .) ~/.vim
+ln -s init.vim vimrc
+ln -s $(realpath .) ~/.config/nvim
