@@ -34,7 +34,6 @@ Plug 'mbbill/undotree'                          " visualise undo history with br
 Plug 'vim-airline/vim-airline'                  " statusline
 Plug 'vim-airline/vim-airline-themes'           " theme statusline to match dark color scheme
 Plug 'tpope/vim-fugitive'                       " git integration
-Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
 
 " -------------------------E. Commands------------------------
 Plug 'tpope/vim-commentary'                     " lightweight commenting plugin
