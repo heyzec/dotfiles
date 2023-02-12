@@ -2,6 +2,17 @@
 #
 # Please see https://i3wm.org/docs/userguide.html for a complete reference!
 
+# https://github.com/regolith-linux/regolith-i3-config/tree/master/partials
+# https://www.sglavoie.com/posts/2020/08/15/a-guided-tour-of-an-i3-configuration/#i3-config-shortcuts
+
+# i3 defines bindings and settings such that "first one wins".
+# Choose a terminal you can use to repair a broken configuration.
+
+
+
+bindsym $mod+Return exec i3-sensible-terminal
+
+# Mod4 is the Windows key, Mod1 is the Alt key
 set $mod Mod4
 
 # Define names for default workspaces for which we configure key bindings later on.
@@ -16,6 +27,14 @@ set $ws7 "7"
 set $ws8 "8"
 set $ws9 "9"
 set $ws10 "10"
+
+# Choose your cursor keys. Default is like 'vi'. Beware binding a key
+# to two operations within a mode. The resulting cursor keypad is the
+# only one.
+set $h h
+set $j j
+set $k k
+set $l l
 
 # 1. NAVIGATION BINDINGS AND CONFIGS {{{
 ###############################################################################
@@ -52,6 +71,9 @@ bindsym $mod+a focus parent
 bindsym $mod+d focus child
 # }}} 1.1. i3 DEFAULTS
 
+## Navigate // Scratchpad // <> n ##
+bindsym $mod+n scratchpad show
+
 # Disabled until familiar with defaults
 # # Navigate // Relative Window // <> w a s d ##
 # bindsym $mod+a focus left
@@ -60,6 +82,8 @@ bindsym $mod+d focus child
 # bindsym $mod+d focus right
 
 
+# Alt-Tablike behaviour
+bindsym $mod+Tab workspace back_and_forth
 # disable window focus follows mouse movements as the mouse crosses window borders
 focus_follows_mouse no
 # }}} 1. NAVIGATION BINDINGS AND CONFIGS
@@ -79,6 +103,7 @@ bindsym $mod+Shift+h     move left
 bindsym $mod+Shift+j     move down
 bindsym $mod+Shift+k     move up
 bindsym $mod+Shift+l     move right
+# bindsym $mod+$i3-wm.binding.layout_mode layout toggle tabbed splith splitv
 
 ## Modify // Move Window to Workspace 1 - 10 // <><Shift> 0..9 ##
 bindsym $mod+Shift+1 move container to workspace number $ws1
@@ -115,15 +140,14 @@ floating_modifier $mod
 #set_from_resource $i3-wm.binding.orientation_toggle i3-wm.binding.orientation_toggle BackSpace
 #bindsym $mod+$i3-wm.binding.orientation_toggle split toggle
 
-
 ## Modify // Window Floating Toggle // <><Shift> f ##
 bindsym $mod+Shift+f floating toggle
-
-## Modify // Move to Scratchpad // <><Ctrl> m ##
 
 ## Modify // Tile/Float Focus Toggle // <><Shift> t ##
 bindsym $mod+Shift+t focus mode_toggle
 
+## Modify // Move to Scratchpad // <> m ##
+bindsym $mod+m move scratchpad
 
 ## bindsym $mod+$i3-wm.binding.layout_mode layout toggle tabbed splith splitv
 
@@ -140,7 +164,7 @@ bindsym $mod+Ctrl+Shift+j     move workspace to output down
 
 
 ## move focused container to workspace, move to workspace
-### Modify // Carry Window to Workspace 1 - 10// <><Alt> 0..9 ##
+## Modify // Carry Window to Workspace 1 - 10 // <><Alt> 0..9 ##
 #bindsym $mod+$alt+$ws1_key move container to workspace number $ws1; workspace number $ws1
 #bindsym $mod+$alt+$ws2_key move container to workspace number $ws2; workspace number $ws2
 #bindsym $mod+$alt+$ws3_key move container to workspace number $ws3; workspace number $ws3
@@ -160,24 +184,14 @@ bindsym $mod+Ctrl+Shift+j     move workspace to output down
 ###############################################################################
 
 ## Session // Exit App // <><Shift> q ##
-bindsym $mod+BackSpace kill
 bindsym $mod+Shift+q kill
+bindsym $mod+BackSpace kill
 
-## Session // Reload i3 Config // <><Shift> c ##
-bindsym $mod+Shift+c reload
-
-## Session // Power Menu // <> Escape ##
-bindsym $mod+shift+x exec rofi -show power-menu -modi power-menu:"$HOME/.config/rofi/power-menu" -width 20 -lines 6
-
-## Session // Refresh Session // <><Shift> r ##
+## Session // Restart i3 // <><Shift> r ##
 bindsym $mod+Shift+r restart
 
-## Session // Restart i3 // <><Ctrl> r ##
-
-## Session // Logout // <><Shift> e ##
-# exit i3 (logs you out of your X session)
+## Session // Logout // <><Shift> e ## logs you out of your X session
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
-
 # }}} 3. BINDINGS - SESSION MANAGEMENT
 
 # 4. BINDINGS - LAUNCHER DIALOGS {{{
@@ -186,7 +200,7 @@ bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcu
 ###############################################################################
 
 ## Launch // Terminal // <> Enter ##
-bindsym $mod+Return exec i3-sensible-terminal
+# bindsym $mod+Return exec i3-sensible-terminal
 
 ## Launch // Browser // <><Shift> Enter ##
 bindsym $mod+Shift+Return exec --no-startup-id gtk-launch $(xdg-settings get default-web-browser)
@@ -195,6 +209,7 @@ bindsym $mod+Shift+Return exec --no-startup-id gtk-launch $(xdg-settings get def
 bindsym $mod+space exec --no-startup-id rofi -show drun
 
 ## Launch // Command // <><Shift> Space ##
+bindsym $mod+shift+space exec --no-startup-id rofi -show run
 
 ## Launch // Keybinding Viewer // <><Shift> ? ##
 bindsym $mod+shift+slash exec rofi -modi shortcut:~/.config/rofi/scripts/shortcut.py -show shortcut
@@ -204,10 +219,8 @@ bindsym $mod+Control+space exec --no-startup-id rofi -show window
 
 ## Launch // File Search // <><Alt> Space ##
 
-## Launch // Look Selector // <><Alt> l ##
-
 ## Launch // Dotfiles Editor  // <> o ##
-bindsym $mod+o exec $HOME/.config/i3/scripts/dotsmenu.sh
+bindsym $mod+o exec ${HOME}/.config/i3/scripts/dotsmenu.sh
 # }}} 4. BINDINGS - LAUNCHER DIALOGS
 
 # 5. BINDINGS - MODES {{{
@@ -236,18 +249,37 @@ mode "resize" {
 }
 bindsym $mod+r mode "resize"
 
-# Testing mode
-set $control System Control [S for shutdown, R for restart, E for logout, X for lock]:
-bindsym $mod+Escape mode "$control"
+set $Locker i3lock && sleep 1
 
-mode "$control" {
-    bindsym x exec notify-send aa bb
-    bindsym e exec notify-send aa aa
-    bindsym r exec notify-send aa d
-    bindsym s exec notify-send aa 
+set $mode_system (l) lock, (e) logout, (s) suspend, (h) hibernate, (r) reboot, (S) shutdown
+# loginctl lock-session
+mode "$mode_system" {
+    bindsym l exec --no-startup-id $Locker, mode "default"
+    bindsym e exec --no-startup-id i3-msg exit, mode "default"
+    bindsym s exec --no-startup-id $Locker && systemctl suspend, mode "default"
+    bindsym h exec --no-startup-id $Locker && systemctl hibernate, mode "default"
+    bindsym r exec --no-startup-id systemctl reboot, mode "default"
+    bindsym Shift+s exec --no-startup-id systemctl poweroff -i, mode "default"  
 
+    # back to normal: Enter or Escape
+    bindsym Return mode "default"
     bindsym Escape mode "default"
 }
+
+bindsym $mod+Escape mode "$mode_system"
+
+# # Testing mode
+# set $control System Control [S for shutdown, R for restart, E for logout, X for lock]:
+# bindsym $mod+Escape mode "$control"
+
+# mode "$control" {
+#     bindsym x exec notify-send aa bb
+#     bindsym e exec notify-send aa aa
+#     bindsym r exec notify-send aa d
+#     bindsym s exec notify-send aa 
+
+#     bindsym Escape mode "default"
+# }
 # }}} 5. BINDINGS - MODES
 
 # 6. BINDINGS - MEDIA AND OTHERS {{{
@@ -256,11 +288,10 @@ mode "$control" {
 ###############################################################################
 
 # Use wactl to adjust volume of WirePlumber
-set $refresh_i3status killall -SIGUSR1 i3status
-bindsym XF86AudioRaiseVolume exec --no-startup-id wpctl set-volume @DEFAULT_SINK@ 10%+ && $refresh_i3status
-bindsym XF86AudioLowerVolume exec --no-startup-id wpctl set-volume @DEFAULT_SINK@ 10%- && $refresh_i3status
-bindsym XF86AudioMute exec --no-startup-id wpctl set-mute @DEFAULT_SINK@ toggle && $refresh_i3status
-bindsym XF86AudioMicMute exec --no-startup-id wpctl set-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
+bindsym XF86AudioRaiseVolume exec --no-startup-id wpctl set-volume @DEFAULT_SINK@ 5%+ --limit 1.5
+bindsym XF86AudioLowerVolume exec --no-startup-id wpctl set-volume @DEFAULT_SINK@ 5%-
+bindsym XF86AudioMute exec --no-startup-id wpctl set-mute @DEFAULT_SINK@ toggle
+bindsym XF86AudioMicMute exec --no-startup-id wpctl set-mute @DEFAULT_SOURCE@ toggle
 
 # Screen brightness controls
 bindsym XF86MonBrightnessUp exec light -A 10 # increase screen brightness
@@ -272,7 +303,7 @@ bindsym XF86TouchpadToggle exec /some/path/toggletouchpad.sh
 # Media player controls
 bindsym XF86AudioPlay exec playerctl play-pause
 
-bindsym --release Print exec gnome-screenshot -i
+bindsym --release Print exec flameshot gui
 # }}} 6. BINDINGS - MEDIA AND OTHERS
 
 # 7. STYLE AND THEMING {{{
@@ -375,13 +406,13 @@ exec --no-startup-id dex --autostart --environment i3
 
 # xss-lock grabs a logind suspend inhibit lock and will use i3lock to lock the
 # screen before suspend. Use loginctl lock-session to lock your screen.
-exec --no-startup-id xss-lock --transfer-sleep-lock -- $HOME/.config/i3/scripts/blurlock.sh
+exec --no-startup-id xss-lock --transfer-sleep-lock -- ${HOME}/.config/i3/scripts/blurlock.sh
 
 # Start the polkit graphical authentication agent, assuming polkit-gnome installed
 exec /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 
 # ---------------------Bar and tray applets--------------------
-exec_always --no-startup-id $HOME/.config/polybar/launch.sh
+exec_always --no-startup-id ${HOME}/.config/polybar/launch.sh
 
 exec indicator-sound-switcher
 
@@ -390,6 +421,34 @@ exec --no-startup-id nm-applet
 
 # ----------------------------Others---------------------------
 # Set wallpaper using custom script
-exec_always $HOME/.config/i3/scripts/setwallpaper.sh
+exec_always ${HOME}/.config/i3/scripts/setwallpaper.sh
 # }}} 8. AUTOSTARTED PROGRAMS
 
+
+set $mod_mode MOD
+mode $mod_mode {
+    # Navigate // Workspaces 1-10 // <> 0..9 ##
+    bindsym 1 workspace number $ws1; mode "default"
+    bindsym 2 workspace number $ws2; mode "default"
+    bindsym 3 workspace number $ws3; mode "default"
+    bindsym 4 workspace number $ws4; mode "default"
+    bindsym 5 workspace number $ws5; mode "default"
+    bindsym 6 workspace number $ws6; mode "default"
+    bindsym 7 workspace number $ws7; mode "default"
+    bindsym 8 workspace number $ws8; mode "default"
+    bindsym 9 workspace number $ws9; mode "default"
+    bindsym 0 workspace number $ws10; mode "default"
+
+    # back to normal: Enter or Escape
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+    bindcode 133 mode "default"
+}
+bindcode 133 --release mode $mod_mode
+
+# Caps Lock indicator, seen at
+# https://www.reddit.com/r/i3wm/comments/k8m4k4/share_your_i3_tips_and_tricks_that_you_have/gf2lppd
+mode "-------------------- CAPSLOCK --------------------" {
+    bindsym Caps_Lock mode "default"
+}
+bindsym Caps_Lock mode "-------------------- CAPSLOCK --------------------"
