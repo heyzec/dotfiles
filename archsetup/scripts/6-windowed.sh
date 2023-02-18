@@ -1,6 +1,6 @@
-section 4-windowed window manager
-sudo pacman -S i3-gaps --noconfirm --needed
-info Starting i3 window manager
+# section 4-windowed window manager
+# sudo pacman -S i3-gaps --noconfirm --needed
+# info Starting i3 window manager
 # Bash on tty2 should start i3 now
 
 # Make i3 not complain about no config

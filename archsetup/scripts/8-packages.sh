@@ -2,17 +2,16 @@
 
 
 _ [Complete graphical environment]
-_ picom           : Xorg Desktop compositor
-_ libnotify       : library needed for dunst, a notification daemon
-_ dunst           : notification daemon
-_ i3lock-color    : screen locker
-_ rofi            : application launcher
-_ light           : backlight control
-_ playerctl       : media control
-_ flameshot       : screen capture
-_ xwallpaper      : wallpaper setter
-_ polybar         : taskbar
-_ dex             : XDG autostarter
+_ libnotify              : library needed for dunst, a notification daemon
+_ dunst                  : notification daemon
+_ swaylock               : screen locker for sway
+_ rofi-lbonn-wayland-git : application launcher
+_ light                  : backlight control
+_ playerctl              : media control
+_ flameshot              : screen capture
+_ swaybg                 : wallpaper setter for wayland
+_ waybar                 : taskbar for wayland
+_ dex                    : XDG autostarter
 
 sudo usermod -aG video $USERNAME
 

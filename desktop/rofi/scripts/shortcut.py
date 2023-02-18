@@ -6,7 +6,7 @@ import os
 from html import escape
 
 
-CONFIG = os.environ.get("HOME") + "/.config/i3/config"
+CONFIG = os.environ.get("HOME") + "/.config/sway/config"
 
 print("\0markup-rows\x1ftrue\n")
 

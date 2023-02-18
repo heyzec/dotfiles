@@ -9,11 +9,12 @@
 # Choose a terminal you can use to repair a broken configuration.
 
 
-
-bindsym $mod+Return exec i3-sensible-terminal
-
 # Mod4 is the Windows key, Mod1 is the Alt key
 set $mod Mod4
+
+# bindsym $mod+Return exec i3-sensible-terminal
+bindsym $mod+Return exec tilix
+
 
 # Define names for default workspaces for which we configure key bindings later on.
 # We use variables to avoid repeating the names in multiple places.
@@ -35,6 +36,11 @@ set $h h
 set $j j
 set $k k
 set $l l
+
+exec systemctl --user import-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP=sway
+# exec hash dbus-update-activation-environment 2>/dev/null && \
+    # dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP=sway
+exec dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP=sway
 
 # 1. NAVIGATION BINDINGS AND CONFIGS {{{
 ###############################################################################
@@ -187,8 +193,13 @@ bindsym $mod+Ctrl+Shift+j     move workspace to output down
 bindsym $mod+Shift+q kill
 bindsym $mod+BackSpace kill
 
+## Session // Force Kill App // <><Shift> x ##
+bindsym $mod+Shift+x exec swaymsg -t get_tree | \
+          jq 'recurse(.nodes[], .floating_nodes[]) | select(.focused).pid' | \
+          xargs -L 1 kill -9
+
 ## Session // Restart i3 // <><Shift> r ##
-bindsym $mod+Shift+r restart
+bindsym $mod+Shift+r reload
 
 ## Session // Logout // <><Shift> e ## logs you out of your X session
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
@@ -220,7 +231,7 @@ bindsym $mod+Control+space exec --no-startup-id rofi -show window
 ## Launch // File Search // <><Alt> Space ##
 
 ## Launch // Dotfiles Editor  // <> o ##
-bindsym $mod+o exec ${HOME}/.config/i3/scripts/dotsmenu.sh
+bindsym $mod+o exec ${HOME}/.config/sway/scripts/dotsmenu.sh
 # }}} 4. BINDINGS - LAUNCHER DIALOGS
 
 # 5. BINDINGS - MODES {{{
@@ -249,7 +260,8 @@ mode "resize" {
 }
 bindsym $mod+r mode "resize"
 
-set $Locker i3lock && sleep 1
+# set $Locker i3lock && sleep 1
+set $Locker true
 
 set $mode_system (l) lock, (e) logout, (s) suspend, (h) hibernate, (r) reboot, (S) shutdown
 # loginctl lock-session
@@ -303,7 +315,13 @@ bindsym XF86TouchpadToggle exec /some/path/toggletouchpad.sh
 # Media player controls
 bindsym XF86AudioPlay exec playerctl play-pause
 
-bindsym --release Print exec flameshot gui
+# Printscreen using flameshot
+# Current workaround for https://github.com/flameshot-org/flameshot/issues/2848#issuecomment-1199796142
+bindsym --release Print exec flameshot gui --raw | copyq copy image/png -
+bindsym --release Shift+Print exec flameshot gui
+# Fix to make flameshot appear on all screens
+# https://github.com/flameshot-org/flameshot/issues/2364#issuecomment-1086129055
+for_window [app_id="flameshot"] border pixel 0, floating enable, fullscreen disable, move absolute position 0 0
 # }}} 6. BINDINGS - MEDIA AND OTHERS
 
 # 7. STYLE AND THEMING {{{
@@ -363,22 +381,24 @@ exec --no-startup-id dex --autostart --environment i3
 
 # xss-lock grabs a logind suspend inhibit lock and will use i3lock to lock the
 # screen before suspend. Use loginctl lock-session to lock your screen.
-exec --no-startup-id xss-lock --transfer-sleep-lock -- ${HOME}/.config/i3/scripts/blurlock.sh
+# exec --no-startup-id xss-lock --transfer-sleep-lock -- ${HOME}/.config/i3/scripts/blurlock.sh
 
 # Start the polkit graphical authentication agent, assuming polkit-gnome installed
 exec /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 
 # ---------------------Bar and tray applets--------------------
-exec_always --no-startup-id ${HOME}/.config/polybar/launch.sh
+# not woring without sleep
+exec_always --no-startup-id sh -c "killall waybar; waybar"
 
-exec indicator-sound-switcher
+# exec indicator-sound-switcher
 
 # nm-applet provides auth dialogs to manage wired and wireless networks
-exec --no-startup-id nm-applet
+exec --no-startup-id nm-applet --indicator
+
 
 # ----------------------------Others---------------------------
 # Set wallpaper using custom script
-exec_always ${HOME}/.config/i3/scripts/setwallpaper.sh
+exec_always ${HOME}/.config/sway/scripts/setwallpaper.sh
 # }}} 8. AUTOSTARTED PROGRAMS
 
 
@@ -405,7 +425,18 @@ bindcode 133 --release mode $mod_mode
 
 # Caps Lock indicator, seen at
 # https://www.reddit.com/r/i3wm/comments/k8m4k4/share_your_i3_tips_and_tricks_that_you_have/gf2lppd
-mode "-------------------- CAPSLOCK --------------------" {
-    bindsym Caps_Lock mode "default"
+# mode "-------------------- CAPSLOCK --------------------" {
+#     bindsym Caps_Lock mode "default"
+# }
+# bindsym Caps_Lock mode "-------------------- CAPSLOCK --------------------"
+
+input type:touchpad {
+    tap enabled
+    natural_scroll enabled
+    click_method clickfinger
 }
-bindsym Caps_Lock mode "-------------------- CAPSLOCK --------------------"
+focus_on_window_activation focus
+for_window [app_id="wdisplays"] floating enable
+for_window [title="Delete AppImage — AppImageLauncher"] floating enable
+for_window [app_id="zoom" title="zoom"] floating enable
+exec_always ${HOME}/.config/sway/scripts/import-gsettings.sh

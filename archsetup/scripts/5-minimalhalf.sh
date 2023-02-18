@@ -25,10 +25,12 @@ info enabling bluetooth
 sudo systemctl enable bluetooth --now
 
 section 3-minimalhalf: Setup sound
-# Display Manager: Starts the X-server
-info installing xorg-server
-sudo pacman -S xorg-server --noconfirm --needed
+# Display Manager: Sway compositor
+info installing sway
+sudo pacman -S sway --noconfirm --needed
 
+
+# TODO: Fix the below chunk of code to start sway and sddm
 cat > ~/.xinitrc << END
 if [ -d /etc/X11/xinit/xinitrc.d ]; then
   for f in /etc/X11/xinit/xinitrc.d/*; do
@@ -39,10 +41,10 @@ fi
 exec tmux attach
 END
 
-info installing xinit
-sudo pacman -S xorg-xinit --noconfirm --needed
-info installing xterm
-sudo pacman -S xterm --noconfirm --needed
+# info installing xinit
+# sudo pacman -S xorg-xinit --noconfirm --needed
+# info installing xterm
+# sudo pacman -S xterm --noconfirm --needed
 
 echo sleep for x to be ready
 sudo chvt 2
@@ -58,8 +60,9 @@ sudo pacman -S polkit
 sudo pacman -S polkit-gnome  # a graphical authenticaion agent, to be autostarted by i3
 
 
-info installing lightdm
-# Greeter required, can configure
-sudo pacman -S lightdm lightdm-gtk-greeter --noconfirm --needed
-info enabling lightdm
-sudo systemctl enable lightdm
+# Using sddm-git as the change to allow sddm to run natively is not yet merged
+# TODO: Will also need to set a config to not use X
+info installing SDDM
+sudo pacman -S sddm-git --noconfirm --needed
+info enabling SDDM
+sudo systemctl enable sddm
