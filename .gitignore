@@ -2,5 +2,7 @@ nvim/vimrc
 nvim/viminfo
 nvim/.netrwhist
 nvim/plug-config/
+nvim/plugged/
+nvim/autoload/
 
 zsh/.zcompdump

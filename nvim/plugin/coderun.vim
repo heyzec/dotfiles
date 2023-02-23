@@ -22,8 +22,9 @@ noremap <leader>c :execute 'call TermExec(TermGetFirst(), "\<' . 'C-c>")'<CR>
 "Double-tap spacebar to run code!
 noremap <leader><leader> :call RunCode()<CR>
 if has('nvim')
-    au TermOpen * let g:tb=bufnr()  
+    au TermOpen * let g:tb=bufnr()
     au TermClose * unlet g:tb
+    autocmd BufWinEnter,WinEnter term://* startinsert
 else
     au TerminalWinOpen * let g:tb=bufnr()
 endif
@@ -61,7 +62,9 @@ function! NewTerm(...)
 
     if has('nvim')
         execute mods 'split term://$SHELL'
-        normal i
+        " https://www.reddit.com/r/neovim/comments/mq4zyh/comment/gulaqp5/?utm_source=share&utm_medium=web2x&context=3
+        " normal G
+        " normal i
     else
         execute mods 'term'
     endif

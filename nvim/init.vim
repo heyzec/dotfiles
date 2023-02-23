@@ -23,7 +23,7 @@ endif
 call plug#begin()
 " -------------------------A. Language------------------------
 " ------------------------B. Completion-----------------------
-Plug 'Raimondi/delimitMate'
+Plug 'jiangmiao/auto-pairs'
 
 " -----------------------C. Code Display----------------------
 Plug 'Yggdroot/indentLine'                      " display indention with thin vertical lines
@@ -50,6 +50,7 @@ else
     call plug#end()
 endif
 set completeopt=menu,menuone,noselect
+
 
 " ------------------------B. Completion-----------------------
 " -----------------------C. Code Display----------------------
@@ -220,6 +221,10 @@ noremap <A-h>     <C-w>h
 noremap <A-j>     <C-w>j
 noremap <A-k>     <C-w>k
 noremap <A-l>     <C-w>l
+tnoremap <A-h> <C-\><C-n><c-w>h
+tnoremap <A-j> <C-\><C-n><c-w>j
+tnoremap <A-k> <C-\><C-n><c-w>k
+tnoremap <A-l> <C-\><C-n><c-w>l
 
 " Resizing splits (ctrl + arrows keys)
 noremap <C-Left>  <C-w><
@@ -308,4 +313,5 @@ function! VimHook()
 endfunction
 
 " }}} 4. THINGS THAT SHOULD BE PLUGINS
+
 
