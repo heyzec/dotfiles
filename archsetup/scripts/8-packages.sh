@@ -24,6 +24,11 @@ _ vlc              : video player
 _ sane             : library and CLI to use scanners
 _ simple-scan      : frontend for SANE
 
+_ [Theming]
+_ lxappearance        : GTK+ theme switcher
+_ whitesur-gtk-theme  : MacOS Big Sur like theme
+_ whitesur-icon-theme : MacOS Big Sur style icon theme
+
 
 _ [Utilities]
 _ gparted             : frontend to parted, a partitioning tool
