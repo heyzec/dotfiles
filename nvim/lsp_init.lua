@@ -18,6 +18,7 @@ Plug 'nvim-treesitter/nvim-treesitter-refactor'
 Plug 'nvim-treesitter/nvim-treesitter-context'
 
 Plug 'nvim-lua/plenary.nvim'
+Plug 'jcdickinson/codeium.nvim'
 
 vim.call('plug#end')
 
@@ -32,6 +33,7 @@ require("mason-lspconfig").setup_handlers {
 }
 
 
+require("codeium").setup({})
 -- nvim-cmp {{{
 -- https://github.com/microsoft/vscode-codicons/blob/main/dist/codicon.ttf
 local cmp_kinds = {
@@ -60,6 +62,7 @@ local cmp_kinds = {
     Event         = '  ',
     Operator      = '  ',
     TypeParameter = '  ',
+    Codeium       = '" ',
 }
 
 
@@ -98,6 +101,7 @@ cmp.setup({
     },
     sources = cmp.config.sources({
         { name = 'nvim_lsp' },
+        { name = "codeium" },
     }, {
         { name = 'buffer' },
     }),
