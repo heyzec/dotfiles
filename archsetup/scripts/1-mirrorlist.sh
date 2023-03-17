@@ -10,3 +10,9 @@ iso=$(curl -4 ifconfig.co/country-iso)
 info Setting up $iso mirrors for faster downloads
 curl -s "https://archlinux.org/mirrorlist/?country=SG&protocol=https&use_mirror_status=on" | sed -e 's/^#Server/Server/' -e '/^#/d' | rankmirrors -n 5 - > /etc/pacman.d/mirrorlist
 info Done setting up mirrors
+
+# Faster downloads
+sed -i 's/^#ParallelDownloads/ParallelDownloads/g' /etc/pacman.conf
+
+# Colored pacman output
+sed -i 's/^#Color/Color/g' /etc/pacman.conf

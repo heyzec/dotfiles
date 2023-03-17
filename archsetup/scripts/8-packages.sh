@@ -20,6 +20,7 @@ _ [Standard desktop environment applications]
 _ firefox          : browser Mozilla based on Gecko engine
 _ gedit            : simple text editor
 _ thunar           : file manager
+_ tumbler          : generate thumbnails
 _ vlc              : video player
 _ sane             : library and CLI to use scanners
 _ simple-scan      : frontend for SANE
@@ -65,6 +66,8 @@ sudo systemctl enable --now docker
 _ telegram-desktop       : Telegram client
 _ python-pip             : package manager for python libraries
 _ chromium               : open-source chrome
+_ transmission-gtk       : lightweight BitTorrent client
+_ gthumb                 : image viewer with simple editing tools
 
 _ [Fonts]
 _ ttf-roboto             : Google\'s sans-serif fonts
