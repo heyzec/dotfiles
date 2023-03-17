@@ -1,0 +1,10 @@
+set $mode_launcher Launch: [b]rowser [f]iles [m]essages
+mode "$mode_launcher" {
+        bindsym b exec firefox; mode "default"
+        bindsym f exec thunar; mode "default"
+        bindsym m exec telegram-desktop; mode "default"
+
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+}
+bindsym $mod+c mode "$mode_launcher"

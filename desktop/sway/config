@@ -277,21 +277,10 @@ mode "$mode_system" {
     bindsym Return mode "default"
     bindsym Escape mode "default"
 }
-
 bindsym $mod+Escape mode "$mode_system"
 
-# # Testing mode
-# set $control System Control [S for shutdown, R for restart, E for logout, X for lock]:
-# bindsym $mod+Escape mode "$control"
+include partials/mode-launcher
 
-# mode "$control" {
-#     bindsym x exec notify-send aa bb
-#     bindsym e exec notify-send aa aa
-#     bindsym r exec notify-send aa d
-#     bindsym s exec notify-send aa 
-
-#     bindsym Escape mode "default"
-# }
 # }}} 5. BINDINGS - MODES
 
 # 6. BINDINGS - MEDIA AND OTHERS {{{
@@ -303,7 +292,10 @@ bindsym $mod+Escape mode "$mode_system"
 bindsym XF86AudioRaiseVolume exec --no-startup-id wpctl set-volume @DEFAULT_SINK@ 5%+ --limit 1.5
 bindsym XF86AudioLowerVolume exec --no-startup-id wpctl set-volume @DEFAULT_SINK@ 5%-
 bindsym XF86AudioMute exec --no-startup-id wpctl set-mute @DEFAULT_SINK@ toggle
-bindsym XF86AudioMicMute exec --no-startup-id wpctl set-mute @DEFAULT_SOURCE@ toggle
+
+bindsym Shift+XF86AudioRaiseVolume exec --no-startup-id wpctl set-volume @DEFAULT_SOURCE@ 5%+ --limit 1.5
+bindsym Shift+XF86AudioLowerVolume exec --no-startup-id wpctl set-volume @DEFAULT_SOURCE@ 5%-
+bindsym Shift+XF86AudioMute exec --no-startup-id wpctl set-mute @DEFAULT_SOURCE@ toggle
 
 # Screen brightness controls
 bindsym XF86MonBrightnessUp exec light -A 10 # increase screen brightness
@@ -370,10 +362,6 @@ client.urgent            $BLUE_MASTRICHT      $RED                 $BEIGE       
 ###############################################################################
 # Autostart Programs
 ###############################################################################
-
-# Start the display compositor
-# disabled until can figure out graphics problem
-# exec_always picom --experimental-backend
 
 # Start XDG autostart .desktop files using dex. See also
 # https://wiki.archlinux.org/index.php/XDG_Autostart
