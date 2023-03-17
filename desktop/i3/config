@@ -22,32 +22,18 @@ set $ws10 "10"
 # Window and Workspace Navigation
 ###############################################################################
 
-# Navigate // Relative Parent // <> z ##/
-bindsym $mod+z focus parent
-
-# Navigate // Relative Child // <> c ##/
-bindsym $mod+c focus child
-
-# Navigate // Relative Window // <> k j h l ##
-bindsym $mod+h focus left
-bindsym $mod+j focus down
-bindsym $mod+k focus up
-bindsym $mod+l focus right
-
-# Navigate // Relative Window // <> ↑ ↓ ← → ##
-bindsym $mod+Left focus left
-bindsym $mod+Down focus down
-bindsym $mod+Up focus up
+# 1.1. i3 DEFAULTS {{{
+## Navigate // Relative Window // <> ↑ ↓ ← → ##  or k j h l
+bindsym $mod+Left  focus left
+bindsym $mod+Down  focus down
+bindsym $mod+Up    focus up
 bindsym $mod+Right focus right
+bindsym $mod+h     focus left
+bindsym $mod+j     focus down
+bindsym $mod+k     focus up
+bindsym $mod+l     focus right
 
-# Disabled until familiar with defaults
-# # Navigate // Relative Window // <> w a s d ##
-# bindsym $mod+a focus left
-# bindsym $mod+s focus down
-# bindsym $mod+w focus up
-# bindsym $mod+d focus right
-
-# Navigate // Workspaces 1-10 // <> 0..9 ##
+## Navigate // Workspaces 1-10 // <> 0..9 ##
 bindsym $mod+1 workspace number $ws1
 bindsym $mod+2 workspace number $ws2
 bindsym $mod+3 workspace number $ws3
@@ -59,6 +45,21 @@ bindsym $mod+8 workspace number $ws8
 bindsym $mod+9 workspace number $ws9
 bindsym $mod+0 workspace number $ws10
 
+## Navigate // Relative Parent // <> a ##
+bindsym $mod+a focus parent
+
+## Navigate // Relative Child // <> d ##
+bindsym $mod+d focus child
+# }}} 1.1. i3 DEFAULTS
+
+# Disabled until familiar with defaults
+# # Navigate // Relative Window // <> w a s d ##
+# bindsym $mod+a focus left
+# bindsym $mod+s focus down
+# bindsym $mod+w focus up
+# bindsym $mod+d focus right
+
+
 # disable window focus follows mouse movements as the mouse crosses window borders
 focus_follows_mouse no
 # }}} 1. NAVIGATION BINDINGS AND CONFIGS
@@ -68,58 +69,16 @@ focus_follows_mouse no
 # Window and Workspace Configuration
 ###############################################################################
 
-## Modify // Window Position // <><Shift> ↑ ↓ ← → ##
-bindsym $mod+Shift+Left move left
-bindsym $mod+Shift+Down move down
-bindsym $mod+Shift+Up move up
+# 2.1. i3 DEFAULTS {{{
+## Modify // Window Position // <><Shift> ↑ ↓ ← → ## or k j h l
+bindsym $mod+Shift+Left  move left
+bindsym $mod+Shift+Down  move down
+bindsym $mod+Shift+Up    move up
 bindsym $mod+Shift+Right move right
-
-## Modify // Window Position // <><Shift> k j h l ##
-bindsym $mod+Shift+h move left
-bindsym $mod+Shift+j move down
-bindsym $mod+Shift+k move up
-bindsym $mod+Shift+l move right
-
-## Modify // Containing Workspace // <><Ctrl><Shift> ↑ ↓ ← → ##
-bindsym $mod+Ctrl+Shift+Left move workspace to output left
-bindsym $mod+Ctrl+Shift+Right move workspace to output right
-bindsym $mod+Ctrl+Shift+Up move workspace to output up
-bindsym $mod+Ctrl+Shift+Down move workspace to output down
-
-## Modify // Containing Workspace // <><Ctrl><Shift> k j h l ##
-bindsym $mod+Ctrl+Shift+h move workspace to output left
-bindsym $mod+Ctrl+Shift+l move workspace to output right
-bindsym $mod+Ctrl+Shift+k move workspace to output up
-bindsym $mod+Ctrl+Shift+j move workspace to output down
-
-## Modify // Vertical Window Orientation // <> v ##
-bindsym $mod+v split v
-
-## Modify // Horizontal Window Orientation // <> g ##
-bindsym $mod+g split h
-
-### Modify // Toggle Window Orientation // <> Backspace ##
-#set_from_resource $i3-wm.binding.orientation_toggle i3-wm.binding.orientation_toggle BackSpace
-#bindsym $mod+$i3-wm.binding.orientation_toggle split toggle
-
-## Modify // Window Fullscreen Toggle // <> f ##
-bindsym $mod+f fullscreen toggle
-
-## Modify // Window Floating Toggle // <><Shift> f ##
-bindsym $mod+Shift+f floating toggle
-
-## Modify // Move to Scratchpad // <><Ctrl> m ##
-
-## Modify // Tile/Float Focus Toggle // <><Shift> t ##
-bindsym $mod+Shift+t focus mode_toggle
-
-### Modify // Window Layout Mode // <> t ##
-bindsym $mod+s layout stacking
-bindsym $mod+w layout tabbed
-bindsym $mod+e layout toggle split
-
-## bindsym $mod+$i3-wm.binding.layout_mode layout toggle tabbed splith splitv
-
+bindsym $mod+Shift+h     move left
+bindsym $mod+Shift+j     move down
+bindsym $mod+Shift+k     move up
+bindsym $mod+Shift+l     move right
 
 ## Modify // Move Window to Workspace 1 - 10 // <><Shift> 0..9 ##
 bindsym $mod+Shift+1 move container to workspace number $ws1
@@ -132,6 +91,53 @@ bindsym $mod+Shift+7 move container to workspace number $ws7
 bindsym $mod+Shift+8 move container to workspace number $ws8
 bindsym $mod+Shift+9 move container to workspace number $ws9
 bindsym $mod+Shift+0 move container to workspace number $ws10
+
+## Modify // Window Layout Mode // <> t ##
+bindsym $mod+s layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+e layout toggle split
+
+## Modify // Window Fullscreen Toggle // <> f ##
+bindsym $mod+f fullscreen toggle
+
+## Modify // Vertical Window Orientation // <> v ##
+bindsym $mod+v split v
+
+## Modify // Horizontal Window Orientation // <> g ##
+bindsym $mod+g split h
+
+# Use Mouse+$mod to drag floating windows to their wanted position
+## Modify // Move Window With Mouse // <> <Mouse> ##
+floating_modifier $mod
+# }}} 2.1. i3 DEFAULTS
+
+### Modify // Toggle Window Orientation // <> Backspace ##
+#set_from_resource $i3-wm.binding.orientation_toggle i3-wm.binding.orientation_toggle BackSpace
+#bindsym $mod+$i3-wm.binding.orientation_toggle split toggle
+
+
+## Modify // Window Floating Toggle // <><Shift> f ##
+bindsym $mod+Shift+f floating toggle
+
+## Modify // Move to Scratchpad // <><Ctrl> m ##
+
+## Modify // Tile/Float Focus Toggle // <><Shift> t ##
+bindsym $mod+Shift+t focus mode_toggle
+
+
+## bindsym $mod+$i3-wm.binding.layout_mode layout toggle tabbed splith splitv
+
+
+## Modify // Containing Workspace // <><Ctrl><Shift> ↑ ↓ ← → ## or k j h l
+bindsym $mod+Ctrl+Shift+Left  move workspace to output left
+bindsym $mod+Ctrl+Shift+Right move workspace to output right
+bindsym $mod+Ctrl+Shift+Up    move workspace to output up
+bindsym $mod+Ctrl+Shift+Down  move workspace to output down
+bindsym $mod+Ctrl+Shift+h     move workspace to output left
+bindsym $mod+Ctrl+Shift+l     move workspace to output right
+bindsym $mod+Ctrl+Shift+k     move workspace to output up
+bindsym $mod+Ctrl+Shift+j     move workspace to output down
+
 
 ## move focused container to workspace, move to workspace
 ### Modify // Carry Window to Workspace 1 - 10// <><Alt> 0..9 ##
@@ -146,8 +152,6 @@ bindsym $mod+Shift+0 move container to workspace number $ws10
 #bindsym $mod+$alt+$ws9_key move container to workspace number $ws9; workspace number $ws9
 #bindsym $mod+$alt+$ws10_key move container to workspace number $ws10; workspace number $ws10
 
-# Use Mouse+$mod to drag floating windows to their wanted position
-floating_modifier $mod
 # }}} 2. WORKSPACE BINDINGS AND CONFIGS
 
 # 3. BINDINGS - SESSION MANAGEMENT {{{
@@ -174,11 +178,6 @@ bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
 
-## Session // Reboot // <><Shift> b ##
-
-## Session // Power Down // <><Shift> p ##
-
-## Session // Sleep // <><Shift> s ##
 # }}} 3. BINDINGS - SESSION MANAGEMENT
 
 # 4. BINDINGS - LAUNCHER DIALOGS {{{
@@ -207,6 +206,7 @@ bindsym $mod+Control+space exec --no-startup-id rofi -show window
 
 ## Launch // Look Selector // <><Alt> l ##
 
+## Launch // Dotfiles Editor  // <> o ##
 bindsym $mod+o exec $HOME/.config/i3/scripts/dotsmenu.sh
 # }}} 4. BINDINGS - LAUNCHER DIALOGS
 
@@ -217,24 +217,22 @@ bindsym $mod+o exec $HOME/.config/i3/scripts/dotsmenu.sh
 
 ## Resize // Enter Resize Mode // <> r ##
 mode "resize" {
-        # These bindings trigger as soon as you enter the resize mode
+    # These bindings trigger as soon as you enter the resize mode
 
-        # Resize // Resize Window // k j h l ##
-        bindsym h resize shrink width 10 px or 10 ppt
-        bindsym j resize grow height 10 px or 10 ppt
-        bindsym k resize shrink height 10 px or 10 ppt
-        bindsym l resize grow width 10 px or 10 ppt
+    ## Resize // Resize Window // ↑ ↓ ← → ## or k j h l
+    bindsym Left  resize shrink width  10 px or 10 ppt
+    bindsym Down  resize grow   height 10 px or 10 ppt
+    bindsym Up    resize shrink height 10 px or 10 ppt
+    bindsym Right resize grow   width  10 px or 10 ppt
+    bindsym h     resize shrink width  10 px or 10 ppt
+    bindsym j     resize grow   height 10 px or 10 ppt
+    bindsym k     resize shrink height 10 px or 10 ppt
+    bindsym l     resize grow   width  10 px or 10 ppt
 
-        # Resize // Resize Window // ↑ ↓ ← → ##
-        bindsym Left resize shrink width 10 px or 10 ppt
-        bindsym Down resize grow height 10 px or 10 ppt
-        bindsym Up resize shrink height 10 px or 10 ppt
-        bindsym Right resize grow width 10 px or 10 ppt
-
-        # Resize // Exit Resize Mode // Escape or Enter ##
-        bindsym Return mode "default"
-        bindsym Escape mode "default"
-        bindsym $mod+r mode "default"
+    ## Resize // Exit Resize Mode // Escape or Enter ##
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+    bindsym $mod+r mode "default"
 }
 bindsym $mod+r mode "resize"
 
@@ -273,7 +271,6 @@ bindsym XF86TouchpadToggle exec /some/path/toggletouchpad.sh
 
 # Media player controls
 bindsym XF86AudioPlay exec playerctl play-pause
-
 
 bindsym --release Print exec gnome-screenshot -i
 # }}} 6. BINDINGS - MEDIA AND OTHERS
