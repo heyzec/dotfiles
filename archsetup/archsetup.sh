@@ -124,7 +124,9 @@ bash "$SCRIPT_DIR/scripts/4-server.sh"
 bash "$SCRIPT_DIR/scripts/5-minimalhalf.sh"
 bash "$SCRIPT_DIR/scripts/6-windowed.sh"
 bash "$SCRIPT_DIR/scripts/7-eyecandy.sh"
-bash "$SCRIPT_DIR/scripts/8-packages.sh"
+bash "$SCRIPT_DIR/scripts/8-desktop.sh"
+
+bash "$SCRIPT_DIR/scripts/packages.sh"
 
 bash "$SCRIPT_DIR/scripts/tweaks-dotfiles.sh"
 bash "$SCRIPT_DIR/scripts/tweaks-intel.sh"
