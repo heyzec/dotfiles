@@ -198,6 +198,7 @@ bindsym $mod+space exec --no-startup-id rofi -show drun
 ## Launch // Command // <><Shift> Space ##
 
 ## Launch // Keybinding Viewer // <><Shift> ? ##
+bindsym $mod+shift+slash exec rofi -modi shortcut:~/.config/rofi/scripts/shortcut.py -show shortcut
 
 ## Navigate // Window by Name // <><Ctrl> Space ##
 bindsym $mod+Control+space exec --no-startup-id rofi -show window
