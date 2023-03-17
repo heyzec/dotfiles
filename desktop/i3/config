@@ -322,73 +322,30 @@ smart_borders on
 font pango:monospace 8
 
 
-# # set $bg-color 	         #2f343f
-# set $bg-color 	         #00ff00
-# set $inactive-bg-color   #2f343f
-# set $text-color          #f3f4f5
-# set $inactive-text-color #676E7D
-# set $urgent-bg-color     #E53935
 # # window colors
 for_window [class="^.*"] border pixel 3
-# #                       border              background         text                 indicator
-# client.focused          #ff0000           $bg-color          $text-color          #00ff00
-# client.unfocused        $iancative-bg-color $inactive-bg-color $inactive-text-color #00ff00
-# client.focused_inactive $iancative-bg-color $inactive-bg-color $inactive-text-color #00ff00
-# client.urgent           $urgent-bg-color    $urgent-bg-color   $text-color          #00ff00
 
+set $BLUE_MASTRICHT "#002b36"
+set $GREY_CADET "#8ba1a7"
+set $BEIGE "#FDF6E3"
+set $BLUE_LIGHT "#268BD2"
+set $BLUE_PRUSSIAN "#073642"
+set $GRAY "#839496"
+set $RED "#DC322F"
+set $PURPLE "#a475cc"
 
-# Create variables from Xresources for i3's look.
-set $focused.color.border  "#002b36"
-set $focused.color.background  "#8ba1a7"
-set $focused.color.text  "#fdf6e3"
-set $focused.color.indicator  "#268bd2"
-set $focused.color.child_border 
-
-set $focused_inactive.color.border  "#002b36"
-set $focused_inactive.color.background  "#073642"
-set $focused_inactive.color.text  "#839496"
-set $focused_inactive.color.indicator  "#073642"
-set $focused_inactive.color.child_border 
-
-set $unfocused.color.border  "#002b36"
-set $unfocused.color.background  "#073642"
-set $unfocused.color.text  "#839496"
-set $unfocused.color.indicator  "#073642"
-set $unfocused.color.child_border 
-
-set $urgent.color.border  "#002b36"
-set $urgent.color.background  "#dc322f"
-set $urgent.color.text  "#fdf6e3"
-set $urgent.color.indicator  "#002b36"
-set $urgent.color.child_border 
-
-
-# Window Border color
-# class                 border                             background                         text                               indicator                          child_border
-client.focused          $focused.color.border              $focused.color.background          $focused.color.text                $focused.color.indicator           $focused.color.child_border
-client.focused_inactive $focused_inactive.color.border     $focused_inactive.color.background $focused_inactive.color.text       $focused_inactive.color.indicator  $focused_inactive.color.child_border
-client.unfocused        $unfocused.color.border            $unfocused.color.background        $unfocused.color.text              $unfocused.color.indicator         $unfocused.color.child_border
-client.urgent           $urgent.color.border               $urgent.color.background           $urgent.color.text                 $urgent.color.indicator            $urgent.color.child_border
 
 # Theme colors
-# class                   border  backgr. text    indic.   child_border
-#  client.focused          #556064 #556064 #80FFF9 #FDF6E3
-#  client.focused_inactive #2F3D44 #2F3D44 #AD69AF #454948
-#  client.unfocused        #2F3D44 #2F3D44 #AD69AF #454948
-#  client.urgent           #CB4B16 #FDF6E3 #AD69AF #268BD2
-#  client.placeholder      #000000 #0c0c0c #ffffff #000000 
-#
-#  client.background       #000000
+# class                  border               background           text                 indicator                          child_border
+client.focused           $PURPLE                 $PURPLE      $BEIGE               $BLUE_LIGHT
 
-# Theme colors
-# class                   border  backgr. text    indic.   child_border
-#  client.focused          #FFFFFF #FFFFFF #FFFFFF #FFFFFF
-#  client.focused_inactive #2F3D44 #2F3D44 #AD69AF #454948
-#  client.unfocused        #2F3D44 #2F3D44 #AD69AF #454948
-#  client.urgent           #CB4B16 #FDF6E3 #AD69AF #268BD2
-#  client.placeholder      #000000 #0c0c0c #ffffff #000000 
-#
-#  client.background       #000000
+client.focused_inactive  $PURPLE      $BLUE_PRUSSIAN       $GRAY                $BLUE_MASTRICHT
+
+client.unfocused         $BLUE_MASTRICHT      $BLUE_PRUSSIAN       $GRAY                $BLUE_MASTRICHT
+
+client.urgent            $BLUE_MASTRICHT      $RED                 $BEIGE               $BLUE_MASTRICHT
+
+
 # }}} 7. STYLE AND THEMING
 
 # 8. AUTOSTARTED PROGRAMS {{{
