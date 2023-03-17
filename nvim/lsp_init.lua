@@ -108,7 +108,10 @@ cmp.setup({
             return vim_item
 
         end,
-    }
+    },
+    experimental = {
+        ghost_text = {hlgroup = "Comment"}
+    },
 })
 
 -- Use buffer as a source when searching.
@@ -239,4 +242,5 @@ require'treesitter-context'.setup{
     },
 }
 -- }}} treesitter
+
 

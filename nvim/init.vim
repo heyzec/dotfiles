@@ -1,4 +1,5 @@
 " ------------------------------ ------------------------------
+let LSP_INIT_FILE = "lsp_init.lua"
 
 " 1. PLUGIN LIST & CONFIGURATIONS {{{
 " ###############################################################################
@@ -38,14 +39,13 @@ Plug 'tpope/vim-fugitive'                       " git integration
 " -------------------------E. Commands------------------------
 Plug 'tpope/vim-commentary'                     " lightweight commenting plugin
 
-" Plug 'ThePrimeagen/vim-be-good'
 " }}} 1.2. Plugin List
 
 " 1.3. Plugin Configurations {{{
 " -------------------------A. Language------------------------
 " Enable and configure language-related plugins in separate lua script
 if has('nvim') && !exists('g:vscode')
-    runtime lsp_init.lua
+    execute "runtime ".LSP_INIT_FILE
 else
     call plug#end()
 endif
@@ -64,9 +64,6 @@ noremap <leader>u :UndotreeToggle<CR>
 " configure vim-airline/vim-airline
 let g:airline_theme='minimalist'
 let g:airline#extensions#tabline#enabled=1
-
-" configure iamcco/markdown-preview.nvim
-let g:mkdp_auto_start=1
 
 " -------------------------E. Commands------------------------
 " }}} 1.3. Plugin Configurations
@@ -185,7 +182,7 @@ noremap Q :echo 'No more Ex mode!'<CR>
 noremap <leader>w :w<CR>
 
 " cd vim into the directory of the current buffer
-nnoremap <leader>cd :cd %:p:h<CR>
+nnoremap <leader>d :cd %:p:h<CR>
 
 " Tabs to switch buffers
 if !exists('g:vscode')
@@ -199,6 +196,7 @@ endif
 
 " [e]dit/[s]ource my [v]imrc {{{
 nnoremap <leader>ve :vsplit $MYVIMRC<CR>
+nnoremap <leader>vl :execute printf('vsplit %s/'.LSP_INIT_FILE, fnamemodify($MYVIMRC, ':h'))<CR>
 if !exists('g:vscode')
     nnoremap <leader>vs :silent! call win_execute(win_findbuf(bufnr($MYVIMRC))[0], 'w') <bar> source $MYVIMRC<CR>
 else
