@@ -1,0 +1,9 @@
+nvim $HOME/.config/nvim/init.vim
+sway $HOME/.config/sway/config
+waybar-config $HOME/.config/waybar/config
+waybar-style $HOME/.config/waybar/style.css
+zsh $HOME/.zshrc
+gitconfig $HOME/.gitconfig
+river $HOME/.config/river/init
+swhkd $HOME/.config/swhkd/swhkdrc
+dotmenu-items $HOME/dotfiles/desktop/sway/scripts/dotsmenu/items
