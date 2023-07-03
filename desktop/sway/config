@@ -1,23 +1,26 @@
-# i3 config file (v4)
+# sway config file
 #
-# Please see https://i3wm.org/docs/userguide.html for a complete reference!
+# Read `man 5 sway` for a complete reference.
 
 # https://github.com/regolith-linux/regolith-i3-config/tree/master/partials
 # https://www.sglavoie.com/posts/2020/08/15/a-guided-tour-of-an-i3-configuration/#i3-config-shortcuts
 
-# i3 defines bindings and settings such that "first one wins".
+# sway defines bindings and settings such that "first one wins".
 # Choose a terminal you can use to repair a broken configuration.
+bindsym Mod4+Return exec tilix
 
+
+###############################################################################
+# Variables
+###############################################################################
+# We use variables to avoid repeating the names in multiple places.
 
 # Mod4 is the Windows key, Mod1 is the Alt key
 set $mod Mod4
 
-# bindsym $mod+Return exec i3-sensible-terminal
-bindsym $mod+Return exec tilix
-
+set $WOBSOCK $XDG_RUNTIME_DIR/wob.sock
 
 # Define names for default workspaces for which we configure key bindings later on.
-# We use variables to avoid repeating the names in multiple places.
 set $ws1 "1"
 set $ws2 "2"
 set $ws3 "3"
@@ -29,25 +32,15 @@ set $ws8 "8"
 set $ws9 "9"
 set $ws10 "10"
 
-# Choose your cursor keys. Default is like 'vi'. Beware binding a key
-# to two operations within a mode. The resulting cursor keypad is the
-# only one.
-set $h h
-set $j j
-set $k k
-set $l l
-
 exec systemctl --user import-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP=sway
 # exec hash dbus-update-activation-environment 2>/dev/null && \
     # dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP=sway
-exec dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP=sway
 
 # 1. NAVIGATION BINDINGS AND CONFIGS {{{
 ###############################################################################
 # Window and Workspace Navigation
 ###############################################################################
 
-# 1.1. i3 DEFAULTS {{{
 ## Navigate // Relative Window // <> ↑ ↓ ← → ##  or k j h l
 bindsym $mod+Left  focus left
 bindsym $mod+Down  focus down
@@ -57,6 +50,10 @@ bindsym $mod+h     focus left
 bindsym $mod+j     focus down
 bindsym $mod+k     focus up
 bindsym $mod+l     focus right
+bindsym $mod+a     focus left
+bindsym $mod+s     focus down
+bindsym $mod+w     focus up
+bindsym $mod+d     focus right
 
 ## Navigate // Workspaces 1-10 // <> 0..9 ##
 bindsym $mod+1 workspace number $ws1
@@ -71,25 +68,18 @@ bindsym $mod+9 workspace number $ws9
 bindsym $mod+0 workspace number $ws10
 
 ## Navigate // Relative Parent // <> a ##
-bindsym $mod+a focus parent
+bindsym $mod+z focus parent
 
 ## Navigate // Relative Child // <> d ##
-bindsym $mod+d focus child
+bindsym $mod+Shift+z focus child
 # }}} 1.1. i3 DEFAULTS
 
 ## Navigate // Scratchpad // <> n ##
 bindsym $mod+n scratchpad show
 
-# Disabled until familiar with defaults
-# # Navigate // Relative Window // <> w a s d ##
-# bindsym $mod+a focus left
-# bindsym $mod+s focus down
-# bindsym $mod+w focus up
-# bindsym $mod+d focus right
-
-
 # Alt-Tablike behaviour
 bindsym $mod+Tab workspace back_and_forth
+
 # disable window focus follows mouse movements as the mouse crosses window borders
 focus_follows_mouse no
 # }}} 1. NAVIGATION BINDINGS AND CONFIGS
@@ -99,7 +89,6 @@ focus_follows_mouse no
 # Window and Workspace Configuration
 ###############################################################################
 
-# 2.1. i3 DEFAULTS {{{
 ## Modify // Window Position // <><Shift> ↑ ↓ ← → ## or k j h l
 bindsym $mod+Shift+Left  move left
 bindsym $mod+Shift+Down  move down
@@ -109,7 +98,10 @@ bindsym $mod+Shift+h     move left
 bindsym $mod+Shift+j     move down
 bindsym $mod+Shift+k     move up
 bindsym $mod+Shift+l     move right
-# bindsym $mod+$i3-wm.binding.layout_mode layout toggle tabbed splith splitv
+bindsym $mod+Shift+a     move left
+bindsym $mod+Shift+s     move down
+bindsym $mod+Shift+w     move up
+bindsym $mod+Shift+d     move right
 
 ## Modify // Move Window to Workspace 1 - 10 // <><Shift> 0..9 ##
 bindsym $mod+Shift+1 move container to workspace number $ws1
@@ -123,10 +115,12 @@ bindsym $mod+Shift+8 move container to workspace number $ws8
 bindsym $mod+Shift+9 move container to workspace number $ws9
 bindsym $mod+Shift+0 move container to workspace number $ws10
 
-## Modify // Window Layout Mode // <> t ##
-bindsym $mod+s layout stacking
-bindsym $mod+w layout tabbed
-bindsym $mod+e layout toggle split
+# ## Modify // Window Layout Mode // <> t ##
+# bindsym $mod+s layout stacking
+# bindsym $mod+w layout tabbed
+# bindsym $mod+e layout toggle split
+## Modify // Toggle Window Layout Mode // <> e ##
+bindsym $mod+e layout toggle stacking tabbed splitv splith
 
 ## Modify // Window Fullscreen Toggle // <> f ##
 bindsym $mod+f fullscreen toggle
@@ -135,12 +129,11 @@ bindsym $mod+f fullscreen toggle
 bindsym $mod+v split v
 
 ## Modify // Horizontal Window Orientation // <> g ##
-bindsym $mod+g split h
+bindsym $mod+b split h
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 ## Modify // Move Window With Mouse // <> <Mouse> ##
 floating_modifier $mod
-# }}} 2.1. i3 DEFAULTS
 
 ### Modify // Toggle Window Orientation // <> Backspace ##
 #set_from_resource $i3-wm.binding.orientation_toggle i3-wm.binding.orientation_toggle BackSpace
@@ -152,11 +145,8 @@ bindsym $mod+Shift+f floating toggle
 ## Modify // Tile/Float Focus Toggle // <><Shift> t ##
 bindsym $mod+Shift+t focus mode_toggle
 
-## Modify // Move to Scratchpad // <> m ##
-bindsym $mod+m move scratchpad
-
-## bindsym $mod+$i3-wm.binding.layout_mode layout toggle tabbed splith splitv
-
+## Modify // Move to Scratchpad // <><Shift> n ##
+bindsym $mod+Shift+n move scratchpad
 
 ## Modify // Containing Workspace // <><Ctrl><Shift> ↑ ↓ ← → ## or k j h l
 bindsym $mod+Ctrl+Shift+Left  move workspace to output left
@@ -189,32 +179,31 @@ bindsym $mod+Ctrl+Shift+j     move workspace to output down
 # Session Management
 ###############################################################################
 
-## Session // Exit App // <><Shift> q ##
-bindsym $mod+Shift+q kill
+## Session // Exit App // <> q ##
+bindsym $mod+q kill
 bindsym $mod+BackSpace kill
 
 ## Session // Force Kill App // <><Shift> x ##
-bindsym $mod+Shift+x exec swaymsg -t get_tree | \
+bindsym $mod+Shift+q exec swaymsg -t get_tree | \
           jq 'recurse(.nodes[], .floating_nodes[]) | select(.focused).pid' | \
           xargs -L 1 kill -9
 
-## Session // Restart i3 // <><Shift> r ##
-bindsym $mod+Shift+r reload
+## Session // Restart sway // <><Shift> Escape ##
+bindsym $mod+Shift+Escape reload
 
-## Session // Logout // <><Shift> e ## logs you out of your X session
-bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
+## Session // Logout // <><Shift> e ## logs you out of your sway session
+bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -B 'Yes, exit sway' 'swaymsg exit'
+
 # }}} 3. BINDINGS - SESSION MANAGEMENT
 
 # 4. BINDINGS - LAUNCHER DIALOGS {{{
 ###############################################################################
 # Launcher dialogs
 ###############################################################################
+# Moved to swhwd
 
 ## Launch // Terminal // <> Enter ##
-# bindsym $mod+Return exec i3-sensible-terminal
-
-## Launch // Browser // <><Shift> Enter ##
-bindsym $mod+Shift+Return exec --no-startup-id gtk-launch $(xdg-settings get default-web-browser)
+# See start of file
 
 ## Launch // Application // <> Space ##
 bindsym $mod+space exec --no-startup-id rofi -show drun
@@ -228,10 +217,10 @@ bindsym $mod+shift+slash exec rofi -modi shortcut:~/.config/rofi/scripts/shortcu
 ## Navigate // Window by Name // <><Ctrl> Space ##
 bindsym $mod+Control+space exec --no-startup-id rofi -show window
 
-## Launch // File Search // <><Alt> Space ##
+# ## Launch // File Search // <><Alt> Space ##
 
 ## Launch // Dotfiles Editor  // <> o ##
-bindsym $mod+o exec ${HOME}/.config/sway/scripts/dotsmenu.sh
+bindsym $mod+o exec ${HOME}/dotfiles/scripts/dotsmenu/dotsmenu.sh
 # }}} 4. BINDINGS - LAUNCHER DIALOGS
 
 # 5. BINDINGS - MODES {{{
@@ -256,36 +245,41 @@ mode "resize" {
     ## Resize // Exit Resize Mode // Escape or Enter ##
     bindsym Return mode "default"
     bindsym Escape mode "default"
-    bindsym $mod+r mode "default"
 }
-bindsym $mod+r mode "resize"
+bindsym $mod+Shift+r mode "resize"
 
-# set $Locker i3lock && sleep 1
-set $Locker true
+set $Locker "$HOME/dotfiles/scripts/locker/blurlock.sh"
 
 set $mode_system (l) lock, (e) logout, (s) suspend, (h) hibernate, (r) reboot, (S) shutdown
 # loginctl lock-session
 mode "$mode_system" {
-    bindsym l exec --no-startup-id $Locker, mode "default"
-    bindsym e exec --no-startup-id i3-msg exit, mode "default"
-    bindsym s exec --no-startup-id $Locker && systemctl suspend, mode "default"
-    bindsym h exec --no-startup-id $Locker && systemctl hibernate, mode "default"
-    bindsym r exec --no-startup-id systemctl reboot, mode "default"
-    bindsym Shift+s exec --no-startup-id systemctl poweroff -i, mode "default"  
+    bindsym --locked l exec --no-startup-id $Locker, mode "default"
+    bindsym --locked e exec --no-startup-id i3-msg exit, mode "default"
+    bindsym --locked s exec --no-startup-id $Locker && systemctl suspend, mode "default"
+    bindsym --locked h exec --no-startup-id $Locker && systemctl hibernate, mode "default"
+    bindsym --locked r exec --no-startup-id systemctl reboot, mode "default"
+    bindsym --locked Shift+s exec --no-startup-id systemctl poweroff -i, mode "default"
 
     # back to normal: Enter or Escape
     bindsym Return mode "default"
     bindsym Escape mode "default"
 }
-bindsym $mod+Escape mode "$mode_system"
+bindsym --locked $mod+Escape mode "$mode_system"
 
 include partials/mode-launcher
+bindsym $mod+Grave mode "$mode_launcher"
 
+set $passthrough "-------------------- PASSTHROUGH --------------------"
+mode $passthrough {
+    bindsym $mod+p mode "default"
+}
+bindsym $mod+Shift+p mode ""$passthrough"
+bindsym $mod+p mode "default"
 # }}} 5. BINDINGS - MODES
 
 # 6. BINDINGS - MEDIA AND OTHERS {{{
 ###############################################################################
-# Other keyboard bindings, including media xf
+# Other keyboard bindings, including media keys
 ###############################################################################
 
 # Use wactl to adjust volume of WirePlumber
@@ -297,29 +291,30 @@ bindsym Shift+XF86AudioRaiseVolume exec --no-startup-id wpctl set-volume @DEFAUL
 bindsym Shift+XF86AudioLowerVolume exec --no-startup-id wpctl set-volume @DEFAULT_SOURCE@ 5%-
 bindsym Shift+XF86AudioMute exec --no-startup-id wpctl set-mute @DEFAULT_SOURCE@ toggle
 
-# Screen brightness controls
-bindsym XF86MonBrightnessUp exec light -A 10 # increase screen brightness
-bindsym XF86MonBrightnessDown exec light -U 10 # decrease screen brightness
-
-# Touchpad controls
-bindsym XF86TouchpadToggle exec /some/path/toggletouchpad.sh
-
 # Media player controls
 bindsym XF86AudioPlay exec playerctl play-pause
 
-# Printscreen using flameshot
+# Screen brightness controls
+bindsym XF86MonBrightnessUp   exec light -A 10 # increase screen brightness
+bindsym XF86MonBrightnessDown exec light -U 10 # decrease screen brightness
+
+exec systemctl --user import-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP=sway
+exec dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP=sway
+
+# Touchpad controls
+# bindsym XF86TouchpadToggle exec /some/path/toggletouchpad.sh
+
 # Current workaround for https://github.com/flameshot-org/flameshot/issues/2848#issuecomment-1199796142
 bindsym --release Print exec flameshot gui --raw | copyq copy image/png -
 bindsym --release Shift+Print exec flameshot gui
-# Fix to make flameshot appear on all screens
-# https://github.com/flameshot-org/flameshot/issues/2364#issuecomment-1086129055
-for_window [app_id="flameshot"] border pixel 0, floating enable, fullscreen disable, move absolute position 0 0
 # }}} 6. BINDINGS - MEDIA AND OTHERS
 
 # 7. STYLE AND THEMING {{{
 ###############################################################################
 # i3-gaps Appearance and Behavior
 ###############################################################################
+
+corner_radius 8
 
 # Specify the distance between windows in pixels. (i3-gaps)
 gaps inner 10
@@ -330,7 +325,6 @@ smart_gaps on
 
 smart_borders on
 font pango:monospace 8
-
 
 # # window colors
 for_window [class="^.*"] border pixel 3
@@ -367,64 +361,74 @@ client.urgent            $BLUE_MASTRICHT      $RED                 $BEIGE       
 # https://wiki.archlinux.org/index.php/XDG_Autostart
 exec --no-startup-id dex --autostart --environment i3
 
-# xss-lock grabs a logind suspend inhibit lock and will use i3lock to lock the
-# screen before suspend. Use loginctl lock-session to lock your screen.
-# exec --no-startup-id xss-lock --transfer-sleep-lock -- ${HOME}/.config/i3/scripts/blurlock.sh
-
 # Start the polkit graphical authentication agent, assuming polkit-gnome installed
 exec /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 
 # ---------------------Bar and tray applets--------------------
-# not woring without sleep
 exec_always --no-startup-id sh -c "killall waybar; waybar"
-
-# exec indicator-sound-switcher
 
 # nm-applet provides auth dialogs to manage wired and wireless networks
 exec --no-startup-id nm-applet --indicator
 
 
 # ----------------------------Others---------------------------
+# Lock screen  on idle
+exec swayidle -w \
+    timeout 300 $Locker \
+    timeout 305 'swaymsg "output * power off"' \
+    resume 'swaymsg "output * power on"'
+
+# Volume and display brightness indicator
+exec rm -f $WOBSOCK && mkfifo $WOBSOCK && tail -f $WOBSOCK | wob
+
 # Set wallpaper using custom script
 exec_always ${HOME}/.config/sway/scripts/setwallpaper.sh
+
+# Restore GTK3 settings
+exec ${HOME}/.config/sway/scripts/import-gsettings.sh
 # }}} 8. AUTOSTARTED PROGRAMS
 
 
-set $mod_mode MOD
-mode $mod_mode {
-    # Navigate // Workspaces 1-10 // <> 0..9 ##
-    bindsym 1 workspace number $ws1; mode "default"
-    bindsym 2 workspace number $ws2; mode "default"
-    bindsym 3 workspace number $ws3; mode "default"
-    bindsym 4 workspace number $ws4; mode "default"
-    bindsym 5 workspace number $ws5; mode "default"
-    bindsym 6 workspace number $ws6; mode "default"
-    bindsym 7 workspace number $ws7; mode "default"
-    bindsym 8 workspace number $ws8; mode "default"
-    bindsym 9 workspace number $ws9; mode "default"
-    bindsym 0 workspace number $ws10; mode "default"
-
-    # back to normal: Enter or Escape
-    bindsym Return mode "default"
-    bindsym Escape mode "default"
-    bindcode 133 mode "default"
-}
-bindcode 133 --release mode $mod_mode
-
-# Caps Lock indicator, seen at
-# https://www.reddit.com/r/i3wm/comments/k8m4k4/share_your_i3_tips_and_tricks_that_you_have/gf2lppd
-# mode "-------------------- CAPSLOCK --------------------" {
-#     bindsym Caps_Lock mode "default"
-# }
-# bindsym Caps_Lock mode "-------------------- CAPSLOCK --------------------"
+# 9. SWAY SPECIFICS {{{
+###############################################################################
+# Sway inputs and window configs
+###############################################################################
 
 input type:touchpad {
     tap enabled
     natural_scroll enabled
     click_method clickfinger
 }
+input type:keyboard {
+    # xkb_layout us
+    xkb_options caps:escape_shifted_capslock
+}
+
+set $laptop eDP-1
+bindswitch --reload --locked lid:on output $laptop disable
+bindswitch --reload --locked lid:off output $laptop enable
+
 focus_on_window_activation focus
-for_window [app_id="wdisplays"] floating enable
-for_window [title="Delete AppImage — AppImageLauncher"] floating enable
-for_window [app_id="zoom" title="zoom"] floating enable
-exec_always ${HOME}/.config/sway/scripts/import-gsettings.sh
+
+for_window {
+    [shell="xwayland"] title_format "[X] %title"
+    [app_id="wdisplays"] floating enable
+    [title="Delete AppImage — AppImageLauncher"] floating enable
+    [app_id="zoom" title="zoom"] floating enable
+    [app_id="zoom" title="as_toolbar"] floating enable; border none; sticky enable
+    [app_id="firefox" title="^Picture-in-Picture$"] floating enable; sticky enable
+    [app_id="org.telegram.desktop" title="Media viewer"] floating enable
+    [app_id="Thunar" title="^Confirm to"] floating enable
+    [app_id="firefox" title="Firefox — Sharing Indicator"] floating enable; border none; sticky enable
+
+    # Fix to make flameshot appear on all screens
+    # https://github.com/flameshot-org/flameshot/issues/2364#issuecomment-1086129055
+    [app_id="flameshot"] border pixel 0, floating enable, fullscreen disable, move absolute position 0 0
+}
+
+# }}} 9. SWAY SPECIFICS
+
+
+# bindsym $mod+Shift+Return exec foot --title=launcher bash -c 'compgen -c | grep -v fzf | sort -u | fzf --layout=reverse | xargs -r swaymsg -t command exec'  
+# for_window [app_id="foot" title="launcher"] floating enable, border none, opacity 1
+
