@@ -21,13 +21,23 @@ require("lazy").setup({
     "williamboman/mason.nvim",              -- Manage external editor tooling i.e LSP servers
     "WhoIsSethDaniel/mason-tool-installer.nvim",
     "williamboman/mason-lspconfig.nvim",
+    "folke/neodev.nvim", -- anotations for neovim api functions
 
     {
+        -- Provide code completion menu
         "hrsh7th/nvim-cmp",                     -- Autocompletion
         dependencies = {
+            -- Engine
+            'L3MON4D3/LuaSnip',
+            'saadparwaiz1/cmp_luasnip', -- integrates luasnip with cmp
+
+            -- Completion
             "hrsh7th/cmp-buffer",
             "hrsh7th/cmp-path",
             "hrsh7th/cmp-cmdline",
+
+            -- Snippets
+            'rafamadriz/friendly-snippets',
 
             "hrsh7th/cmp-nvim-lsp",
         },
@@ -40,7 +50,24 @@ require("lazy").setup({
     'nvim-treesitter/nvim-treesitter-refactor',
     'nvim-treesitter/nvim-treesitter-context',
 
+    {
+        'nvim-telescope/telescope.nvim',
+        tag = '0.1.2',
+        dependencies = { 'nvim-lua/plenary.nvim' }
+    },
+
 
     'nvim-lua/plenary.nvim',
     'jcdickinson/codeium.nvim',
+
+    "lewis6991/gitsigns.nvim",
+
+    {
+        "nvim-neo-tree/neo-tree.nvim",
+        dependencies = {
+          "nvim-lua/plenary.nvim",
+          "nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
+          "MunifTanjim/nui.nvim",
+        }
+    },
 })

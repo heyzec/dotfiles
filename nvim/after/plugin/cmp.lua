@@ -1,6 +1,10 @@
 -- ##### CODE COMPLETION #####
 -- Setup nvim-cmp.
 local cmp = require('cmp')
+local luasnip = require('luasnip')
+
+require("luasnip.loaders.from_vscode").lazy_load()
+luasnip.config.setup {}
 
 -- https://github.com/microsoft/vscode-codicons/blob/main/dist/codicon.ttf
 local cmp_kinds = {
@@ -40,7 +44,7 @@ cmp.setup({
     },
     snippet = {
         expand = function(args)
-            vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
+            luasnip.lsp_expand(args.body)
         end,
     },
     window = {
@@ -66,6 +70,7 @@ cmp.setup({
     },
     sources = cmp.config.sources({
         { name = 'nvim_lsp' },
+        { name = 'luasnip' },
         { name = "codeium" },
     }, {
         { name = 'buffer' },
