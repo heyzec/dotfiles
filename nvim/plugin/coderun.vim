@@ -1,5 +1,4 @@
 
-" Make nvim autoscroll output in terminal
 " 1. TERMINAL AND REPL CONFIGS {{{
 " ###############################################################################
 " ##                                                                           ##
@@ -22,9 +21,8 @@ noremap <leader>c :execute 'call TermExec(TermGetFirst(), "\<' . 'C-c>")'<CR>
 "Double-tap spacebar to run code!
 noremap <leader><leader> :call RunCode()<CR>
 if has('nvim')
-    au TermOpen * let g:tb=bufnr()
+    au TermOpen * let g:tb=bufnr()  
     au TermClose * unlet g:tb
-    autocmd BufWinEnter,WinEnter term://* startinsert
 else
     au TerminalWinOpen * let g:tb=bufnr()
 endif
@@ -53,18 +51,12 @@ endfunction
 
 
 function! NewTerm(...)
-    " if exists('g:vscode')
-    "     call VSCodeNotify('workbench.action.terminal.toggleTerminal')
-    "     return
-    " endif
     " Opens a term at the bottom of the screen, and go into insert mode
     let mods = a:0 >= 1 && a:1 != "" ? a:1 : 'botright'  " By default open term across splits below
 
     if has('nvim')
         execute mods 'split term://$SHELL'
-        " https://www.reddit.com/r/neovim/comments/mq4zyh/comment/gulaqp5/?utm_source=share&utm_medium=web2x&context=3
-        " normal G
-        " normal i
+        normal i
     else
         execute mods 'term'
     endif
@@ -92,7 +84,7 @@ function! TermCheckIfRunning(bufnr)
     " Returns 1 if the terminal shell process still has running child processes
     return system('ps -eo ppid= | grep -w ' . getbufvar(a:bufnr, 'terminal_job_pid')) != ''
 endfunction
-" }}} Helper functions
+" }}}
 
 " Change scrolling behaviour {{{
 if has('nvim')
@@ -268,18 +260,3 @@ function! GetCodeRunCmd()
 endfunction
 
 " }}} 2. CODE RUNNER
-
-
-" let s:comp = 0
-" set cot=menu,menuone,noinsert,noselect cpt-=u
-" au insertcharpre * call I()
-" au completedone * let s:comp = 0
-" ino <expr> <tab> pumvisible() \|\| getline('.')[:col('.')-2] !~ '^\s*$' ? "\<c-n>" : "\<tab>"
-
-" func I()  "InsertPre
-"     if !pumvisible() && !s:comp && v:char =~ '\K'
-"         let s:comp = 1
-"         call feedkeys("\<c-n>")
-"     end
-" endf
-

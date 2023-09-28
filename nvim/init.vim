@@ -1,74 +1,14 @@
 " ------------------------------ ------------------------------
-let LSP_INIT_FILE = "lsp_init.lua"
-
-" 1. PLUGIN LIST & CONFIGURATIONS {{{
-" ###############################################################################
-" ##                                                                           ##
-" ##                      1. PLUGIN LIST & CONFIGURATIONS                      ##
-" ##                                                                           ##
-" ###############################################################################
-
 " -------------------Map the leader key first-----------------
 let mapleader = "\<space>"                      " the easiest button to hit
 
-" 1.1. vim-plug auto-installer {{{
-" -------------Auto install vim-plug (from github)------------
-let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
-if empty(glob(data_dir . '/autoload/plug.vim'))
-    silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+if !exists('g:vscode')
+    runtime plugins.vim
+    if has('nvim')
+        runtime plugins.lua
+    endif
 endif
-" }}}
 
-" 1.2. Plugin List {{{
-call plug#begin()
-" -------------------------A. Language------------------------
-" ------------------------B. Completion-----------------------
-Plug 'jiangmiao/auto-pairs'
-
-" -----------------------C. Code Display----------------------
-Plug 'Yggdroot/indentLine'                      " display indention with thin vertical lines
-Plug 'tomasiser/vim-code-dark'                  " dark color scheme like vscode
-
-" ------------------------D. Interface------------------------
-Plug 'mbbill/undotree'                          " visualise undo history with branches
-Plug 'vim-airline/vim-airline'                  " statusline
-Plug 'vim-airline/vim-airline-themes'           " theme statusline to match dark color scheme
-Plug 'tpope/vim-fugitive'                       " git integration
-
-" -------------------------E. Commands------------------------
-Plug 'tpope/vim-commentary'                     " lightweight commenting plugin
-
-" }}} 1.2. Plugin List
-
-" 1.3. Plugin Configurations {{{
-" -------------------------A. Language------------------------
-" Enable and configure language-related plugins in separate lua script
-if has('nvim') && !exists('g:vscode')
-    execute "runtime ".LSP_INIT_FILE
-else
-    call plug#end()
-endif
-set completeopt=menu,menuone,noselect
-
-
-" ------------------------B. Completion-----------------------
-" -----------------------C. Code Display----------------------
-" configure tomasiser/vim-code-dark
-colorscheme codedark
-
-" ------------------------D. Interface------------------------
-" configure mbbill/undotree
-noremap <leader>u :UndotreeToggle<CR>
-
-" configure vim-airline/vim-airline
-let g:airline_theme='minimalist'
-let g:airline#extensions#tabline#enabled=1
-
-" -------------------------E. Commands------------------------
-" }}} 1.3. Plugin Configurations
-
-" }}} 1. PLUGIN LIST & CONFIGURATIONS
 
 " 2. BASIC VIM CONFIGURATIONS {{{
 " ###############################################################################
@@ -157,6 +97,9 @@ if has('nvim')                                  " vim and nvim uses different un
 endif
 set foldmethod=marker
 " }}} Editing: Search, splits and indentation
+" testing
+
+let g:netrw_winsize = 15
 
 " }}} 2. BASIC VIM CONFIGURATIONS
 
@@ -261,8 +204,9 @@ noremap <leader>e :Lexplore<CR>
 " ##                      4. THINGS THAT SHOULD BE PLUGINS                     ##
 " ##                                                                           ##
 " ###############################################################################
-
 " A useful function
+"
+" explore the update command (:h update)
 command WriteIfModified if getbufinfo(bufnr('%'))[0].changed | w | endif
 function WriteIfModified()
     if getbufinfo(bufnr('%'))[0].changed
