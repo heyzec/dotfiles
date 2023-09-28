@@ -6,18 +6,14 @@
     font-size: 13px;
     min-height: 0;
 }
-/* box#tray.horizontal { */
-/*     border: 1px solid red; */
-/*     font-family: Roboto, heyzec-polybar-icons, Helvetica, Arial, sans-serif; */
-/*     font-size: 13px; */
-/* } */
+
 #icon {
     color: blue;
 }
 
 window#waybar {
-    background: rgba(43, 48, 59, 0.5);
-    border-bottom: 3px solid rgba(100, 114, 125, 0.5);
+    background: transparent;
+    /**border-bottom: 3px solid rgba(100, 114, 125, 0.5);**/
     color: white;
 }
 
@@ -29,11 +25,34 @@ tooltip label {
   color: white;
 }
 
+#window, #traymore,
+#audio, #network, #battery, #hardware, #clock {
+    padding: 6px 10px;
+	margin: 0 0px;
+	color: @text;
+	border-radius: 16px;
+	border-width: 0 2px 2px 0;
+	border-style: solid;
+	border-color: @crust;
+	background-color: @surface0;
+}
+
+
+/** #################### MODULES LEFT ####################  **/
+#workspaces {
+    padding: 0 2px;
+}
+
 #workspaces button {
-    padding: 0 5px;
+    padding: 4px 5px;
     background: transparent;
     color: white;
-    border-bottom: 3px solid transparent;
+}
+
+#workspaces button.active {
+    background: transparent;
+    color: #dfdfdf;
+    border-bottom: 2px solid white;
 }
 
 #workspaces button.focused {
@@ -41,8 +60,77 @@ tooltip label {
     border-bottom: 3px solid white;
 }
 
-#mode, #clock, #battery {
-    padding: 0 10px;
+#workspaces button.urgent {
+    background: red;
+}
+
+#workspaces button:hover {
+    /* Disable default hover effects */
+    box-shadow: inherit;
+    text-shadow: inherit;
+
+    border-bottom: 2px solid white;
+}
+/** #################### MODULES CENTER ####################  **/
+#window.empty {
+    /** visibility: hidden; **/
+    padding: 6px 10px;
+	margin: 0 0px;
+	color: @text;
+	border-radius: 16px;
+	border-width: 0 2px 2px 0;
+	border-style: solid;
+	border-color: @crust;
+	background-color: red;
+}
+
+/** #################### MODULES RIGHT ####################  **/
+#idle_inhibitor, #pulseaudio {
+    padding: 0px 8px;
+}
+#cpu, #memory, #temperature, #backlight, #keyboard-state {
+    padding: 0px 3px;
+}
+
+#workspaces {
+    padding: 0px 10px;
+	margin: 0 0px;
+	color: @text;
+	border-radius: 16px;
+	border-width: 0 2px 2px 0;
+	border-style: solid;
+	border-color: @crust;
+	background-color: @surface0;
+}
+
+#battery.charging {
+    color: white;
+    background-color: #26A65B;
+}
+#battery.warning:not(.charging) {
+    background: #f53c3c;
+    color: white;
+    animation-name: blink;
+    animation-duration: 0.5s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+#tray {
+    font-family: Roboto, heyzec-polybar-icons, Helvetica, Arial, sans-serif;
+    padding-right: 5px;
+}
+#custom-wlogout {
+    padding: 0px 5px;
+}
+
+/** #################### OTHERS ####################  **/
+@keyframes blink {
+    to {
+        background-color: #ffffff;
+        color: black;
+    }
 }
 
 #mode {
@@ -58,25 +146,3 @@ tooltip label {
 /*     background-color: #ffffff; */
 /*     color: black; */
 /* } */
-
-#battery.charging {
-    color: white;
-    background-color: #26A65B;
-}
-
-@keyframes blink {
-    to {
-        background-color: #ffffff;
-        color: black;
-    }
-}
-
-#battery.warning:not(.charging) {
-    background: #f53c3c;
-    color: white;
-    animation-name: blink;
-    animation-duration: 0.5s;
-    animation-timing-function: linear;
-    animation-iteration-count: infinite;
-    animation-direction: alternate;
-}
