@@ -1,6 +1,7 @@
 require('nvim-treesitter.configs').setup {
+    build = ":TSUpdate", -- Update parsers when treesitter is updated
     highlight = {
-        -- enable = false,
+        enable = true,
         additional_vim_regex_highlighting = false,
     },
     refactor = {
@@ -20,7 +21,51 @@ require('nvim-treesitter.configs').setup {
     indent = {
         enable = true,
         disable = {"python"}
-    }
+    },
+    -- Check for these parsers and install if missing
+    ensure_installed = {
+        "json",
+        "javascript",
+        "typescript",
+        "tsx",
+        "yaml",
+        "html",
+        "css",
+        "markdown",
+        "bash",
+        "lua",
+        "vim",
+        "dockerfile",
+        "gitignore",
+        "python",
+        "go",
+        "gosum",
+        "gomod",
+    },
+    incremental_selection = {
+        enable = true,
+        keymaps = {
+            init_selection = "<C-Space>",
+            node_incremental = "<C-Space>",
+            scope_incremental = false,
+            node_decremental = "<bs>",
+        },
+    },
+    textobjects = {
+        select = {
+            enable = true,
+            keymaps = {
+                ["al"] = { query = "@loop.outer", desc = "Select outer part of a loop" },
+                ["il"] = { query = "@loop.inner", desc = "Select outer part of a loop" },
+
+                ["af"] = { query = "@function.outer", desc = "Select outer part of a function definition" },
+                ["if"] = { query = "@function.inner", desc = "Select outer part of a function definition" },
+
+                ["ac"] = { query = "@class.outer", desc = "Select outer part of a class" },
+                ["ic"] = { query = "@class.inner", desc = "Select outer part of a class" },
+            },
+        },
+    },
 }
 
 require("treesitter-context").setup{

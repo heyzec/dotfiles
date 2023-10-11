@@ -49,6 +49,7 @@ require("lazy").setup({
     },
     'nvim-treesitter/nvim-treesitter-refactor',
     'nvim-treesitter/nvim-treesitter-context',
+    'nvim-treesitter/nvim-treesitter-textobjects',
 
     {
         'nvim-telescope/telescope.nvim',
