@@ -33,7 +33,8 @@
 
     "hyprland/window": {
         "rewrite": {
-            "(.*) — Mozilla Firefox": "🌎 $1",
+            "(.*?)( — )?Mozilla Firefox": "🌎$2$1",
+            "(.*?)( - )?Text Editor": "🗒️$2$1",
         },
     },
 
@@ -138,7 +139,7 @@
         "format": "{icon} {capacity}% {power:.1f}W",
         "format-charging": " {capacity}%",
         "format-plugged": " {capacity}%",
-        "format-alt": "{time} {icon}",
+        "format-alt": "{icon} {time}",
         "format-icons": ["", "", "", "", ""]
     },
 
@@ -188,7 +189,7 @@
     "custom/wlogout": {
         "format": "",
         "interval": "once",
-        "on-click": "wlogout",
+        "on-click": "wlogout -p layer-shell",
     },
 
     "group/audio": {

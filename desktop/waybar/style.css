@@ -1,3 +1,5 @@
+@import "./colors.css";
+
 * {
     border: none;
     /* border: 1px solid red; */
@@ -14,7 +16,7 @@
 window#waybar {
     background: transparent;
     /**border-bottom: 3px solid rgba(100, 114, 125, 0.5);**/
-    color: white;
+    color: @base07;
 }
 
 tooltip {
@@ -25,16 +27,16 @@ tooltip label {
   color: white;
 }
 
-#window, #traymore,
+#workspaces, #window, #traymore,
 #audio, #network, #battery, #hardware, #clock {
     padding: 6px 10px;
 	margin: 0 0px;
-	color: @text;
+    color: @base07;
 	border-radius: 16px;
 	border-width: 0 2px 2px 0;
 	border-style: solid;
-	border-color: @crust;
-	background-color: @surface0;
+	border-color: @base00;
+	background-color: @base01;
 }
 
 
@@ -45,14 +47,14 @@ tooltip label {
 
 #workspaces button {
     padding: 4px 5px;
+    color: @base06;
     background: transparent;
-    color: white;
 }
 
 #workspaces button.active {
-    background: transparent;
-    color: #dfdfdf;
-    border-bottom: 2px solid white;
+    background: @base0A;
+    color: @base06;
+    border-radius: 45%;
 }
 
 #workspaces button.focused {
@@ -62,6 +64,7 @@ tooltip label {
 
 #workspaces button.urgent {
     background: red;
+    color: red;
 }
 
 #workspaces button:hover {
@@ -69,8 +72,10 @@ tooltip label {
     box-shadow: inherit;
     text-shadow: inherit;
 
-    border-bottom: 2px solid white;
+    border-bottom: 2px solid @base06;
 }
+
+
 /** #################### MODULES CENTER ####################  **/
 #window.empty {
     /** visibility: hidden; **/
@@ -85,13 +90,14 @@ tooltip label {
 }
 
 /** #################### MODULES RIGHT ####################  **/
-#idle_inhibitor, #pulseaudio {
-    padding: 0px 8px;
-}
+#idle_inhibitor, #pulseaudio,
 #cpu, #memory, #temperature, #backlight, #keyboard-state {
     padding: 0px 3px;
 }
-
+#idle_inhibitor {
+    padding-right: 10px;
+}
+/**
 #workspaces {
     padding: 0px 10px;
 	margin: 0 0px;
@@ -102,6 +108,7 @@ tooltip label {
 	border-color: @crust;
 	background-color: @surface0;
 }
+**/
 
 #battery.charging {
     color: white;
@@ -128,7 +135,7 @@ tooltip label {
 /** #################### OTHERS ####################  **/
 @keyframes blink {
     to {
-        background-color: #ffffff;
+        background-color: white;
         color: black;
     }
 }
@@ -138,11 +145,3 @@ tooltip label {
     border-bottom: 3px solid white;
 }
 
-/* #clock { */
-/*     background-color: #64727D; */
-/* } */
-
-/* #battery { */
-/*     background-color: #ffffff; */
-/*     color: black; */
-/* } */
