@@ -1,51 +1,128 @@
-{ config, lib, pkgs, ... }:
+# See https://rycee.gitlab.io/home-manager/options.html
+{ config, lib, pkgs, inputs, ... }:
 
-with import <nixpkgs> {};
 with builtins;
 with lib;
-with import <home-manager/modules/lib/dag.nix> { inherit lib; };
+
+
 
 let
+  colorScheme = inputs.nix-colors.colorSchemes.gruvbox-dark-medium;
 in
 {
-  home.packages = [
+
+  imports = [
+    # inputs.nix-colors.homeManagerModules.default
+  ];
+
+  home.file.colortest = {
+    text = ''
+      ${colorScheme.colors.base01}
+      ${colorScheme.colors.base02}
+      ${colorScheme.colors.base03}
+      ${colorScheme.colors.base04}
+      ${colorScheme.colors.base05}
+      ${colorScheme.colors.base06}
+      ${colorScheme.colors.base07}
+      ${colorScheme.colors.base08}
+      ${colorScheme.colors.base09}
+      ${colorScheme.colors.base0A}
+      ${colorScheme.colors.base0B}
+      ${colorScheme.colors.base0C}
+      ${colorScheme.colors.base0D}
+      ${colorScheme.colors.base0E}
+      ${colorScheme.colors.base0F}
+    '';
+    target = "colortest";
+  };
+
+
+  home.packages = with pkgs; [
+    eza
+    bat
+
+
+    kitty
+    blackbox-terminal
+
+    reflex
+    insomnia    # REST API client
+
+    ##### Applications: Communication Utilities
+    telegram-desktop # Telegram client
+    webcord # Alternative Discord client
+    whatsapp-for-linux # unofficial client
+    # zoom             # Zoom client
+    teams-for-linux
+
+
+
+    pdfsam-basic           # PDF editing
+    xournalpp        # tablet notetaking software
+    stable.joplin-desktop
+
+
+    # [Specialised CTF Tools]
+    thc-hydra        # online password-cracking tool
+    john             # John the Ripper, an offline password-cracker
+    nmap             # port scanner
+    # TODO: Fix privilege issues so that wireshark CLI is user but wireshark-cli is root
+    # wireshark-qt     # network analyzer
+
+
+    # texlive.combined.scheme-full
+    tectonic
+
+
+    dbeaver
+    nix-output-monitor
+
+    (openfortivpn.overrideAttrs(old: {
+      src = builtins.fetchTarball "https://github.com/adrienverge/openfortivpn/archive/refs/tags/v1.20.4.tar.gz";
+    }))
+
+    flavours
+
+    waypaper killall
+
+    ticktick
   ];
 
 
   xdg.mimeApps = {
     enable = true;
     defaultApplications = {
+      "text/plain" = ["org.gnome.TextEditor.desktop"];
       "inode/directory" = ["thunar.desktop"];
       "text/x-uri" = ["firefox.desktop"];
       "x-scheme-handler/http" = ["firefox.desktop"];
       "x-scheme-handler/https" = ["firefox.desktop"];
+      "x-scheme-handler/mailto" = ["firefox.desktop"];
+      "image/*" = ["qimgv.desktop"];
       "image/png" = ["qimgv.desktop"];
+      "image/jpeg" = ["qimgv.desktop"];
+      "video/*" = ["vlc.desktop"];
+      "application/pdf" = ["atril.desktop"];
+      "application/x-archive" = [ "gnome-file-roller.desktop" ];
     };
   };
+  xdg.configFile."mimeapps.list".force = true;
 
 
+  # We're using the "Standalone installation" option, let home-manager install itself
   programs.home-manager.enable = true;
+
   home.stateVersion = "23.05";
   home.username = "heyzec";
   home.homeDirectory = "/home/heyzec";
-  dconf.settings = {
-      "com/raggesilver/BlackBox" = { 
-        "show-headerbar" = false;
-        "opacity" = lib.hm.gvariant.mkUint32 50;
-        "theme-dark" = "Modified Tango";
-        "use-sixel" = true;
-        "font" = "Monospace 11";
-      };
 
-
-  };
-
+  # SYMLINKED CONFIGS {{{
   xdg.configFile."hyprland" = {
-    source = /mnt/arch/home/heyzec/.config/hypr/hyprland.conf;
+    source = config.lib.file.mkOutOfStoreSymlink /home/heyzec/dotfiles/desktop/hyprland/hyprland.conf;
     target = "hypr/hyprland.conf";
   };
   xdg.configFile."waybar" = {
-    source = /home/heyzec/dotfiles/desktop/waybar;
+    source = config.lib.file.mkOutOfStoreSymlink /home/heyzec/dotfiles/desktop/waybar;
     target = "waybar";
   };
   xdg.configFile."kanshi" = {
@@ -61,7 +138,7 @@ in
     target = ".zshenv";
   };
   home.file."gitconfig" = {
-    source = /home/heyzec/dotfiles/git/.gitconfig;
+    source = config.lib.file.mkOutOfStoreSymlink /home/heyzec/dotfiles/git/.gitconfig;
     target = ".gitconfig";
   };
 
@@ -94,6 +171,7 @@ in
     source = config.lib.file.mkOutOfStoreSymlink /media/D/Videos;
     target = "Videos";
   };
+  # }}}
 
   # Doesn't seem to work
   gtk.enable = true;
@@ -104,7 +182,10 @@ in
     "file:///home/heyzec/Pictures"
     "file:///home/heyzec/Videos"
     "file:///home/heyzec/Documents/NUS"
-    "file:///home/heyzec/Documents/NUS/CVWO"
+    "file:///home/heyzec/Documents/NUS/Current%20Mods/CS3103%20Computer%20Networks%20Practice CS3103"
+    "file:///home/heyzec/Documents/NUS/Current%20Mods/CS3230%20Design%20and%20Analysis%20of%20Algorithms CS3230"
+    "file:///home/heyzec/Documents/NUS/Current%20Mods/CS3235%20Computer%20Security CS3235"
+    "file:///home/heyzec/Documents/NUS/Current%20Mods/MA2104%20Multivariable%20Calculus MA2104"
   ];
 
 
@@ -115,17 +196,41 @@ in
     TERMINAL = "blackbox";
   };
 
-  # programs.firefox.enable = true;
-  # programs.firefox.profiles."Dual Boot Profile" = {
+  home.file."firefox-profile-workaround" = {
+    source = config.lib.file.mkOutOfStoreSymlink "/media/D/Common AppData/Firefox/profile4";
+    target = ".mozilla/firefox/DualBootProfile";
+  };
+  programs.firefox = {
+    enable = true;
+    package = pkgs.firefox.override {
+      cfg = { enableTridactylNative = true; };
+    };
+    profiles."new" = {
+      path = "DualBootProfile";
+      userContent = ''
+        .wsn-google-focused-link {
+          border-left: 3px solid #2586fc !important;
+          transform: translate(-3px, 0) !important;
+          padding-left: 8px;
+          margin-left: -11px;
+        }
+      '';
+      # extensions = with pkgs.nur.repos.rycee.firefox-addons; [
+      #   ublock-origin
+      # ];
+    };
+  };
+
+
+  # programs.firefox.profiles."New one" = {
+  #   isDefault = true;
+  # };
 
   #   id = 6;
   #   # isRelative = false;
   #   # path = "/media/D/Common AppData/Firefox/profile4";
-  #   path = "../../../../media/D/Common AppData/Firefox/profile4";
   #   isDefault = true;
   # };
-
-
 
 
   # programs.command-not-found.enable = true;
@@ -140,97 +245,120 @@ in
   #   defaultCacheTtl = 1800;
   # };
 
-  # systemd.user.services.dropbox = {
-  #   Unit = {
-  #     Description = "Dropbox";
-  #     After = [ "graphical-session-pre.target" ];
-  #     PartOf = [ "graphical-session.target" ];
-  #   };
+  services.mako = {
+    enable = true;
+    defaultTimeout = 10000;
+    backgroundColor = "#${colorScheme.colors.base01}";
+    borderColor = "#${colorScheme.colors.base0E}";
+    textColor = "#${colorScheme.colors.base04}";
+    borderRadius = 5;
+    borderSize = 2;
+  };
 
-  #   Service = {
-  #     Restart = "on-failure";
-  #     RestartSec = 1;
-  #     ExecStart = "${pkgs.dropbox}/bin/dropbox";
-  #     Environment = "QT_PLUGIN_PATH=/run/current-system/sw/${pkgs.qt5.qtbase.qtPluginPrefix}";
-  #    };
+  systemd.user.services = {
+    battery_status = {
+      Unit = {
+        Description = "low battery notification service";
+      };
+      Service = {
+        Type = "oneshot";
+        ExecStart = toString (
+          pkgs.writeShellScript "battery-status-script" ''
+            set -eou pipefail
+            ${pkgs.bash}/bin/bash -c notify-send hi hi;
+          ''
+        );
+      };
+      Install.WantedBy = [ "default.target" ];
+    };
+  };
 
-  #   Install = {
-  #       WantedBy = [ "graphical-session.target" ];
-  #   };
+  systemd.user.timers = {
+    battery_status = {
+      Unit.Description = "timer for battery_status service";
+      Timer = {
+        Unit = "battery_status";
+    OnBootSec = "1m";
+        OnUnitActiveSec = "1m";
+      };
+      Install.WantedBy = [ "timers.target" ];
+    };
+  };
+  systemd.user.services."polkit-agent" = {
+    Unit = {
+      Description = "polkit-gnome-authentication-agent-1";
+    };
+    Install = {
+      WantedBy = [ "graphical-session.target" ];
+      Wants = [ "graphical-session.target" ];
+      After = [ "graphical-session.target" ];
+    };
+    Service = {
+      Type = "simple";
+      ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
+      Restart = "on-failure";
+      RestartSec = 1;
+      TimeoutStopSec = 10;
+    };
+  };
 
+
+
+  # https://wiki.archlinux.org/title/GTK
+
+  gtk.theme = {
+    name = "Materia-light";
+  };
+  gtk.iconTheme = {
+    # # https://github.com/vinceliuice/vimix-icon-theme
+    # name = "Vimix-Black";
+
+    name = "Vimix-Black";
+    package = pkgs.vimix-gtk-themes;
+
+
+  };
+  # Cursors
+  # gtk.cursorTheme = {
+  #   # https://github.com/vinceliuice/vimix-icon-theme
+  #   name = "capitaine-cursors";
+  #   package = pkgs.capitaine-cursors;
   # };
+  # # https://www.gnome-look.org/browse?cat=107&ord=latest
 
-  # home.file = { 
+  qt.enable = true;
+  qt.style.name = "adwaita";
 
-  # ".config/inkscape" = {
-  #   source = ./inkscape;
-  #   recursive = true;
-  # };
+  # APPLICATION SPECIFIC CONFIGS {{{
+  dconf.settings = {
+      "com/raggesilver/BlackBox" = { 
+        "show-headerbar" = false;
+        "opacity" = lib.hm.gvariant.mkUint32 50;
+        "theme-dark" = "Modified Tango";
+        "use-sixel" = true;
+        "font" = "Monospace 11";
+      };
+  };
 
-
-  # ".tmux.conf" = {
-  #  text = ''
-  #  set-option -g default-shell /run/current-system/sw/bin/fish
-  #  set-window-option -g mode-keys vi
-  #  set -g default-terminal "screen-256color"
-  #  set -ga terminal-overrides ',screen-256color:Tc'
-  #  '';
-  # };
-
-  # ".config/fish/config.fish" = {
-  #   text = ''  
-  #   set -x GPG_TTY (tty)
-  #   gpg-connect-agent updatestartuptty /bye > /dev/null
-  #   set -x SSH_AUTH_SOCK $XDG_RUNTIME_DIR/gnupg/S.gpg-agent.ssh
-  #   set -x EDITOR vim
-  #   set -x TERM xterm-256color
-  #   if status --is-interactive
-  #      set -g fish_user_abbreviations
-  #      abbr h 'home-manager switch'
-  #      abbr r 'sudo nixos-rebuild switch'
-  #      abbr gvim vim -g
-  #      abbr mc 'env TERM=linux mc'
-  #      abbr tmux 'tmux -2'
-  #   end
-  #   function __fish_command_not_found_handler --on-event fish_command_not_found
-  #      command-not-found $argv[1]
-  #   end
-  #   '';
-  # };
+  xdg.configFile."joplin-plugin-tabs" = {
+    source = builtins.fetchurl {
+      url = "https://github.com/benji300/joplin-note-tabs/releases/download/v1.4.0/joplin.plugin.note.tabs.jpl";
+      sha256 = "1mdw3p8g1sklyj1jicwgxlalvrg4zrrs2aizbrm7bym7lm8b8znv";
+    };
+    target = "joplin-desktop/plugins/joplin.plugin.note.tabs.jpl";
+  };
+  xdg.configFile."joplin-plugin-sidebars" = {
+    source = builtins.fetchurl {
+      url = "https://github.com/joplin/plugins/releases/download/plugins/org.joplinapp.plugins.ToggleSidebars@1.0.3.jpl";
+      name = "org.joplinapp.plugins.ToggleSidebars.jpl";
+      sha256 = "12clq50vplg8c3mnaybh861ap2bawlpazrzbnq10q5izswvl1x8g";
+    };
+    target = "joplin-desktop/plugins/org.joplinapp.plugins.ToggleSidebars.jpl";
+  };
+  # }}}
 
 
-  # ".local/share/applications/defaults.list" = {
-  #    text = ''
-  #    [Default Applications]
-  #    application/pdf=zathura.desktop
-  #    '';
-  # };
-
-  # ".config/astroid/config" = {
-  #   text = toJSON (import ./mail/astroid.nix {
-  #     inherit pkgs;
-  #   });
-  # };
-
-  # ".ssh/id_rsa.pub".source = ./id_rsa.pub;
-
-
-  # home.activation.copyIdeaKey = dagEntryAfter ["writeBoundary"] ''
-  #     install -D -m600 ${./private/idea.key} $HOME/.IntelliJIdea2018.1/config/idea.key
-  # '';
-
-  # home.activation.copySSHKey = dagEntryAfter ["writeBoundary"] ''
-  #     install -D -m600 ${./private/id_rsa} $HOME/.ssh/id_rsa
-  # '';
-
-  # home.activation.authorizedKeys = dagEntryAfter ["writeBoundary"] ''
-  #     install -D -m600 ${./id_rsa.pub} $HOME/.ssh/authorized_keys
-  # '';
-
-  # home.activation.mailPasswords = dagEntryAfter ["writeBoundary"] ''
-  #    mkdir -p $HOME/.mail/gmail
-  #    install -m600 ${./mail/pass-yrashk} $HOME/.mail/pass-yrashk
-  #    install -m600 ${./mail/pass-gmail} $HOME/.mail/pass-gmail
-  # '';
 
 }
+# vim: set ts=2 sts=2 sw=2:
+
