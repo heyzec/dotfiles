@@ -1,30 +1,87 @@
 #!/usr/bin/env bash
 
+directory=$(dirname "$(realpath "$0")")
+ITEMS_FILE="$directory/items.ini"
+
+terminal="${TERMINAL:=foot}"  # default to foot
+
 subst() {
-    if $(command envsubst); then
+    # In case envsubst is not available, use sed
+    if $(command -v envsubst); then
         envsubst
     else
         sed "s/\$HOME/${HOME//\//\\/}/"
     fi
 }
 
-ITEMS_FILE=$HOME/dotfiles/scripts/dotsmenu/items
+declare -A table
+declare -a sections=()
 
-config_names=$(awk '{print $1}' "$ITEMS_FILE")
+section_i=0
+while IFS= read -r line; do
+    if [[ $line =~ ^\[([a-z-]+)\]$ ]]; then
+        section=${BASH_REMATCH[1]}
 
+        sections[${#sections[@]}]=$section
+
+        section_i=$((section_i + 1))
+    else
+        [[ $line =~ ^\[([a-z]+)\]$ ]]
+        IFS="=" read -a temp <<<"$line"
+        key=${temp[0]}
+        value=${temp[1]}
+        table[$section,$key]=$value
+    fi
+done < "$ITEMS_FILE"
+
+bar="$(printf "\n%s" "${sections[@]}")"
+config_names="${bar:1}"
 selected_config_name=$( (echo "$config_names") | rofi -dmenu -p "Select config file")
-if [ -z "$selected_config_name" ]; then
-    exit
-fi
-selected_config_file=$(awk '/^'"$selected_config_name"'[[:space:]]/{print $2}' "$ITEMS_FILE")
+selected_config_file=${table[$selected_config_name,file]}
 selected_config_file_expanded=$(subst <<< "$selected_config_file")
+
 if [ -z "$selected_config_file_expanded" ]; then
     notify-send "dotsmenu" "No valid entry selected!"
     exit
 fi
 
-if [ -e "$selected_config_file_expanded" ]; then
-    blackbox -c "$EDITOR $selected_config_file_expanded"
-else
+if ! [ -e "$selected_config_file_expanded" ]; then
     notify-send "dotsmenu" "Path to $selected_config_name ($selected_config_file_expanded) does not exist!"
 fi
+
+if [ "${table[$selected_config_name,sudo]}" = "true" ]; then
+    editor="sudoedit"
+else
+    editor="$EDITOR"
+fi
+
+
+# if ! [ -z "${table[$selected_config_name,posthook]}" ]; then
+#     cmd=${table[$selected_config_name,posthook]}
+#     export cmd
+#     func() {
+#         # echo yay running posthook
+#         $cmd
+#     }
+# else
+#     func() { :; }
+# fi
+# export -f func
+# kitty --hold bash -c "$editor $selected_config_file_expanded; func"
+
+
+if [ -n "${table[$selected_config_name,posthook]}" ]; then
+    cmd=${table[$selected_config_name,posthook]}
+else
+    cmd=':'
+fi
+
+#magic="$editor $selected_config_file_expanded || exit; $cmd || bash"
+#while nvim test || exit; do false && break || (echo "Press enter to edit"; read); done
+magic="while $editor $selected_config_file_expanded || exit; do ($cmd) && break || (echo 'Command failed, press enter to edit'; read); done"
+if [ -n "${table[$selected_config_name,cd]}" ]; then
+    magic="cd ${table[$selected_config_name,cd]}; $magic"
+fi
+# bash -o pipefail -c "$magic"
+$terminal -e bash -o pipefail -c "$magic"
+

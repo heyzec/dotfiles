@@ -26,7 +26,7 @@ super + control + space
 
 ## Launch // Dotfiles Editor  // <> o ##
 super + o
-    /home/heyzec/dotfiles/scripts/dotsmenu/dotsmenuv2.sh
+    /home/heyzec/dotfiles/scripts/dotsmenu/dotsmenu.sh
 
 
 
