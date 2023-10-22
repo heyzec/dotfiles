@@ -71,4 +71,6 @@ require("lazy").setup({
           "MunifTanjim/nui.nvim",
         }
     },
+    { "norcalli/nvim-colorizer.lua" },
+    { "nvim-tree/nvim-tree.lua" },
 })

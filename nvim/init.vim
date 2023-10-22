@@ -9,6 +9,8 @@ if !exists('g:vscode')
     endif
 endif
 
+set termguicolors
+
 
 " 2. BASIC VIM CONFIGURATIONS {{{
 " ###############################################################################
@@ -99,7 +101,7 @@ set foldmethod=marker
 " }}} Editing: Search, splits and indentation
 " testing
 
-let g:netrw_winsize = 15
+" let g:netrw_winsize = 15
 
 " }}} 2. BASIC VIM CONFIGURATIONS
 
@@ -191,7 +193,7 @@ if !has('nvim')
     noremap <leader>W :w !sudo tee %:p >/dev/null<CR>
 endif
 
-noremap <leader>e :Lexplore<CR>
+noremap <leader>e :NvimTreeToggle<CR>
 " TO DO: only do subst within selected visual-line lines
 " vmap <expr> <leader>q mode() == 'v' ? "j" : "k"
 " }}}
