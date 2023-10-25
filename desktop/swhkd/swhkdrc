@@ -1,15 +1,13 @@
 ## Launch // Terminal // <> Enter ##
 super + enter
-    blackbox
+    foot
 
 # ## Launch // Command // <><Shift> Space ##
 super + control + return
     notify-send "Quick Run" "$(rofi -show run)"
 
 ## Launch // Browser // <><Shift> Enter ##
-# bindsym $mod+Shift+Return exec --no-startup-id gtk-launch $(xdg-settings get default-web-browser)
 
-## Launch // Application // <> Space ##
 super + space
     rofi -show drun
 
@@ -21,30 +19,25 @@ super + shift + /
     rofi -modi shortcut:~/.config/rofi/scripts/shortcut.py -show shortcut
 
 ## Navigate // Window by Name // <><Ctrl> Space ##
-super + control + space 
+super + control + space
     rofi -show window
 
 ## Launch // File Search // <><Alt> Space ##
 
 ## Launch // Dotfiles Editor  // <> o ##
 super + o
-    /home/heyzec/dotfiles/scripts/dotsmenu/dotsmenu.sh
-
-# bindsym $mod+p exec .config/sway/scripts/dotsmenu/dotsmenu.sh
-# bindsym $mod+p exec python -c 'import os; os.system("notify-send " + os.getcwd())'
+    /home/heyzec/dotfiles/scripts/dotsmenu/dotsmenuv2.sh
 
 
 
-
-
-# Use wactl to adjust volume of WirePlumber
+# Use wpctl to adjust volume of WirePlumber
 # $WOBSOCK = $XDG_RUNTIME_DIR/wob.sock
 
 XF86AudioRaiseVolume
-    wpctl set-volume @DEFAULT_SINK@ 5%+ --limit 1.5 && wpctl get-volume @DEFAULT_SINK@ | awk '$0=$2*100' > /run/user/1000/wob.sock
+    wpctl set-volume @DEFAULT_SINK@ 5%+ --limit 1.5 && wpctl get-volume @DEFAULT_SINK@ | sed 's/[^0-9]//g' > $XDG_RUNTIME_DIR/wob.sock
 
 XF86AudioLowerVolume
-    wpctl set-volume @DEFAULT_SINK@ 5%- && wpctl get-volume @DEFAULT_SINK@ | awk '$0=$2*100' > /run/user/1000/wob.sock
+    wpctl set-volume @DEFAULT_SINK@ 5%- && wpctl get-volume @DEFAULT_SINK@ | sed 's/[^0-9]//g' > $XDG_RUNTIME_DIR/wob.sock
 
 Shift+XF86AudioRaiseVolume
     wpctl set-volume @DEFAULT_SOURCE@ 5%+ --limit 1.5
@@ -64,9 +57,9 @@ XF86AudioPlay
 
 # Screen brightness controls
 XF86MonBrightnessUp
-    light -A 10 && light -G | cut -d'.' -f1 > /run/user/1000/wob.sock
+    brightnessctl set +10% | sed -En 's/.*\(([0-9]+)%\).*/\1/p' > $XDG_RUNTIME_DIR/wob.sock
 XF86MonBrightnessDown
-    light -U 10 && light -G | cut -d'.' -f1 > /run/user/1000/wob.sock
+    brightnessctl set 10%- | sed -En 's/.*\(([0-9]+)%\).*/\1/p' > $XDG_RUNTIME_DIR/wob.sock
 
 Shift+XF86MonBrightnessUp
     brightnessctl -d ddcci14 set +10%
@@ -76,42 +69,38 @@ Shift+XF86MonBrightnessDown
 # Printscreen using flameshot
 # Current workaround for https://github.com/flameshot-org/flameshot/issues/2848#issuecomment-1199796142
 @Print
-    # notify-send "hi" "lol"
-    flameshot gui --raw | copyq copy image/png -
+    slurp | grim -g - - | wl-copy
+    # Flameshot not working
+    # flameshot gui --raw | copyq copy image/png -
 Shift+@Print
-    # notify-send "hi" "lol2"
-    flameshot gui
-
-# bindsym --locked Shift+XF86MonBrightnessUp   exec brightnessctl -d ddcci14 set +10%
-# bindsym --locked Shift+XF86MonBrightnessDown   exec brightnessctl -d ddcci14 set 10%-
-
-
-
-
-# $LOCKER is an environment variable exported in .zshenv
-# export LOCKER="$HOME/.config/sway/scripts/blurlock.sh"
+    # flameshot gui
+    grim -g "$(slurp)" - | swappy -f -
 
 
 
 super + shift + escape
-    @enter system && sh -c 'echo "(l) lock, (e) logout, (s) suspend, (h) hibernate, (r) reboot, (S) shutdown" > /tmp/mode && pkill -35 waybar'
+    @enter system && wlogout -p layer-shell
 mode system
 l
-    @escape && "/home/heyzec/dotfiles/scripts/locker/blurlock.sh" && echo "" > /tmp/mode && pkill -35 waybar
+    @escape && pkill wlogout && sleep 0.5 && swaylock
 s
-    @escape && "/home/heyzec/dotfiles/scripts/locker/blurlock.sh" && systemctl suspend && echo "" > /tmp/mode && pkill -35 waybar
+    @escape && pkill wlogout && sleep 0.5 && systemctl suspend
 h
-    @escape && "/home/heyzec/dotfiles/scripts/locker/blurlock.sh" && systemctl hibernate && echo "" > /tmp/mode && pkill -35 waybar
+    @escape && pkill wlogout && sleep 0.5 && systemctl hibernate
 r
-    @escape && systemctl reboot && echo "" > /tmp/mode && pkill -35 waybar
+    @escape && pkill wlogout && systemctl reboot
 Shift + s
-    @escape && systemctl poweroff -i && echo "" > /tmp/mode && pkill -35 waybar
-@escape
-    @escape && echo "" > /tmp/mode && pkill -35 waybar
+    @escape && pkill wlogout && systemctl poweroff -i
+escape
+    @escape && pkill wlogout
 endmode
 
+# Duplicated for use on multiple keyboards
+super + escape
+    @enter applications && sh -c 'echo "Launch: [b]rowser [f]iles [m]essages" > /tmp/mode && pkill -35 waybar'
 super + grave
     @enter applications && sh -c 'echo "Launch: [b]rowser [f]iles [m]essages" > /tmp/mode && pkill -35 waybar'
+
 mode applications
 b
     @escape && gtk-launch $(xdg-settings get default-web-browser) && echo "" > /tmp/mode && pkill -35 waybar
@@ -125,7 +114,6 @@ escape
     @escape && echo "" > /tmp/mode && pkill -35 waybar
 endmode
 
-
-super + escape
-    killall waybar; waybar
+# super + escape
+    # pkill waybar; waybar
 
