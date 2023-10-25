@@ -6,3 +6,6 @@ nvim/plugged/
 nvim/autoload/
 
 zsh/.zcompdump
+
+nix/*.qcow2
+nix/result

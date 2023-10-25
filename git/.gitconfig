@@ -71,7 +71,10 @@
 [pull]
 	ff = only
 [diff]
-	tool = nvimdiff
+    #tool = nvimdiff
+    tool = vscode
+[diff "vscode"]
+    cmd = code --wait --diff $LOCAL $REMOTE
 [instaweb]
 	httpd = python
 [help]

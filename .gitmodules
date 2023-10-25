@@ -14,3 +14,4 @@
 	path = zsh/plugins/zsh-expand-all
 	url = https://github.com/simnalamburt/zsh-expand-all
 	branch = master
+	ignore = dirty
