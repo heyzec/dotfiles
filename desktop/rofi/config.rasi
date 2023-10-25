@@ -1,19 +1,29 @@
 configuration {
-	modi: "window,run,ssh,drun";
+	modi: "run,ssh,drun";
+
 	show-icons: true;
 	icon-theme: "Papirus";
 	font: "mono 20", "Roboto 20";
-    sort: true;
-    drun-show-actions: true;
-    drun-match-fields: "name,generic,categories";
-  timeout {
-      action: "kb-cancel";
-      delay:  0;
-  }
-  filebrowser {
-      directories-first: true;
-      sorting-method:    "name";
-  }
-}
-@theme "Paper"
 
+	matching: "fuzzy";
+	sort: true;
+	sorting-method: "fzf";
+
+	scroll-method: 1;  // Keep selected item in the center
+
+	drun-show-actions: true;
+	drun-match-fields: "name,generic,categories";
+
+	timeout {
+		action: "kb-cancel";
+		delay: 0;
+	}
+	filebrowser {
+		directories-first: true;
+		sorting-method: "name";
+	}
+}
+
+@theme "./spotlight.rasi"
+
+/* vim: set noai ts=4 sw=4: */
