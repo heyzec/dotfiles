@@ -75,6 +75,9 @@ else
     cmd=':'
 fi
 
-magic="$editor $selected_config_file_expanded; $cmd || bash"
-$terminal -e bash -c "$magic"
+#magic="$editor $selected_config_file_expanded || exit; $cmd || bash"
+#while nvim test || exit; do false && break || (echo "Press enter to edit"; read); done
+magic="while $editor $selected_config_file_expanded || exit; do ($cmd) && break || (echo 'Command failed, press enter to edit'; read); done"
+# bash -o pipefail -c "$magic"
+$terminal -e bash -o pipefail -c "$magic"
 
