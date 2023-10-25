@@ -1,0 +1,20 @@
+{
+  imports = [
+    ./btrbk.nix
+    ./fonts.nix
+    ./keyd.nix
+    ./locale.nix
+    ./logind.nix
+    ./nix.nix
+    ./packages.nix
+    ./waybar.nix
+    ./postgresql.nix
+    ./system.nix
+    ./thunar.nix
+    ./users.nix
+    ./virtualization.nix
+    ./hyprland.nix
+    ./printing.nix
+    ./sddm.nix
+  ];
+}
