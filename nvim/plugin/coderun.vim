@@ -13,7 +13,7 @@ command! Term call NewTerm(<q-mods>)
 noremap <leader><leader> :call Double()<CR>
 
 " Stop running process even when not focused on the terminal
-noremap <leader>c :execute 'call TermExec(TermGetFirst(), "\<' . 'C-c>")'<CR>
+noremap <C-c> :execute 'call TermExec(TermGetFirst(), "\<' . 'C-c>")'<CR>
 
 
 " Helper functions {{{

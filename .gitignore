@@ -1,4 +1,3 @@
-nvim/vimrc
 nvim/viminfo
 nvim/.netrwhist
 nvim/plug-config/
@@ -9,3 +8,6 @@ zsh/.zcompdump
 
 nix/*.qcow2
 nix/result
+*.qcow2
+result
+

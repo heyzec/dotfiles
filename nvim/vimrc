@@ -3,9 +3,8 @@
 let mapleader = "\<space>"                      " the easiest button to hit
 
 if !exists('g:vscode')
-    runtime plugins.vim
-    if has('nvim')
-        runtime plugins.lua
+    if !has('nvim')
+        runtime plugins.vim
     endif
 endif
 
