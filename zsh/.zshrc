@@ -99,5 +99,5 @@ function git() {
 }
 
 # My customised prompt
-source $ZDOTDIR/zshprompt.zsh
+eval "$(starship init zsh)"
 
