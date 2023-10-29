@@ -60,6 +60,38 @@ zle -N edit-command-line
 bindkey "^X^E" edit-command-line
 bindkey "^[[A" up-line-or-search
 bindkey "^[[B" down-line-or-search
+bindkey "^[[H" beginning-of-line
+bindkey "^[[F" end-of-line
+
+# Fix keybindings for basic keys
+# https://wiki.archlinux.org/title/Zsh#Key_bindings
+typeset -g -A key
+key[Home]="${terminfo[khome]}"
+key[End]="${terminfo[kend]}"
+key[PageUp]="${terminfo[kpp]}"
+key[PageDown]="${terminfo[knp]}"
+key[Delete]="${terminfo[kdch1]}"
+key[Control-Left]="${terminfo[kLFT5]}"
+key[Control-Right]="${terminfo[kRIT5]}"
+
+# setup key accordingly
+[[ -n "${key[Home]}"          ]] && bindkey -- "${key[Home]}"          beginning-of-line
+[[ -n "${key[End]}"           ]] && bindkey -- "${key[End]}"           end-of-line
+[[ -n "${key[PageUp]}"        ]] && bindkey -- "${key[PageUp]}"        beginning-of-buffer-or-history
+[[ -n "${key[PageDown]}"      ]] && bindkey -- "${key[PageDown]}"      end-of-buffer-or-history
+[[ -n "${key[Delete]}"        ]] && bindkey -- "${key[Delete]}"        delete-char
+[[ -n "${key[Control-Left]}"  ]] && bindkey -- "${key[Control-Left]}"  backward-word
+[[ -n "${key[Control-Right]}" ]] && bindkey -- "${key[Control-Right]}" forward-word
+
+# Finally, make sure the terminal is in application mode, when zle is
+# active. Only then are the values from $terminfo valid.
+if (( ${+terminfo[smkx]} && ${+terminfo[rmkx]} )); then
+	autoload -Uz add-zle-hook-widget
+	function zle_application_mode_start { echoti smkx }
+	function zle_application_mode_stop { echoti rmkx }
+	add-zle-hook-widget -Uz zle-line-init zle_application_mode_start
+	add-zle-hook-widget -Uz zle-line-finish zle_application_mode_stop
+fi
 
 # Color support for ls and some other commands (use .dircolors)
 if [ -x /usr/bin/dircolors ]; then
@@ -101,3 +133,18 @@ function git() {
 # My customised prompt
 eval "$(starship init zsh)"
 
+# Dynamically change title of terminal window based on running command
+function xterm_title_precmd () {
+	print -Pn -- '\e]2;%n@%m %~\a'
+	[[ "$TERM" == 'screen'* ]] && print -Pn -- '\e_\005{g}%n\005{-}@\005{m}%m\005{-} \005{B}%~\005{-}\e\\'
+}
+
+function xterm_title_preexec () {
+	print -Pn -- '\e]2;%n@%m %~ %# ' && print -n -- "${(q)1}\a"
+	[[ "$TERM" == 'screen'* ]] && { print -Pn -- '\e_\005{g}%n\005{-}@\005{m}%m\005{-} \005{B}%~\005{-} %# ' && print -n -- "${(q)1}\e\\"; }
+}
+
+if [[ "$TERM" == (Eterm*|alacritty*|aterm*|foot*|gnome*|konsole*|kterm*|putty*|rxvt*|screen*|wezterm*|tmux*|xterm*) ]]; then
+	add-zsh-hook -Uz precmd xterm_title_precmd
+	add-zsh-hook -Uz preexec xterm_title_preexec
+fi
