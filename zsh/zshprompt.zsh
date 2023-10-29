@@ -73,7 +73,7 @@ foo() {
 
 }
 clrd() {
-    RPROMPT=$DEBUG
+    # RPROMPT=$DEBUG
     DEBUG=""
 }
 

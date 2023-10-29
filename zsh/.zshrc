@@ -1,3 +1,7 @@
+# Uncomment this to profile zsh
+# zmodload zsh/zprof
+
+# ========================== DEFAULT STARTS HERE ==========================
 setopt histignorealldups sharehistory
 
 # Use emacs keybindings even if our EDITOR is set to vi
@@ -8,9 +12,12 @@ HISTSIZE=1000
 SAVEHIST=1000
 HISTFILE=~/.zsh_history
 
-# Use modern completion system
+# Use modern completion system (modified)
 autoload -Uz compinit
-compinit
+for dump in ~/.zcompdump(N.mh+24); do
+  compinit
+done
+compinit -C
 
 zstyle ':completion:*' auto-description 'specify: %d'
 zstyle ':completion:*' completer _expand _complete _correct _approximate
@@ -29,27 +36,22 @@ zstyle ':completion:*' verbose true
 
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
 zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
-
-
 # ========================== DEFAULT END HERE ==========================
 
-# Use neovim as the default terminal
-export EDITOR=/usr/bin/nvim
-
-# Virtual environments
-export PATH="$HOME/.local/bin:$PATH"
-
-# rbenv
-export PATH="$HOME/.rbenv/bin:$PATH"
-eval "$(rbenv init - zsh)"
-
-# go
-export PATH="$HOME/go/bin:$PATH"
-
-# nodenv
-export PATH="$HOME/.nodenv/bin:$PATH"
-eval "$(nodenv init -)"
-export GOPATH="$HOME/go"
+# # Virtual environments
+# export PATH="$HOME/.local/bin:$PATH"
+#
+# # rbenv
+# export PATH="$HOME/.rbenv/bin:$PATH"
+# eval "$(rbenv init - zsh)"
+#
+# # go
+# export PATH="$HOME/go/bin:$PATH"
+#
+# # nodenv
+# export PATH="$HOME/.nodenv/bin:$PATH"
+# eval "$(nodenv init -)"
+# export GOPATH="$HOME/go"
 
 
 # ZSH shell options and settings
@@ -112,25 +114,41 @@ alias d='dirs -v'
 for index ({0..9}) alias "d$index"="cd +${index}"; unset index
 
 # Enable autojump (github.com/agkozak/zsh-z)
+# https://github.com/agkozak/zsh-z/issues/66
 source $ZDOTDIR/plugins/zsh-z/zsh-z.plugin.zsh
-unalias z
-function z() { zshz 2>&1 "$@" }
-
-# Useful shell functions
-source $ZDOTDIR/functions.zsh
+unalias z 2> /dev/null
+z() {
+  [ $# -gt 0 ] && zshz "$*" && return
+  cd "$(zshz -l 2>&1 | fzf --height 40% --nth 2.. --reverse --inline-info +s --tac --query "${*##-* }" | sed 's/^[0-9,.]* *//')"
+}
 
 # Alias definitions
-source $ZDOTDIR/plugins/zsh-expand-all/zsh-expand-all.zsh
+# check whether the following plugin is bugged. test on a vm, plain zsh config, only this plugin.
+# home directory touch a, a.txt
+# then type echo<space><tab>. this should show sugggestions
+# type <tab> again. nothing occurs (not sure why)
+# type <tab> again. expansion occurs
+# type either <space> or <enter>. the suggestion now jumps to the alternative
+# source $ZDOTDIR/plugins/zsh-expand-all/zsh-expand-all.zsh
+
+# source $ZDOTDIR/plugins/zsh-expand/zsh-expand.plugin.zsh
 source $ZDOTDIR/aliases.zsh
 
 # Show git alias expansions
 function git() {
     # GIT_TRACE=1 /bin/git "$@" 2> >(awk '!/trace/{x++} {if(NR==3){sub(/.+\s\s\S+\s/,"");print}else if(x>0){print}}' >&2)
     # GIT_TRACE=1 /bin/git "$@" 2> >(awk '/^[0-9:.]{15}/{if(NR==3 && $0 ~ /(run_command: \W|alias expansion)/){sub(/.+\s\s\S+\s/,"");print;};next;}{print;}' >&2)
-    GIT_TRACE=1 /bin/git "$@" 2> >(awk '/^[0-9:.]{15}/{if(NR==3 && $0 ~ /alias expansion/){sub(/.+\s\s\S+\s/,"");print;};next;}{print;}' >&2)
+    GIT_TRACE=1 /usr/bin/env git "$@" 2> >(awk '/^[0-9:.]{15}/{if(NR==3 && $0 ~ /alias expansion/){sub(/.+\s\s\S+\s/,"");print;};next;}{print;}' >&2)
 }
 
-# My customised prompt
+# Use fzf keybindings
+# source /usr/share/fzf/key-bindings.zsh
+if [ -n "${commands[fzf-share]}" ]; then
+  source "$(fzf-share)/key-bindings.zsh"
+  source "$(fzf-share)/completion.zsh"
+fi
+
+# Use starship prompt
 eval "$(starship init zsh)"
 
 # Dynamically change title of terminal window based on running command
@@ -148,3 +166,7 @@ if [[ "$TERM" == (Eterm*|alacritty*|aterm*|foot*|gnome*|konsole*|kterm*|putty*|r
 	add-zsh-hook -Uz precmd xterm_title_precmd
 	add-zsh-hook -Uz preexec xterm_title_preexec
 fi
+
+
+# Uncomment this to profile zsh
+# zprof
