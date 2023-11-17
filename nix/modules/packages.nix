@@ -103,6 +103,10 @@
     grim
     swappy
 
+    cliphist
+    wl-clip-persist
+
+
 
 
     ##### Applications: Standard desktop environment
@@ -210,7 +214,6 @@
 
 
     wl-clipboard
-    copyq
     xdg-utils
     wob
     wl-mirror
