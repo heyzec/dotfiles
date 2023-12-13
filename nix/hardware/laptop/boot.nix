@@ -6,7 +6,7 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.efi.efiSysMountPoint = "/efi";
-  boot.kernelPackages = pkgs.stable.linuxPackages;
+  boot.kernelPackages = pkgs.linuxPackages;
   boot.kernelParams = [
     "\"PARTLABEL=Swap partition\""
     # https://wiki.archlinux.org/title/intel_graphics#Crash/freeze_on_low_power_Intel_CPUs

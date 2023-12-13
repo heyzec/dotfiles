@@ -46,7 +46,7 @@ in {
 
     firefox = {
       enable = true;
-      nativeMessagingHosts.tridactyl = true;
+      nativeMessagingHosts.packages = [ pkgs.tridactyl-native ];
     };
 
 
@@ -115,7 +115,7 @@ in {
 
     avahi = {
       enable = true;
-      nssmdns = true;
+      nssmdns4 = true;
     };
 
     cron.enable = true;  # Temporary, until we migrate all to systemd timers
