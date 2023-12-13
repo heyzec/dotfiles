@@ -168,9 +168,8 @@ in {
 
   security.polkit.extraConfig = ''
     polkit.addRule(function(action, subject) {
-        if (action.id == "com.github.swhkd.pkexec"  &&
-            subject.local == true &&
-            subject.active == true &&) {
+        if (action.id == "org.freedesktop.policykit.exec" &&
+            action.lookup("program") == "/run/current-system/sw/bin/swhkd") {
                 return polkit.Result.YES;
         }
     });

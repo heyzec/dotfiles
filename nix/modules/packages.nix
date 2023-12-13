@@ -192,7 +192,7 @@
     tartube
 
 
-    (pkgs.callPackage ../packages/swhkd/default.nix {})  # self-packaged swhkd
+    swhkd
 
     # sddmtheme is defined in overlay
     # sddmtheme
