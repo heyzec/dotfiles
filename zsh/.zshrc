@@ -37,7 +37,6 @@ zstyle ':completion:*' completer _expand _complete _correct _approximate
 zstyle ':completion:*' format 'Completing %d'
 zstyle ':completion:*' group-name ''
 zstyle ':completion:*' menu select=2
-eval "$(dircolors -b)"
 zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 zstyle ':completion:*' list-colors ''
 zstyle ':completion:*' list-prompt %SAt %p: Hit TAB for more, or the character to insert%s
@@ -104,6 +103,8 @@ fi
 ##                                                                           ##
 ###############################################################################
 
+check_health_missing=()
+
 # # Virtual environments
 # export PATH="$HOME/.local/bin:$PATH"
 #
@@ -151,6 +152,7 @@ function xterm_title_preexec () {
 	[[ "$TERM" == 'screen'* ]] && { print -Pn -- '\e_\005{g}%n\005{-}@\005{m}%m\005{-} \005{B}%~\005{-} %# ' && print -n -- "${(q)1}\e\\"; }
 }
 if [[ "$TERM" == (Eterm*|alacritty*|aterm*|foot*|gnome*|konsole*|kterm*|putty*|rxvt*|screen*|wezterm*|tmux*|xterm*) ]]; then
+	autoload -U add-zsh-hook
 	add-zsh-hook -Uz precmd xterm_title_precmd
 	add-zsh-hook -Uz preexec xterm_title_preexec
 fi
@@ -175,12 +177,16 @@ fi
 # https://github.com/starship/starship
 if (( $+commands[starship] )); then
 	eval "$(starship init zsh)"
+else
+	check_health_missing+=(starship)
 fi
 
 # Use direnv to add hooks per directory
 # https://github.com/direnv/direnv
 if (( $+commands[direnv] )); then
 	eval "$(direnv hook zsh)"
+else
+	check_health_missing+=(direnv)
 fi
 
 # unalias z 2> /dev/null
@@ -192,13 +198,21 @@ fi
 # https://github.com/ajeetdsouza/zoxide
 if (( $+commands[zoxide] )); then
 	eval "$(zoxide init zsh)"
+else
+	check_health_missing+=(zoxide)
 fi
 
 # Use fzf keybindings
 if [ -n "${commands[fzf-share]}" ]; then
 	source "$(fzf-share)/key-bindings.zsh"
 	source "$(fzf-share)/completion.zsh"
+else
+	check_health_missing+=(fzf-share)
 fi
+
+function checkhealth() {
+	echo $check_health_missing
+}
 
 ###############################################################################
 ##                                                                           ##
