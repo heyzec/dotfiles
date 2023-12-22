@@ -1,7 +1,11 @@
 # Uncomment this to profile zsh
 # zmodload zsh/zprof
 
-# ========================== DEFAULT STARTS HERE ==========================
+###############################################################################
+##                                                                           ##
+##           1. ZSH native completion (adapted from default .zshrc)          ##
+##                                                                           ##
+###############################################################################
 setopt histignorealldups sharehistory
 
 # Use emacs keybindings even if our EDITOR is set to vi
@@ -12,10 +16,19 @@ HISTSIZE=1000
 SAVEHIST=1000
 HISTFILE=~/.zsh_history
 
+# ZSH shell options and settings
+unsetopt BEEP  # Disable beeping in zsh instead of globally in terminal
+
+###############################################################################
+##                                                                           ##
+##           1. ZSH native completion (adapted from default .zshrc)          ##
+##                                                                           ##
+###############################################################################
+
 # Use modern completion system (modified)
 autoload -Uz compinit
 for dump in ~/.zcompdump(N.mh+24); do
-  compinit
+	compinit
 done
 compinit -C
 
@@ -36,26 +49,14 @@ zstyle ':completion:*' verbose true
 
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
 zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
-# ========================== DEFAULT END HERE ==========================
-
-# # Virtual environments
-# export PATH="$HOME/.local/bin:$PATH"
-#
-# # rbenv
-# export PATH="$HOME/.rbenv/bin:$PATH"
-# eval "$(rbenv init - zsh)"
-#
-# # go
-# export PATH="$HOME/go/bin:$PATH"
-#
-# # nodenv
-# export PATH="$HOME/.nodenv/bin:$PATH"
-# eval "$(nodenv init -)"
-# export GOPATH="$HOME/go"
 
 
-# ZSH shell options and settings
-unsetopt BEEP  # Disable beeping in zsh instead of globally in terminal
+
+###############################################################################
+##                                                                           ##
+##                               1. Keybindings                              ##
+##                                                                           ##
+###############################################################################
 
 autoload -z edit-command-line
 zle -N edit-command-line
@@ -64,6 +65,7 @@ bindkey "^[[A" up-line-or-search
 bindkey "^[[B" down-line-or-search
 bindkey "^[[H" beginning-of-line
 bindkey "^[[F" end-of-line
+bindkey "^H" backward-kill-word
 
 # Fix keybindings for basic keys
 # https://wiki.archlinux.org/title/Zsh#Key_bindings
@@ -95,16 +97,28 @@ if (( ${+terminfo[smkx]} && ${+terminfo[rmkx]} )); then
 	add-zle-hook-widget -Uz zle-line-finish zle_application_mode_stop
 fi
 
-# Color support for ls and some other commands (use .dircolors)
-if [ -x /usr/bin/dircolors ]; then
-    test -r $ZDOTDIR/dircolors && eval "$(dircolors -b $ZDOTDIR/dircolors)" || eval "$(dircolors -b)"
-fi
 
-# Syntax highlighting (github.com/zsh-users/zsh-syntax-highlighting)
-source $ZDOTDIR/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+###############################################################################
+##                                                                           ##
+##                         1. Personal customisations                        ##
+##                                                                           ##
+###############################################################################
 
+# # Virtual environments
+# export PATH="$HOME/.local/bin:$PATH"
+#
+# # rbenv
+# export PATH="$HOME/.rbenv/bin:$PATH"
+# eval "$(rbenv init - zsh)"
+#
+# # go
+# export PATH="$HOME/go/bin:$PATH"
+#
+# # nodenv
+# export PATH="$HOME/.nodenv/bin:$PATH"
+# eval "$(nodenv init -)"
+# export GOPATH="$HOME/go"
 
-source $ZDOTDIR/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 # Quickly jump around
 setopt AUTO_PUSHD           # Push the current directory visited on the stack.
@@ -113,60 +127,119 @@ setopt PUSHD_SILENT         # Do not print the directory stack after pushd or po
 alias d='dirs -v'
 for index ({0..9}) alias "d$index"="cd +${index}"; unset index
 
-# Enable autojump (github.com/agkozak/zsh-z)
-# https://github.com/agkozak/zsh-z/issues/66
-source $ZDOTDIR/plugins/zsh-z/zsh-z.plugin.zsh
-unalias z 2> /dev/null
-z() {
-  [ $# -gt 0 ] && zshz "$*" && return
-  cd "$(zshz -l 2>&1 | fzf --height 40% --nth 2.. --reverse --inline-info +s --tac --query "${*##-* }" | sed 's/^[0-9,.]* *//')"
-}
 
-# Alias definitions
-# check whether the following plugin is bugged. test on a vm, plain zsh config, only this plugin.
-# home directory touch a, a.txt
-# then type echo<space><tab>. this should show sugggestions
-# type <tab> again. nothing occurs (not sure why)
-# type <tab> again. expansion occurs
-# type either <space> or <enter>. the suggestion now jumps to the alternative
-# source $ZDOTDIR/plugins/zsh-expand-all/zsh-expand-all.zsh
 
 # source $ZDOTDIR/plugins/zsh-expand/zsh-expand.plugin.zsh
 source $ZDOTDIR/aliases.zsh
 
 # Show git alias expansions
 function git() {
-    # GIT_TRACE=1 /bin/git "$@" 2> >(awk '!/trace/{x++} {if(NR==3){sub(/.+\s\s\S+\s/,"");print}else if(x>0){print}}' >&2)
-    # GIT_TRACE=1 /bin/git "$@" 2> >(awk '/^[0-9:.]{15}/{if(NR==3 && $0 ~ /(run_command: \W|alias expansion)/){sub(/.+\s\s\S+\s/,"");print;};next;}{print;}' >&2)
-    GIT_TRACE=1 /usr/bin/env git "$@" 2> >(awk '/^[0-9:.]{15}/{if(NR==3 && $0 ~ /alias expansion/){sub(/.+\s\s\S+\s/,"");print;};next;}{print;}' >&2)
+	# GIT_TRACE=1 /bin/git "$@" 2> >(awk '!/trace/{x++} {if(NR==3){sub(/.+\s\s\S+\s/,"");print}else if(x>0){print}}' >&2)
+	# GIT_TRACE=1 /bin/git "$@" 2> >(awk '/^[0-9:.]{15}/{if(NR==3 && $0 ~ /(run_command: \W|alias expansion)/){sub(/.+\s\s\S+\s/,"");print;};next;}{print;}' >&2)
+	GIT_TRACE=1 /usr/bin/env git "$@" 2> >(awk '/^[0-9:.]{15}/{if(NR==3 && $0 ~ /alias expansion/){sub(/.+\s\s\S+\s/,"");print;};next;}{print;}' >&2)
 }
 
-# Use fzf keybindings
-# source /usr/share/fzf/key-bindings.zsh
-if [ -n "${commands[fzf-share]}" ]; then
-  source "$(fzf-share)/key-bindings.zsh"
-  source "$(fzf-share)/completion.zsh"
-fi
-
-# Use starship prompt
-eval "$(starship init zsh)"
 
 # Dynamically change title of terminal window based on running command
 function xterm_title_precmd () {
 	print -Pn -- '\e]2;%n@%m %~\a'
 	[[ "$TERM" == 'screen'* ]] && print -Pn -- '\e_\005{g}%n\005{-}@\005{m}%m\005{-} \005{B}%~\005{-}\e\\'
 }
-
 function xterm_title_preexec () {
 	print -Pn -- '\e]2;%n@%m %~ %# ' && print -n -- "${(q)1}\a"
 	[[ "$TERM" == 'screen'* ]] && { print -Pn -- '\e_\005{g}%n\005{-}@\005{m}%m\005{-} \005{B}%~\005{-} %# ' && print -n -- "${(q)1}\e\\"; }
 }
-
 if [[ "$TERM" == (Eterm*|alacritty*|aterm*|foot*|gnome*|konsole*|kterm*|putty*|rxvt*|screen*|wezterm*|tmux*|xterm*) ]]; then
 	add-zsh-hook -Uz precmd xterm_title_precmd
 	add-zsh-hook -Uz preexec xterm_title_preexec
 fi
 
+
+
+
+
+
+###############################################################################
+##                                                                           ##
+##                     1. External shell program integration                 ##
+##                                                                           ##
+###############################################################################
+#
+# Color support for ls and some other commands (use .dircolors)
+if [ -x /usr/bin/dircolors ]; then
+	test -r $ZDOTDIR/dircolors && eval "$(dircolors -b $ZDOTDIR/dircolors)" || eval "$(dircolors -b)"
+fi
+
+# Use starship to decorate shell prompt
+# https://github.com/starship/starship
+if (( $+commands[starship] )); then
+	eval "$(starship init zsh)"
+fi
+
+# Use direnv to add hooks per directory
+# https://github.com/direnv/direnv
+if (( $+commands[direnv] )); then
+	eval "$(direnv hook zsh)"
+fi
+
+# unalias z 2> /dev/null
+# z() {
+#   [ $# -gt 0 ] && zshz "$*" && return
+#   cd "$(zshz -l 2>&1 | fzf --height 40% --nth 2.. --reverse --inline-info +s --tac --query "${*##-* }" | sed 's/^[0-9,.]* *//')"
+# }
+# Use zoxide to jump around directories faster with `z`
+# https://github.com/ajeetdsouza/zoxide
+if (( $+commands[zoxide] )); then
+	eval "$(zoxide init zsh)"
+fi
+
+# Use fzf keybindings
+if [ -n "${commands[fzf-share]}" ]; then
+	source "$(fzf-share)/key-bindings.zsh"
+	source "$(fzf-share)/completion.zsh"
+fi
+
+###############################################################################
+##                                                                           ##
+##                               1. ZSH plugins                              ##
+##                                                                           ##
+###############################################################################
+
+# 20 line plugin manager
+# From https://github.com/mattmc3/zsh_unplugged
+# Clone a plugin, identify its init file, source it, and add it to your fpath.
+function plugin-load {
+	local repo plugdir initfile initfiles=()
+	: ${ZPLUGINDIR:=${ZDOTDIR:-~/.config/zsh}/plugins}
+	for repo in $@; do
+		plugdir=$ZPLUGINDIR/${repo:t}
+		initfile=$plugdir/${repo:t}.plugin.zsh
+		if [[ ! -d $plugdir ]]; then
+			echo "Cloning $repo..."
+			git clone -q --depth 1 --recursive --shallow-submodules \
+				https://github.com/$repo $plugdir
+		fi
+		if [[ ! -e $initfile ]]; then
+			initfiles=($plugdir/*.{plugin.zsh,zsh-theme,zsh,sh}(N))
+			(( $#initfiles )) || { echo >&2 "No init file '$repo'." && continue }
+			ln -sf $initfiles[1] $initfile
+		fi
+		fpath+=$plugdir
+		(( $+functions[zsh-defer] )) && zsh-defer . $initfile || . $initfile
+	done
+}
+
+repos=(
+	# Syntax highlighting
+	zsh-users/zsh-syntax-highlighting
+
+	zsh-users/zsh-autosuggestions
+
+	# Improved completion selection menu (requires fzf)
+	Aloxaf/fzf-tab
+)
+
+plugin-load $repos
 
 # Uncomment this to profile zsh
 # zprof
