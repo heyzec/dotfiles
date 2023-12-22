@@ -21,7 +21,9 @@ if (( $+commands[exa] )); then
     }
 fi
 # Use bat over cat
-alias cat="bat"
+if (( $+commands[bat] )); then
+    alias cat="bat"
+fi
 
 
 
@@ -43,26 +45,8 @@ alias backup='cd /home/heyzec/Desktop/restic-backup-scripts && ./hacky-backup.sh
 # alias vim='nvim'
 alias pwdc='echo -n $(pwd) | wl-copy'
 
-function loc() {
-    # TODO: set default to *
-    pattern=$1
-    find . -name pattern | xargs wc -l
-}
-
 
 alias lfcd='cd "$(command lf -print-last-dir "$@")"'
-unalias z 2> /dev/null
-z() {
-  if [ $# -eq 0 ]; then
-      lfcd
-      return
-  fi
-
-  [ $# -gt 0 ] && zshz "$*" && return
-  cd "$(zshz -l 2>&1 | fzf --height 40% --nth 2.. --reverse --inline-info +s --tac --query "${*##-* }" | sed 's/^[0-9,.]* *//')"
-}
-# function z() { zshz 2>&1 "$@" }
-
 
 ###############################################################################
 # 4. Useful functions
@@ -92,5 +76,10 @@ function mergerequests() {
     git log --format=%B $commit1..$commit2 | awk '/See merge request/ {print "- " $4}'
 }
 
+function loc() {
+    # TODO: set default to *
+    pattern=$1
+    find . -name pattern | xargs wc -l
+}
 
 
