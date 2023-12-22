@@ -1,11 +1,15 @@
+# Neovim
 nvim/viminfo
 nvim/.netrwhist
 nvim/plug-config/
 nvim/plugged/
 nvim/autoload/
 
+# Zsh
 zsh/.zcompdump
+zsh/plugins  # this folder is managed by plugin manager
 
+# Nix VM build artifacts
 nix/*.qcow2
 nix/result
 *.qcow2

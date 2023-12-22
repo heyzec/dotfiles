@@ -10,14 +10,16 @@ alias egrep='egrep --color=auto'
 # 2. Command replacements
 ###############################################################################
 # Use exa over ls
-unalias ls
-function ls() {
-    if [ $# -eq 0 ]; then
-        exa --color=auto --icons --sort=type
-    else
-        exa --color=auto --icons $@
-    fi
-}
+if (( $+commands[exa] )); then
+    alias ls='' && unalias ls
+    function ls() {
+        if [ $# -eq 0 ]; then
+            exa --color=auto --icons --sort=type
+        else
+            exa --color=auto --icons $@
+        fi
+    }
+fi
 # Use bat over cat
 alias cat="bat"
 
