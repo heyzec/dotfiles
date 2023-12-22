@@ -4,7 +4,6 @@
     ./hardware/laptop
     ./configuration.nix
     # ./overlays/hyprland.nix
-    ./overlays/keyd.nix
     ./overlays/swhkd.nix
   ];
 }
