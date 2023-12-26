@@ -1,15 +1,12 @@
 { config, pkgs, inputs, ... }: {
-# 4. ADDITIONAL SYSTEM PACKAGES {{{
-################################################################################
-##### System Packages
-################################################################################
-  environment.systemPackages = let
-  in with pkgs; [
+  environment.systemPackages = with pkgs; [
+    ################################################################################
+    ##### Command-line Utilities
+    ################################################################################
 
-    ##### Minimal requirements #####
+    ##### Must have #####
     git
     neovim
-    foot
 
     ##### Command line utilities #####
     btdu
@@ -17,8 +14,9 @@
     wget  # also a basic requirement for many pkgs
     zip
     unzip
-    gnumake
-    gcc
+    starship
+    fzf
+    ripgrep
 
     ##### User space drivers and utilities #####
     pciutils
@@ -45,42 +43,20 @@
 
     man-pages man-pages-posix # Additional man pages
 
-    # Using newer version of sddm, else it hangs on shutdown
-    # https://bbs.archlinux.org/viewtopic.php?pid=2099914#p2099914
-    # unstable.sddm
 
 
 
-    # using latest for sixel support
-    (lf.override {
-    # See note for overriding Go packages:
-    # https://github.com/NixOS/nixpkgs/issues/86349#issuecomment-945210042
-      buildGoModule = args: pkgs.buildGoModule ( args // {
-        src = fetchFromGitHub {
-          owner = "gokcehan";
-          repo = "lf";
-          rev = "r31";
-          sha256 = "sha256-Tuk/4R/gGtSY+4M/+OhQCbhXftZGoxZ0SeLIwYjTLA4=";
-        };
-        vendorHash = "sha256-PVvHrXfMN6ZSWqd5GJ08VaeKaHrFsz6FKdDoe0tk2BE=";
-      });
-    })
+    lf
     # two dependencies for the lf previewer
     file
     chafa
 
 
-    (let
-      python-packages = ps: with ps; [
-        python-dotenv
-        requests
-        python-telegram-bot
-      ];
-    in
-      python311.withPackages python-packages)
-    python311Packages.pip # package manager for python libraries
 
-    distrobox
+
+    ################################################################################
+    ##### Graphical / Desktop Environment
+    ################################################################################
 
     ##### Graphical environment
     # Using newer version of sddm, else it hangs on shutdown
@@ -90,26 +66,44 @@
     dex                    # XDG autostarter
     dunst                  # notification daemon
     # flameshot              # screen capture
-    # unstable.flameshot              # screen capture
     libnotify              # library needed for dunst, a notification daemon
     playerctl              # media control
     rofi-wayland           # application launcher
     swaybg                 # wallpaper setter for wayland
     swaylock-effects       # screen locker for sway
-    swayidle
-    wlogout
+    swayidle               # idle management daemon
+    wlogout                # logout menu
+    foot                   # terminal emulator
 
     slurp
     grim
     swappy
 
+    wl-clipboard
     cliphist
     wl-clip-persist
 
+    wob
+
+    ##### System trays #####
+    indicator-sound-switcher   # sound input/output selector
+    networkmanagerapplet       # NetworkManager
+    networkmanager-openvpn     # enable/disable OpenVPN profiles
+
+    ##### Theming #####
+    lxappearance        # GTK+ theme switcher
+    themechanger
+    # whitesur-gtk-theme  # MacOS Big Sur like theme
+    # whitesur-icon-theme # MacOS Big Sur style icon theme
+    vimix-icon-theme
+    gnome.adwaita-icon-theme
 
 
+    ################################################################################
+    ##### Applications
+    ################################################################################
 
-    ##### Applications: Standard desktop environment
+    ##### Standard desktop environment #####
     baobab               # disk usage analyzer
     chromium             # open-source chrome
     gnome-text-editor    # simple text editor
@@ -126,9 +120,7 @@
     xfce.tumbler         # generate thumbnails
     font-manager
 
-
-
-    ##### Applications: Documents and Graphics
+    ##### Documents and Graphics #####
     audacity         # audio editor
     inkscape         # vector graphics editor
     gimp             # image editing suite
@@ -139,13 +131,6 @@
 
 
 
-    # [Theming]
-    lxappearance        # GTK+ theme switcher
-    themechanger
-    # whitesur-gtk-theme  # MacOS Big Sur like theme
-    # whitesur-icon-theme # MacOS Big Sur style icon theme
-    vimix-icon-theme
-    gnome.adwaita-icon-theme
 
     wayland-protocols
 
@@ -157,32 +142,55 @@
     qemu_full              # create virtual machines
     #libvirt
     virt-manager           # frontend for qemu
+    distrobox
 
 
-    ##### Development Tools: Languages, package and version managers #####
+    ################################################################################
+    ##### Development Tools
+    ################################################################################
+
+    ##### Python-specific #####
+    (let
+      python-packages = ps: with ps; [
+        python-dotenv
+        requests
+        python-telegram-bot
+      ];
+    in
+      python311.withPackages python-packages)
+    python311Packages.pip # package manager for python libraries
+
+    ##### Languages, package and version managers #####
+    gnumake
+    gcc
     rbenv      # version manager tool for Ruby
     nodenv     # version manager tool for nodeJS
     yarn
     nodejs
     go          # golang
     asdf-vm
+    clang-tools_16  # for C++ LSP - clangd
 
-    # [Development Tools - Others Tools]
+    ##### Other Tools #####
     gdb         # GNU Debugger for C/C++
     valgrind    # memory leak detection tool
 
+    # golangcl-lint 1.52.2
+    # reallyOld = import (pkgs.fetchFromGitHub {
+    #   owner = "NixOS";
+    #   repo = "nixpkgs";
+    #   rev = "ff75d77c5d6803123568981d0413606f58252a53";
+    #   sha256 = "5UOzGnsO0cB9T2y2IazSp0GvMtiqb+85ath4Sd0M/Jk=";
+    # }) {};
+    golangci-lint
 
 
-    # [Unsorted]
-    indicator-sound-switcher
-    networkmanager-openvpn
-    networkmanagerapplet
+    ################################################################################
+    ##### Unsorted
+    ################################################################################
     wdisplays
     tartube
 
-    starship
-    indicator-sound-switcher
-    fzf
 
     (pkgs.callPackage ../packages/swhkd/default.nix {})  # self-packaged swhkd
 
@@ -203,24 +211,14 @@
     adwaita-qt6
 
 
-    # golangcl-lint 1.52.2
-    # reallyOld = import (pkgs.fetchFromGitHub {
-    #   owner = "NixOS";
-    #   repo = "nixpkgs";
-    #   rev = "ff75d77c5d6803123568981d0413606f58252a53";
-    #   sha256 = "5UOzGnsO0cB9T2y2IazSp0GvMtiqb+85ath4Sd0M/Jk=";
-    # }) {};
-    golangci-lint
 
 
     wl-clipboard
     xdg-utils
-    wob
     wl-mirror
     freerdp
+    pdfarranger
     # mission-center
   # etcher
   ];
-
-# }}}
 }

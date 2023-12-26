@@ -9,6 +9,9 @@
   boot.kernelPackages = pkgs.stable.linuxPackages;
   boot.kernelParams = [
     "\"PARTLABEL=Swap partition\""
+    # https://wiki.archlinux.org/title/intel_graphics#Crash/freeze_on_low_power_Intel_CPUs
+    # Disable GPU power management to fix random hangs
+    "i915.enable_dc=0"
   ];
   # Enable all sysrq functions (useful to recover from some issues):
   boot.kernel.sysctl."kernel.sysrq" = 1; # NixOS default: 16 (only the sync command)

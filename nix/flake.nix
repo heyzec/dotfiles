@@ -72,7 +72,7 @@
             home-manager.useUserPackages = true;
             home-manager.users.heyzec = {
               imports = [
-                ./home/home.nix
+                ./home
               ];
             };
             home-manager.extraSpecialArgs = {

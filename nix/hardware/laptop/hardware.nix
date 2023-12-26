@@ -3,6 +3,11 @@
 {
   hardware = {
     bluetooth.enable = true;
+    bluetooth.settings = {
+      General = {
+        Enable = "Source,Sink,Media,Socket";
+      };
+    };
     uinput.enable = true;
     i2c.enable = true;
     opengl = {

@@ -2,10 +2,13 @@
 {
   programs.firefox = {
     enable = true;
-    package = pkgs.firefox.override {
+    package = pkgs.firefox-devedition.override {
       cfg = { enableTridactylNative = true; };
     };
-    profiles."new" = {
+
+    # Firefox Developer Edition does not allow setting default. Instead, it starts up dev-edition-default
+    # https://support.mozilla.org/en-US/kb/understanding-depth-profile-installation#w_firefox-developer-edition_2
+    profiles."dev-edition-default" = {
       path = "DualBootProfile";
       userContent = ''
         .wsn-google-focused-link {

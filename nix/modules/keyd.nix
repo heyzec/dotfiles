@@ -28,6 +28,9 @@
             j = "down";
             k = "up";
             l = "right";
+
+            a = "end";
+            i = "home";
           };
           "capslock+shift" = {
             h = "C-left";
@@ -35,8 +38,6 @@
             k = "pageup";
             l = "C-right";
 
-            a = "end";
-            i = "home";
             # j = "pagedown";
             # k = "pageup";
             # l = "end";

@@ -2,8 +2,8 @@
 {
   # SYMLINKED CONFIGS
   xdg.configFile."hyprland" = {
-    source = config.lib.file.mkOutOfStoreSymlink /home/heyzec/dotfiles/desktop/hyprland/hyprland.conf;
-    target = "hypr/hyprland.conf";
+    source = config.lib.file.mkOutOfStoreSymlink /home/heyzec/dotfiles/desktop/hyprland;
+    target = "hypr";
   };
   xdg.configFile."waybar" = {
     source = config.lib.file.mkOutOfStoreSymlink /home/heyzec/dotfiles/desktop/waybar;
@@ -25,6 +25,8 @@
     source = config.lib.file.mkOutOfStoreSymlink /home/heyzec/dotfiles/git/.gitconfig;
     target = ".gitconfig";
   };
+
+  #TODO: link .config/swhkd as vm is expecting this
 
   xdg.configFile."vscode-settings" = {
     source = config.lib.file.mkOutOfStoreSymlink /home/heyzec/dotfiles/vscode/keybindings.json;

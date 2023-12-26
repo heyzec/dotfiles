@@ -26,8 +26,11 @@
     };
 
     virtualisation.qemu.options = [
+      # "-device virtio-vga-gl"
+      # "-display sdl,gl=on,show-cursor=off"
       "-device virtio-vga-gl"
-      "-display sdl,gl=on,show-cursor=off"
+      "-device usb-tablet"
+      "-display gtk,gl=on,show-cursor=off"
       "-audio pa,model=hda"
     ];
 

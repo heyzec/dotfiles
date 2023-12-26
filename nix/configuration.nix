@@ -20,6 +20,7 @@ in {
     # XDG_CONFIG_HOME = "$HOME/.config";
     XDG_DATA_HOME   = "$HOME/.local/share";
     XDG_STATE_HOME  = "$HOME/.local/state";
+    TERMINAL        = "foot";
     # Hint electron apps to use wayland
     # BREAKS VSCODE
     # NIXOS_OZONE_WL = "1";
@@ -196,21 +197,22 @@ in {
 programs.gnupg.agent = {
    enable = true;
    pinentryFlavor = "curses";
-   enableSSHSupport = true;
 };
 
-environment.systemPackages = [
-pkgs.pinentry-curses
-pkgs.git-crypt
-pkgs.cryptsetup
-];
+  environment.systemPackages = with pkgs; [
+    pinentry-curses
+    git-crypt
+    cryptsetup
+    ollama
+  ];
 
-  environment.etc.crypttab = {
-    enable = true;
-    text = ''
-      private /dev/nvme0n1p12 none luks,noauto
-    '';
-  };
+  # environment.etc.crypttab = {
+  #   enable = true;
+  #   text = ''
+  #     private /dev/nvme0n1p12 none luks,noauto
+  #   '';
+  # };
+  programs.ssh.startAgent = true;
 
 }
 

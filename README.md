@@ -2,6 +2,9 @@
 
 Here lies my current (but always evolving) config files to some stuff I use.
 
+## More READMEs
+- [nix/README.md](nix) - NixOS configuration
+
 ## Programs
 |Type|Program|
 |---|---|
