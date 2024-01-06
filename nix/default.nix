@@ -1,9 +1,9 @@
-{ config, pkgs, inputs, ... }: {
+{
   imports = [
     ./modules
+    ./overlays
     ./hardware/laptop
     ./configuration.nix
-    # ./overlays/hyprland.nix
-    ./overlays/swhkd.nix
   ];
 }
+

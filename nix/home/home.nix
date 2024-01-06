@@ -16,7 +16,7 @@
   #   XDG_SESSION_TYPE="wayland";
   #   TERMINAL = "foot";
   # };
-    programs.vscode = {
+  programs.vscode = {
     enable = true;
     extensions = with pkgs.vscode-extensions; [
       asvetliakov.vscode-neovim
@@ -37,7 +37,7 @@
       firefox-devtools.vscode-firefox-debug
     ];
   };
-    programs = {
+  programs = {
     direnv = {
       enable = true;
       nix-direnv.enable = true;

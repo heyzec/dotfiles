@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 {
   programs.firefox = {
-    enable = true;
+    enable = false;
     package = pkgs.firefox-devedition.override {
       cfg = { enableTridactylNative = true; };
     };
@@ -25,6 +25,8 @@
   };
 
 
+
+
   # programs.firefox.profiles."New one" = {
   #   isDefault = true;
   # };
@@ -35,8 +37,10 @@
   #   isDefault = true;
   # };
 
-  home.file."firefox-profile-workaround" = {
-    source = config.lib.file.mkOutOfStoreSymlink "/media/D/Common AppData/Firefox/profile4";
-    target = ".mozilla/firefox/DualBootProfile";
-  };
+  # home.file."firefox-profile-workaround" = {
+  #   source = config.lib.file.mkOutOfStoreSymlink "/media/D/Common AppData/Firefox/profile4";
+  #   target = ".mozilla/firefox/DualBootProfile";
+  # };
+
 }
+

@@ -10,15 +10,15 @@
     target = "waybar";
   };
   xdg.configFile."kanshi" = {
-    source = /home/heyzec/dotfiles/desktop/kanshi/config;
+    source = config.lib.file.mkOutOfStoreSymlink /home/heyzec/dotfiles/desktop/kanshi/config;
     target = "kanshi/config";
   };
   xdg.configFile."starship" = {
-    source = /home/heyzec/dotfiles/zsh/starship.toml;
+    source = config.lib.file.mkOutOfStoreSymlink /home/heyzec/dotfiles/zsh/starship.toml;
     target = "starship.toml";
   };
   home.file."zsh" = {
-    source = /home/heyzec/dotfiles/zsh/.zshenv;
+    source = config.lib.file.mkOutOfStoreSymlink /home/heyzec/dotfiles/zsh/.zshenv;
     target = ".zshenv";
   };
   home.file."gitconfig" = {

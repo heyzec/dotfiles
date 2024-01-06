@@ -6,7 +6,6 @@
 let
 in {
 
-  nixpkgs.config.allowUnfree = true;
 
 # 1. HARDWARE, BOOT, NETWORK SETTINGS {{{
 ################################################################################
@@ -35,26 +34,6 @@ in {
     nix-ld.enable = true;
     dconf.enable = true;
 
-    neovim = {
-      enable = true;
-      defaultEditor = true;
-    };
-
-    zsh = {
-      enable = true;
-    };
-
-    firefox = {
-      enable = true;
-      nativeMessagingHosts.packages = [ pkgs.tridactyl-native ];
-    };
-
-
-    # xfce.thunar                # file manager
-    # xfce.thunar-volman         # volume manager integration for thunar
-    # xfce.thunar-archive-plugin # integration with archive tool - file-roller
-    # xfce.tumbler               # generate thumbnails
-
     wireshark.enable = true;
     wireshark.package = pkgs.wireshark;
 
@@ -63,96 +42,6 @@ in {
   environment.etc."asdf-vm/asdf.sh".source = "${pkgs.asdf-vm}/share/asdf-vm/asdf.sh";
 # }}}
 
-# 5. SERVICES AND SYSTEMD {{{
-################################################################################
-##### Services and SystemD
-################################################################################
-  services = {
-
-
-    dbus = {
-      enable = true;
-      packages = [ pkgs.flameshot ];
-    };
-
-
-
-    pipewire = {
-      enable = true;
-      alsa.enable = true;
-      pulse.enable = true;
-      jack.enable = true;
-    };
-
- #    udev.extraRules = ''
- #        KERNEL=="i2c-[0-9]*", GROUP="i2c", MODE="0660"
- #  '';
-
-
-
-    auto-cpufreq.enable = true;
-
-
-    earlyoom = {
-      enable = true;
-      extraArgs = [
-        "--avoid '^(Hyprland)$'"
-        "--prefer '^(electron)$'"
-      ];
-    };
-
-
-    flatpak = {
-      enable = true;
-    };
-
-    # tumbler.enable = true; # Thumbnail support for images
-
-    # For automounting
-    devmon.enable = true;
-    gvfs.enable = true; # Mount, trash, and other functionalities
-    udisks2.enable = true;
-
-    avahi = {
-      enable = true;
-      nssmdns4 = true;
-    };
-
-    cron.enable = true;  # Temporary, until we migrate all to systemd timers
-
-
-    locate = {
-      enable = true;
-      package = pkgs.plocate;
-      localuser = null;  # to squelch warning: plocate does not support non-root updatedb
-      pruneNames = [
-        ".bzr" ".cache" ".git" ".hg" ".svn"  # defaults
-        "node_modules"
-      ];
-      prunePaths = [
-        "/mnt/D"
-        "/media/D"
-      ];
-    };
-
-    # Enable the OpenSSH daemon.
-    openssh.enable = true;
-
-    thermald.enable = true;
-  };
-
-
-  systemd = {
-    user.services.kanshi = {
-      description = "kanshi daemon a";
-      serviceConfig = {
-        Type = "simple";
-        ExecStart = ''${pkgs.kanshi}/bin/kanshi'';
-      };
-    };
-  };
-
-# }}}
 
 # 6. OTHERS {{{
 
@@ -166,14 +55,6 @@ in {
     pam.services.swaylock = {};
   };
 
-  security.polkit.extraConfig = ''
-    polkit.addRule(function(action, subject) {
-        if (action.id == "org.freedesktop.policykit.exec" &&
-            action.lookup("program") == "/run/current-system/sw/bin/swhkd") {
-                return polkit.Result.YES;
-        }
-    });
-  '';
 
   virtualisation = {
     docker.enable = true;
@@ -198,20 +79,27 @@ programs.gnupg.agent = {
    pinentryFlavor = "curses";
 };
 
+
   environment.systemPackages = with pkgs; [
     pinentry-curses
-    git-crypt
     cryptsetup
     ollama
+    obs-studio
+    tor-browser-bundle-bin
+
+    wl-color-picker
+
+
+    (floorp.override {
+      nativeMessagingHosts = with pkgs; [
+        tridactyl-native
+      ];
+    })
   ];
 
-  # environment.etc.crypttab = {
-  #   enable = true;
-  #   text = ''
-  #     private /dev/nvme0n1p12 none luks,noauto
-  #   '';
-  # };
   programs.ssh.startAgent = true;
 
+  programs.adb.enable = true;
+  users.users.heyzec.extraGroups = [ "adbusers" ];
 }
 

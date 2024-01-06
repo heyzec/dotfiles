@@ -6,10 +6,12 @@
     ./locale.nix
     ./logind.nix
     ./nix.nix
+    ./neovim.nix
     ./packages.nix
     ./waybar.nix
     ./postgresql.nix
-    ./system.nix
+    ./services.nix
+    ./shell.nix
     ./thunar.nix
     ./users.nix
     ./virtualization.nix
@@ -18,3 +20,4 @@
     ./sddm.nix
   ];
 }
+

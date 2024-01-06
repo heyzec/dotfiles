@@ -1,5 +1,6 @@
 { pkgs, ... }:
 {
+  # keyd
   services.keyd = {
     enable = true;
     keyboards = {
@@ -9,9 +10,20 @@
       };
     };
   };
+
+  # swhkd
+  security.polkit.extraConfig = ''
+    polkit.addRule(function(action, subject) {
+        if (action.id == "org.freedesktop.policykit.exec" &&
+            action.lookup("program") == "/run/current-system/sw/bin/swhkd") {
+                return polkit.Result.YES;
+        }
+    });
+  '';
+
   environment.systemPackages = with pkgs; [
-    # Add keyd to programs too for manpage
-    keyd
+    keyd  # Add keyd to programs too for manpage
+    swhkd
   ];
 }
 
