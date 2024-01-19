@@ -10,10 +10,30 @@ set -e
 directory=$(dirname "$(realpath "$0")")
 ITEMS_FILE="$directory/items.ini"
 
-if [ $# -ne 1 ]; then
-    echo "usage: ./install <program>"
-    exit
+cd "$directory"
+cd "$(git rev-parse --show-toplevel)"
+
+help_string="usage: ./install <program> [--no-dry-run]"
+
+if [ $# -eq 1 ]; then
+    program="$1"
+    dry_run=true
+elif [ $# -eq 2 ]; then
+    if [ "$1" = '--no-dry-run' ]; then
+        program="$2"
+        dry_run=false
+    elif [ "$2" = '--no-dry-run' ]; then
+        program="$1"
+        dry_run=false
+    else
+        echo "$help_string"
+        exit 1
+    fi
+else
+    echo "$help_string"
+    exit 1
 fi
+
 
 subst() {
     # In case envsubst is not available, use sed
@@ -23,6 +43,12 @@ subst() {
         # The innermost sed is to escape slashes in path for outer sed command to be valid
         sed "s/\$HOME/$(echo "$HOME" | sed 's:/:\\\/:g')/"
     fi
+}
+
+parse_sections() {
+    filename="$1"
+    # Note: BSD grep does not GNU grep's -P flag
+    cat "$filename" | grep '^\[[a-z]\+\]$' | sed -E 's/\[|\]//g'
 }
 
 extract_section() {
@@ -42,7 +68,17 @@ extract_value() {
     echo "$key_value_pairs" | grep "^$key=" | sed "s/^$key=//"
 }
 
-program="$1"
+
+# Parse section headers in config file
+all_sections="$(parse_sections "$ITEMS_FILE")"
+
+if ! echo "$all_sections" | grep -q "^$program\$"; then
+    echo "$program is not a valid entry!"
+    echo "ITEMS_FILE contains these programs:"
+    echo $all_sections
+    exit 1
+fi
+
 
 # Extract relevant section from config file
 key_value_pairs=$(extract_section "$program" "$ITEMS_FILE")
@@ -53,13 +89,22 @@ dest=$(extract_value dest "$key_value_pairs")
 
 
 if [ -z "$src" ]; then
-    echo "No valid entry selected!"
     exit
 fi
 
 src_expanded=$(realpath "$src")
 dest_expanded=$(echo "$dest" | subst)
 
-set -x
-ln --symbolic --no-target-directory --verbose "$src_expanded" "$dest_expanded"
+if [ -e "$dest_expanded" ]; then
+    echo "Failed to create link: $dest_expanded exists"
+    exit 1
+fi
+
+if [ "$dry_run" = true ]; then
+    echo ln -s -v "$src_expanded" "$dest_expanded"
+    echo "Run again with --no-dry-run"
+else
+    set -x
+    ln -s -v "$src_expanded" "$dest_expanded"
+fi
 
