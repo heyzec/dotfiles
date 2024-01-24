@@ -1,11 +1,7 @@
 -- Setup mason so it can manage external tooling
-
--- require("mason").setup {
---     -- https://github.com/williamboman/mason.nvim/issues/428#issuecomment-1357203892
---     PATH = "append",
--- }
 -- Use mason-tool-installer to declaratively install
 
+local servers = require("utils.lsp").servers
 
 return {
     -- Manage external editor tooling i.e LSP servers
@@ -22,26 +18,11 @@ return {
         local mason_lspconfig = require('mason-lspconfig')
         local mason_tool_installer = require('mason-tool-installer')
 
-        local telescope = require('telescope.builtin')
-
-        mason.setup()
-        
-        local opts = { }
-        local on_attach = function(_, bufnr)
-            opts.buffer = bufnr
-
-            opts.desc = "Smart rename"
-            vim.keymap.set('n', '<F2>', vim.lsp.buf.rename, opts)
-
-            opts.desc = "Show LSP references"
-            vim.keymap.set('n', 'gr', telescope.lsp_references)
-
-            vim.keymap.set('n', 'K', vim.lsp.buf.hover, { buffer = bufnr })
-
-
-            vim.keymap.set('n', '<leader>s', telescope.lsp_document_symbols)
-            vim.keymap.set('n', '<leader>S', telescope.lsp_dynamic_workspace_symbols)
-        end
+        mason.setup({
+            -- Set mason to prefer using system installed program if it's available
+            -- https://github.com/williamboman/mason.nvim/issues/428#issuecomment-1357203892
+            PATH = "append",
+        })
 
         -- to enable autocompletion (assign to every lsp server config)
         local capabilities = vim.lsp.protocol.make_client_capabilities()
@@ -50,42 +31,35 @@ return {
 
         -- Define configs for each specific language here
         mason_lspconfig.setup_handlers({
-            -- Define configs for each specific language here
-            -- ...
-            ["lua_ls"] = function()
-                require('neodev').setup()
-                require("lspconfig").lua_ls.setup {
-                    on_attach = on_attach,
-                    capabilities = capabilities,
-                    Lua = {
-                        -- Stop prompting
-                        -- See https://github.com/LunarVim/LunarVim/issues/4049
-                        workspace = { checkThirdParty = false},
-                    },
-                }
-            end,
-
             -- Default fallback handler for those not explcitly specified
-            function (server_name)
+            function(server_name)
                 require("lspconfig")[server_name].setup {
-                    on_attach = on_attach,
+                    -- Removed, we config keymaps using the autocmd LspAttach
+                    -- on_attach = on_attach,
                     capabilities = capabilities,
+                    settings = servers[server_name],
                 }
             end,
         })
-        
-    
+
+
         mason_tool_installer.setup({
             ensure_installed = {
-                'bash-language-server',
-                'clangd',
-                'html-lsp',
-                'isort',
-                'lua-language-server',
-                'pyright',
-                'shellcheck'
+                'bash-language-server',      -- Bash, LSP, npm
+                'shellcheck',                -- Bash, linting, binary (Github)
+
+                'nil',                       -- Nix, LSP, cargo
+
+                'lua-language-server',       -- Lua, LSP, binary (Github)
+                'pyright',                   -- Python, LSP, npm
+
+                'clangd',                    -- C++, LSP, binary (Github)
+
+                -- 'html-lsp',
+                -- 'isort',
             }
         })
     end,
     opts = {},
 }
+

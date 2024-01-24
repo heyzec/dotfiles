@@ -2,13 +2,9 @@
 " -------------------Map the leader key first-----------------
 let mapleader = "\<space>"                      " the easiest button to hit
 
-if !exists('g:vscode')
-    if !has('nvim')
-        runtime plugins.vim
-    endif
+if !has('nvim')
+    runtime plugins.vim
 endif
-
-set termguicolors
 
 
 " 2. BASIC VIM CONFIGURATIONS {{{
@@ -19,18 +15,27 @@ set termguicolors
 " ###############################################################################
 
 " Absolute essentials!: Escape mapping, enable mouse {{{
+
+" See https://github.com/vscode-neovim/vscode-neovim#composite-escape-keys
+" for mapping jk to Esc in vscode-neovim
 if !exists('g:vscode')
     inoremap <silent> jk <Esc><Right>
+    " Avoid using capslock-map-to-esc in vim
+    inoremap <Esc> <Nop>
 endif
+
 set mouse=a                                     " enable mouse in all modes
+
 if !has('nvim')
     set ttymouse=xterm2                         " allow mouse through tmux, ssh
 endif
+
 " let mapleader = "\<space>"                    " is set above in PLUGINS section
 " }}}
 
 " Appearance: Ruler, cursor and visualising chars {{{
 set showcmd                                     " display last command  (default in nvim)
+set termguicolors
 
 " ----------------------------Ruler----------------------------
 set number                                      " enable numbers on the left ...
@@ -39,7 +44,8 @@ set relativenumber                              " ... but make current line 0
 " ----------------------------Cursor---------------------------
 set cursorline                                  " highlight current line
 if !exists('g:vscode')
-    set scrolloff=4                             " keep cursor centered (4 lines from edges)
+    set scrolloff=8                             " keep cursor centered (8 lines from top and bottom edges)
+    set sidescrolloff=4                         " keep cursor centered (4 lines from left and right edges)
 endif
 let &t_SI = "\e[5 q"                            " change to i-beam cursor when entering insert mode
 let &t_EI = "\e[2 q"                            " change to block cursor when leaving insert mode
@@ -47,22 +53,22 @@ let &t_EI = "\e[2 q"                            " change to block cursor when le
 " -------------------Visualize hidden chars--------------------
 set list
 set listchars=tab:\|\ ,trail:·,nbsp:⎵           " tabs, non-breaking spaces, trailing spaces
-if !has('g:vscode')                                 " make these chars display in gray instead of blue
-    augroup visualise_chars                         " only show eol when in insert mode
+
+if !has('g:vscode')
+    augroup visualise_chars
         autocmd!
-        autocmd InsertEnter * set listchars+=eol:↲
-        autocmd InsertLeave * set listchars-=eol:↲
+        " only show eol when in visual mode
+        autocmd ModeChanged n:[vV] set listchars+=eol:↲
+        autocmd ModeChanged [vV]:n set listchars-=eol:↲
     augroup end
 endif
-if !has('nvim')
-    hi SpecialKey ctermfg=244 guifg=#808080
+if !has('nvim')                                 " make these chars display in gray instead of blue
+    highlight SpecialKey ctermfg=244 guifg=#808080
 endif
 " }}} Appearance: Ruler, cursor and visualising chars
 
 " Editing: Search, splits and indentation {{{
 " --------------------------Searching--------------------------
-" set path+=**                                    " allow recursive :find
-" setglobal complete-=i
 set wildmenu                                    " enable command line completion (default in nvim)
 set wildmode=longest:full,full                  " don't default to 1st option e.g. `:e` (like bash)
 set wildignorecase                              " ignore case when searching
@@ -98,9 +104,6 @@ if has('nvim')                                  " vim and nvim uses different un
 endif
 set foldmethod=marker
 " }}} Editing: Search, splits and indentation
-" testing
-
-" let g:netrw_winsize = 15
 
 " }}} 2. BASIC VIM CONFIGURATIONS
 
@@ -111,36 +114,83 @@ set foldmethod=marker
 " ##                                                                           ##
 " ###############################################################################
 
+" Use this function to create keymaps with descriptions for neovim
+" while remaining compatible with vim
+function s:nnoremap(key, cmd, desc)
+    if has('nvim')
+        call luaeval("require('utils.keymap').map(_A[1], _A[2], { desc = _A[3] })", [a:key, a:cmd, a:desc])
+    else
+        execute 'nnoremap ' . a:key . ' ' . a:cmd
+    endif
+endfunction
+
+" Let the Alt key be mappable (only need fix for vim)
+if !has('nvim')
+    execute "set <A-j>=\ej"
+    execute "set <A-k>=\ek"
+endif
+
+
 " Basic keymappings {{{
 " context-based j and k - gj usually, but j if count is given
 nnoremap <expr> j v:count == 0 ? 'gj' : 'j'
 nnoremap <expr> k v:count == 0 ? 'gk' : 'k'
+nnoremap gj j
+nnoremap gk k
 
 " make Y more consistent - yank till end (like D and C)
 noremap Y y$
 
-" no more `how did we get here?`
-noremap Q :echo 'No more Ex mode!'<CR>
+
+" Don't use Ex mode, use Q for macros (idea: jesseliete)
+nnoremap Q @qj
+xnoremap Q :norm @q<CR>
+" Do not show stupid `how did we get here?` window
+"nnoremap q: :echo 'No more Ex mode!'<CR>
+
+
+" Ctrl + Backspace - delete previous word
+" Use Ctrl+Shift+w because Ctrl+w does not work for Telescope
+inoremap <C-BS> <C-S-w>
+cnoremap <C-BS> <C-S-w>
+
+" center searches and open folds
+nmap n nzzzv
+nmap N Nzzzv
+
+" Easy access to the clipboard register (idea: ThePrimeagen)
+nmap <leader>y "+y
+vmap <leader>y "+y
+nmap <leader>Y "+Y
+nmap <leader>d "+d
+vmap <leader>d "+d
+nmap <leader>D "+D
+nmap <leader>p "+p
+vmap <leader>p "+p
+nmap <leader>P "+P
 
 " :w looks simple at first but it's not
-noremap <leader>w :w<CR>
+if !exists('g:vscode')
+    call s:nnoremap('<leader>w', ':w<CR>', 'Write to buffer')
+else
+    " remapped in keymaps.lua if vscode exists
+endif
 
 " cd vim into the directory of the current buffer
-nnoremap <leader>d :cd %:p:h<CR>
+call s:nnoremap('<leader>c', ':cd %:p:h<CR>', 'cd into buffer directory')
 
-" Tabs to switch buffers
-if !exists('g:vscode')
-    nnoremap <Tab>   :bnext<CR>
-    nnoremap <S-Tab> :bprevious<CR>
-else
-    nnoremap <Tab>   :tabnext<CR>
-    nnoremap <S-Tab> :tabprevious<CR>
-endif
+" Tabs to switch buffers (not a useful remap)
+" if !exists('g:vscode')
+"     nnoremap <Tab>   :bnext<CR>
+"     nnoremap <S-Tab> :bprevious<CR>
+" else
+"     nnoremap <Tab>   :tabnext<CR>
+"     nnoremap <S-Tab> :tabprevious<CR>
+" endif
 " }}} Basic keymappings
 
 " [e]dit/[s]ource my [v]imrc {{{
 nnoremap <leader>ve :vsplit $MYVIMRC<CR>
-nnoremap <leader>vl :execute printf('vsplit %s/'.LSP_INIT_FILE, fnamemodify($MYVIMRC, ':h'))<CR>
 if !exists('g:vscode')
     nnoremap <leader>vs :silent! call win_execute(win_findbuf(bufnr($MYVIMRC))[0], 'w') <bar> source $MYVIMRC<CR>
 else
@@ -152,36 +202,31 @@ endif
 if !exists('g:vscode')
     nnoremap <leader>s :%s//g<Left><Left>
 else
-    nnoremap <leader>s :call VSCodeNotify('editor.action.startFindReplaceAction')<CR>
+    " remapped in keymaps.lua if vscode exists
 endif
 vnoremap <leader>s "zy:%s/<C-r>z//g<Left><Left>
 " }}}
 
 " Splits controls {{{
 " Switching between splits (alt + h,j,k,l)
-noremap <A-h>     <C-w>h
-noremap <A-j>     <C-w>j
-noremap <A-k>     <C-w>k
-noremap <A-l>     <C-w>l
+" Use map over noremap to trigger vscode-neovim's default maps (if vscode)
+map <A-h>     <C-w>h
+map <A-j>     <C-w>j
+map <A-k>     <C-w>k
+map <A-l>     <C-w>l
 tnoremap <A-h> <C-\><C-n><c-w>h
 tnoremap <A-j> <C-\><C-n><c-w>j
 tnoremap <A-k> <C-\><C-n><c-w>k
 tnoremap <A-l> <C-\><C-n><c-w>l
 
 " Resizing splits (ctrl + arrows keys)
-noremap <C-Left>  <C-w><
-noremap <C-Right> <C-w>>
-noremap <C-Up>    <C-w>+
-noremap <C-Down>  <C-w>-
+map <C-Left>  <C-w><
+map <C-Right> <C-w>>
+map <C-Up>    <C-w>+
+map <C-Down>  <C-w>-
 " }}}
 
 " Moving v-block selection (alt + j,k) {{{
-" Let the Alt key be mappable (only need fix for vim)
-if !has('nvim')
-    execute "set <A-j>=\ej"
-    execute "set <A-k>=\ek"
-endif
-
 vnoremap <A-j> :m '>+1<CR>gv=gv
 vnoremap <A-k> :m '<-2<CR>gv=gv
 " }}}
@@ -192,11 +237,31 @@ if !has('nvim')
     noremap <leader>W :w !sudo tee %:p >/dev/null<CR>
 endif
 
-noremap <leader>e :NvimTreeToggle<CR>
 " TO DO: only do subst within selected visual-line lines
 " vmap <expr> <leader>q mode() == 'v' ? "j" : "k"
 " }}}
 
 " }}} 3. KEYMAPPINGS
+
+" 4. THINGS THAT SHOULD BE PLUGINS {{{
+" ###############################################################################
+" ##                                                                           ##
+" ##                      4. THINGS THAT SHOULD BE PLUGINS                     ##
+" ##                                                                           ##
+" ###############################################################################
+" A useful function
+"
+" explore the update command (:h update)
+command WriteIfModified if getbufinfo(bufnr('%'))[0].changed | w | endif
+function WriteIfModified()
+    if getbufinfo(bufnr('%'))[0].changed
+        " return execute('w')->split('\n')[0]
+        return split(execute('w'), '\n')[0]
+    endif
+    return ''
+endfunction
+
+
+" }}} 4. THINGS THAT SHOULD BE PLUGINS
 
 

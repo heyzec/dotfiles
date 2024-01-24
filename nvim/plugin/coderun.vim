@@ -28,7 +28,7 @@ else
 endif
 
 function Double()
-    if !exists('g:tb')
+    if !exists('g:vscode') && !exists('g:tb')
         call NewTerm()
         return
     endif
@@ -51,6 +51,11 @@ endfunction
 
 
 function! NewTerm(...)
+    if exists('g:vscode')
+        call VSCodeNotify('workbench.action.terminal.toggleTerminal')
+        return
+    endif
+
     " Opens a term at the bottom of the screen, and go into insert mode
     let mods = a:0 >= 1 && a:1 != "" ? a:1 : 'botright'  " By default open term across splits below
 
@@ -234,7 +239,6 @@ endfunction
 
 
 function! GetCodeRunCmd()
-
     function! Quote(str)
         return '"' . a:str . '"'
     endfunction

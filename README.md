@@ -2,8 +2,12 @@
 
 Here lies my current (but always evolving) config files to some stuff I use.
 
+
 ## More READMEs
 - [nix/README.md](nix) - NixOS configuration
+- [nvim/README.md](nvim) - Neovim configuration
+
+
 
 ## Programs
 |Type|Program|

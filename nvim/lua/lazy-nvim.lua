@@ -13,18 +13,19 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-local plugins = "plugins"
+local not_vscode = not vim.g.vscode
 
-require("lazy").setup(plugins, {})
---require "lazy-setup"
--- require("lazy").setup({
---     -- "Comment.nvim?"
---     "neovim/nvim-lspconfig",                -- required for nvim LSP
--- 
--- 
---     "folke/neodev.nvim", -- anotations for neovim api functions
--- 
---     'jcdickinson/codeium.nvim',
--- 
---     { "lukas-reineke/indent-blankline.nvim" },
--- })
+require('utils.plugin').setup()
+
+local plugins = "plugins"
+require("lazy").setup(plugins, {
+  defaults = {
+    cond = not_vscode,
+  },
+  change_detection = {
+    -- automatically check for config file changes and reload the ui
+    enabled = true,
+    notify = false,
+  },
+})
+

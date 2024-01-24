@@ -31,8 +31,8 @@ Plug 'tomasiser/vim-code-dark'                  " dark color scheme like vscode
 
 " ------------------------D. Interface------------------------
 Plug 'mbbill/undotree'                          " visualise undo history with branches
-" Plug 'vim-airline/vim-airline'                  " statusline
-" Plug 'vim-airline/vim-airline-themes'           " theme statusline to match dark color scheme
+Plug 'vim-airline/vim-airline'                  " statusline
+Plug 'vim-airline/vim-airline-themes'           " theme statusline to match dark color scheme
 Plug 'tpope/vim-fugitive'                       " git integration
 
 " -------------------------E. Commands------------------------
