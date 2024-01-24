@@ -1,8 +1,4 @@
 #!/bin/sh
-#
-
-# Exit immediately if any command fails
-set -e
 
 # Exit immediately if any command fails
 set -e
@@ -37,7 +33,7 @@ fi
 
 subst() {
     # In case envsubst is not available, use sed
-    if command -v envsubst &> /dev/null; then
+    if command -v envsubst 2>&1 /dev/null; then
         envsubst
     else
         # The innermost sed is to escape slashes in path for outer sed command to be valid
@@ -48,7 +44,7 @@ subst() {
 parse_sections() {
     filename="$1"
     # Note: BSD grep does not GNU grep's -P flag
-    cat "$filename" | grep '^\[[a-z]\+\]$' | sed -E 's/\[|\]//g'
+    cat "$filename" | grep '^\[[a-z\-]\+\]$' | sed -E 's/\[|\]//g'
 }
 
 extract_section() {
@@ -56,8 +52,8 @@ extract_section() {
     filename="$2"
     cat "$filename" | awk '
         BEGIN{state=0}
-        /'"$section_name"'/&&state==0{state++;next}
-        state==1&&/\[[a-z-]+\]/{exit;}
+        /\['"$section_name"'\]/&&state==0{state++;next}
+        state==1&&/\[[a-z\-]+\]/{exit;}
         state==1{print $0}
     ' | sed '/^$/d'
 }
@@ -79,32 +75,42 @@ if ! echo "$all_sections" | grep -q "^$program\$"; then
     exit 1
 fi
 
+# Use () instead of {} to scope variables by running in a subshell
+link_section() (
+    header="$1"
 
-# Extract relevant section from config file
-key_value_pairs=$(extract_section "$program" "$ITEMS_FILE")
+    # Extract relevant section from config file
+    key_value_pairs=$(extract_section "$header" "$ITEMS_FILE")
 
-# Extract values
-src=$(extract_value src "$key_value_pairs")
-dest=$(extract_value dest "$key_value_pairs")
+    # Extract values
+    src=$(extract_value src "$key_value_pairs")
+    dest=$(extract_value dest "$key_value_pairs")
+    call=$(extract_value call "$key_value_pairs")
 
+    IFS=","
+    for header in $call; do
+        link_section "$header"
+    done
 
-if [ -z "$src" ]; then
-    exit
-fi
+    if [ -n "$src" ]; then
+        src_expanded=$(realpath "$src")
+        dest_expanded=$(echo "$dest" | subst)
 
-src_expanded=$(realpath "$src")
-dest_expanded=$(echo "$dest" | subst)
+        if [ -e "$dest_expanded" ]; then
+            echo "Failed to create link: $dest_expanded exists"
+            exit 1
+        fi
 
-if [ -e "$dest_expanded" ]; then
-    echo "Failed to create link: $dest_expanded exists"
-    exit 1
-fi
+        if [ "$dry_run" = true ]; then
+            echo ln -s -v "$src_expanded" "$dest_expanded"
+        else
+            (set -x ; ln -s -v "$src_expanded" "$dest_expanded")
+        fi
+    fi
+)
 
+link_section "$program"
 if [ "$dry_run" = true ]; then
-    echo ln -s -v "$src_expanded" "$dest_expanded"
     echo "Run again with --no-dry-run"
-else
-    set -x
-    ln -s -v "$src_expanded" "$dest_expanded"
 fi
 
