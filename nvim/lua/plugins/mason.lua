@@ -48,7 +48,7 @@ return {
                 'bash-language-server',      -- Bash, LSP, npm
                 'shellcheck',                -- Bash, linting, binary (Github)
 
-                'nil',                       -- Nix, LSP, cargo
+                -- 'nil',                       -- Nix, LSP, cargo
 
                 'lua-language-server',       -- Lua, LSP, binary (Github)
                 'pyright',                   -- Python, LSP, npm

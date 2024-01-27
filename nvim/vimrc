@@ -155,6 +155,7 @@ inoremap <C-BS> <C-S-w>
 cnoremap <C-BS> <C-S-w>
 
 " center searches and open folds
+" this does not play nice with vscode-neovim, we add a fix in settings.json
 nmap n nzzzv
 nmap N Nzzzv
 
@@ -227,6 +228,7 @@ map <C-Down>  <C-w>-
 " }}}
 
 " Moving v-block selection (alt + j,k) {{{
+" with vscode-neovim, vscode has a native way to move lines that less laggy, we override this in settings.json
 vnoremap <A-j> :m '>+1<CR>gv=gv
 vnoremap <A-k> :m '<-2<CR>gv=gv
 " }}}

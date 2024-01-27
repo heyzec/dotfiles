@@ -1,45 +1,143 @@
+// ------------------------------ ------------------------------
 // Place your key bindings in this file to override the defaults
+// See https://www.whitphx.info/posts/20230217-vscode-undocumented-contexts/
+// for the valid contexts (when key)
 [
-    // jk as escape (side-effect: jj, kk and kj also will be mapped) 
-    {
-        "command": "vscode-neovim.compositeEscape1", "key": "j",
-        "when": "neovim.mode == insert && editorTextFocus", "args": "j"
-    },
-    {
-        "command": "vscode-neovim.compositeEscape2", "key": "k",
-        "when": "neovim.mode == insert && editorTextFocus", "args": "k"
-    },
-    
-    // Suggestions
-    {
-        "key": "tab", "command": "selectNextSuggestion",
-        "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus"
-    },
-    {
-        "key": "down", "command": "-selectNextSuggestion",
-        "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus"
-    },
-    {
-        "key": "shift+tab", "command": "selectPrevSuggestion",
-        "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus"
-    },
-    {
-        "key": "up", "command": "-selectPrevSuggestion",
-        "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus"
-    },
-    // {   "key": "space", "command": "acceptSelectedSuggestion", "when": "editorTextFocus && suggestWidgetVisible" },
-    
+    // ###############################################################################
+    // ##                                                                           ##
+    // ##                        1. VSCODE-NEOVIM INTEGRATION                       ##
+    // ##                                                                           ##
+    // ###############################################################################
 
-    // Restore Ctrl + C as copy
+    // -----------------------Escape mapping------------------------
+    // jk as escape (side-effect: jj, kk and kj also will be mapped)
+    // See https://github.com/vscode-neovim/vscode-neovim#composite-escape-keys
     {
-        "command": "vscode-neovim.send",
-        "key": "ctrl+c",
-        "when": "editorTextFocus && neovim.mode == visual",
-        "args": "<C-c>"  // the input to send to neovim
+        "command": "vscode-neovim.compositeEscape1",
+        "key": "j",
+        "when": "neovim.mode == insert && editorTextFocus",
+        "args": "j"
     },
     {
-        "key": "ctrl+c", "command": "editor.action.clipboardCopyAction",
+        "command": "vscode-neovim.compositeEscape2",
+        "key": "k",
+        "when": "neovim.mode == insert && editorTextFocus",
+        "args": "k"
+    },
+
+    // --------------------Restore Ctrl+C as copy-------------------
+    // This makes insert mode behave more like VSCode without neovim plugin
+    {
+        "key": "ctrl+c",
+        "command": "editor.action.clipboardCopyAction",
         "when": "neovim.mode != visual"
     },
 
+    // ----------------------Special shortcuts----------------------
+    // Alt keyboard shortcut must be explicitly defined here
+    // See https://github.com/vscode-neovim/vscode-neovim#add-keybindings
+    // Mapping alt in vscode also requires additional settings:
+    // - window.enableMenuBarMnemonics: false (if not macos)
+    // - window.titleBarStyle: native (if in linux)
+    {
+        "command": "vscode-neovim.send",
+        "key": "alt+h",
+        "when": "editorTextFocus && neovim.mode != insert",
+        "args": "<A-h>"
+    },
+    {
+        "command": "vscode-neovim.send",
+        "key": "alt+j",
+        "when": "editorTextFocus && neovim.mode != insert",
+        "args": "<A-j>"
+    },
+    {
+        "command": "vscode-neovim.send",
+        "key": "alt+k",
+        "when": "editorTextFocus && neovim.mode != insert",
+        "args": "<A-k>"
+    },
+    {
+        "command": "vscode-neovim.send",
+        "key": "alt+l",
+        "when": "editorTextFocus && neovim.mode != insert",
+        "args": "<A-l>"
+    },
+
+    // ----------------------Other workarounds----------------------
+    // Workaround for mapping n to nzz
+    // https://github.com/vscode-neovim/vscode-neovim/issues/1222
+    {
+        "key": "n",
+        "when": "editorTextFocus && neovim.mode != insert",
+        "command": "runCommands",
+        "args": {
+            "commands": [
+                {
+                    "command": "vscode-neovim.send",
+                    "args": "n",
+                },
+                {
+                    "command": "vscode-neovim.send-blocking",
+                    "args": ":sleep 100m<CR>",
+                },
+                {
+                    "command": "vscode-neovim.send",
+                    "args": "zz",
+                },
+            ]
+        }
+    },
+    {
+        "key": "shift+n",
+        "when": "editorTextFocus && neovim.mode != insert",
+        "command": "runCommands",
+        "args": {
+            "commands": [
+                {
+                    "command": "vscode-neovim.send",
+                    "args": "N",
+                },
+                {
+                    "command": "vscode-neovim.send-blocking",
+                    "args": ":sleep 100m<CR>",
+                },
+                {
+                    "command": "vscode-neovim.send",
+                    "args": "zz",
+                },
+            ]
+        }
+    },
+    // Moving lines up and down faster is less laggy if we do it in vscode
+    {
+        "command": "editor.action.moveLinesDownAction",
+        "when": "editorTextFocus && neovim.mode != insert",
+        "key": "ctrl+j"
+    },
+    {
+        "command": "editor.action.moveLinesUpAction",
+        "when": "editorTextFocus && neovim.mode != insert",
+        "key": "ctrl+k"
+    },
+
+
+    // ###############################################################################
+    // ##                                                                           ##
+    // ##                             2. VSCODE KEYBINDS                            ##
+    // ##                                                                           ##
+    // ###############################################################################
+
+    // The default behaviour of tab in vscode is to accept current suggestion,
+    // let's change it to select the next one instead.
+    {
+        "key": "tab",
+        "command": "selectNextSuggestion",
+        "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus"
+    },
+    {
+        "key": "shift+tab",
+        "command": "selectPrevSuggestion",
+        "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus"
+    },
 ]
