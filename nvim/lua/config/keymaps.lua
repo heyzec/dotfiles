@@ -38,15 +38,17 @@ if not vim.g.vscode then
     } })
 end
 
--- { "<leader>fa", ":Telescope <CR>" },
--- { "<leader>fh", ":Telescope help_tags<CR>" },
-local telescope = require('telescope.builtin')
+local telescope
+if not vim.g.vscode then
+    telescope = require('telescope.builtin')
+end
+
 utils_mapdesc(
     '<leader>ff',
     conditional(telescope and telescope.find_files, vscode('workbench.action.quickOpen')),
     "Telescope find files")
 utils_mapdesc('<leader>fg',
-    conditional(telescope and telescope.live_grep, vscode('')),
+    conditional(telescope and telescope.live_grep, vscode('workbench.action.showAllSymbols')),
     "Telescope live grep")
 utils_mapdesc('<leader>fd',
     conditional(telescope and telescope.diagnostics, vscode('workbench.actions.view.problems')),
