@@ -6,11 +6,11 @@ Dotsmenu is a script that makes use of [rofi](https://github.com/davatorium/rofi
 
 It is written to have as little dependencies as possible - almost nothing!
 - `rofi` (obviously)
-- `bash`
+- `sh` (POSIX-compliant)
 - `envsubst` (optional)
 
 ## How to use
-1. Fill up the `items.ini` file, adding a section for each files to appear on the menu. An example:
+1. Fill up the (`items.ini`)[items.ini] file, adding a section for each files to appear on the menu. An example:
 ```
 [home-manager]
 file=$HOME/nix/home/home.nix
@@ -19,6 +19,6 @@ posthook=home-manager switch --flake ~/nix/#heyzec --impure |& nom
 - `file` is the path to the config file, which can include variables.
 - `posthook` is the shell command to run upon editor exiting
 
-2. Call the `dotsmenuv2.sh` script for the menu to appear. It would make sense to set a keybind
-that calls this script, e.g. window manager
+2. Call the [`dotsmenu.sh`](dotsmenu.sh) script for the menu to appear. It would make sense to set a keybind
+that calls this script in an appropriate place, e.g. window manager
 

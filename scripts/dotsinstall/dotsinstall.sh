@@ -1,4 +1,5 @@
 #!/bin/sh
+# dotsinstall.sh
 
 # Exit immediately if any command fails
 set -e
@@ -33,7 +34,7 @@ fi
 
 subst() {
     # In case envsubst is not available, use sed
-    if command -v envsubst 2>&1 /dev/null; then
+    if command -v envsubst > /dev/null 2>&1; then
         envsubst
     else
         # The innermost sed is to escape slashes in path for outer sed command to be valid
@@ -41,10 +42,12 @@ subst() {
     fi
 }
 
+valid_section_regex="[a-z-]+"
+
 parse_sections() {
     filename="$1"
-    # Note: BSD grep does not GNU grep's -P flag
-    cat "$filename" | grep '^\[[a-z\-]\+\]$' | sed -E 's/\[|\]//g'
+    # Note: BSD grep does not support GNU grep's -P flag
+    cat "$filename" | grep -E "^\[$valid_section_regex]$" | sed -E 's/\[|\]//g'
 }
 
 extract_section() {
@@ -52,8 +55,8 @@ extract_section() {
     filename="$2"
     cat "$filename" | awk '
         BEGIN{state=0}
-        /\['"$section_name"'\]/&&state==0{state++;next}
-        state==1&&/\[[a-z\-]+\]/{exit;}
+        /'"$section_name"'/&&state==0{state++;next}
+        state==1&&/\['"$valid_section_regex"'\]/{exit;}
         state==1{print $0}
     ' | sed '/^$/d'
 }
