@@ -1,7 +1,9 @@
+# ------------------------------ ------------------------------
 [user]
 	email = 61238538+heyzec@users.noreply.github.com
 	name = heyzec
-    signingkey = ~/.ssh/id_ed25519
+	# Use ssh key to sign commits
+	signingkey = ~/.ssh/id_ed25519
 [gpg]
 	format = ssh
 [commit]
@@ -10,74 +12,91 @@
 	allowedSignersFile = ~/.ssh/allowed_signers
 
 [alias]
-    # Shorthands
-    a = add
-    aa = add --all
+	# --------------------------Shorthands-------------------------
+	a = add
+	aa = add --all
+	au = add --update
 
-    b = branch
+	b = branch
 
-    c = commit
-    ca = commit --amend
-    cane = commit --amend --no-edit
+	bib = bisect bad
+	big = bisect good
+	bir = bisect reset
+	bis = bisect start
 
-    cp = cherry-pick
-    cpa = cherry-pick --abort
-    cpc = cherry-pick --continue
+	c = commit
+	ca = commit --amend
+	cane = commit --amend --no-edit
 
-    cob = checkout -b
-    co = checkout
+	cp = cherry-pick
+	cpa = cherry-pick --abort
+	cpc = cherry-pick --continue
 
-    f = fetch
+	# Avoid using checkout, use switch and restore instead
+	# co = checkout
 
-    l = log
+	f = fetch
 
-    me = merge
-    mea = merge --abort
+	l = log
 
-    rb = rebase
-    rba = rebase --abort
-    rbc = rebase --continue
-    rbi = rebase --interactive
+	me = merge
+	mea = merge --abort
 
-    s = status
+	r = reset
 
-    sw = switch
+	rb = rebase
+	rba = rebase --abort
+	rbc = rebase --continue
+	rbi = rebase --interactive
+	rbs = rebase --skip
 
-    wt = worktree
+	rs = restore
+
+	s = status
+
+	st = stash
+	stp = stash pop
+
+	sw = switch
+	swc = switch --create
+
+	wt = worktree
 
 
-    # Plurals
-    aliases = "!git config -l | grep alias | cut -c 7-"
-    branches = branch -a
-    stashes = stash list
-    remotes = remote -v
+	# ---------------------------Plurals---------------------------
+	aliases = "!git config -l | grep alias | cut -c 7-"
+	branches = branch -a
+	stashes = stash list
+	remotes = remote -v
 
-    ignore = update-index --assume-unchanged
-    unignore = update-index --no-assume-unchanged
-    ignored = !git ls-files -v | grep "^[[:lower:]]"
+	ignore = update-index --assume-unchanged
+	unignore = update-index --no-assume-unchanged
+	ignored = !git ls-files -v | grep "^[[:lower:]]"
 
-    # Others
-    lg = log --graph --oneline --decorate --date=short --pretty=format:'%Cgreen%ad %Cred%h%Creset -%C(yellow)%d%Creset %s %Cblue[%cn]%Creset %Cblue%G?%Creset'
-    who = shortlog --summary --email --numbered --no-merges
+	# ----------------------------Others---------------------------
+	lg = log --graph --oneline --decorate --date=short --pretty=format:'%Cgreen%ad %Cred%h%Creset -%C(yellow)%d%Creset %s %Cblue[%cn]%Creset'
+	who = shortlog --summary --email --numbered --no-merges
 
-    # add "exec git reworder" to the top of rebase interactive to allow editing inplace
-    reworder = "!gawk -i inplace '{print $0}/^pick/{printf \"exec git commit --amend --message \\\"\"; for(i=3; i<=NF-1; ++i) printf \"%s \", $i; printf \"%s\\\"\", $NF; print \"\"}' .git/rebase-merge/git-rebase-todo"
+	# add "exec git reworder" to the top of rebase interactive to allow editing inplace
+	reworder = "!gawk -i inplace '{print $0}/^pick/{printf \"exec git commit --amend --message \\\"\"; for(i=3; i<=NF-1; ++i) printf \"%s \", $i; printf \"%s\\\"\", $NF; print \"\"}' .git/rebase-merge/git-rebase-todo"
 
-    commit-date-to-author-date = !GIT_COMMITTER_DATE="$(git log -1 --format="%ad")" git commit --amend --no-edit
+	commit-date-to-author-date = !GIT_COMMITTER_DATE="$(git log -1 --format="%ad")" git commit --amend --no-edit
 
 [init]
-    defaultBranch = main
-    # templatedir = ~/.git-templates
+	defaultBranch = main
+	# templatedir = ~/.git-templates
 [pull]
 	ff = only
 [diff]
-    #tool = nvimdiff
-    tool = vscode
+	#tool = nvimdiff
+	tool = vscode
 [diff "vscode"]
-    cmd = code --wait --diff $LOCAL $REMOTE
+	cmd = code --wait --diff $LOCAL $REMOTE
 [instaweb]
 	httpd = python
 [help]
 	autocorrect = 20
 [merge]
 	conflictstyle = diff3
+
+# vim: noexpandtab commentstring=#\ %s
