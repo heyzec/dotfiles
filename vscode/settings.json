@@ -1,87 +1,108 @@
 {
-  // ###############################################################################
-  // ##                                                                           ##
-  // ##                        1. VSCODE-NEOVIM INTEGRATION                       ##
-  // ##                                                                           ##
-  // ###############################################################################
-
-  // Make vscode-neovim extension run in a separate thread
-  // https://github.com/vscode-neovim/vscode-neovim/issues/1051
+  // Editor
+  "editor.tabCompletion": "on",
+  "editor.fontSize": 13,
   "extensions.experimental.affinity": {
     "asvetliakov.vscode-neovim": 1
   },
-
-  // Required for mapping alt shortcuts in keybindings.json
-  "window.enableMenuBarMnemonics": false,
-  "window.customMenuBarAltFocus": false,
-
-  // Cursors don't blink in neovim
-  "editor.cursorBlinking": "solid",
-
-  // Similar to `set relativenumber`
-  "editor.lineNumbers": "relative",
-
-  // Similar to nvim-treesitter-context
-  "editor.stickyScroll.enabled": true,
-  "editor.guides.bracketPairs": "active",
-
-
-  // ###############################################################################
-  // ##                                                                           ##
-  // ##                             2. VSCODE SETTINGS                            ##
-  // ##                                                                           ##
-  // ###############################################################################
-  // Some explanation of useful settings here:
-  // https://blog.danskingdom.com/Visual-Studio-Code-default-settings-to-change
-
-  // Make it smaller, the default is 14
-  "editor.fontSize": 13,
-
-  // Autosave, by default after 1000ms
-  "files.autoSave": "afterDelay",
-  // "editor.formatOnSave": true,
-
-  // Automatically deal with whitespaces
-  "files.trimTrailingWhitespace": true,
-  "files.insertFinalNewline": true,
-  "files.trimFinalNewlines": true,
-
-  // This makes vscode use their own sidebar, which looks nicer on linux
-  "window.titleBarStyle": "custom",
-
-  // Use minimap as a large scrollbar
-  "editor.minimap.size": "fill",
-  "editor.minimap.autohide": true,
-
-  // Debug toolbar is very annoying
-  "debug.toolBarLocation": "commandCenter",
-
-  // VSCode asking for updates too frequently, we disable auto-update checks
-  "update.mode": "manual",
-
-  // Others
-  "workbench.editor.pinnedTabsOnSeparateRow": true,
-  "workbench.tree.enableStickyScroll": true,
-
-
-  // ###############################################################################
-  // ##                                                                           ##
-  // ##                       3. FILETYPE SPECIFIC SETTINGS                       ##
-  // ##                                                                           ##
-  // ###############################################################################
-
-  // In web dev, prettier is a common standard
+  "files.associations": {
+    "*.vim": "viml"
+  },
+  // Workbench
+  "workbench.editorAssociations": {
+    "*.ipynb": "jupyter.notebook.ipynb"
+  },
+  // Extensions
+  "code-runner.runInTerminal": true,
+  "code-runner.executorMap": {
+    "python": "python3"
+  },
+  "[python]": {
+    "editor.formatOnType": true
+  },
+  "explorer.confirmDragAndDrop": false,
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "javascript.updateImportsOnFileMove.enabled": "always",
   "[typescript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[typescriptreact]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-
-
-  // ###############################################################################
-  // ##                                                                           ##
-  // ##                           4. EXTENSIONS SETTINGS                          ##
-  // ##                                                                           ##
-  // ###############################################################################
+  "editor.formatOnPaste": false,
+  "editor.formatOnSave": false,
+  "editor.formatOnType": false,
+  "task.allowAutomaticTasks": "off",
+  // Personal linting default for my sanity
+  "python.linting.pylintArgs": [
+    "--disable=C0111",
+    // See https://github.com/pylint-dev/pylint/issues/2018#issuecomment-458069377
+    //"--variable-rgx=^-z][a-z0-9]*((_[a-z0-9]+)*)?$",
+    // "--argument-rgx=^[a-z][a-z0-9]*((_[a-z0-9]+)*)?$",
+    "--variable-rgx=^.+$",
+    "--argument-rgx=^.+$",
+  ],
+  "files.trimTrailingWhitespace": true,
+  "latex-workshop.latex.recipe.default": "tectonic",
+  "latex-workshop.latex.autoBuild.run": "onSave",
+  "latex-workshop.latex.outDir": "%WORKSPACE_FOLDER%/build/index",
+  "latex-workshop.view.pdf.viewer": "tab",
+  "latex-workshop.latex.recipes": [
+    {
+      "name": "tectonic",
+      "tools": [
+        "tectonic"
+      ]
+    }
+  ],
+  "latex-workshop.latex.tools": [
+    {
+      "name": "tectonic",
+      "command": "tectonic",
+      "args": [
+        "-X",
+        "build",
+        "--keep-intermediates",
+        "--keep-logs"
+      ],
+      "env": {}
+    }
+  ],
+  "editor.minimap.enabled": false,
+  "editor.lineNumbers": "relative",
+  "c-cpp-linter.compiler.path": "/nix/store/75slks1wr3b3sxr5advswjzg9lvbv9jc-gcc-wrapper-12.3.0/bin/g++",
+  // https://github.com/Dart-Code/Dart-Code/issues/4800
+  "dart.sdkPath": "/nix/store/b4jwbp7qcjbi5q04d3pbqwl1kza3mnwn-flutter-wrapped-3.13.8-sdk-links/bin/cache/dart-sdk",
+  "dart.flutterSdkPath": "/nix/store/b4jwbp7qcjbi5q04d3pbqwl1kza3mnwn-flutter-wrapped-3.13.8-sdk-links",
+  "dart.checkForSdkUpdates": false,
+  "window.titleBarStyle": "custom",
+  "window.enableMenuBarMnemonics": false,
+  "window.customMenuBarAltFocus": false,
+  "update.mode": "manual",
+  "editor.semanticHighlighting.enabled": true,
+  "errorLens.scrollbarHackEnabled": true,
+  "diffEditor.renderSideBySide": false,
+  "smartsemicolon.autoLineChange": true,
+  "kotlin.debugAdapter.enabled": false,
+  "dart.promptToGetPackages": false,
+  "kotlin.languageServer.debugAttach.enabled": true,
+  "diffEditor.ignoreTrimWhitespace": false,
+  "redhat.telemetry.enabled": false,
+  "git.openRepositoryInParentFolders": "never",
+  "kotlin.languageServer.debugAttach.port": 5006,
+  "java.import.gradle.home": "/nix/store/nwlqhmqgdzv6djwjfzp585drbdphgczq-gradle-7.6.3",
+  "extensions.ignoreRecommendations": true,
+  "android-dev-ext.appSourceRoot": "android/app/src/main",
+  "android-dev-ext.codeCompletionLibraries": [
+    "androidx.activity:activity"
+  ],
+  "java.project.sourcePaths": [
+    "android"
+  ],
+  "[java]": {
+    "editor.defaultFormatter": "mwpb.java-prettier-formatter"
+  },
+  // Increase linting check, default standard is not useful enough
+  "python.analysis.typeCheckingMode": "strict",
+  "files.autoSave": "afterDelay",
 }

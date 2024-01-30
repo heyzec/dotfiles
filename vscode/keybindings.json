@@ -1,11 +1,10 @@
 // ------------------------------ ------------------------------
 // Place your key bindings in this file to override the defaults
-// See https://www.whitphx.info/posts/20230217-vscode-undocumented-contexts/
-// for the valid contexts (when key)
+// See https://www.whitphx.info/posts/20230217-vscode-undocumented-contexts/ for when
 [
     // ###############################################################################
     // ##                                                                           ##
-    // ##                        1. VSCODE-NEOVIM INTEGRATION                       ##
+    // ##                        1. NEOVIM-VSCODE INTEGRATION                       ##
     // ##                                                                           ##
     // ###############################################################################
 
@@ -24,7 +23,6 @@
         "when": "neovim.mode == insert && editorTextFocus",
         "args": "k"
     },
-
     // --------------------Restore Ctrl+C as copy-------------------
     // This makes insert mode behave more like VSCode without neovim plugin
     {
@@ -32,12 +30,11 @@
         "command": "editor.action.clipboardCopyAction",
         "when": "neovim.mode != visual"
     },
-
     // ----------------------Special shortcuts----------------------
     // Alt keyboard shortcut must be explicitly defined here
     // See https://github.com/vscode-neovim/vscode-neovim#add-keybindings
     // Mapping alt in vscode also requires additional settings:
-    // - window.enableMenuBarMnemonics: false (if not macos)
+    // - window.enableMenuBarMnemonics: false
     // - window.titleBarStyle: native (if in linux)
     {
         "command": "vscode-neovim.send",
@@ -63,73 +60,8 @@
         "when": "editorTextFocus && neovim.mode != insert",
         "args": "<A-l>"
     },
-
-    // ----------------------Other workarounds----------------------
-    // Workaround for mapping n to nzz
-    // https://github.com/vscode-neovim/vscode-neovim/issues/1222
-    {
-        "key": "n",
-        "when": "editorTextFocus && neovim.mode != insert",
-        "command": "runCommands",
-        "args": {
-            "commands": [
-                {
-                    "command": "vscode-neovim.send",
-                    "args": "n",
-                },
-                {
-                    "command": "vscode-neovim.send-blocking",
-                    "args": ":sleep 100m<CR>",
-                },
-                {
-                    "command": "vscode-neovim.send",
-                    "args": "zz",
-                },
-            ]
-        }
-    },
-    {
-        "key": "shift+n",
-        "when": "editorTextFocus && neovim.mode != insert",
-        "command": "runCommands",
-        "args": {
-            "commands": [
-                {
-                    "command": "vscode-neovim.send",
-                    "args": "N",
-                },
-                {
-                    "command": "vscode-neovim.send-blocking",
-                    "args": ":sleep 100m<CR>",
-                },
-                {
-                    "command": "vscode-neovim.send",
-                    "args": "zz",
-                },
-            ]
-        }
-    },
-    // Moving lines up and down faster is less laggy if we do it in vscode
-    {
-        "command": "editor.action.moveLinesDownAction",
-        "when": "editorTextFocus && neovim.mode != insert",
-        "key": "ctrl+j"
-    },
-    {
-        "command": "editor.action.moveLinesUpAction",
-        "when": "editorTextFocus && neovim.mode != insert",
-        "key": "ctrl+k"
-    },
-
-
-    // ###############################################################################
-    // ##                                                                           ##
-    // ##                             2. VSCODE KEYBINDS                            ##
-    // ##                                                                           ##
-    // ###############################################################################
-
-    // The default behaviour of tab in vscode is to accept current suggestion,
-    // let's change it to select the next one instead.
+    // ------------------------------ ------------------------------
+    // Idk
     {
         "key": "tab",
         "command": "selectNextSuggestion",
@@ -140,4 +72,169 @@
         "command": "selectPrevSuggestion",
         "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus"
     },
+    // ---------------------Toggle file explorer--------------------
+    // <leader>e toggles file explorer
+    // Part [1]: If buffer is (1) closed or (2) open but unfocused, open and focus to the explorer
+    // Refer to map in lua/config/keymaps.lua
+    // Part [2]: Otherwise, close the panel
+    {
+        "key": "space e",
+        "command": "workbench.action.toggleSidebarVisibility",
+        "when": "listFocus && !inputFocus"
+    },
+    // ---------------------Toggle file explorer--------------------
+    // Break habit
+    {
+        "key": "ctrl+s",
+        "command": "-workbench.action.files.save"
+    },
+
+    {
+        "key": "space",
+        "command": "workbench.action.togglePanel",
+        "when": "problemFocus"
+    },
+    // ###############################################################################
+    // ##                                                                           ##
+    // ##                             2. VSCODE KEYBINDS                            ##
+    // ##                                                                           ##
+    // ###############################################################################
+    // Don't make up/down interfere with suggestions (?)
+    // Consider removing
+    {
+        "key": "down",
+        "command": "-selectNextSuggestion",
+        "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus"
+    },
+    {
+        "key": "up",
+        "command": "-selectPrevSuggestion",
+        "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus"
+    },
+
+    // Sane navigation default, else filter keeps stealing focus
+    // Since filter will focus on any key press
+    {
+        "key": "escape",
+        "command": "problems.action.focusProblemsFromFilter",
+        "when": "problemsFilterFocus"
+    },
+
+
+    // https://github.com/vscode-neovim/vscode-neovim/issues/983#issuecomment-1812198768
+    {
+        "key": "ctrl+u",
+        "command": "-vscode-neovim.ctrl-u",
+        "when": "editorTextFocus && neovim.ctrlKeysNormal.u && neovim.init && neovim.mode != 'insert' && editorLangId not in 'neovim.editorLangIdExclusions'"
+    },
+    {
+        "key": "ctrl+d",
+        "command": "-vscode-neovim.ctrl-d",
+        "when": "editorTextFocus && neovim.ctrlKeysNormal.d && neovim.init && neovim.mode != 'insert' && editorLangId not in 'neovim.editorLangIdExclusions'"
+    },
+    {
+        "key": "ctrl+u",
+        "command": "runCommands",
+        "when": "editorTextFocus",
+        "args": {
+            "commands": [
+                // commands to run in sequence
+                {
+                    "command": "editorScroll",
+                    "args": { "to": "up", "by": "wrappedLine", "value": 32 },
+                },
+                {
+                    "command": "cursorMove",
+                    "args": { "to": "viewPortCenter" },
+                },
+            ]
+        }
+    },
+    {
+        "key": "ctrl+d",
+        "command": "runCommands",
+        "when": "editorTextFocus",
+        "args": {
+            "commands": [
+                // commands to run in sequence
+                {
+                    "command": "editorScroll",
+                    "args": { "to": "down", "by": "wrappedLine", "value": 32 },
+                },
+                {
+                    "command": "cursorMove",
+                    "args": { "to": "viewPortCenter" },
+                },
+            ]
+        }
+    }
+
+
+
+
+    // ================================================================================
+    // ================================================================================
+    // ================================================================================
+    // TODO: Remove in the future if unnecessary
+    // {
+    //     "command": "runCommands",
+    //     "key": "alt+space",
+    //     "args": {
+    //         "commands": [
+    //             "workbench.view.explorer",
+    //             "workbench.action.toggleSidebarVisibility",
+    //         ]
+    //     }
+    // },
+    // {
+    //     "command": "vscode-neovim.send",
+    //     "key": "ctrl+c",
+    //     "when": "editorTextFocus && neovim.mode == visual",
+    //     "args": "<C-c>" // the input to send to neovim
+    // },
+    // {
+    //     "key": "ctrl+w",
+    //     "command": "-vscode-neovim.send-cmdline",
+    //     "when": "neovim.mode == 'cmdline_insert' || neovim.mode == 'cmdline_normal' || neovim.mode == 'cmdline_replace'"
+    // },
+    // {
+    //     "key": "ctrl+r w",
+    //     "command": "-vscode-neovim.send-cmdline",
+    //     "when": "neovim.mode == 'cmdline_insert' || neovim.mode == 'cmdline_normal' || neovim.mode == 'cmdline_replace'"
+    // },
+    // {
+    //     "key": "ctrl+r ctrl+w",
+    //     "command": "-vscode-neovim.send-cmdline",
+    //     "when": "neovim.mode == 'cmdline_insert' || neovim.mode == 'cmdline_normal' || neovim.mode == 'cmdline_replace'"
+    // },
+    // {
+    //     "key": "ctrl+w",
+    //     "command": "-vscode-neovim.send",
+    //     "when": "editorTextFocus && neovim.ctrlKeysNormal && neovim.init && neovim.mode != 'insert'"
+    // },
+    // {
+    //     "key": "ctrl+w",
+    //     "command": "-vscode-neovim.send",
+    //     "when": "editorTextFocus && neovim.ctrlKeysInsert && neovim.mode == 'insert'"
+    // },
+    // {
+    //     "key": "ctrl+w q",
+    //     "command": "-workbench.action.closeActiveEditor",
+    //     "when": "!editorTextFocus && !filesExplorerFocus && !searchViewletFocus"
+    // },
+    // {
+    //     "key": "ctrl+w ctrl+w",
+    //     "command": "-workbench.action.focusFirstEditorGroup",
+    //     "when": "!editorTextFocus && !filesExplorerFocus && !inSearchEditor && !replaceInputBoxFocus && !searchViewletFocus"
+    // },
+    // {
+    //     "key": "ctrl+w ctrl+w",
+    //     "command": "-workbench.action.focusNextGroup",
+    //     "when": "!editorTextFocus && !filesExplorerFocus && !inSearchEditor && !replaceInputBoxFocus && !searchViewletFocus"
+    // },
+    // {
+    //     "key": "ctrl+w",
+    //     "command": "-workbench.action.terminal.killEditor",
+    //     "when": "terminalEditorFocus && terminalFocus && terminalHasBeenCreated && resourceScheme == 'vscode-terminal' || terminalEditorFocus && terminalFocus && terminalProcessSupported && resourceScheme == 'vscode-terminal'"
+    // },
 ]
