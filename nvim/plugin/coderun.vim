@@ -18,8 +18,7 @@ noremap <C-c> :execute 'call TermExec(TermGetFirst(), "\<' . 'C-c>")'<CR>
 
 " Helper functions {{{
 
-"Double-tap spacebar to run code!
-noremap <leader><leader> :call RunCode()<CR>
+" maybe dont make global
 if has('nvim')
     au TermOpen * let g:tb=bufnr()  
     au TermClose * unlet g:tb

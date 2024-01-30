@@ -57,7 +57,7 @@ set listchars=tab:\|\ ,trail:·,nbsp:⎵           " tabs, non-breaking spaces, 
 if !has('g:vscode')
     augroup visualise_chars
         autocmd!
-        " only show eol when in visual mode
+        " only show eol when in insert mode
         autocmd ModeChanged n:[vV] set listchars+=eol:↲
         autocmd ModeChanged [vV]:n set listchars-=eol:↲
     augroup end
@@ -267,4 +267,15 @@ endfunction
 
 " }}} 4. THINGS THAT SHOULD BE PLUGINS
 
+" noremap <C-d> :echo LOL<CR>
+"
+" nnoremap <C-y> 3<C-y>
+" nnoremap <C-e> 3<C-e>
+
+nnoremap <expr> <C-u> v:count == 0 ? "<C-u>" : 'j'
+nnoremap <expr> k v:count == 0 ? 'gk' : 'k'
+
+
+nmap H :tabprevious<CR>
+nmap L :tabnext<CR>
 
