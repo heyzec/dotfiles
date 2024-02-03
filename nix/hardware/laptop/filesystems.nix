@@ -2,7 +2,13 @@
   fileSystems."/" = {
     device = "/dev/disk/by-uuid/40cd3c9f-96a0-4132-94af-d4eac638b744";
     fsType = "btrfs";
-    options = [ "subvol=@" ];
+    options = [ "subvol=@root" ];
+  };
+
+  fileSystems."/home/heyzec" = {
+    device = "/dev/disk/by-uuid/40cd3c9f-96a0-4132-94af-d4eac638b744";
+    fsType = "btrfs";
+    options = [ "subvol=@home" ];
   };
 
   fileSystems."/boot" = {
@@ -20,6 +26,12 @@
     device = "/@/var/lib/docker/btrfs";
     fsType = "none";
     options = [ "bind" ];
+  };
+
+  fileSystems."/mnt/root" = {
+    device = "/dev/disk/by-uuid/40cd3c9f-96a0-4132-94af-d4eac638b744";
+    fsType = "btrfs";
+    options = [ "subvolid=5" "nofail" ];
   };
 
   fileSystems."/mnt/D" = {
