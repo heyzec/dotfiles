@@ -3,6 +3,7 @@
 .icon-brightness-low:before { content: '\e0ca'; } /* '' */
 .icon-brightness-medium:before { content: '\e0cb'; } /* '' */
 .icon-brightness-high:before { content: '\e0cc'; } /* '' */
+.icon-flash:before { content: '\e800'; } /* '' */
 .icon-volume-off:before { content: '\f026'; } /* '' */
 .icon-volume-low:before { content: '\f027'; } /* '' */
 .icon-volume-high:before { content: '\f028'; } /* '' */

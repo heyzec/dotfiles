@@ -1,11 +1,11 @@
 @font-face {
   font-family: 'heyzec-polybar-icons';
-  src: url('../font/heyzec-polybar-icons.eot?25696922');
-  src: url('../font/heyzec-polybar-icons.eot?25696922#iefix') format('embedded-opentype'),
-       url('../font/heyzec-polybar-icons.woff2?25696922') format('woff2'),
-       url('../font/heyzec-polybar-icons.woff?25696922') format('woff'),
-       url('../font/heyzec-polybar-icons.ttf?25696922') format('truetype'),
-       url('../font/heyzec-polybar-icons.svg?25696922#heyzec-polybar-icons') format('svg');
+  src: url('../font/heyzec-polybar-icons.eot?44365640');
+  src: url('../font/heyzec-polybar-icons.eot?44365640#iefix') format('embedded-opentype'),
+       url('../font/heyzec-polybar-icons.woff2?44365640') format('woff2'),
+       url('../font/heyzec-polybar-icons.woff?44365640') format('woff'),
+       url('../font/heyzec-polybar-icons.ttf?44365640') format('truetype'),
+       url('../font/heyzec-polybar-icons.svg?44365640#heyzec-polybar-icons') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -15,7 +15,7 @@
 @media screen and (-webkit-min-device-pixel-ratio:0) {
   @font-face {
     font-family: 'heyzec-polybar-icons';
-    src: url('../font/heyzec-polybar-icons.svg?25696922#heyzec-polybar-icons') format('svg');
+    src: url('../font/heyzec-polybar-icons.svg?44365640#heyzec-polybar-icons') format('svg');
   }
 }
 */
@@ -58,6 +58,7 @@
 .icon-brightness-low:before { content: '\e0ca'; } /* '' */
 .icon-brightness-medium:before { content: '\e0cb'; } /* '' */
 .icon-brightness-high:before { content: '\e0cc'; } /* '' */
+.icon-flash:before { content: '\e800'; } /* '' */
 .icon-volume-off:before { content: '\f026'; } /* '' */
 .icon-volume-low:before { content: '\f027'; } /* '' */
 .icon-volume-high:before { content: '\f028'; } /* '' */
