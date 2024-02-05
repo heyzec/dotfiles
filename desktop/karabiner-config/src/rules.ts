@@ -54,6 +54,34 @@ export const rules = () => [
     withModifier('command')({
       6: toKey('6', 'control'),
     }),
-  ])
+  ]),
+
+    rule('swap').manipulators([
+        // dont do this
+        // map('left_command').to('left_control'),
+        // map('left_control').to('left_command')
+
+        withModifier('command')({
+            h: toKey('left_arrow', 'control')
+
+        }),
+        withModifier('command')({
+            j: toKey('down_arrow', 'control')
+
+        }),
+        withModifier('command')({
+            k: toKey('up_arrow', 'control')
+
+        }),
+        withModifier('command')({
+            l: toKey('right_arrow', 'control')
+
+        }),
+        withModifier('control')({
+            l: toKey('l', 'command')
+
+        }),
+
+    ])
 ]
 
