@@ -1,0 +1,20 @@
+# .gitconfig.template
+# Device-specific gitconfig
+# Copy this file to $HOME and edit as necessary
+
+[include]
+	path = ~/dotfiles/git/.gitconfig
+
+[user]
+	email = 61238538+heyzec@users.noreply.github.com
+	name = heyzec
+	# Use ssh key to sign commits
+	signingkey = ~/.ssh/id_ed25519
+[gpg]
+	format = ssh
+[commit]
+	gpgsign = true
+[gpg "ssh"]
+	allowedSignersFile = ~/.ssh/allowed_signers
+
+# vim: filetype=gitconfig noexpandtab commentstring=#\ %s

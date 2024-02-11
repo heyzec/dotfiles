@@ -1,15 +1,8 @@
+# .gitconfig
+# Main portion of my personalisations
+# To be included by $HOME/.gitconfig
+
 # ------------------------------ ------------------------------
-[user]
-	email = 61238538+heyzec@users.noreply.github.com
-	name = heyzec
-	# Use ssh key to sign commits
-	signingkey = ~/.ssh/id_ed25519
-[gpg]
-	format = ssh
-[commit]
-	gpgsign = true
-[gpg "ssh"]
-	allowedSignersFile = ~/.ssh/allowed_signers
 
 [alias]
 	# --------------------------Shorthands-------------------------
@@ -99,4 +92,4 @@
 [merge]
 	conflictstyle = diff3
 
-# vim: noexpandtab commentstring=#\ %s
+# vim: filetype=gitconfig noexpandtab commentstring=#\ %s
