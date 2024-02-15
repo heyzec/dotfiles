@@ -41,27 +41,27 @@
     // - window.titleBarStyle: native (if in linux)
     {
         "command": "vscode-neovim.send",
-        "key": "alt+h",
+        "key": "ctrl+h",
         "when": "editorTextFocus && neovim.mode != insert",
-        "args": "<A-h>"
+        "args": "<C-h>"
     },
     {
         "command": "vscode-neovim.send",
-        "key": "alt+j",
+        "key": "ctrl+j",
         "when": "editorTextFocus && neovim.mode != insert",
-        "args": "<A-j>"
+        "args": "<C-j>"
     },
     {
         "command": "vscode-neovim.send",
-        "key": "alt+k",
+        "key": "ctrl+k",
         "when": "editorTextFocus && neovim.mode != insert",
-        "args": "<A-k>"
+        "args": "<C-k>"
     },
     {
         "command": "vscode-neovim.send",
-        "key": "alt+l",
+        "key": "ctrl+l",
         "when": "editorTextFocus && neovim.mode != insert",
-        "args": "<A-l>"
+        "args": "<C-l>"
     },
 
     // ----------------------Other workarounds----------------------
@@ -113,12 +113,12 @@
     {
         "command": "editor.action.moveLinesDownAction",
         "when": "editorTextFocus && neovim.mode != insert",
-        "key": "ctrl+j"
+        "key": "alt+j"
     },
     {
         "command": "editor.action.moveLinesUpAction",
         "when": "editorTextFocus && neovim.mode != insert",
-        "key": "ctrl+k"
+        "key": "alt+k"
     },
 
 

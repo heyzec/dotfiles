@@ -209,16 +209,17 @@ vnoremap <leader>s "zy:%s/<C-r>z//g<Left><Left>
 " }}}
 
 " Splits controls {{{
-" Switching between splits (alt + h,j,k,l)
+" Switching between splits (ctrl + h,j,k,l)
+" We choose ctrl over alt because vim-tmux-navigator defaults to ctrl+hjkl
 " Use map over noremap to trigger vscode-neovim's default maps (if vscode)
-map <A-h>     <C-w>h
-map <A-j>     <C-w>j
-map <A-k>     <C-w>k
-map <A-l>     <C-w>l
-tnoremap <A-h> <C-\><C-n><c-w>h
-tnoremap <A-j> <C-\><C-n><c-w>j
-tnoremap <A-k> <C-\><C-n><c-w>k
-tnoremap <A-l> <C-\><C-n><c-w>l
+map <C-h>     <C-w>h
+map <C-j>     <C-w>j
+map <C-k>     <C-w>k
+map <C-l>     <C-w>l
+tnoremap <C-h> <C-\><C-n><c-w>h
+tnoremap <C-j> <C-\><C-n><c-w>j
+tnoremap <C-k> <C-\><C-n><c-w>k
+tnoremap <C-l> <C-\><C-n><c-w>l
 
 " Resizing splits (ctrl + arrows keys)
 map <C-Left>  <C-w><
