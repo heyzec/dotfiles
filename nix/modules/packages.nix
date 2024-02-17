@@ -32,7 +32,8 @@
     btdu                # disk usage profiler for btrfs
     kanshi
     neofetch
-    lf file chafa       # terminal file manager (with dependencies for previewing images)
+    lf                  # terminal file manager
+    ctpv                # file previewer for lf, with image support
 
     man-pages man-pages-posix # Additional man pages
 

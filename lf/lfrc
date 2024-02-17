@@ -7,8 +7,9 @@ cmd delete ${{
     [ "$ans" = "y" ] && rm -rf $fx
 }}
 
-# image previews in terminal
-# see ~/.config/lf/previewer
+# use ctpv to preview files, including images
+# on wayland terminals that support sixel, add "set chafasixel" to ~/.config/ctpv/config
 set sixel true
-set previewer ~/.config/lf/previewer
+set previewer ctpv
+set cleaner ctpvclear
 
