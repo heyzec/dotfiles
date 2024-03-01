@@ -28,15 +28,16 @@ tooltip label {
 }
 
 #workspaces, #window, #traymore,
-#audio, #network, #battery, #hardware, #clock {
+#audio, #disk, #network,
+#battery, #hardware, #clock {
     padding: 6px 10px;
-	margin: 0 0px;
+    margin: 0 0px;
     color: @base07;
-	border-radius: 16px;
-	border-width: 0 2px 2px 0;
-	border-style: solid;
-	border-color: @base00;
-	background-color: @base01;
+    border-radius: 16px;
+    border-width: 0 2px 2px 0;
+    border-style: solid;
+    border-color: @base00;
+    background-color: @base01;
 }
 
 
@@ -54,7 +55,7 @@ tooltip label {
 #workspaces button.active {
     background: @base0A;
     color: @base06;
-    border-radius: 45%;
+    border-radius: 16px;
 }
 
 #workspaces button.focused {
@@ -64,7 +65,7 @@ tooltip label {
 
 #workspaces button.urgent {
     background: red;
-    color: red;
+    border-radius: 16px;
 }
 
 #workspaces button:hover {
@@ -114,15 +115,15 @@ tooltip label {
     color: white;
     background-color: #26A65B;
 }
-#battery.warning:not(.charging) {
-    background: #f53c3c;
-    color: white;
-    animation-name: blink;
-    animation-duration: 0.5s;
-    animation-timing-function: linear;
-    animation-iteration-count: infinite;
-    animation-direction: alternate;
-}
+/* #battery.warning:not(.charging) { */
+/*     background: #f53c3c; */
+/*     color: white; */
+/*     animation-name: blink; */
+/*     animation-duration: 0.5s; */
+/*     animation-timing-function: linear; */
+/*     animation-iteration-count: infinite; */
+/*     animation-direction: alternate; */
+/* } */
 
 #tray {
     font-family: Roboto, heyzec-polybar-icons, Helvetica, Arial, sans-serif;

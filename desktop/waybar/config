@@ -16,7 +16,9 @@
         "hyprland/window",
     ],
     "modules-right": [
+        // "privacy", add this module when next release arrives
         "group/audio",
+        "disk",
         "network",
         "group/hardware",
         "battery",
@@ -33,7 +35,8 @@
 
     "hyprland/window": {
         "rewrite": {
-            "(.*?)( — )?Mozilla Firefox": "🌎$2$1",
+            "(.*) — Mozilla Firefox": "🌎 $1",
+            "(.*) — Ablaze Floorp": "🌎 $1",
             "(.*?)( - )?Text Editor": "🗒️$2$1",
         },
     },
@@ -45,7 +48,7 @@
         "format-icons": {
             "locked": "",
             "unlocked": ""
-        }
+        },
     },
 
     "mpd": {
@@ -116,6 +119,12 @@
 
     "memory": {
         "format": " {}%"
+    },
+
+    "disk": {
+        "interval": 30,
+        "format": "{path} {percentage_used}%",
+        "path": "/"
     },
 
     "temperature": {
