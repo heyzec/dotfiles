@@ -2,21 +2,21 @@
 {
   # home.file.colortest = {
   #   text = ''
-  #     ${colorScheme.colors.base01}
-  #     ${colorScheme.colors.base02}
-  #     ${colorScheme.colors.base03}
-  #     ${colorScheme.colors.base04}
-  #     ${colorScheme.colors.base05}
-  #     ${colorScheme.colors.base06}
-  #     ${colorScheme.colors.base07}
-  #     ${colorScheme.colors.base08}
-  #     ${colorScheme.colors.base09}
-  #     ${colorScheme.colors.base0A}
-  #     ${colorScheme.colors.base0B}
-  #     ${colorScheme.colors.base0C}
-  #     ${colorScheme.colors.base0D}
-  #     ${colorScheme.colors.base0E}
-  #     ${colorScheme.colors.base0F}
+  #     ${colorScheme.palette.base01}
+  #     ${colorScheme.palette.base02}
+  #     ${colorScheme.palette.base03}
+  #     ${colorScheme.palette.base04}
+  #     ${colorScheme.palette.base05}
+  #     ${colorScheme.palette.base06}
+  #     ${colorScheme.palette.base07}
+  #     ${colorScheme.palette.base08}
+  #     ${colorScheme.palette.base09}
+  #     ${colorScheme.palette.base0A}
+  #     ${colorScheme.palette.base0B}
+  #     ${colorScheme.palette.base0C}
+  #     ${colorScheme.palette.base0D}
+  #     ${colorScheme.palette.base0E}
+  #     ${colorScheme.palette.base0F}
   #   '';
   #   target = "colortest";
   # };

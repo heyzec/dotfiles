@@ -2,8 +2,10 @@
 {
   services.xserver = {
     enable = true;
-    layout = "us";
-    xkbVariant = "";
+    xkb = {
+      layout = "us";
+      variant = "";
+    };
     displayManager.sddm = {
       enable = true;
       theme = "${import ../packages/sddm-theme/sddm-theme.nix { inherit pkgs; }}";
