@@ -26,7 +26,7 @@ super + control + space
 
 ## Launch // Dotfiles Editor  // <> o ##
 super + o
-    /home/heyzec/dotfiles/scripts/dotsmenu/dotsmenu.sh
+    ~/dotfiles/scripts/dotsmenu/dotsmenu.sh
 
 
 
@@ -79,21 +79,7 @@ Shift+@Print
 
 
 super + shift + escape
-    @enter system && wlogout -p layer-shell
-mode system
-l
-    @escape && pkill wlogout && sleep 0.5 && swaylock
-s
-    @escape && pkill wlogout && sleep 0.5 && systemctl suspend
-h
-    @escape && pkill wlogout && sleep 0.5 && systemctl hibernate
-r
-    @escape && pkill wlogout && systemctl reboot
-Shift + s
-    @escape && pkill wlogout && systemctl poweroff -i
-escape
-    @escape && pkill wlogout
-endmode
+    wlogout -p layer-shell
 
 # Duplicated for use on multiple keyboards
 super + escape
