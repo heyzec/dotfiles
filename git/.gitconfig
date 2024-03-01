@@ -9,6 +9,7 @@
 	a = add
 	aa = add --all
 	au = add --update
+	ap = add --patch
 
 	b = branch
 
@@ -20,6 +21,7 @@
 	c = commit
 	ca = commit --amend
 	cane = commit --amend --no-edit
+	cm = commit --message
 
 	cp = cherry-pick
 	cpa = cherry-pick --abort
@@ -35,11 +37,14 @@
 	me = merge
 	mea = merge --abort
 
+	pushfli = push --force-with-lease --force-if-includes
+
 	r = reset
 
 	rb = rebase
 	rba = rebase --abort
 	rbc = rebase --continue
+	rbe = rebase --edit-todo
 	rbi = rebase --interactive
 	rbs = rebase --skip
 
@@ -48,7 +53,12 @@
 	s = status
 
 	st = stash
+	std = stash drop
+	stl = stash list
 	stp = stash pop
+	stu = stash push --include-untracked
+
+	smur = submodule update --init --recursive
 
 	sw = switch
 	swc = switch --create
@@ -88,8 +98,11 @@
 [instaweb]
 	httpd = python
 [help]
-	autocorrect = 20
+	autoCorrect = prompt
+[column]
+	ui = auto
+	status = never
 [merge]
-	conflictstyle = diff3
+	conflictStyle = diff3
 
 # vim: filetype=gitconfig noexpandtab commentstring=#\ %s
