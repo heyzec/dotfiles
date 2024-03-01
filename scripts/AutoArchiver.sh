@@ -7,11 +7,12 @@
 # @reboot /path/to/AutoArchiver.sh ~/Pictures/Screenshots
 
 
-cd "$1"
+cd "$1" || exit 1
 
 folder="Archived/$(date +'%Y-%m')"
 mkdir "$folder" 2>/dev/null
 
+# https://unix.stackexchange.com/questions/127712/merging-folders-with-mv
 find -maxdepth 1 -mindepth 1 \
 	! -name 'Archived' \
 	-ctime +1 \

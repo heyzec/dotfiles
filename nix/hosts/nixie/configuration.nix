@@ -93,6 +93,7 @@ in {
     '')
 
     lazygit
+    diffr
   ];
 
   programs.adb.enable = true;
