@@ -1,0 +1,18 @@
+/**
+"userContent.css" is a file that can be used to customize the appearance of websites on Firefox
+by manually adding custom CSS rules.
+**/
+
+@charset "UTF-8";
+/* Please write your custom CSS under this line*/
+
+/* For web-search-navigator extension  */
+/* Add a vertical line instead of an arrow next to selected result */
+/* https://github.com/infokiller/web-search-navigator/issues/427 */
+.wsn-google-focused-link {
+    border-left: 3px solid #2586fc !important;
+    transform: translate(-3px, 0) !important;
+    padding-left: 8px;
+    margin-left: -11px;
+}
+
