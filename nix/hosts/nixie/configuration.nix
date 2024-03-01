@@ -87,6 +87,7 @@ in {
         tridactyl-native
       ];
     })
+    diffr
   ];
 
   programs.adb.enable = true;
