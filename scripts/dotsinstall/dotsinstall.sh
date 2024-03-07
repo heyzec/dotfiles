@@ -95,20 +95,32 @@ link_section() (
         link_section "$header"
     done
 
-    if [ -n "$src" ]; then
-        src_expanded=$(realpath "$src")
-        dest_expanded=$(echo "$dest" | subst)
+    if [ -z "$src" ]; then
+        return
+    fi
 
-        if [ -e "$dest_expanded" ]; then
-            echo "Failed to create link: $dest_expanded exists"
-            exit 1
-        fi
+    src_expanded=$(realpath "$src")
+    dest_expanded=$(echo "$dest" | subst)
 
+    dest_expanded_parent=$(dirname "$dest_expanded")
+
+    if [ ! -d "$dest_expanded_parent" ]; then
         if [ "$dry_run" = true ]; then
-            echo ln -s -v "$src_expanded" "$dest_expanded"
+            echo mkdir -p "$dest_expanded_parent"
         else
-            (set -x ; ln -s -v "$src_expanded" "$dest_expanded")
+            (set -x ; mkdir -p "$dest_expanded_parent")
         fi
+    fi
+
+    if [ -e "$dest_expanded" ]; then
+        echo "Failed to create link: $dest_expanded exists"
+        exit 1
+    fi
+
+    if [ "$dry_run" = true ]; then
+        echo ln -s -v "$src_expanded" "$dest_expanded"
+    else
+        (set -x ; ln -s -v "$src_expanded" "$dest_expanded")
     fi
 )
 
