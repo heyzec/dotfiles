@@ -1,18 +1,20 @@
+# Refer to README.md
+
 {
   fileSystems."/" = {
-    device = "/dev/disk/by-uuid/40cd3c9f-96a0-4132-94af-d4eac638b744";
+    device = "/dev/disk/by-partlabel/NixOS";
     fsType = "btrfs";
     options = [ "subvol=@root" ];
   };
 
   fileSystems."/home/heyzec" = {
-    device = "/dev/disk/by-uuid/40cd3c9f-96a0-4132-94af-d4eac638b744";
+    device = "/dev/disk/by-partlabel/NixOS";
     fsType = "btrfs";
     options = [ "subvol=@home" ];
   };
 
   fileSystems."/boot" = {
-    device = "/dev/disk/by-uuid/9BDA-8A89";
+    device = "/dev/disk/by-partlabel/EFI";
     fsType = "vfat";
   };
 
@@ -29,20 +31,19 @@
   };
 
   fileSystems."/mnt/root" = {
-    device = "/dev/disk/by-uuid/40cd3c9f-96a0-4132-94af-d4eac638b744";
+    device = "/dev/disk/by-partlabel/NixOS";
     fsType = "btrfs";
     options = [ "subvolid=5" "nofail" ];
   };
 
   fileSystems."/mnt/D" = {
-    device = "/dev/disk/by-label/Data";
+    device = "/dev/disk/by-partlabel/Data";
     fsType = "btrfs";
     options = [ "subvolid=5" "compress=zstd" "nofail" ];
   };
 
   fileSystems."/media/D" = {
     depends = [ "/mnt/D" ];
-    label = "Data D";
     device = "/mnt/D/@data";
     fsType = "none";
     options = [ "bind" "nofail" ];
@@ -55,6 +56,6 @@
 #   };
 
   swapDevices = [
-    { device = "/dev/disk/by-uuid/04668d02-fa34-4c6d-9de3-092cffd62de4"; }
+    { device = "/dev/disk/by-partlabel/Swap"; }
   ];
 }
