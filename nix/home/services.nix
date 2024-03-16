@@ -4,11 +4,6 @@
   #   enable = true;
   # };
 
-  # services.gpg-agent = {
-  #   enable = true;
-  #   enableSshSupport = true;
-  #   defaultCacheTtl = 1800;
-  # };
 
   services.mako = {
     enable = true;

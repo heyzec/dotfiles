@@ -1,6 +1,7 @@
 {
   imports = [
     ./btrbk.nix
+    ./credentials.nix
     ./fonts.nix
     ./keyd.nix
     ./locale.nix

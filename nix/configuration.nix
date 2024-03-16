@@ -74,10 +74,6 @@ in {
 
 
 # }}}
-programs.gnupg.agent = {
-   enable = true;
-   pinentryFlavor = "curses";
-};
 
 
   environment.systemPackages = with pkgs; [
@@ -96,8 +92,6 @@ programs.gnupg.agent = {
       ];
     })
   ];
-
-  programs.ssh.startAgent = true;
 
   programs.adb.enable = true;
   users.users.heyzec.extraGroups = [ "adbusers" ];
