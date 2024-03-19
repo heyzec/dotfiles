@@ -55,7 +55,7 @@ extract_section() {
     filename="$2"
     cat "$filename" | awk '
         BEGIN{state=0}
-        /'"$section_name"'/&&state==0{state++;next}
+        /\['"$section_name"'\]/&&state==0{state++;next}
         state==1&&/\['"$valid_section_regex"'\]/{exit;}
         state==1{print $0}
     ' | sed '/^$/d'
@@ -72,11 +72,24 @@ extract_value() {
 all_sections="$(parse_sections "$ITEMS_FILE")"
 
 if ! echo "$all_sections" | grep -q "^$program\$"; then
-    echo "$program is not a valid entry!"
-    echo "ITEMS_FILE contains these programs:"
-    echo $all_sections
-    exit 1
+    if [ "$program" != "all" ]; then
+        echo "$program is not a valid entry!"
+        echo "ITEMS_FILE contains these programs:"
+        echo $all_sections
+        exit 1
+    fi
 fi
+
+is_same_file() {
+    file1="$1"
+    file2="$2"
+    if [ "$(stat -L -c %d:%i "$file1")" = "$(stat -L -c %d:%i "$file2")" ]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
 
 # Use () instead of {} to scope variables by running in a subshell
 link_section() (
@@ -96,6 +109,7 @@ link_section() (
     done
 
     if [ -z "$src" ]; then
+        echo "Skipping, src is empty!"
         return
     fi
 
@@ -113,6 +127,10 @@ link_section() (
     fi
 
     if [ -e "$dest_expanded" ]; then
+        if is_same_file "$dest_expanded" "$src_expanded"; then
+            echo "Dest exists and matches source, skipping: $dest_expanded"
+            return
+        fi
         echo "Failed to create link: $dest_expanded exists"
         exit 1
     fi
@@ -124,7 +142,18 @@ link_section() (
     fi
 )
 
-link_section "$program"
+if [ "$program" = "all" ]; then
+    for section in $all_sections; do
+        key_value_pairs=$(extract_section "$section" "$ITEMS_FILE")
+        call=$(extract_value call "$key_value_pairs")
+        if [ -n "$call" ]; then
+            continue
+        fi
+        link_section "$section"
+    done;
+else
+    link_section "$program"
+fi
 if [ "$dry_run" = true ]; then
     echo "Run again with --no-dry-run"
 fi
