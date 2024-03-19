@@ -46,8 +46,10 @@
         "capslock": true,
         "format": "{icon} {name}",
         "format-icons": {
+            // nf-md-lock
             "locked": "",
-            "unlocked": ""
+            // nf-md-lock_open_variant
+            "unlocked": "󰿆"
         },
     },
 
@@ -81,8 +83,10 @@
     "idle_inhibitor": {
         "format": "{icon}",
         "format-icons": {
-            "activated": "",
-            "deactivated": ""
+            // nf-md-eye_outline
+            "activated": "󰛐",
+            // nf-md-eye_off_outline
+            "deactivated": "󰛑"
         }
     },
 
@@ -113,17 +117,20 @@
     },
 
     "cpu": {
-        "format": " {usage}%",
+        // nf-oct-cpu
+        "format": " {usage}%",
         "tooltip": true
     },
 
     "memory": {
-        "format": " {}%"
+        // nf-md-chip
+        "format": "󰘚 {}%"
     },
 
     "disk": {
         "interval": 30,
-        "format": "{path} {percentage_used}%",
+        // nf-fa-files_o
+        "format": " {percentage_used}%",
         "path": "/"
     },
 
@@ -131,56 +138,74 @@
         "thermal-zone": 2,
         "critical-threshold": 80,
         "format": "{icon} {temperatureC}°C",
-        "format-icons": ["", "", "", ""]
+        // nf-md-thermometer{_low, , _high}
+        "format-icons": ["󱃃", "󰔏", "󱃂"],
     },
 
     "backlight": {
         "format": "{icon} {percent}%",
-        "format-icons": ["", "", "", ""]
+        // nf-md-brightness_{5, 4, 6, 7}
+        "format-icons": ["󰃞", "󰃝", "󰃟", "󰃠"],
     },
 
     "battery": {
         "states": {
             "warning": 30,
-            "critical": 15
+            "critical": 15,
         },
         "interval": 10,
         "format": "{icon} {capacity}% {power:.1f}W",
-        "format-charging": " {capacity}%",
-        "format-plugged": " {capacity}%",
+        "format-charging": "{icon} {capacity}%",
+        "format-plugged": "{icon} {capacity}%",
         "format-alt": "{icon} {time}",
-        "format-icons": ["", "", "", "", ""]
+        "format-icons": {
+            // nf-fa-battery_{0, 1, 2, 3, 4}
+            "discharging": ["", "", "", "", ""],
+            // nf-md-battery_charging{_outline, _10..90, }
+            "charging": ["󰢟", "󰢜", "󰂆", "󰂇", "󰂈", "󰢝", "󰂉", "󰢞", "󰂊", "󰂋", "󰂅"],
+            // nf-fa-plug
+            "plugged": "",
+        }
     },
 
     "network": {
         "format-wifi": "{icon} {essid} ({signalStrength}%)",
         "format-alt": "{icon} {ifname}: {ipaddr}/{cidr} {bandwidthDownBytes}",
         "tooltip-format": "{ifname} via {gwaddr}",
-
-        "format-ethernet": "{ipaddr}/{cidr} ",
-        "format-linked": "{ifname} (No IP) ",
-        "format-disconnected": "Disconnected ⚠",
-        "format-icons": ["", "", ""]
-
+        // nf-md-ethernet
+        "format-ethernet": "{ipaddr}/{cidr} 󰈀",
+        // nf-md-help_network
+        "format-linked": "{ifname} (No IP) 󰛵",
+        // nf-md-wifi_strength_off_outline
+        "format-disconnected": "Disconnected 󰤮",
+        // nf-md-wifi_strength_{outline, 1, 2, 3, 4}
+        "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"]
     },
 
     "pulseaudio": {
         "format": "{icon} {volume}% {format_source}",
-        "format-muted": " {format_source}",
+        // nf-md-volume_off
+        "format-muted": "󰖁 {format_source}",
 
-        "format-bluetooth": "{icon} {volume}% {format_source}",
-        "format-bluetooth-muted": "{icon} {format_source}",
+        // nf-md-bluetooth
+        "format-bluetooth": "{icon}󰂯 {volume}% {format_source}",
+        "format-bluetooth-muted": "{icon} {format_source}",
 
+        // nf-fa-microphone
         "format-source": " {volume}%",
+        // nf-fa-microphone_slash
         "format-source-muted": "",
 
         "format-icons": {
+            // nf-fa-headphones
             "headphone": "",
-            "hands-free": "",
-            "headset": "",
+            // nf-fa-phone
             "phone": "",
+            // nf-fa-phone
             "portable": "",
+            // nf-fa-car
             "car": "",
+            // nf-fa-volume_{off,down,up}
             "default": ["", "", ""]
         },
         "on-click": "wpctl set-mute @DEFAULT_SINK@ toggle",
@@ -196,6 +221,7 @@
     },
 
     "custom/wlogout": {
+        // nf-fa-power_off
         "format": "",
         "interval": "once",
         "on-click": "wlogout -p layer-shell",
