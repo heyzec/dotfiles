@@ -1,5 +1,5 @@
 # See https://rycee.gitlab.io/home-manager/options.html
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 {
   # We're using the "Standalone installation" option, let home-manager install itself
   programs.home-manager.enable = true;
@@ -44,6 +44,11 @@
     };
 
   };
+  # TODO: do not depend on location of dotfiles repo (impure)
+  home.activation."dotsinstall" = lib.hm.dag.entryAfter ["writeBoundary"] ''
+    nix-shell -p gawk git --run "$HOME/dotfiles/install all --no-dry-run"
+  '';
+
 }
 
 # TODO: fix swhkd not starting, we need it for vm
