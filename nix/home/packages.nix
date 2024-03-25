@@ -14,10 +14,21 @@
     insomnia    # REST API client
 
     ##### Applications: Communication Utilities
-    telegram-desktop    # Telegram client
+    # Let telegram use gtk3
+    # The default QT filepicker is much uglier than the GTK filepicker
+    (pkgs.runCommand "telegram-desktop" {
+      buildInputs = [ pkgs.makeWrapper ];
+    } ''
+      mkdir $out
+      ln -s ${pkgs.telegram-desktop}/* $out
+      rm $out/bin
+      mkdir $out/bin
+      makeWrapper ${pkgs.telegram-desktop}/bin/telegram-desktop $out/bin/telegram-desktop \
+        --set QT_QPA_PLATFORMTHEME gtk3
+    '')
     webcord             # Alternative Discord client
     whatsapp-for-linux  # unofficial client
-    # zoom              # Zoom client
+    # zoom-us              # Zoom client
     teams-for-linux
     slack
 

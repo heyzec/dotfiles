@@ -7,6 +7,7 @@
     ./gtk.nix
     ./joplin.nix
     ./symlinks.nix
+    ./thunar.nix
     ./mime.nix
     ./packages.nix
     ./services.nix
