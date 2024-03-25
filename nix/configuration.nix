@@ -86,6 +86,7 @@ in {
     wl-color-picker
 
 
+    firefox
     (floorp.override {
       nativeMessagingHosts = with pkgs; [
         tridactyl-native

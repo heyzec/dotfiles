@@ -2,7 +2,7 @@
 {
   programs.firefox = {
     enable = false;
-    package = pkgs.firefox-devedition.override {
+    package = pkgs.firefox.override {
       cfg = { enableTridactylNative = true; };
     };
 
