@@ -20,9 +20,14 @@ if (( $+commands[exa] )); then
         fi
     }
 fi
-# Use bat over cat
-alias cat="bat"
 
+# Use bat over cat
+if (( $+commands[bat] )); then
+    alias cat="bat"
+fi
+if (( $+commands[batman] )); then
+    alias man="batman"
+fi
 
 
 ###############################################################################

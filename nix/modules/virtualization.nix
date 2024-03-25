@@ -18,10 +18,6 @@
           source = "$HOME/dotfiles";
           target = "/home/heyzec/dotfiles";
         };
-        nix = {
-          source = "$HOME/nix";
-          target = "/home/heyzec/nix";
-        };
       };
     };
 

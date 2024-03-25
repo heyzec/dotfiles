@@ -4,6 +4,7 @@
   home.packages = with pkgs; [
     eza
     bat
+    bat-extras.batman
 
 
     kitty
@@ -13,11 +14,12 @@
     insomnia    # REST API client
 
     ##### Applications: Communication Utilities
-    telegram-desktop # Telegram client
-    webcord # Alternative Discord client
-    whatsapp-for-linux # unofficial client
-    # zoom             # Zoom client
+    telegram-desktop    # Telegram client
+    webcord             # Alternative Discord client
+    whatsapp-for-linux  # unofficial client
+    # zoom              # Zoom client
     teams-for-linux
+    slack
 
 
 
@@ -29,17 +31,11 @@
     # [Specialised CTF Tools]
     thc-hydra        # online password-cracking tool
     john             # John the Ripper, an offline password-cracker
-    nmap             # port scanner
-    # TODO: Fix privilege issues so that wireshark CLI is user but wireshark-cli is root
-    # wireshark-qt     # network analyzer
 
-
-    # texlive.combined.scheme-full
     tectonic
 
 
     dbeaver
-    nix-output-monitor
 
     (openfortivpn.overrideAttrs(old: {
       src = builtins.fetchTarball
@@ -56,6 +52,7 @@
     ticktick
     linux-wifi-hotspot
     bottles
+    mindustry
   ];
 }
 
