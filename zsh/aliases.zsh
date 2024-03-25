@@ -26,6 +26,7 @@ fi
 # Use bat over cat
 if (( $+commands[bat] )); then
     alias cat="bat"
+    alias man="batman"
 else
     check_health_missing+=(bat)
 fi
