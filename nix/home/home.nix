@@ -1,5 +1,5 @@
 # See https://rycee.gitlab.io/home-manager/options.html
-{ lib, pkgs, ... }:
+{ lib, pkgs, userSettings, ... }:
 {
   # We're using the "Standalone installation" option, let home-manager install itself
   programs.home-manager.enable = true;
@@ -46,7 +46,7 @@
   };
   # TODO: do not depend on location of dotfiles repo (impure)
   home.activation."dotsinstall" = lib.hm.dag.entryAfter ["writeBoundary"] ''
-    nix-shell -p gawk git --run "$HOME/dotfiles/install all --no-dry-run"
+    nix-shell -p gawk git --run "${userSettings.dotfilesDir}/install all --no-dry-run"
   '';
 
 }

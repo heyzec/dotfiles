@@ -1,12 +1,12 @@
-{ pkgs, ... }: {
+{ pkgs, userSettings, ... }: {
 ################################################################################
 ##### User Accounts
 ################################################################################
   users.mutableUsers = false;
-  users.users.heyzec = {
+  users.users.${userSettings.username} = {
     isNormalUser = true;
     uid = 1000;
-    description = "heyzec";
+    description = "Main user of this device";
     extraGroups = [
       "wheel"            # Access sudo command
       "networkmanager"   # Access network manager

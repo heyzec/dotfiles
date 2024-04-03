@@ -1,7 +1,6 @@
 # Taken from https://github.com/donovanglover/nix-config, someting in this file is needed
 # for it to be possible to nixos-buildvm and for vm generated to not crash on Hyprland
-{ lib, pkgs, ... }:
-
+{ lib, pkgs, userSettings, ... }:
 {
   virtualisation.vmVariant = {
     # following configuration is added only when building VM with build-vm
@@ -14,10 +13,17 @@
           source = "$HOME";
           target = "/mnt";
         };
-        dotfiles = {
-          source = "$HOME/dotfiles";
-          target = "/home/heyzec/dotfiles";
-        };
+        dotfiles = if builtins.substring 0 1 userSettings.dotfilesDir == "~"
+          then {
+            # Apply sane intepretation of path with ~
+            source = builtins.replaceStrings ["~"] ["$HOME"] userSettings.dotfilesDir;
+            target = "/home/${userSettings.username}/" +
+              builtins.replaceStrings ["~"] ["."] userSettings.dotfilesDir;
+          } else {
+            # Treat dotfilesDir as absolute path and try
+            source = userSettings.dotfilesDir;
+            target = userSettings.dotfilesDir;
+          };
       };
     };
 
@@ -36,9 +42,9 @@
 
     services.interception-tools.enable = lib.mkForce false;
 
-    environment.systemPackages = [
-      pkgs.kitty  # For bare hyprland to be usable
-      pkgs.home-manager
+    environment.systemPackages = with pkgs; [
+      kitty  # For bare hyprland to be usable
+      home-manager
     ];
   };
 }

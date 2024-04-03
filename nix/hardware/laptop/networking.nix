@@ -1,11 +1,11 @@
 ################################################################################
 ##### Networking Settings
 ################################################################################
-{ lib, ...}:
+{ lib, systemSettings, ...}:
 
 {
   networking = {
-    hostName = "nixie"; # Define your hostname.
+    hostName = systemSettings.hostname;
     networkmanager.enable = true;
     firewall = {
       enable = false;

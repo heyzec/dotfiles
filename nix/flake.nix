@@ -1,5 +1,5 @@
 {
-  description = "A very basic flake";
+  description = "Flake of heyzec";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
@@ -14,85 +14,110 @@
     xremap-flake.url = "github:xremap/nix-flake";
   };
 
-  outputs = { self, nixpkgs, nixpkgs-stable, nix-colors, home-manager, ... }@inputs:
-  let
-    inherit (nixpkgs) lib;
-    system = "x86_64-linux";
+  # Don't add parameters to within { ... }, explicitly index it from inputs instead
+  outputs = { self, ... }@inputs: let
+    # ---- SYSTEM SETTINGS ---- #
+    systemSettings = {
+      system = "x86_64-linux";      # system arch
+      hostname = "nixie";
+      timezone = "Asia/Singapore";
+      locale = "en_SG.UTF-8";
+    };
 
-    pkgs = import nixpkgs {
-      inherit system;
+    # ----- USER SETTINGS ----- #
+    userSettings = {
+      username = "heyzec";
+      dotfilesDir = "~/dotfiles";  # path to dotfiles repo, good to start with ~
+    };
+
+    # Needed by home manager in standalone mode
+    pkgs = import inputs.nixpkgs {
+      system = systemSettings.system;
       config = {
         allowUnfree = true;
       };
     };
 
+    # This allows us to access stable packages:
+    # - unstable: pkgs.<program>
+    # - stable:   pkgs.stable.<program>
     overlay-stable = final: prev: {
-      # unstable = nixpkgs-unstable.legacyPackages.${prev.system};
-      # use this variant if unfree packages are needed:
-      stable = import nixpkgs-stable {
-        inherit system;
+      stable = import inputs.nixpkgs-stable {
+        system = systemSettings.system;
         config.allowUnfree = true;
       };
     };
     nixpkgs-overlay-stable = ({ config, pkgs, ... }: { nixpkgs.overlays = [ overlay-stable ]; });
 
-
   in
   {
     nixosConfigurations = {
       # The standard configuration (home manager standalone)
-      "nixos" = nixpkgs.lib.nixosSystem {
-        specialArgs = { inherit inputs; };
-
+      "nixos" = inputs.nixpkgs.lib.nixosSystem {
         modules = [
           nixpkgs-overlay-stable
           ./.
           ({
             system.nixos.label = 
             if self.sourceInfo ? lastModifiedDate && self.sourceInfo ? shortRev
-            then "${lib.substring 0 8 self.sourceInfo.lastModifiedDate}.${self.sourceInfo.shortRev}"
-            else lib.warn "Repo is dirty, revision will not be available in system label" "dirty";
-
-
-
+            then "${inputs.nixpkgs.lib.substring 0 8 self.sourceInfo.lastModifiedDate}.${self.sourceInfo.shortRev}"
+            else inputs.nixpkgs.lib.warn "Repo is dirty, revision will not be available in system label" "dirty";
           })
         ];
+        specialArgs = {
+          inherit inputs;
+          inherit systemSettings;
+          inherit userSettings;
+        };
       };
 
       # The configuration for build-vm (home manager as a module)
-      "nixos-vm" = nixpkgs.lib.nixosSystem {
-        specialArgs = { inherit inputs; };
-
+      "nixos-vm" = inputs.nixpkgs.lib.nixosSystem {
         modules = [
           nixpkgs-overlay-stable
           ./.
-          home-manager.nixosModules.home-manager
+          inputs.home-manager.nixosModules.home-manager
           ({
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.users.heyzec = {
-              imports = [
-                ./home
-              ];
-            };
-            home-manager.extraSpecialArgs = {
-              inherit inputs;
+            home-manager = {
+              users = {
+                ${userSettings.username} = {
+                  imports = [
+                    ./home
+                  ];
+                };
+              };
+              useGlobalPkgs = true;
+              useUserPackages = true;
+              extraSpecialArgs = {
+                inherit inputs;
+                inherit systemSettings;
+                inherit userSettings;
+              };
             };
           })
         ];
+        specialArgs = {
+          inherit inputs;
+          inherit systemSettings;
+          inherit userSettings;
+        };
       };
     };
 
 
     homeConfigurations = {
-      "heyzec" = home-manager.lib.homeManagerConfiguration {
+      "user" = inputs.home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
-        extraSpecialArgs = { inherit inputs; };
         modules = [
           nixpkgs-overlay-stable
           # stylix.homeManagerModules.stylix ./home/home.nix
           ./home
         ];
+        extraSpecialArgs = {
+          inherit inputs;
+          inherit systemSettings;
+          inherit userSettings;
+        };
       };
     };
   };

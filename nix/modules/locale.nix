@@ -1,20 +1,21 @@
 ################################################################################
 ##### Regional Settings
 ################################################################################
+{ systemSettings, ... }:
 {
-  time.timeZone = "Asia/Singapore";
+  time.timeZone = systemSettings.timezone;
 
-  i18n.defaultLocale = "en_SG.UTF-8"; # Select internationalisation properties.
+  i18n.defaultLocale = systemSettings.locale;
   i18n.extraLocaleSettings = {
-    LC_ADDRESS = "en_SG.UTF-8";
-    LC_IDENTIFICATION = "en_SG.UTF-8";
-    LC_MEASUREMENT = "en_SG.UTF-8";
-    LC_MONETARY = "en_SG.UTF-8";
-    LC_NAME = "en_SG.UTF-8";
-    LC_NUMERIC = "en_SG.UTF-8";
-    LC_PAPER = "en_SG.UTF-8";
-    LC_TELEPHONE = "en_SG.UTF-8";
-    LC_TIME = "en_SG.UTF-8";
+    LC_ADDRESS        = systemSettings.locale;
+    LC_IDENTIFICATION = systemSettings.locale;
+    LC_MEASUREMENT    = systemSettings.locale;
+    LC_MONETARY       = systemSettings.locale;
+    LC_NAME           = systemSettings.locale;
+    LC_NUMERIC        = systemSettings.locale;
+    LC_PAPER          = systemSettings.locale;
+    LC_TELEPHONE      = systemSettings.locale;
+    LC_TIME           = systemSettings.locale;
   };
 }
 
