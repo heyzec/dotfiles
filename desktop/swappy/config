@@ -1,0 +1,6 @@
+[Default]
+save_dir=$HOME/Pictures/Screenshots
+# exit after saving the picture or copying it to the clipboard
+early_exit=true
+
+# vim: set filetype=cfg:
