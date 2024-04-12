@@ -29,6 +29,7 @@ bind n findnext --search-from-view
 bind N findnext --search-from-view --reverse
 bind gI js tri.excmds.hint("-c", tri.excmds.INPUTTAGS_selectors)
 unbind --mode=hint <Space>
+bind <BS> back
 
 
 " Website specific
@@ -42,8 +43,8 @@ bindurl www.google.com i hint -J; form textarea
 bindurl www.google.com f hint -Jc #search div:not(.action-menu) > a, block-component a
 seturl www.google.com hintchars 1234567890
 
-unbindurl github.com j
-unbindurl github.com k
+unbindurl github\.com/.+/.+/tree j
+unbindurl github\.com/.+/.+/tree k
 bindurl github\.com/search f hint -Jc [data-testid="results-list"] h3 a
 
 unbindurl gitlab.com j
@@ -55,6 +56,7 @@ unbindurl youtube.com k
 blacklistadd www.hackerrank.com
 
 
+" set newtab moz-extension://bf06a4a8-6a69-4d89-a585-942a45cf930e/index.html
 
 # vim: commentstring="\ %s
 
