@@ -2,6 +2,11 @@
 -- - Advanced features that original vim is unable to do, e.g. lsp
 -- - vscode-neovim remaps
 
+-- ###############################################################################
+-- ##                                                                           ##
+-- ##                              1. UTILITIES                                 ##
+-- ##                                                                           ##
+-- ###############################################################################
 
 local utils_map = require('utils.keymap').map
 local utils_mapdesc = require('utils.keymap').mapdesc
@@ -29,7 +34,11 @@ if vim.g.vscode then
 end
 
 
-
+-- ###############################################################################
+-- ##                                                                           ##
+-- ##                                2. TELESCOPE                               ##
+-- ##                                                                           ##
+-- ###############################################################################
 
 if not vim.g.vscode then
     local whichkey = require("which-key")
@@ -55,7 +64,7 @@ utils_mapdesc('<leader>fd',
     "Telescope diagnostics")
 
 if not vim.g.vscode then
-    utils_mapdesc('<leader>g',  telescope.resume,   "Telescope resume")
+    utils_mapdesc('<leader>fr',  telescope.resume,  "Telescope resume")
     utils_mapdesc('<leader>fm', telescope.marks,    "Telescope marks")
     utils_mapdesc('<leader>fk', telescope.keymaps,  "Telescope keymaps")
     utils_mapdesc('<leader>fu', require('telescope').extensions.undo.undo, "Telescope undo")
@@ -64,35 +73,64 @@ if not vim.g.vscode then
     utils_mapdesc('<leader>fo', telescope.oldfiles,  "Telescope oldfiles")
 end
 
--- Code suggestions
-if not vim.g.vscode then
-else
-    vim.keymap.set('n', '<leader>ca', vscode('editor.action.quickFix'))
-    vim.keymap.set('n', '<leader>cr', vscode('editor.action.refactor'))
-end
 
+-- ###############################################################################
+-- ##                                                                           ##
+-- ##                                  3. LSP                                   ##
+-- ##                                                                           ##
+-- ###############################################################################
 
+-- ----------------------------Info----------------------------
+-- overrides vim default mapping of K
+utils_mapdesc(
+    'K',
+    conditional(vim.lsp.buf.hover, vscode('editor.action.showHover')),
+    'LSP: Hover')
 
+-- ----------------------------Goto----------------------------
+-- See :help *g* for g-prefixed default keymaps
+utils_mapdesc(
+    '<leader>gd',
+    conditional(telescope.lsp_definitions, vscode('editor.action.revealDefinition')),
+    'LSP: [G]oto [D]efinition')
+utils_mapdesc(
+    '<leader>gr',
+    conditional(telescope.lsp_references, vscode('editor.action.goToReferences')),
+    'LSP: [G]oto [R]eferences')
+utils_mapdesc(
+    '<leader>gt',
+    conditional(telescope.lsp_type_definitions, vscode('editor.action.goToTypeDefinition')),
+    'LSP: [G]oto [T]ype definition')
+utils_mapdesc(
+    '<leader>gi',
+    conditional(telescope.lsp_implementations, vscode('editor.action.goToImplementation')),
+    'LSP: [G]oto [I]mplementation')
 
--- neotree = require('neo-tree.command')
-vim.keymap.set('n', '<leader>e', conditional(
-    function()
-        -- If drawer is open, but not focused, don;t close. instead focus to it
-        -- Benefit: If access wrong file, can tap to go back to nav another file
-        -- If intention is to close, then just press it again
-        if (string.find(vim.api.nvim_buf_get_name(0), "tree") ~= nil) then
-            vim.cmd(":Neotree toggle")
-        else
-            vim.cmd(":Neotree focus")
-        end
-    end,
-    -- Part [1]: If buffer is (1) closed or (2) open but unfocused, open and focus to the explorer
-    -- Part [2]: Otherwise, close the panel
-    -- Not possible to map here, because keys are not sent to neovim when buffer unfocused.
-    -- Refer to map in keybindings.json
-    vscode('workbench.view.explorer')))
-
-
+-- ----------------------------Code editing----------------------------
+utils_mapdesc(
+    '<leader>ca',
+    conditional(
+        function()
+            vim.lsp.buf.code_action({ only = {"quickfix"} })
+        end,
+        vscode('editor.action.quickFix')),
+    'LSP: [C]ode [A]ction')
+utils_mapdesc(
+    '<leader>cf',
+    conditional(vim.lsp.buf.code_action, vscode('editor.action.refactor')),
+    'LSP: [C]ode Re[f]actor')
+utils_mapdesc(
+    '<leader>cr',
+    conditional(vim.lsp.buf.rename, vscode('editor.action.rename')),
+    'LSP: [C]ode Smart [R]ename')
+utils_mapdesc(
+    '==',
+    conditional(
+        function()
+            vim.lsp.buf.format { async = true }
+        end,
+        vscode('editor.action.formatDocument')),
+    'LSP: Format Document')
 
 -- Use LspAttach autocommand to create buffer local mappings
 -- after the language server attaches to the current buffer
@@ -109,40 +147,32 @@ vim.api.nvim_create_autocmd('LspAttach', {
             utils_map(keys, callback, opts)
         end
 
-
-        -- Jump related
-        map('gD',     vim.lsp.buf.declaration,     '[G]oto [D]eclaration')
-        map('gd',     vim.lsp.buf.definition,      '[G]oto [D]eclaration')
-        map('gi',     vim.lsp.buf.implementation,  '[G]oto [I]mplementation')
-        map('gr',     vim.lsp.buf.references,      '[G]oto [R]eferences')
-        map('g<C-d>', vim.lsp.buf.type_definition, '[G]oto Type [D]efinition')
-
-
-        -- Help related
-        map('K',  vim.lsp.buf.hover,          'Hover Documentation')
-        -- nmap('<C-k>', vim.lsp.buf.signature_help, opts)
-
-
-        -- Refactor related
-        map('<F2>', vim.lsp.buf.rename, 'Smart rename')
-
-        map('<space>ca', vim.lsp.buf.code_action, '[C]ode [A]ction', { mode = { 'n', 'v' }})
-
-
-
-
-
-
-        -- Others
-        -- nmap('<space>wa', vim.lsp.buf.add_workspace_folder, opts)
-        -- nmap('<space>wr', vim.lsp.buf.remove_workspace_folder, opts)
-        -- nmap('<space>wl', function()
-        --   print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-        -- end, opts)
-
-        map('==', function()
-          vim.lsp.buf.format { async = true }
-        end)
+        -- Insert your buffer local mappings here
     end,
 })
+
+
+-- ###############################################################################
+-- ##                                                                           ##
+-- ##                             4. TOGGLE SIDEPANE                            ##
+-- ##                                                                           ##
+-- ###############################################################################
+
+-- neotree = require('neo-tree.command')
+vim.keymap.set('n', '<leader>e', conditional(
+    function()
+        -- If drawer is open, but not focused, don't close. instead focus to it
+        -- Benefit: If access wrong file, can tap to go back to nav another file
+        -- If intention is to close, then just press it again
+        if (string.find(vim.api.nvim_buf_get_name(0), "tree") ~= nil) then
+            vim.cmd(":Neotree toggle")
+        else
+            vim.cmd(":Neotree focus")
+        end
+    end,
+    -- Part [1]: If buffer is (1) closed or (2) open but unfocused, open and focus to the explorer
+    -- Part [2]: Otherwise, close the panel
+    -- Not possible to map here, because keys are not sent to neovim when buffer unfocused.
+    -- Refer to map in keybindings.json
+    vscode('workbench.view.explorer')))
 
