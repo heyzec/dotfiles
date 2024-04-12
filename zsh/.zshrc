@@ -37,7 +37,6 @@ zstyle ':completion:*' completer _expand _complete _correct _approximate
 zstyle ':completion:*' format 'Completing %d'
 zstyle ':completion:*' group-name ''
 zstyle ':completion:*' menu select=2
-eval "$(dircolors -b)"
 zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 zstyle ':completion:*' list-colors ''
 zstyle ':completion:*' list-prompt %SAt %p: Hit TAB for more, or the character to insert%s
@@ -104,6 +103,26 @@ fi
 ##                                                                           ##
 ###############################################################################
 
+checkhealth_missing=()
+function has() {
+	check="$1"
+	if (( $+commands[$check] )); then
+		return 0
+	else
+		checkhealth_missing+=($check)
+		return 1
+	fi
+}
+function checkhealth() {
+	if [ ${#checkhealth_missing[@]} -eq 0 ]; then
+		echo "No issues found."
+	else
+		echo "Some commands are missing:"
+		echo $checkhealth_missing
+		return 1
+	fi
+}
+
 # # Virtual environments
 # export PATH="$HOME/.local/bin:$PATH"
 #
@@ -132,14 +151,6 @@ for index ({0..9}) alias "d$index"="cd +${index}"; unset index
 # source $ZDOTDIR/plugins/zsh-expand/zsh-expand.plugin.zsh
 source $ZDOTDIR/aliases.zsh
 
-# Show git alias expansions
-# Disabled as this interferes with git autocorrect prompting
-# function git() {
-# 	# GIT_TRACE=1 /bin/git "$@" 2> >(awk '!/trace/{x++} {if(NR==3){sub(/.+\s\s\S+\s/,"");print}else if(x>0){print}}' >&2)
-# 	# GIT_TRACE=1 /bin/git "$@" 2> >(awk '/^[0-9:.]{15}/{if(NR==3 && $0 ~ /(run_command: \W|alias expansion)/){sub(/.+\s\s\S+\s/,"");print;};next;}{print;}' >&2)
-# 	GIT_TRACE=1 /usr/bin/env git "$@" 2> >(awk '/^[0-9:.]{15}/{if(NR==3 && $0 ~ /alias expansion/){sub(/.+\s\s\S+\s/,"");print;};next;}{print;}' >&2)
-# }
-
 
 # Dynamically change title of terminal window based on running command
 function xterm_title_precmd () {
@@ -151,13 +162,10 @@ function xterm_title_preexec () {
 	[[ "$TERM" == 'screen'* ]] && { print -Pn -- '\e_\005{g}%n\005{-}@\005{m}%m\005{-} \005{B}%~\005{-} %# ' && print -n -- "${(q)1}\e\\"; }
 }
 if [[ "$TERM" == (Eterm*|alacritty*|aterm*|foot*|gnome*|konsole*|kterm*|putty*|rxvt*|screen*|wezterm*|tmux*|xterm*) ]]; then
+	autoload -U add-zsh-hook
 	add-zsh-hook -Uz precmd xterm_title_precmd
 	add-zsh-hook -Uz preexec xterm_title_preexec
 fi
-
-
-
-
 
 
 ###############################################################################
@@ -165,40 +173,53 @@ fi
 ##                     1. External shell program integration                 ##
 ##                                                                           ##
 ###############################################################################
-#
+
+
 # Color support for ls and some other commands (use .dircolors)
-if [ -x /usr/bin/dircolors ]; then
-	test -r $ZDOTDIR/dircolors && eval "$(dircolors -b $ZDOTDIR/dircolors)" || eval "$(dircolors -b)"
+if has dircolors; then
+	if [ -r $ZDOTDIR/dircolors ]; then
+		eval "$(dircolors -b $ZDOTDIR/dircolors)"
+	else
+		eval "$(dircolors -b)"
+	fi
 fi
 
 # Use starship to decorate shell prompt
 # https://github.com/starship/starship
-if (( $+commands[starship] )); then
+if has starship; then
 	eval "$(starship init zsh)"
 fi
 
 # Use direnv to add hooks per directory
 # https://github.com/direnv/direnv
-if (( $+commands[direnv] )); then
+if has direnv; then
 	eval "$(direnv hook zsh)"
 fi
 
-# unalias z 2> /dev/null
-# z() {
-#   [ $# -gt 0 ] && zshz "$*" && return
-#   cd "$(zshz -l 2>&1 | fzf --height 40% --nth 2.. --reverse --inline-info +s --tac --query "${*##-* }" | sed 's/^[0-9,.]* *//')"
-# }
 # Use zoxide to jump around directories faster with `z`
 # https://github.com/ajeetdsouza/zoxide
-if (( $+commands[zoxide] )); then
+if has zoxide; then
 	eval "$(zoxide init zsh)"
 fi
 
 # Use fzf keybindings
-if [ -n "${commands[fzf-share]}" ]; then
-	source "$(fzf-share)/key-bindings.zsh"
-	source "$(fzf-share)/completion.zsh"
+if [ -d /usr/share/doc/fzf/examples/ ]; then
+    # Expected location for typical linux distributions
+    fzf_folder="/usr/share/doc/fzf/examples"
+elif [ -d /usr/local/opt/fzf/shell/ ]; then
+    # Expected location for MacOS
+    fzf_folder="/usr/local/opt/fzf/shell/"
+elif [ -n "${commands[fzf-share]}" ]; then
+    # For NixOS, we need to call this script to get the location
+    fzf_folder="$(fzf-share)"
 fi
+if [ ! -z $fzf_folder ]; then
+	source "$fzf_folder/key-bindings.zsh"
+	source "$fzf_folder/completion.zsh"
+else
+	checkhealth_missing+=(fzf)
+fi
+
 
 ###############################################################################
 ##                                                                           ##
@@ -242,5 +263,11 @@ repos=(
 
 plugin-load $repos
 
+
+
+unset -f has
 # Uncomment this to profile zsh
 # zprof
+
+
+# vim: set noexpandtab:
