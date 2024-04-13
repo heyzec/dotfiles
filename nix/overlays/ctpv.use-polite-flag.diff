@@ -1,0 +1,13 @@
+diff --git a/sh/helpers.sh b/sh/helpers.sh
+index fef8691..24d04a7 100644
+--- a/sh/helpers.sh
++++ b/sh/helpers.sh
+@@ -74,7 +74,7 @@ chafa_run() {
+ 	format='-f symbols'
+ 	autochafa && format=
+ 	chafasixel && format='-f sixels'
+-	chafa -s "${w}x${h}" $format "$1" | sed 's/#/\n#/g'
++	chafa --polite on -s "${w}x${h}" $format "$1" | sed 's/#/\n#/g'
+ }
+ 
+ setup_fifo() {
