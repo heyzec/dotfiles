@@ -61,6 +61,10 @@
   };
 
   config = with config.heyzec; {
+
+    # By default, lid switch is ignored when docked (but not on AC)
+    services.logind.lidSwitch = "suspend-then-hibernate";
+
     environment.etc = if ! power.enable then {} else {
       "hypr/hypridle.conf" = {
         text =
