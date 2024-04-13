@@ -55,6 +55,7 @@
       "nixos" = inputs.nixpkgs.lib.nixosSystem {
         modules = [
           nixpkgs-overlay-stable
+          ./modules
           ./hosts/nixie
           ({
             system.nixos.label = 
@@ -74,6 +75,7 @@
       "nixos-vm" = inputs.nixpkgs.lib.nixosSystem {
         modules = [
           nixpkgs-overlay-stable
+          ./modules
           ./hosts/nixie
           inputs.home-manager.nixosModules.home-manager
           ({

@@ -67,7 +67,7 @@
     rofi-wayland           # application launcher
     swaybg                 # wallpaper setter for wayland
     swaylock-effects       # screen locker for sway
-    wlogout                # logout menu
+    # wlogout                # logout menu
 
     # flameshot               # screen capture
     grim                   # grab an image

@@ -9,7 +9,7 @@ indicator-radius=100
 inside-color=00000050
 line-ver-color=00000000
 line-wrong-color=00000000
-grace=3
+# grace=3
 fade-in=0.5
 show-failed-attempts
 ignore-empty-password
