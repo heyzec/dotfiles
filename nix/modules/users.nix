@@ -20,6 +20,6 @@
       "wireshark"
     ];
     shell = pkgs.zsh;
-    hashedPassword = import ../secrets/hashed-password.nix;
+    hashedPassword = (import ./users.crypt.nix).hashedPassword;
   };
 }
