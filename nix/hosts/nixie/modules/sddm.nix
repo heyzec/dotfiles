@@ -8,7 +8,7 @@
     };
     displayManager.sddm = {
       enable = true;
-      theme = "${import ../packages/sddm-theme/sddm-theme.nix { inherit pkgs; }}";
+      theme = "${import ../../../packages/sddm-theme/sddm-theme.nix { inherit pkgs; }}";
     };
   };
   environment.systemPackages = with pkgs; [

@@ -53,7 +53,7 @@
       "nixos" = inputs.nixpkgs.lib.nixosSystem {
         modules = [
           nixpkgs-overlay-stable
-          ./.
+          ./hosts/nixie
           ({
             system.nixos.label = 
             if self.sourceInfo ? lastModifiedDate && self.sourceInfo ? shortRev
@@ -72,7 +72,7 @@
       "nixos-vm" = inputs.nixpkgs.lib.nixosSystem {
         modules = [
           nixpkgs-overlay-stable
-          ./.
+          ./hosts/nixie
           inputs.home-manager.nixosModules.home-manager
           ({
             home-manager = {

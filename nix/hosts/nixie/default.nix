@@ -1,8 +1,8 @@
 {
   imports = [
+    ../../overlays
     ./modules
-    ./overlays
-    ./hardware/laptop
+    ./hardware
     ./configuration.nix
   ];
 }
