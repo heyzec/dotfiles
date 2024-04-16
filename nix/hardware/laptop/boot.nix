@@ -29,6 +29,11 @@
 
   # From hardware-configuration.nix
   boot.initrd.availableKernelModules = [ "xhci_pci" "thunderbolt" "vmd" "nvme" "rtsx_pci_sdmmc" ];
-  boot.kernelModules = [ "kvm-intel" ];
-  boot.extraModulePackages = [ ];
+  boot.kernelModules = [
+    "kvm-intel"
+    "v4l2loopback"  # For virtual camera support, e.g. OBS
+  ];
+  boot.extraModulePackages = with pkgs; [
+    linuxPackages.v4l2loopback
+  ];
 }

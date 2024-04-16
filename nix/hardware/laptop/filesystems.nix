@@ -1,5 +1,5 @@
 # Refer to README.md
-
+{ userSettings, ... }:
 {
   fileSystems."/" = {
     device = "/dev/disk/by-partlabel/NixOS";
@@ -7,7 +7,7 @@
     options = [ "subvol=@root" ];
   };
 
-  fileSystems."/home/heyzec" = {
+  fileSystems."/home/${userSettings.username}" = {
     device = "/dev/disk/by-partlabel/NixOS";
     fsType = "btrfs";
     options = [ "subvol=@home" ];
@@ -48,12 +48,6 @@
     fsType = "none";
     options = [ "bind" "nofail" ];
   };
-
-#   fileSystems."/home/heyzec/Private" = {
-#     device = "/dev/mapper/private";
-#     fsType = "auto";
-#     options = [ "noauto" "x-systemd.automount" "x-systemd.mount-timeout=5" "nofail" ];
-#   };
 
   swapDevices = [
     { device = "/dev/disk/by-partlabel/Swap"; }

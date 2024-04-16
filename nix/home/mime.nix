@@ -1,4 +1,5 @@
 {
+  # xdg-mime query {filetype | default}
   xdg.mimeApps = {
     enable = true;
     defaultApplications = let

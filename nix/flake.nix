@@ -9,9 +9,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-colors.url = "github:misterio77/nix-colors";
-    # stylix.url = "github:danth/stylix";
-
-    xremap-flake.url = "github:xremap/nix-flake";
   };
 
   # Don't add parameters to within { ... }, explicitly index it from inputs instead

@@ -5,8 +5,8 @@
   programs.home-manager.enable = true;
 
   home.stateVersion = "23.05";
-  home.username = "heyzec";
-  home.homeDirectory = "/home/heyzec";
+  home.username = userSettings.username;
+  home.homeDirectory = "/home/${userSettings.username}";
 
   # https://github.com/nix-community/home-manager/issues/1011
   # Does not work
@@ -44,7 +44,7 @@
     };
 
   };
-  # TODO: do not depend on location of dotfiles repo (impure)
+
   home.activation."dotsinstall" = lib.hm.dag.entryAfter ["writeBoundary"] ''
     nix-shell -p gawk git --run "${userSettings.dotfilesDir}/install all --no-dry-run"
   '';
