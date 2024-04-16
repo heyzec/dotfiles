@@ -133,7 +133,7 @@
     flatpak           # handle Flatpaks
 
     ##### Containerisation and Virtualisation #####
-    qemu_full              # create virtual machines
+    qemu                   # create virtual machines
     virt-manager           # frontend for qemu
     distrobox
 
