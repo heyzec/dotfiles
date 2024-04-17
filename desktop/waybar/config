@@ -173,11 +173,11 @@
         "format-alt": "{icon} {ifname}: {ipaddr}/{cidr} {bandwidthDownBytes}",
         "tooltip-format": "{ifname} via {gwaddr}",
         // nf-md-ethernet
-        "format-ethernet": "{ipaddr}/{cidr} 󰈀",
+        "format-ethernet": "󰈀 {ipaddr}/{cidr}",
         // nf-md-help_network
-        "format-linked": "{ifname} (No IP) 󰛵",
+        "format-linked": "󰛵 {ifname} (No IP)",
         // nf-md-wifi_strength_off_outline
-        "format-disconnected": "Disconnected 󰤮",
+        "format-disconnected": "󰤮 Disconnected",
         // nf-md-wifi_strength_{outline, 1, 2, 3, 4}
         "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"]
     },

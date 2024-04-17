@@ -1,0 +1,25 @@
+# # Lock screen  on idle
+# exec-once = swayidle -w timeout 600 swaylock before-sleep swaylock
+# 
+#     # timeout 305 'swaymsg "output * power off"' \
+#     # resume 'swaymsg "output * power on"'
+
+# general {
+#     # TODO: ensure swaylock does not unlock on mouse move
+#     after_sleep_cmd = swaylock
+# }
+
+# listener {
+#     timeout = 6
+#     on-timeout = swaylock
+# }
+# listener {
+#   timeout = 5
+#   on-timeout = systemctl suspend-then-hibernate
+# }
+
+
+# listener {
+#     timeout = 600
+#     on-timeout = swaylock
+# }

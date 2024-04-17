@@ -103,5 +103,18 @@ in {
   programs.adb.enable = true;
   users.users.heyzec.extraGroups = [ "adbusers" ];
   hardware.opentabletdriver.enable = true;
+
+  services.fprintd.enable = true;
+
+  services.fprintd.tod.enable = true;
+
+  security.pam.services.login.fprintAuth = false;
+  security.pam.services.swaylock.fprintAuth = false;
+
+  # Enroll properly
+  # https://discourse.nixos.org/t/nixos-unstable-fprintd-fingerprint-reader-issues/33273/2
+  # services.fprintd.tod.driver = pkgs.libfprint-2-tod1-goodix;
+
+  virtualisation.vmware.host.enable = true;
 }
 

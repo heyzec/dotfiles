@@ -57,6 +57,7 @@
           nixpkgs-overlay-stable
           ./modules
           ./hosts/nixie
+          inputs.nixos-hardware.nixosModules.dell-xps-13-9310
           ({
             system.nixos.label = 
             if self.sourceInfo ? lastModifiedDate && self.sourceInfo ? shortRev
