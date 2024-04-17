@@ -22,11 +22,5 @@
       # configure = {};
     };
   };
-
-
-  environment.systemPackages = with pkgs; [
-    shellcheck
-    nodePackages.bash-language-server
-  ];
 }
 
