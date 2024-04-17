@@ -3,7 +3,6 @@
     ../../overlays
     ./modules
     ./hardware
-    ./configuration.nix
   ];
 }
 

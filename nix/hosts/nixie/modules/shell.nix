@@ -5,10 +5,6 @@
   };
 
   environment.systemPackages = with pkgs; [
-    starship
-    fzf
-    ripgrep
-    zoxide
   ];
 }
 
