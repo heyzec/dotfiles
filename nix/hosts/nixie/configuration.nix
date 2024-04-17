@@ -26,21 +26,6 @@ in {
   };
 # }}}
 
-# 3. CONFIGURED PROGRAMS {{{
-################################################################################
-##### Programs
-################################################################################
-  programs = {
-    nix-ld.enable = true;
-    dconf.enable = true;
-
-    wireshark.enable = true;
-    wireshark.package = pkgs.wireshark;
-
-  };
-
-  environment.etc."asdf-vm/asdf.sh".source = "${pkgs.asdf-vm}/share/asdf-vm/asdf.sh";
-# }}}
 
 
 # 6. OTHERS {{{
@@ -52,57 +37,9 @@ in {
 
   security = {
     polkit.enable = true;
-    pam.services.swaylock = {};
   };
 
 
-  virtualisation = {
-    docker.enable = true;
-    libvirtd.enable = true;
-  };
-
-  documentation.dev.enable = true;
-
-
-
- # Copy the NixOS configuration file and link it from the resulting system
-  # (/run/current-system/configuration.nix). This is useful in case you
-  # accidentally delete configuration.nix.
-  # system.copySystemConfiguration = true;
-
-
-
-
-# }}}
-
-
-  environment.systemPackages = with pkgs; [
-    pinentry-curses
-    cryptsetup
-    ollama
-    obs-studio
-    tor-browser-bundle-bin
-
-    wl-color-picker
-
-
-    (floorp.override {
-      nativeMessagingHosts = with pkgs; [
-        tridactyl-native
-      ];
-    })
-    weylus
-    zoom-us
-    pulseaudioFull
-    # kdePackages.kde-cli-tools  # looks like libreoffice kde-open5: command not found
-    (pkgs.writeShellScriptBin "kde-open5" ''
-      xdg-open "$@"
-    '')
-  ];
-
-  programs.adb.enable = true;
-  users.users.heyzec.extraGroups = [ "adbusers" ];
-  hardware.opentabletdriver.enable = true;
 
   services.fprintd.enable = true;
 
@@ -115,6 +52,5 @@ in {
   # https://discourse.nixos.org/t/nixos-unstable-fprintd-fingerprint-reader-issues/33273/2
   # services.fprintd.tod.driver = pkgs.libfprint-2-tod1-goodix;
 
-  virtualisation.vmware.host.enable = true;
 }
 
