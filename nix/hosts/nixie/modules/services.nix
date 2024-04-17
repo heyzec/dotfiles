@@ -4,14 +4,7 @@
 { pkgs, ... }:
 {
   services = {
-    dbus = {
-      enable = true;
-    };
-
-
     thermald.enable = true;
   };
-
-
 }
 
