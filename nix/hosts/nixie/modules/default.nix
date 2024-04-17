@@ -5,7 +5,6 @@
     ./neovim.nix
     ./packages.nix
     ./power.nix
-    ./waybar.nix
     ./services.nix
     ./shell.nix
     ./users.nix
