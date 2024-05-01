@@ -77,7 +77,6 @@ in {
 
 
   environment.systemPackages = with pkgs; [
-    pinentry-curses
     cryptsetup
     ollama
     obs-studio
