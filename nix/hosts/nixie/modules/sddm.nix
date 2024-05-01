@@ -6,11 +6,13 @@
       layout = "us";
       variant = "";
     };
-    displayManager.sddm = {
-      enable = true;
-      theme = "${import ../../../packages/sddm-theme/sddm-theme.nix { inherit pkgs; }}";
-    };
   };
+
+  services.displayManager.sddm = {
+    enable = true;
+    theme = "${import ../../../packages/sddm-theme/sddm-theme.nix { inherit pkgs; }}";
+  };
+
   environment.systemPackages = with pkgs; [
     # The sugar-dark theme requires these dependencies:
     libsForQt5.qt5.qtquickcontrols2
