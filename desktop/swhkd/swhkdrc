@@ -2,12 +2,11 @@
 super + enter
     foot
 
-# ## Launch // Command // <><Shift> Space ##
+## Launch // Command Launcher // <><Ctrl> Enter ##
 super + control + return
     notify-send "Quick Run" "$(rofi -show run)"
 
-## Launch // Browser // <><Shift> Enter ##
-
+# ## Launch // Application Launcher // <> Space ##
 super + space
     rofi -show drun
 
@@ -77,7 +76,7 @@ Shift+@Print
     grim -g "$(slurp)" - | swappy -f -
 
 
-
+## Launch // Logout Menu // <><Shift><Esc> ##
 super + shift + escape
     @enter system && wlogout -p layer-shell
 mode system
@@ -102,8 +101,10 @@ super + grave
     @enter applications && sh -c 'echo "Launch: [b]rowser [f]iles [m]essages" > /tmp/mode && pkill -35 waybar'
 
 mode applications
+## Launch // Browser // <><Grave> b ##
 b
     @escape && gtk-launch $(xdg-settings get default-web-browser) && echo "" > /tmp/mode && pkill -35 waybar
+## Launch // File Explorer // <><Grave> f ##
 f
     @escape && thunar && echo "" > /tmp/mode && pkill -35 waybar
 m
