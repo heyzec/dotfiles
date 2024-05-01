@@ -26,7 +26,8 @@
     # ----- USER SETTINGS ----- #
     userSettings = {
       username = "heyzec";
-      dotfilesDir = "~/dotfiles";  # path to dotfiles repo, good to start with ~
+      dotfilesDir = "~/dotfiles";              # path to dotfiles repo, used by vm (good to start with ~)
+      flakeDir = "/home/heyzec/dotfiles/nix";  # path to flake repo, used by nh
     };
 
     # Needed by home manager in standalone mode
@@ -52,7 +53,7 @@
   {
     nixosConfigurations = {
       # The standard configuration (home manager standalone)
-      "nixos" = inputs.nixpkgs.lib.nixosSystem {
+      "nixie" = inputs.nixpkgs.lib.nixosSystem {
         modules = [
           nixpkgs-overlay-stable
           ./hosts/nixie
@@ -71,7 +72,7 @@
       };
 
       # The configuration for build-vm (home manager as a module)
-      "nixos-vm" = inputs.nixpkgs.lib.nixosSystem {
+      "nixie-vm" = inputs.nixpkgs.lib.nixosSystem {
         modules = [
           nixpkgs-overlay-stable
           ./hosts/nixie
@@ -119,7 +120,7 @@
 
 
     homeConfigurations = {
-      "user" = inputs.home-manager.lib.homeManagerConfiguration {
+      "heyzec" = inputs.home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
         modules = [
           nixpkgs-overlay-stable
