@@ -3,7 +3,6 @@ return {
     -- https://github.com/nvim-treesitter/nvim-treesitter/issues/4945#issuecomment-1691168369
     {
         "nvim-treesitter/nvim-treesitter",
-        commit = "f2778bd1a28b74adf5b1aa51aa57da85adfa3d16",
         build = ":TSUpdate",
 
         event = vim.g.vscode and nil or { "LazyFile", "VeryLazy" },
@@ -22,7 +21,6 @@ return {
         dependencies = {
             {
                 "nvim-treesitter/nvim-treesitter-textobjects",
-                commit = "35a60f093fa15a303874975f963428a5cd24e4a0",
                 cond = true,
                 config = function()
                 end,

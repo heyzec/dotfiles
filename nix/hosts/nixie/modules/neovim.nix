@@ -1,16 +1,8 @@
-{ lib, pkgs, ... }:
+{ pkgs, ... }:
 {
   programs = {
     neovim = {
-      package = pkgs.neovim-unwrapped.overrideAttrs (finalAttrs: previousAttrs: {
-        nativeBuildInputs = previousAttrs.nativeBuildInputs ++ [ pkgs.makeWrapper ];
-        postFixUp = ''
-          wrapProgram $out/bin/nvim \
-            --prefix PATH : ${lib.makeBinPath [ pkgs.cargo ]}
-          exit 1
-        '';
-      });
-
+      package = pkgs.neovim-unwrapped;
 
       enable = true;
       defaultEditor = true;
@@ -24,7 +16,14 @@
   };
 
 
+  # Add LSPs here
+  # NOTE: If would like to make these binaries not available system-wide and only in neovim,
+  # will need to create wrapper around neovim package (not override!) to avoid rebuilds
   environment.systemPackages = with pkgs; [
+    # == NixOS ==
+    nil          # LSP for nix
+    nixpkgs-fmt  # External formatter used by nil
+
     shellcheck
     nodePackages.bash-language-server
   ];
