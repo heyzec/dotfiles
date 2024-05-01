@@ -61,13 +61,13 @@
     dex                    # XDG autostarter
     dunst                  # notification daemon
     foot                   # terminal emulator
+    hypridle               # idle management daemon
     libnotify              # library needed for dunst, a notification daemon
     playerctl              # media control
     rofi-wayland           # application launcher
     swaybg                 # wallpaper setter for wayland
-    swayidle               # idle management daemon
     swaylock-effects       # screen locker for sway
-    wlogout                # logout menu
+    # wlogout                # logout menu
 
     # flameshot               # screen capture
     grim                   # grab an image

@@ -9,6 +9,7 @@
     ./nix.nix
     ./neovim.nix
     ./packages.nix
+    ./power.nix
     ./waybar.nix
     ./postgresql.nix
     ./services.nix
