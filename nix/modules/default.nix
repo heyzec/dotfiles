@@ -1,5 +1,6 @@
+{ lib, ... }:
 {
-  imports = [
-    ./power.nix
-  ];
+  imports = lib.heyzec.umport {
+    path = ./.;
+  };
 }

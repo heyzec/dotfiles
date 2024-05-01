@@ -30,6 +30,13 @@
       flakeDir = "/home/heyzec/dotfiles/nix";  # path to flake repo, used by nh
     };
 
+    # Override lib with custom utilities
+    # https://github.com/bangedorrunt/nix/blob/tdt/flake.nix#L94-L97
+    mkLib = nixpkgs:
+      nixpkgs.lib.extend
+      (self: super: {heyzec = import ./lib { inherit pkgs; lib = self; }; } // inputs.home-manager.lib);
+    lib = mkLib inputs.nixpkgs;
+
     # Needed by home manager in standalone mode
     pkgs = import inputs.nixpkgs {
       system = systemSettings.system;
@@ -67,6 +74,7 @@
         ];
         specialArgs = {
           inherit inputs;
+          inherit lib;
           inherit systemSettings;
           inherit userSettings;
         };

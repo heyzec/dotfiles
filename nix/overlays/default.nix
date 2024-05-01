@@ -1,7 +1,7 @@
+{ lib, ... }:
 {
-  imports = [
-    ./ctpv.nix
-    ./swhkd.nix
-  ];
+  imports = lib.heyzec.umport {
+    path = ./.;
+    exclude = [ "utils.nix" ];
+  };
 }
-
