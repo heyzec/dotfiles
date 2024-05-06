@@ -1,28 +1,41 @@
 { pkgs, ... }:
+let
+  name = "ddns";
+  description = "Update DDNS entry for heyzec.mooo.com";
+  ddns_updater = /* bash */ ''
+      msg=$(${pkgs.wget}/bin/wget -q -O - https://freedns.afraid.org/dynamic/update.php?${(import ./ddns.crypt.nix).api-key})
+      echo $msg
+
+      if $(echo $msg | grep -q 'ERROR: Address .* has not changed.'); then
+        exit 0
+      fi
+
+      exit 1
+    '';
+in
 {
   # Update DDNS entry for heyzec.mooo.com
-  systemd.services."dns" = {
-    path = with pkgs; [
-      iproute2
-      gnugrep
-      wget
-    ];
-    script = ''
-      /home/pi/router-scripts/check_router.sh && /home/pi/router-scripts/ddns_updater.sh
-    '';
-    serviceConfig = {
-      WorkingDirectory = "/home/pi";
-      Type = "oneshot";
+  systemd.services = {
+    ${name} = {
+      inherit description;
+      onFailure = [ "notify-failure@%n.service" ];
+      serviceConfig = {
+        Type = "oneshot";
+      };
+      script = ddns_updater;
     };
   };
-  systemd.timers."dns" = {
-    wantedBy = [ "timers.target" ];
-    timerConfig = {
-      OnCalendar = "";
-      RandomizedDelaySec = 30;
-      Unit = "dns.service";
-    };
-  };
-# 1,31 * * * * /home/pi/router-scripts/check_router.sh && /home/pi/router-scripts/ddns_updater.sh
-}
 
+  systemd.timers = {
+    ${name} = {
+      inherit description;
+      timerConfig = {
+        # Every 15 minutes
+        OnCalendar = "*:0/15";
+        RandomizedDelaySec = 30;
+        Unit = "${name}.service";
+      };
+      wantedBy = [ "timers.target" ];
+    };
+  };
+}
