@@ -38,5 +38,14 @@
       };
     };
   };
+
+  systemd.services = {
+    "btrbk-data" = {
+      onFailure = [ "notify-failure@%n.service" ];
+    };
+    "btrbk-home" = {
+      onFailure = [ "notify-failure@%n.service" ];
+    };
+  };
 }
 
