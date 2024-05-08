@@ -14,9 +14,9 @@
     insomnia    # REST API client
 
     ##### Applications: Communication Utilities
-    telegram-desktop    # Telegram client
-    webcord             # Alternative Discord client
-    whatsapp-for-linux  # unofficial client
+    telegram-desktop-gtk  # Telegram client (patched to use GTK3 over QT filepicker, see overlays)
+    webcord               # Alternative Discord client
+    whatsapp-for-linux    # unofficial client
     # zoom              # Zoom client
     teams-for-linux
     slack

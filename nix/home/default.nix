@@ -1,6 +1,8 @@
 { inputs, ... }:
 {
   imports = [
+    ../overlays
+
     inputs.nix-colors.homeManagerModules.default
     ./firefox.nix
     ./home.nix
