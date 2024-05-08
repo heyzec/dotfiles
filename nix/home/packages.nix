@@ -16,7 +16,7 @@
 
     pdfsam-basic           # PDF editing
     xournalpp        # tablet notetaking software
-    stable.joplin-desktop
+    joplin-desktop
 
 
     # [Specialised CTF Tools]
@@ -28,9 +28,7 @@
 
     dbeaver-bin
 
-    flavours
-
-    waypaper killall
+    waypaper
 
     ticktick
     linux-wifi-hotspot
