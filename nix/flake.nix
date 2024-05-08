@@ -48,47 +48,59 @@
     # This allows us to access stable packages:
     # - unstable: pkgs.<program>
     # - stable:   pkgs.stable.<program>
-    overlay-stable = final: prev: {
-      stable = import inputs.nixpkgs-stable {
-        system = systemSettings.system;
-        config.allowUnfree = true;
-      };
-    };
-    nixpkgs-overlay-stable = ({ config, pkgs, ... }: { nixpkgs.overlays = [ overlay-stable ]; });
+    nixpkgs-stable-module = ({
+      nixpkgs.overlays = [
+        (final: prev: {
+          stable = import inputs.nixpkgs-stable {
+            system = systemSettings.system;
+            config.allowUnfree = true;
+          };
+        })
+      ];
+    });
 
+    label-generation-module = ({
+      system.nixos.label =
+      if self.sourceInfo ? lastModifiedDate && self.sourceInfo ? shortRev
+      then "${inputs.nixpkgs.lib.substring 0 8 self.sourceInfo.lastModifiedDate}.${self.sourceInfo.shortRev}"
+      else inputs.nixpkgs.lib.warn "Repo is dirty, revision will not be available in system label" "dirty";
+      });
+
+    # Additional pass these arguments to each module
+    customArgs = {
+      inherit inputs;
+      inherit lib;
+    };
+
+    customSettings = {
+      inherit systemSettings;
+      inherit userSettings;
+    };
   in
   {
     nixosConfigurations = {
       # The standard configuration (home manager standalone)
       "nixie" = inputs.nixpkgs.lib.nixosSystem {
+        specialArgs = customArgs // customSettings;
         modules = [
-          nixpkgs-overlay-stable
           ./modules
           ./hosts/nixie
-          ({
-            system.nixos.label = 
-            if self.sourceInfo ? lastModifiedDate && self.sourceInfo ? shortRev
-            then "${inputs.nixpkgs.lib.substring 0 8 self.sourceInfo.lastModifiedDate}.${self.sourceInfo.shortRev}"
-            else inputs.nixpkgs.lib.warn "Repo is dirty, revision will not be available in system label" "dirty";
-          })
+          nixpkgs-stable-module
+          label-generation-module
         ];
-        specialArgs = {
-          inherit inputs;
-          inherit lib;
-          inherit systemSettings;
-          inherit userSettings;
-        };
       };
 
       # The configuration for build-vm (home manager as a module)
       "nixie-vm" = inputs.nixpkgs.lib.nixosSystem {
+        specialArgs = customArgs;
         modules = [
-          nixpkgs-overlay-stable
           ./modules
           ./hosts/nixie
+          nixpkgs-stable-module
           inputs.home-manager.nixosModules.home-manager
           ({
             home-manager = {
+              extraSpecialArgs = customArgs // customSettings;
               users = {
                 ${userSettings.username} = {
                   imports = [
@@ -98,33 +110,19 @@
               };
               useGlobalPkgs = true;
               useUserPackages = true;
-              extraSpecialArgs = {
-                inherit inputs;
-                inherit systemSettings;
-                inherit userSettings;
-              };
             };
           })
         ];
-        specialArgs = {
-          inherit inputs;
-          inherit systemSettings;
-          inherit userSettings;
-        };
       };
 
       "homelab" = inputs.nixpkgs-stable.lib.nixosSystem {
         system = "aarch64-linux";
-
         modules = [
+          ./modules
           ./hosts/homelab
           inputs.nixos-hardware.nixosModules.raspberry-pi-4
         ];
-        specialArgs = {
-          inherit inputs;
-          inherit systemSettings;
-          inherit userSettings;
-        };
+        specialArgs = customArgs // customSettings;  # TODO: Remove irrelevant settings
       };
     };
 
@@ -132,16 +130,11 @@
     homeConfigurations = {
       "heyzec" = inputs.home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
+        extraSpecialArgs = customArgs // customSettings;
         modules = [
-          nixpkgs-overlay-stable
-          # stylix.homeManagerModules.stylix ./home/home.nix
           ./home
+          nixpkgs-stable-module
         ];
-        extraSpecialArgs = {
-          inherit inputs;
-          inherit systemSettings;
-          inherit userSettings;
-        };
       };
     };
   };

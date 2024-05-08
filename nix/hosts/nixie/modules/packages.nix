@@ -4,13 +4,6 @@
     ##### Command-line Utilities
     ################################################################################
 
-    ##### Command line utilities: Basics #####
-    git
-    gnupg
-    wget
-    zip unzip
-    tmux
-
     ##### Command line utilities: Hardware drivers related #####
     bluez               # bluetooth related commands (e.g. bluetoothctl)
     brightnessctl       # backlight control
@@ -23,8 +16,6 @@
     virtiofsd           # additional driver for shared directory virtualisation (VMs)
 
     ##### Command line utilities: Terminal #####
-    ctpv                # file previewer for lf, with image support
-    lf                  # terminal file manager
     neofetch            # terminal system info display
     nix-output-monitor  # prettify nix command outputs
 

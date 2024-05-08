@@ -1,4 +1,4 @@
-{ pkgs, userSettings, ... }: {
+{ userSettings, ... }: {
 ################################################################################
 ##### User Accounts
 ################################################################################
@@ -19,7 +19,6 @@
       "ic2"              # Control /dev/i2c-* devices
       "wireshark"
     ];
-    shell = pkgs.zsh;
     hashedPassword = (import ./users.crypt.nix).hashedPassword;
   };
 }
