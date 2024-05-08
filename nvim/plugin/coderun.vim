@@ -70,14 +70,22 @@ endfunction
 
 function! TermGetFirst()
     " Returns the bufnr of the first terminal
-    return uniq(map(filter(getwininfo(), 'v:val.terminal'), 'v:val.bufnr'))[0]
+    let jobs = filter(getwininfo(), 'v:val.terminal')
+    if len(jobs) == 0
+        return v:null
+    endif
+    return uniq(map(jobs, 'v:val.terminal'), 'v:val.bufnr'))[0]
 endfunction
 
 
 function! TermExec(bufnr, cmd)
     " Send command to the the terminal buffer
     if has('nvim')
-        let jobid = filter(nvim_list_chans(), 'v:val.mode == "terminal" && v:val.buffer == ' . a:bufnr)[0]['id']
+        let jobs = filter(nvim_list_chans(), 'v:val.mode == "terminal" && v:val.buffer == ' . a:bufnr)
+        if len(jobs) == 0
+            return
+        endif
+        let jobid = jobs[0]['id']
         call chansend(jobid, [a:cmd, ''])
     else
         call term_sendkeys(a:bufnr, a:cmd . "\<CR>")

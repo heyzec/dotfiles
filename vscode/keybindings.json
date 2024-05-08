@@ -9,22 +9,6 @@
     // ##                                                                           ##
     // ###############################################################################
 
-    // -----------------------Escape mapping------------------------
-    // jk as escape (side-effect: jj, kk and kj also will be mapped)
-    // See https://github.com/vscode-neovim/vscode-neovim#composite-escape-keys
-    {
-        "command": "vscode-neovim.compositeEscape1",
-        "key": "j",
-        "when": "neovim.mode == insert && editorTextFocus",
-        "args": "j"
-    },
-    {
-        "command": "vscode-neovim.compositeEscape2",
-        "key": "k",
-        "when": "neovim.mode == insert && editorTextFocus",
-        "args": "k"
-    },
-
     // --------------------Restore Ctrl+C as copy-------------------
     // This makes insert mode behave more like VSCode without neovim plugin
     {

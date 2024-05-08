@@ -57,7 +57,7 @@ set listchars=tab:\|\ ,trail:·,nbsp:⎵           " tabs, non-breaking spaces, 
 if !has('g:vscode')
     augroup visualise_chars
         autocmd!
-        " only show eol when in visual mode
+        " only show eol when in insert mode
         autocmd ModeChanged n:[vV] set listchars+=eol:↲
         autocmd ModeChanged [vV]:n set listchars-=eol:↲
     augroup end

@@ -64,7 +64,7 @@ utils_mapdesc('<leader>fd',
     "Telescope diagnostics")
 
 if not vim.g.vscode then
-    utils_mapdesc('<leader>fr',  telescope.resume,  "Telescope resume")
+    utils_mapdesc('<leader>fr', telescope.resume,   "Telescope resume")
     utils_mapdesc('<leader>fm', telescope.marks,    "Telescope marks")
     utils_mapdesc('<leader>fk', telescope.keymaps,  "Telescope keymaps")
     utils_mapdesc('<leader>fu', require('telescope').extensions.undo.undo, "Telescope undo")
@@ -91,19 +91,19 @@ utils_mapdesc(
 -- See :help *g* for g-prefixed default keymaps
 utils_mapdesc(
     '<leader>gd',
-    conditional(telescope.lsp_definitions, vscode('editor.action.revealDefinition')),
+    conditional(telescope and telescope.lsp_definitions, vscode('editor.action.revealDefinition')),
     'LSP: [G]oto [D]efinition')
 utils_mapdesc(
     '<leader>gr',
-    conditional(telescope.lsp_references, vscode('editor.action.goToReferences')),
+    conditional(telescope and telescope.lsp_references, vscode('editor.action.goToReferences')),
     'LSP: [G]oto [R]eferences')
 utils_mapdesc(
     '<leader>gt',
-    conditional(telescope.lsp_type_definitions, vscode('editor.action.goToTypeDefinition')),
+    conditional(telescope and telescope.lsp_type_definitions, vscode('editor.action.goToTypeDefinition')),
     'LSP: [G]oto [T]ype definition')
 utils_mapdesc(
     '<leader>gi',
-    conditional(telescope.lsp_implementations, vscode('editor.action.goToImplementation')),
+    conditional(telescope and telescope.lsp_implementations, vscode('editor.action.goToImplementation')),
     'LSP: [G]oto [I]mplementation')
 
 -- ----------------------------Code editing----------------------------

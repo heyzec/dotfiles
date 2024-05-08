@@ -5,6 +5,14 @@
   // ##                                                                           ##
   // ###############################################################################
 
+  // -----------------------Escape mapping------------------------
+  // See https://github.com/vscode-neovim/vscode-neovim#composite-escape-keys
+  "vscode-neovim.compositeKeys": {
+    "jk": {
+      "command": "vscode-neovim.escape"
+    }
+  },
+
   // Make vscode-neovim extension run in a separate thread
   // https://github.com/vscode-neovim/vscode-neovim/issues/1051
   "extensions.experimental.affinity": {

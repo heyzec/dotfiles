@@ -14,6 +14,9 @@ return {
     cmd = "Mason",
     event = "BufReadPre",
     config = function()
+        -- IMPORTANT: make sure to setup neodev BEFORE lspconfig
+        require('neodev').setup({})
+
         local mason = require('mason')
         local mason_lspconfig = require('mason-lspconfig')
         local mason_tool_installer = require('mason-tool-installer')
