@@ -87,6 +87,10 @@ in {
         tridactyl-native
       ];
     })
+    # kdePackages.kde-cli-tools  # looks like libreoffice kde-open5: command not found
+    (pkgs.writeShellScriptBin "kde-open5" ''
+      xdg-open "$@"
+    '')
   ];
 
   programs.adb.enable = true;
