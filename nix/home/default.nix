@@ -6,16 +6,18 @@
     inputs.nix-colors.homeManagerModules.default
     ./AutoArchiver.nix
     ./firefox.nix
-    ./home.nix
+    ./fonts.nix
     ./gtk.nix
+    ./home.nix
     ./joplin.nix
-    ./symlinks.nix
-    ./thunar.nix
     ./mime.nix
     ./packages.nix
     ./services.nix
+    ./symlinks.nix
     ./systemd.nix
     ./theming.nix
+    ./thunar.nix
+    ./vscode.nix
   ];
 
   colorScheme = inputs.nix-colors.colorSchemes.gruvbox-dark-medium;

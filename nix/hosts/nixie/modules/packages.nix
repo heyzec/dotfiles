@@ -28,6 +28,7 @@
     ##### Command line utilities: Downloads, Backups, Encryption #####
     git-crypt           # encrypt files in a git repository
     gocryptfs           # file-based encryption as a mountable FUSE filesystem
+    (callPackage ../../../packages/gocryptfs-scripts.nix {})
     rclone              # manage files on cloud storage
     restic              # push-based backup tool
     wireguard-tools     # tools for configuring wireguard, a VPN protocol (e.g. wg, wg-quick)
@@ -79,10 +80,6 @@
     ##### Theming #####
     lxappearance        # GTK+ theme switcher
     themechanger
-    # whitesur-gtk-theme  # MacOS Big Sur like theme
-    # whitesur-icon-theme # MacOS Big Sur style icon theme
-    vimix-icon-theme
-    gnome.adwaita-icon-theme
 
 
     ################################################################################
@@ -111,6 +108,10 @@
     gimp             # image editing suite
     inkscape         # vector graphics editor
     libreoffice-qt   # alternative to MS Office
+    # Fix for kde-open5: command not found when opening links in libreoffice
+    (pkgs.writeShellScriptBin "kde-open5" ''
+      xdg-open "$@"
+    '')
     vscode           # IDE-like text editor
 
     ##### Others #####
@@ -168,4 +169,9 @@
     # mission-center
     # etcher (disabled until updated)
   ];
+
+  programs = {
+    wireshark.enable = true;
+    wireshark.package = pkgs.wireshark;
+  };
 }

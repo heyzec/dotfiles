@@ -22,6 +22,10 @@
       fzf
       ripgrep
       zoxide
+      eza
+      bat
+      bat-extras.batman
+
 
       tmux
       ctpv # file previewer for lf, with image support
@@ -35,6 +39,9 @@
       xxd
       file
       pstree
+
+      diffr
+      lazygit
 
       ##### Network Diagnostics #####
       nmap # port scanner
