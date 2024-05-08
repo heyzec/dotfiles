@@ -29,7 +29,9 @@ tooltip label {
 
 #workspaces, #window, #traymore,
 #audio, #disk, #network,
-#battery, #hardware, #clock {
+#battery, #hardware, #clock,
+#privacy
+{
     padding: 6px 10px;
     margin: 0 0px;
     color: @base07;
@@ -91,6 +93,11 @@ tooltip label {
 }
 
 /** #################### MODULES RIGHT ####################  **/
+#privacy {
+    background: orange;
+    color: white;
+}
+
 #idle_inhibitor, #pulseaudio,
 #cpu, #memory, #temperature, #backlight, #keyboard-state {
     padding: 0px 3px;

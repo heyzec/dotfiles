@@ -16,7 +16,7 @@
         "hyprland/window",
     ],
     "modules-right": [
-        // "privacy", add this module when next release arrives
+        "privacy",
         "group/audio",
         "disk",
         "network",
@@ -173,29 +173,25 @@
         "format-alt": "{icon} {ifname}: {ipaddr}/{cidr} {bandwidthDownBytes}",
         "tooltip-format": "{ifname} via {gwaddr}",
         // nf-md-ethernet
-        "format-ethernet": "{ipaddr}/{cidr} 󰈀",
+        "format-ethernet": "󰈀 {ipaddr}/{cidr}",
         // nf-md-help_network
-        "format-linked": "{ifname} (No IP) 󰛵",
+        "format-linked": "󰛵 {ifname} (No IP)",
         // nf-md-wifi_strength_off_outline
-        "format-disconnected": "Disconnected 󰤮",
+        "format-disconnected": "󰤮 Disconnected",
         // nf-md-wifi_strength_{outline, 1, 2, 3, 4}
         "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"]
     },
 
-    "pulseaudio": {
-        "format": "{icon} {volume}% {format_source}",
+    "pulseaudio#speaker": {
+        "format": "{icon} {volume}%",
         // nf-md-volume_off
-        "format-muted": "󰖁 {format_source}",
-
+        "format-muted": "󰖁",
         // nf-md-bluetooth
-        "format-bluetooth": "{icon}󰂯 {volume}% {format_source}",
-        "format-bluetooth-muted": "{icon} {format_source}",
+        "format-bluetooth": "{icon}󰂯 {volume}%",
+        "format-bluetooth-muted": "{icon}",
 
-        // nf-fa-microphone
-        "format-source": " {volume}%",
-        // nf-fa-microphone_slash
-        "format-source-muted": "",
-
+        "on-click": "wpctl set-mute @DEFAULT_SINK@ toggle",
+        "max-volume": 150,
         "format-icons": {
             // nf-fa-headphones
             "headphone": "",
@@ -208,8 +204,18 @@
             // nf-fa-volume_{off,down,up}
             "default": ["", "", ""]
         },
-        "on-click": "wpctl set-mute @DEFAULT_SINK@ toggle",
-        "max-volume": 150,
+    },
+    "pulseaudio#microphone": {
+        "format": "{format_source}",
+        // nf-fa-microphone
+        "format-source": " {volume}%",
+        // nf-fa-microphone_slash
+        "format-source-muted": "",
+        "on-click": "wpctl set-mute @DEFAULT_SOURCE@ toggle",
+        "on-scroll-up": "wpctl set-volume @DEFAULT_SOURCE@ 1%+ --limit 1.5",
+        "on-scroll-down": "wpctl set-volume @DEFAULT_SOURCE@ 1%-",
+        // Otherwise, shows {desc} for speakers
+        "tooltip": false,
     },
 
     "group/traymore": {
@@ -231,7 +237,8 @@
         "orientation": "inherit",
         "modules": [
             "idle_inhibitor",
-            "pulseaudio"
+            "pulseaudio#speaker",
+            "pulseaudio#microphone",
         ]
     },
 
@@ -243,6 +250,27 @@
             "temperature",
             "backlight",
             "keyboard-state",
+        ]
+    },
+
+    "privacy": {
+        "icon-size": 16,
+        "modules": [
+            {
+                "type": "screenshare",
+                "tooltip": true,
+                "tooltip-icon-size": 24
+            },
+            {
+                "type": "audio-out",
+                "tooltip": true,
+                "tooltip-icon-size": 24
+            },
+            {
+                "type": "audio-in",
+                "tooltip": true,
+                "tooltip-icon-size": 24
+            },
         ]
     },
 
