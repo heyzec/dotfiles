@@ -85,6 +85,7 @@
   "[typescriptreact]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
+  "diffEditor.renderSideBySide": false,
 
 
   // ###############################################################################
@@ -92,4 +93,11 @@
   // ##                           4. EXTENSIONS SETTINGS                          ##
   // ##                                                                           ##
   // ###############################################################################
+
+  // ext install waderyan.gitblame
+  "gitblame.inlineMessageEnabled": true,
+  "gitblame.inlineMessageFormat": "${author.name} (${time.ago})",
+  "gitblame.statusBarMessageFormat": "${commit.summary}"
 }
+// Unfortunately we cannot rename the file extension to jsonc
+// vim: filetype=jsonc
