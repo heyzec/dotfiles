@@ -24,6 +24,7 @@
     nil          # LSP for nix
     nixpkgs-fmt  # External formatter used by nil
 
+    clang-tools_16  # for C++ LSP - clangd
     shellcheck
     nodePackages.bash-language-server
   ];

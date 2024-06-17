@@ -4,6 +4,9 @@
     ##### Command-line Utilities
     ################################################################################
 
+    ##### Command line utilities: Basics #####
+    gnupg
+
     ##### Command line utilities: Hardware drivers related #####
     bluez               # bluetooth related commands (e.g. bluetoothctl)
     brightnessctl       # backlight control
@@ -16,8 +19,7 @@
     virtiofsd           # additional driver for shared directory virtualisation (VMs)
 
     ##### Command line utilities: Terminal #####
-    neofetch            # terminal system info display
-    nix-output-monitor  # prettify nix command outputs
+    fastfetch           # terminal system info display
 
     ##### Command line utilities: System #####
     btdu                # disk usage profiler for btrfs
@@ -31,9 +33,6 @@
     wireguard-tools     # tools for configuring wireguard, a VPN protocol (e.g. wg, wg-quick)
     yt-dlp              # download youtube videos
 
-    ##### Command line utilities: Network Diagnostics #####
-    nmap                # port scanner
-    traceroute          # track route taken by packets
 
     ##### Command line utilities: Others #####
     imagemagick         # edit image files (e.g. convert)
@@ -124,7 +123,7 @@
     flatpak           # handle Flatpaks
 
     ##### Containerisation and Virtualisation #####
-    qemu_full              # create virtual machines
+    qemu                   # create virtual machines
     virt-manager           # frontend for qemu
     distrobox
 
@@ -145,8 +144,6 @@
     python311Packages.pip # package manager for python libraries
 
     ##### Languages, package and version managers #####
-    gnumake
-    gcc
     # rbenv      # version manager tool for Ruby
     # nodenv     # version manager tool for nodeJS
     # yarn
@@ -156,8 +153,6 @@
     clang-tools_16  # for C++ LSP - clangd
 
     ##### Other Tools #####
-    gdb         # GNU Debugger for C/C++
-    valgrind    # memory leak detection tool
 
 
 

@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, inputs, ... }:
+{ config, pkgs, inputs, lib, ... }:
 let
 in {
 
@@ -31,15 +31,12 @@ in {
 ##### Programs
 ################################################################################
   programs = {
-    nix-ld.enable = true;
     dconf.enable = true;
 
     wireshark.enable = true;
     wireshark.package = pkgs.wireshark;
 
   };
-
-  environment.etc."asdf-vm/asdf.sh".source = "${pkgs.asdf-vm}/share/asdf-vm/asdf.sh";
 # }}}
 
 
