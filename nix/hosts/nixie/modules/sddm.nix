@@ -18,6 +18,7 @@ in
   services.displayManager.sddm = {
     enable = true;
     theme = "sugar-dark";
+    wayland.enable = true;
   };
 
   environment.systemPackages = with pkgs; [

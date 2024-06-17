@@ -91,6 +91,8 @@ in {
     (pkgs.writeShellScriptBin "kde-open5" ''
       xdg-open "$@"
     '')
+
+    lazygit
   ];
 
   programs.adb.enable = true;

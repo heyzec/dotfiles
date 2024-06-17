@@ -54,7 +54,17 @@
     hypridle               # idle management daemon
     libnotify              # library needed for dunst, a notification daemon
     playerctl              # media control
-    rofi-wayland           # application launcher
+    # rofi-wayland           # application launcher
+
+    (pkgs.rofi-wayland.override {
+      plugins = [
+        (pkgs.rofi-calc.override {
+          rofi-unwrapped = rofi-wayland-unwrapped;
+        })
+      ];
+    })
+
+
     swaybg                 # wallpaper setter for wayland
     swaylock-effects       # screen locker for sway
     # wlogout                # logout menu
