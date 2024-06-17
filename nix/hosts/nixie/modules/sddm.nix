@@ -1,4 +1,11 @@
-{ pkgs, ... }:
+{ pkgs, ... }: let
+  imgLink = "https://wallpaperaccess.com/full/674253.png";
+
+  image = pkgs.fetchurl {
+    url = imgLink;
+    sha256 = "sha256-SLEh6PSkBxsPAzkJyUTaVGFVh51wqI9zJN7ekGZLrfU=";
+  };
+in
 {
   services.xserver = {
     enable = true;
@@ -10,13 +17,15 @@
 
   services.displayManager.sddm = {
     enable = true;
-    theme = "${import ../../../packages/sddm-theme/sddm-theme.nix { inherit pkgs; }}";
+    theme = "sugar-dark";
   };
 
   environment.systemPackages = with pkgs; [
-    # The sugar-dark theme requires these dependencies:
-    libsForQt5.qt5.qtquickcontrols2
-    libsForQt5.qt5.qtgraphicaleffects
+    (sddm-sugar-dark.override {
+      themeConfig = {
+        Background = image;
+      };
+    })
   ];
 }
 
