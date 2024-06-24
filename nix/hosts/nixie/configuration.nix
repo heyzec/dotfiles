@@ -94,6 +94,8 @@ in {
 
     lazygit
     diffr
+
+    (import ../../packages/unlock.nix { inherit pkgs; } )
   ];
 
   programs.adb.enable = true;
