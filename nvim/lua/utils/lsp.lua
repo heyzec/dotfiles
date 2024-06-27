@@ -1,6 +1,18 @@
 local M = {}
 
 
+        -- local lspconfig = require('lspconfig')
+        -- -- See https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
+        -- lspconfig.nil_ls.setup {
+        --     settings = {
+        --         ['nil'] = {
+        --             formatting = {
+        --                 command = { "nixpkgs-fmt" },
+        --             }
+        --         }
+        --
+        --     }
+        -- }
 -- Define configs for each specific language here
 M.servers = {
   -- clangd = {},
