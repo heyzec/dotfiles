@@ -20,8 +20,6 @@ endif
 " for mapping jk to Esc in vscode-neovim
 if !exists('g:vscode')
     inoremap <silent> jk <Esc><Right>
-    " Avoid using capslock-map-to-esc in vim
-    inoremap <Esc> <Nop>
 endif
 
 set mouse=a                                     " enable mouse in all modes
@@ -80,9 +78,11 @@ set hlsearch                                    " highlight text while searching
 if has('nvim')
     set inccommand=nosplit                      " visual feedback while substituting
 endif
+
 " Allow quick clearing of highlighted search results
 " Using <Esc><Esc> as a vim mapping is glitchy, see online for reasons
 nnoremap <leader><Esc> :nohlsearch<CR>
+autocmd! InsertEnter * call feedkeys("\<Cmd>noh\<cr>" , 'n') " close hlsearch when typing (idea: siuoly)
 
 set wildmenu                                    " enable command line completion (default in nvim)
 set wildmode=longest:full,full                  " don't default to 1st option e.g. `:e` (like bash)
@@ -98,6 +98,7 @@ set shiftwidth=4                                " use 4 spaces width for indents
 set expandtab                                   " insert 4 spaces when tab pressed
 
 " ---------------------------Others---------------------------
+set pumheight=10                                " limit popup menu height to 10
 if has('nvim')                                  " vim and nvim uses different undofiles
     set undofile                                " enable persistent undo
     set undodir=/tmp                            " undo temp file directory
@@ -267,4 +268,13 @@ endfunction
 
 " }}} 4. THINGS THAT SHOULD BE PLUGINS
 
-
+" In later neovim versions, these will be deprecated, use vim.lsp.diagnostic.config()
+" instead. See :h diagnostic-signs
+" nf-fa-times_circle
+sign define DiagnosticSignError text= texthl=DiagnosticSignError linehl= numhl=
+" nf-fa-warning
+sign define DiagnosticSignWarn text= texthl=DiagnosticSignWarn linehl= numhl=
+" nf-fa-info_circle
+sign define DiagnosticSignInfo text= texthl=DiagnosticSignInfo linehl= numhl=
+" nf-fa-lightbulb
+sign define DiagnosticSignHint text= texthl=DiagnosticSignHint linehl= numhl=

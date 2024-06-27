@@ -1,6 +1,6 @@
 return {
     -- Provide code completion menu
-    "hrsh7th/nvim-cmp",                     -- Autocompletion
+    "hrsh7th/nvim-cmp", -- Autocompletion
     dependencies = {
         -- Engine
         'L3MON4D3/LuaSnip',
@@ -52,8 +52,8 @@ return {
                 documentation = cmp.config.window.bordered(),
             },
             mapping = {
-                ['<C-Space>'] = cmp.mapping.complete(),  -- show completion suggestions
-                ['<C-e>'] = cmp.mapping.abort(),         -- close completion window
+                ['<C-Space>'] = cmp.mapping.complete(), -- show completion suggestions
+                ['<C-e>'] = cmp.mapping.abort(),        -- close completion window
                 ['<CR>'] = cmp.mapping({
                     i = cmp.mapping.confirm({ select = true }),
                     c = nil,
@@ -89,9 +89,8 @@ return {
                     })
                 })
             },
-
             experimental = {
-                ghost_text = {hlgroup = "Comment"}
+                ghost_text = { hlgroup = "Comment" }
             },
         })
 
@@ -120,4 +119,3 @@ return {
         })
     end,
 }
-

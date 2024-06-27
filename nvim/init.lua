@@ -1,17 +1,11 @@
+---@diagnostic disable: undefined-global
+
+-- Source traditional vimrc first
 local vimrc = vim.fn.stdpath("config") .. "/vimrc"
 vim.cmd.source(vimrc)
 
+-- Source lua config next
 require('.')
 
-
--- [[ Highlight on yank ]]
--- See `:help vim.highlight.on_yank()`
-local highlight_group = vim.api.nvim_create_augroup('YankHighlight', { clear = true })
-vim.api.nvim_create_autocmd('TextYankPost', {
-  callback = function()
-    vim.highlight.on_yank({ timeout = 800 })
-  end,
-  group = highlight_group,
-  pattern = '*',
-})
-
+-- Note to self: Place the bulk of lua config in the lua/init.lua file instead
+-- This is because neodev only provides neovim annotations in that folder

@@ -74,7 +74,7 @@ function! TermGetFirst()
     if len(jobs) == 0
         return v:null
     endif
-    return uniq(map(jobs, 'v:val.terminal'), 'v:val.bufnr'))[0]
+    return uniq(map(jobs, 'v:val.terminal'), 'v:val.bufnr')[0]
 endfunction
 
 
@@ -196,7 +196,7 @@ function! RunCode()
     if exists('g:vscode')
         call VSCodeNotify('code-runner.run')
         return
-    end
+    endif
 
     if expand('%') == '' | echo "Can't run code, no filename" | return | endif
 

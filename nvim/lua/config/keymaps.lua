@@ -21,13 +21,19 @@ end
 
 local telescope
 local telescope_ext
+local hover
+local barbar
 if not vim.g.vscode then
     telescope     = require('telescope.builtin')
     telescope_ext = require('telescope').extensions
+    hover         = require('hover')
+    barbar        = require('barbar.api')
 else
     -- Hack to avoid having to use index error when doing telescope.find_files
     telescope     = {}
     telescope_ext = nil
+    hover         = {}
+    barbar        = {}
 end
 
 -- From vimrc
@@ -85,7 +91,7 @@ local goto_type_def  = action('💬 [G]oto [T]ype Definition', telescope.lsp_typ
     vscode('editor.action.goToTypeDefinition'))
 
 -- Info
-local show_hover          = action('💬 Hover', vim.lsp.buf.hover, vscode('editor.action.showHover'))
+local show_hover          = action('💬 Hover', hover.hover, vscode('editor.action.showHover'))
 local signature_help = action('💬 Signature Help', vim.lsp.buf.signature_help)
 
 -- Actions
@@ -121,6 +127,21 @@ local explorer       = action('🗃️ Toggle Explorer',
     -- Refer to map in keybindings.json
     vscode('workbench.view.explorer'))
 
+-- Barbar
+-- API: https://github.com/romgrk/barbar.nvim/blob/master/lua/barbar/api.lua
+local barbar_pin     = action("📌 Pin", function() vim.cmd("BufferPin") end)
+local barbar_pick    = action("📌 Pick", function() barbar.pick_buffer() end)
+local function barbar_goto(n)
+    return action("📌 Goto pinned", function() barbar.goto_buffer(n) end)
+end
+
+-- Hover
+-- Actions to switch panes in the hover popup
+---@diagnostic disable-next-line: missing-parameter
+local hover_switch_next = action("hover.nvim (next source)", function() hover.hover_switch("next") end)
+---@diagnostic disable-next-line: missing-parameter
+local hover_switch_prev = action("hover.nvim (prev source)", function() hover.hover_switch("previous") end)
+
 
 
 -- ###############################################################################
@@ -128,9 +149,6 @@ local explorer       = action('🗃️ Toggle Explorer',
 -- ##                             3. DEFINE MAPPINGS                            ##
 -- ##                                                                           ##
 -- ###############################################################################
-local luasnip = require('luasnip')
-local cmp = require('cmp')
-
 local mappings = {
     ['g'] = {
         ['d'] = goto_def,  -- overrides default gd (goto local declaration)
@@ -142,6 +160,9 @@ local mappings = {
     ['K'] = show_hover,                         -- overrides default K (to lookup word on cursor)
     ['gK'] = signature_help,
     ['<C-k>'] = bind('i', signature_help), -- overrides default i_<C-k> (insert digraphs)
+
+    ['<C-n>'] = hover_switch_next,         -- overrides default <C-n> (down)
+    ['<C-p>'] = hover_switch_prev,         --overrides default <C-p> (up)
 
     ['gO'] = document_symbols,             -- overrides default gO (outline of buffer for man, help)
 
@@ -157,6 +178,13 @@ local mappings = {
         -- More useful ones
         ['o'] = oldfiles,
         ['r'] = resume,
+
+        -- Barbar as harpoon
+        ["h"] = {
+            'harpoon',
+            ["a"] = barbar_pin,
+            ["p"] = barbar_pick,
+        },
 
         ['f'] = {
             '🔭 Find using Telescope',
@@ -189,6 +217,17 @@ local mappings = {
             ['s'] = git_status,
             ['c'] = git_commits,
         },
+
+        -- Use barbar to quickly switch "tabs" like Harpoon
+        ["1"] = barbar_goto(1),
+        ["2"] = barbar_goto(2),
+        ["3"] = barbar_goto(3),
+        ["4"] = barbar_goto(4),
+        ["5"] = barbar_goto(5),
+        ["6"] = barbar_goto(6),
+        ["7"] = barbar_goto(7),
+        ["8"] = barbar_goto(8),
+        ["9"] = barbar_goto(9),
     },
 }
 

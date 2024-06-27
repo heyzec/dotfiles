@@ -53,7 +53,8 @@ return {
                     },
                 },
             },
-            auto_install = true,
+            -- Note to self: Do not install automatically, since it is likely to fail on Nix systems!
+            auto_install = false,
             incremental_selection = {
                 enable = true,
                 keymaps = {

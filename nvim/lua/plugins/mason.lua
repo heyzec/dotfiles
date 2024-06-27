@@ -56,7 +56,9 @@ return {
                 'lua-language-server',       -- Lua, LSP, binary (Github)
                 'pyright',                   -- Python, LSP, npm
 
-                'clangd',                    -- C++, LSP, binary (Github)
+                -- For Mason installed clangd, includes will not work on nixos
+                -- Use nixpkgs instead
+                -- 'clangd',                    -- C++, LSP, binary (Github)
 
                 -- 'html-lsp',
                 -- 'isort',
