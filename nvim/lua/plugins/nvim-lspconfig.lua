@@ -5,17 +5,21 @@ return {
     "neovim/nvim-lspconfig",
     event = { "BufReadPre", "BufNewFile" },
     config = function()
-        local lspconfig = require('lspconfig')
-        -- See https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
-        lspconfig.nil_ls.setup {
-            settings = {
-                ['nil'] = {
-                    formatting = {
-                        command = { "nixpkgs-fmt" },
-                    }
-                }
+        -- local lspconfig = require('lspconfig')
+        -- -- See https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
+        -- lspconfig.nil_ls.setup {
+        --     settings = {
+        --         ['nil'] = {
+        --             formatting = {
+        --                 command = { "nixpkgs-fmt" },
+        --             }
+        --         }
+        --
+        --     }
+        -- }
 
-            }
-        }
+        -- https://roobert.github.io/2022/12/03/Extending-Neovim/
+        -- https://vonheikemen.github.io/devlog/tools/neovim-lsp-client-guide/
+
     end
 }
