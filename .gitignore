@@ -16,3 +16,6 @@ nix/result
 *.qcow2
 result
 
+node_modules/
+.DS_Store
+.direnv/
