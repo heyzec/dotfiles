@@ -42,6 +42,7 @@
   // Some explanation of useful settings here:
   // https://blog.danskingdom.com/Visual-Studio-Code-default-settings-to-change
 
+  "editor.fontFamily": "monospace",
   // Make it smaller, the default is 14
   "editor.fontSize": 13,
 
