@@ -1,24 +1,10 @@
-{ inputs, ... }:
+{ systemSettings, ... }:
 {
   imports = [
     ../overlays
-
-    inputs.nix-colors.homeManagerModules.default
-    ./AutoArchiver.nix
-    ./firefox.nix
-    ./fonts.nix
-    ./gtk.nix
     ./home.nix
-    ./joplin.nix
-    ./mime.nix
-    ./packages.nix
-    ./services.nix
-    ./symlinks.nix
-    ./systemd.nix
-    ./theming.nix
-    ./thunar.nix
-    ./vscode.nix
-  ];
+    ./fonts.nix
+  ] ++ (if systemSettings.system == "x86_64-linux" then [ ./linux ] else []);
 
-  colorScheme = inputs.nix-colors.colorSchemes.gruvbox-dark-medium;
+  # colorScheme = inputs.nix-colors.colorSchemes.gruvbox-dark-medium;
 }

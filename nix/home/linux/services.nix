@@ -11,8 +11,8 @@
     # backgroundColor = "#${config.colorScheme.palette.base01}";
     # base01 is also waybar's background color
     backgroundColor = "#3e4954";
-    borderColor = "#${config.colorScheme.palette.base0E}";
-    textColor = "#${config.colorScheme.palette.base04}";
+    # borderColor = "#${config.colorScheme.palette.base0E}";
+    # textColor = "#${config.colorScheme.palette.base04}";
     borderRadius = 5;
     borderSize = 2;
   };

@@ -6,31 +6,25 @@
 
   home.stateVersion = "23.05";
   home.username = userSettings.username;
-  home.homeDirectory = "/home/${userSettings.username}";
+  home.homeDirectory = userSettings.homeDir;
 
   # https://github.com/nix-community/home-manager/issues/1011
   # Does not work
-  # home.sessionVariables = {
+  home.sessionVariables = {
   #   XDG_CURRENT_DESKTOP = "Hyprland";
   #   XDG_SESSION_DESKTOP="Hyprland";
   #   XDG_SESSION_TYPE="wayland";
-  #   TERMINAL = "foot";
-  # };
-
-  programs = {
-    direnv = {
-      enable = true;
-      nix-direnv.enable = true;
-    };
-
+    TERMINAL = "foot";
   };
+  heyzec.shell.enable = true;
 
-  home.activation."dotsman-install" = lib.hm.dag.entryAfter ["writeBoundary"] ''
-    PATH="${pkgs.gawk}/bin:${pkgs.git}/bin:$PATH"
-    # Using symlinks in when the dotfiles folder is mounted VM gives too many levels error
-    ${userSettings.dotfilesDir}/scripts/dotsman/dotsman.sh install all --no-dry-run
-  '';
+  # home.activation."dotsman-install" = lib.hm.dag.entryAfter ["writeBoundary"] ''
+  #   PATH="${pkgs.gawk}/bin:${pkgs.git}/bin:$PATH"
+  #   # Using symlinks in when the dotfiles folder is mounted VM gives too many levels error
+  #   ${userSettings.dotfilesDir}/scripts/dotsman/dotsman.sh install all --no-dry-run
+  # '';
 
+  # services.kdeconnect.enable = true;
 }
 
 # TODO: fix swhkd not starting, we need it for vm

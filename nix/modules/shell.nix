@@ -1,22 +1,17 @@
-{ lib, pkgs, ... }:
+{ lib, pkgs, config, ... }:
 {
   options = {
     heyzec.shell = {
       enable = lib.mkOption {
         type = lib.types.bool;
-        default = true;
+        default = false;
         description = "Enable zsh with useful tools for a CLI workflow";
       };
     };
   };
 
-  config = {
-    programs.zsh = {
-      enable = true;
-    };
-    users.defaultUserShell = pkgs.zsh;
-
-    environment.systemPackages = with pkgs; [
+  config = lib.mkIf config.heyzec.shell.enable (let
+    packages = with pkgs; [
       ##### Required by .zshrc #####
       starship
       fzf
@@ -28,7 +23,7 @@
 
 
       tmux
-      ctpv # file previewer for lf, with image support
+      # ctpv # file previewer for lf, with image support
       lf # terminal file manager
 
       git
@@ -45,7 +40,28 @@
 
       ##### Network Diagnostics #####
       nmap # port scanner
-      traceroute # track route taken by packets
+      # traceroute # track route taken by packets
     ];
-  };
+
+    isHome = true;
+  in {
+    # This config is available in both NixOS and home-manager
+    # programs.zsh.enable = true;
+
+    # users.defaultUserShell = pkgs.zsh;
+
+    # Enable nix-direnv for dev shells
+    programs.direnv = {
+      enable = true;
+      nix-direnv.enable = true;
+    };
+
+  }
+  // (if isHome then
+  {
+    home.packages = packages;
+  } else {
+    environment.systemPackages = packages;
+  }
+  ));
 }
