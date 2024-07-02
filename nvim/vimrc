@@ -179,7 +179,7 @@ else
 endif
 
 " cd vim into the directory of the current buffer
-call s:nnoremap('<leader>c', ':cd %:p:h<CR>', 'cd into buffer directory')
+" call s:nnoremap('<leader>c', ':cd %:p:h<CR>', 'cd into buffer directory')
 
 " Tabs to switch buffers (not a useful remap)
 " if !exists('g:vscode')
