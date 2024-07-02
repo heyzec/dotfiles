@@ -74,6 +74,7 @@ key[End]="${terminfo[kend]}"
 key[PageUp]="${terminfo[kpp]}"
 key[PageDown]="${terminfo[knp]}"
 key[Delete]="${terminfo[kdch1]}"
+# These are ncurses extensions and not terminfo standard
 key[Control-Left]="${terminfo[kLFT5]}"
 key[Control-Right]="${terminfo[kRIT5]}"
 
