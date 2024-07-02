@@ -3,7 +3,6 @@
   programs.hyprland = {
     enable = true;
     xwayland.enable = true;
-    envVars.enable = false;
   };
 
   xdg.portal = {

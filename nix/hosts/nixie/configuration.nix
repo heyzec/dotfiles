@@ -82,7 +82,7 @@ in {
     wl-color-picker
 
 
-    (floorp.override {
+    (firefox.override {
       nativeMessagingHosts = with pkgs; [
         tridactyl-native
       ];
@@ -94,11 +94,13 @@ in {
 
     lazygit
     diffr
+    kdePackages.kdeconnect-kde
 
     (import ../../packages/unlock.nix { inherit pkgs; } )
   ];
 
   programs.adb.enable = true;
   users.users.heyzec.extraGroups = [ "adbusers" ];
+  # programs.kdeconnect.enable = true;
 }
 

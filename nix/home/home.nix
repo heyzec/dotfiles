@@ -49,6 +49,7 @@
     nix-shell -p gawk git --run "${userSettings.dotfilesDir}/install all --no-dry-run"
   '';
 
+  services.kdeconnect.enable = true;
 }
 
 # TODO: fix swhkd not starting, we need it for vm

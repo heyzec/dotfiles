@@ -1,28 +1,8 @@
 { config, pkgs, ... }:
-{
-  # home.file.colortest = {
-  #   text = ''
-  #     ${colorScheme.palette.base01}
-  #     ${colorScheme.palette.base02}
-  #     ${colorScheme.palette.base03}
-  #     ${colorScheme.palette.base04}
-  #     ${colorScheme.palette.base05}
-  #     ${colorScheme.palette.base06}
-  #     ${colorScheme.palette.base07}
-  #     ${colorScheme.palette.base08}
-  #     ${colorScheme.palette.base09}
-  #     ${colorScheme.palette.base0A}
-  #     ${colorScheme.palette.base0B}
-  #     ${colorScheme.palette.base0C}
-  #     ${colorScheme.palette.base0D}
-  #     ${colorScheme.palette.base0E}
-  #     ${colorScheme.palette.base0F}
-  #   '';
-  #   target = "colortest";
-  # };
-
-
-
+let
+  cursorName = "Bibata-Modern-Ice";
+  cursorSize = 20;
+in {
   # https://wiki.archlinux.org/title/GTK
 
   gtk.theme = {
@@ -37,13 +17,22 @@
 
 
   };
+
   # Cursors
-  # gtk.cursorTheme = {
-  #   # https://github.com/vinceliuice/vimix-icon-theme
-  #   name = "capitaine-cursors";
-  #   package = pkgs.capitaine-cursors;
-  # };
-  # # https://www.gnome-look.org/browse?cat=107&ord=latest
+  gtk.cursorTheme = {
+    name = cursorName;
+    package = pkgs.bibata-cursors;
+    size = cursorSize;
+  };
+
+  xdg.configFile."hypr/nix.conf" = {
+    text = /* conf */ ''
+      exec-once = hyprctl setcursor ${cursorName} ${builtins.toString cursorSize}
+      env = XCURSOR_SIZE,${builtins.toString cursorSize}
+      env = XCURSOR_THEME,${cursorName}
+    '';
+  };
+
 
   qt.enable = true;
   qt.style.name = "adwaita";
