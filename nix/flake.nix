@@ -10,11 +10,17 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-darwin = {
+      url = "github:LnL7/nix-darwin";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     nix-colors.url = "github:misterio77/nix-colors";
   };
 
   # Don't add parameters to within { ... }, explicitly index it from inputs instead
   outputs = { self, ... }@inputs: let
+
     # ---- SYSTEM SETTINGS ---- #
     systemSettings = {
       system = "x86_64-linux";      # system arch
@@ -30,16 +36,31 @@
       flakeDir = "/home/heyzec/dotfiles/nix";  # path to flake repo, used by nh
     };
 
+
+    specificSettings = {
+      "hostlab" = {
+        systemSettings = {
+          system = "aarch64-linux";
+        };
+      };
+    };
+
     # Override lib with custom utilities
     # https://github.com/bangedorrunt/nix/blob/tdt/flake.nix#L94-L97
     mkLib = nixpkgs:
       nixpkgs.lib.extend
-      (self: super: {heyzec = import ./lib { inherit pkgs; lib = self; }; } // inputs.home-manager.lib);
+      (self: super: {heyzec = import ./lib { pkgs = getPkgs "x86_64-linux"; lib = self; }; } // inputs.home-manager.lib);
     lib = mkLib inputs.nixpkgs;
 
     # Needed by home manager in standalone mode
     pkgs = import inputs.nixpkgs {
-      system = systemSettings.system;
+      system = "x86_64-linux";
+      config = {
+        allowUnfree = true;
+      };
+    };
+    getPkgs = system : import inputs.nixpkgs {
+      inherit system;
       config = {
         allowUnfree = true;
       };
@@ -72,16 +93,21 @@
       inherit lib;
     };
 
-    customSettings = {
-      inherit systemSettings;
-      inherit userSettings;
-    };
+    getSpecialArgs = name :
+      if builtins.hasAttr name specificSettings then
+      customArgs // {
+        systemSettings = specificSettings.${name}.systemSettings // systemSettings;
+        userSettings = specificSettings.${name}.userSettings // userSettings;
+      } else customArgs // {
+        systemSettings = systemSettings;
+        userSettings = userSettings;
+      };
   in
   {
     nixosConfigurations = {
       # The standard configuration (home manager standalone)
       "nixie" = inputs.nixpkgs.lib.nixosSystem {
-        specialArgs = customArgs // customSettings;
+        specialArgs = getSpecialArgs "nixie";
         modules = [
           ./modules
           ./hosts/nixie
@@ -100,7 +126,7 @@
           inputs.home-manager.nixosModules.home-manager
           ({
             home-manager = {
-              extraSpecialArgs = customArgs // customSettings;
+              extraSpecialArgs = getSpecialArgs "nixie";
               users = {
                 ${userSettings.username} = {
                   imports = [
@@ -122,15 +148,25 @@
           ./hosts/homelab
           inputs.nixos-hardware.nixosModules.raspberry-pi-4
         ];
-        specialArgs = customArgs // customSettings;  # TODO: Remove irrelevant settings
+        specialArgs = getSpecialArgs "";  # TODO: Remove irrelevant settings
       };
     };
 
 
     homeConfigurations = {
       "heyzec" = inputs.home-manager.lib.homeManagerConfiguration {
-        inherit pkgs;
-        extraSpecialArgs = customArgs // customSettings;
+        pkgs = pkgs;
+        # extraSpecialArgs = getSpecialArgs "";
+        extraSpecialArgs =  customArgs // { inherit userSettings; inherit systemSettings; };
+        modules = [
+          ./home
+          nixpkgs-stable-module
+        ];
+      };
+
+      "darwin" = inputs.home-manager.lib.homeManagerConfiguration {
+        pkgs = getPkgs "x86_64-darwin";
+        extraSpecialArgs = getSpecialArgs "" // { systemSettings.system = "x86_64-darwin"; };
         modules = [
           ./home
           nixpkgs-stable-module
