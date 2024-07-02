@@ -25,9 +25,7 @@ super + control + space
 
 ## Launch // Dotfiles Editor  // <> o ##
 super + o
-    /home/heyzec/dotfiles/scripts/dotsmenu/dotsmenu.sh
-
-
+    ~/dotfiles/scripts/dotsman/dotsman.sh rofi
 
 # Use wpctl to adjust volume of WirePlumber
 # $WOBSOCK = $XDG_RUNTIME_DIR/wob.sock

@@ -26,5 +26,5 @@ There is a simple install script located at the root of the repo. It can be used
 ./install nvim
 # ln -s -v /home/heyzec/dotfiles/nvim /home/heyzec/.config/nvim
 ```
-For more details, take a look here: [dotsinstall.sh](scripts/dotsinstall)
+For more details, take a look here: [dotsman.sh](scripts/dotsman)
 
