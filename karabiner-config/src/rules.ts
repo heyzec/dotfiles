@@ -14,18 +14,23 @@ withCondition, withMapper, withModifier
 
 
 export const rules = () => [
-
   rule('Better Caps Lock').manipulators([
     map('caps_lock').toHyper().toIfAlone('escape'),
+    withModifier(['option', 'control', 'shift', 'command'])({
+      h: toKey('left_arrow'),
+      j: toKey('down_arrow'),
+      k: toKey('up_arrow'),
+      l: toKey('right_arrow'),
+    })
   ]),
 
-  rule('hjkl').manipulators([
-        withModifier(['option', 'control', 'shift', 'command'])({
-            h: toKey('left_arrow'),
-            j: toKey('down_arrow'),
-            k: toKey('up_arrow'),
-            l: toKey('right_arrow'),
-        })
+  rule('Shift Shift').manipulators([
+    withModifier(['left_shift'])({
+      right_shift: toKey('caps_lock'),
+    }),
+    withModifier(['right_shift'])({
+      left_shift: toKey('caps_lock'),
+    })
   ]),
 
   rule('Terminal').manipulators([
