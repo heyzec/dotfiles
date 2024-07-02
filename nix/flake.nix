@@ -36,6 +36,12 @@
       flakeDir = "/home/heyzec/dotfiles/nix";  # path to flake repo, used by nh
     };
 
+      pkgsForSystem = system: import inputs.nixpkgs {
+        inherit system;
+        config.allowUnfree = true;
+      };
+
+
 
     specificSettings = {
       "hostlab" = {
@@ -103,57 +109,14 @@
         userSettings = userSettings;
       };
   in
-  {
-    nixosConfigurations = {
-      # The standard configuration (home manager standalone)
-      "nixie" = inputs.nixpkgs.lib.nixosSystem {
-        specialArgs = getSpecialArgs "nixie";
-        modules = [
-          ./modules
-          ./hosts/nixie
-          nixpkgs-stable-module
-          label-generation-module
-        ];
-      };
-
-      # The configuration for build-vm (home manager as a module)
-      "nixie-vm" = inputs.nixpkgs.lib.nixosSystem {
-        specialArgs = customArgs;
-        modules = [
-          ./modules
-          ./hosts/nixie
-          nixpkgs-stable-module
-          inputs.home-manager.nixosModules.home-manager
-          ({
-            home-manager = {
-              extraSpecialArgs = getSpecialArgs "nixie";
-              users = {
-                ${userSettings.username} = {
-                  imports = [
-                    ./home
-                  ];
-                };
-              };
-              useGlobalPkgs = true;
-              useUserPackages = true;
-            };
-          })
-        ];
-      };
-
-      "homelab" = inputs.nixpkgs-stable.lib.nixosSystem {
-        system = "aarch64-linux";
-        modules = [
-          ./modules
-          ./hosts/homelab
-          inputs.nixos-hardware.nixosModules.raspberry-pi-4
-        ];
-        specialArgs = getSpecialArgs "";  # TODO: Remove irrelevant settings
-      };
-    };
+    {
+  legacyPackages."x86_64-darwin" = pkgsForSystem "x86_64-darwin";
 
 
-    homeConfigurations = {
+
+} // {
+
+    packages."x86_64-darwin".homeConfigurations = {
       "heyzec" = inputs.home-manager.lib.homeManagerConfiguration {
         pkgs = pkgs;
         # extraSpecialArgs = getSpecialArgs "";
@@ -165,7 +128,7 @@
       };
 
       "darwin" = inputs.home-manager.lib.homeManagerConfiguration {
-        pkgs = getPkgs "x86_64-darwin";
+        pkgs = inputs.nixpkgs.legacyPackages."x86_64-darwin";
         extraSpecialArgs = getSpecialArgs "" // { systemSettings.system = "x86_64-darwin"; };
         modules = [
           ./home
