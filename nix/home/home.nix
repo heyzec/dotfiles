@@ -46,7 +46,9 @@
   };
 
   home.activation."dotsinstall" = lib.hm.dag.entryAfter ["writeBoundary"] ''
-    nix-shell -p gawk git --run "${userSettings.dotfilesDir}/install all --no-dry-run"
+    PATH="${pkgs.gawk}/bin:${pkgs.git}/bin:$PATH"
+    # Using symlinks in when the dotfiles folder is mounted VM gives too many levels error
+    ${userSettings.dotfilesDir}/scripts/dotsinstall/dotsinstall.sh all --no-dry-run
   '';
 
 }

@@ -103,7 +103,7 @@
     qimgv                # simple image viewer
     remmina              # remote desktop client
     sane-airscan         # library and CLI to use scanners
-    transmission-gtk     # lightweight BitTorrent client
+    transmission_4-gtk     # lightweight BitTorrent client
     vlc                  # video player
 
     ##### Documents and Graphics #####

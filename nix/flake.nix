@@ -92,7 +92,7 @@
 
       # The configuration for build-vm (home manager as a module)
       "nixie-vm" = inputs.nixpkgs.lib.nixosSystem {
-        specialArgs = customArgs;
+        specialArgs = customArgs // customSettings;
         modules = [
           ./modules
           ./hosts/nixie

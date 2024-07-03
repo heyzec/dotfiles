@@ -26,7 +26,7 @@
     tectonic
 
 
-    dbeaver
+    dbeaver-bin
 
     flavours
 

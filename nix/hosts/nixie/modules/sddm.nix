@@ -17,15 +17,18 @@ in
 
   services.displayManager.sddm = {
     enable = true;
-    theme = "sugar-dark";
+    # Temporarily replace theme because sddm-sugar-dark is broken
+    # theme = "sugar-dark";
+    theme = "catppuccin-sddm-corners";
   };
 
   environment.systemPackages = with pkgs; [
-    (sddm-sugar-dark.override {
-      themeConfig = {
-        Background = image;
-      };
-    })
+    # (sddm-sugar-dark.override {
+    #   themeConfig = {
+    #     Background = image;
+    #   };
+    # })
+    catppuccin-sddm-corners
   ];
 }
 
