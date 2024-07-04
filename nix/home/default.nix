@@ -4,6 +4,7 @@
     ../overlays
 
     inputs.nix-colors.homeManagerModules.default
+    ./AutoArchiver.nix
     ./firefox.nix
     ./home.nix
     ./gtk.nix
