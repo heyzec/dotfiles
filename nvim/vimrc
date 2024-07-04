@@ -144,8 +144,8 @@ noremap Y y$
 
 
 " Don't use Ex mode, use Q for macros (idea: jesseliete)
+" This is now a default mapping in Visual mode
 nnoremap Q @qj
-xnoremap Q :norm @q<CR>
 " Do not show stupid `how did we get here?` window
 "nnoremap q: :echo 'No more Ex mode!'<CR>
 
