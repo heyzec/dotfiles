@@ -16,3 +16,4 @@ nix/result
 *.qcow2
 result
 
+.DS_Store

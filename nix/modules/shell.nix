@@ -24,6 +24,7 @@
       bat-extras.batman
 
 
+      neovim
       tmux
       (if stdenv.isLinux then ctpv else null) # file previewer for lf, with image support
       lf # terminal file manager

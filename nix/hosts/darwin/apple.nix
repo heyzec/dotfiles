@@ -7,6 +7,10 @@
       InitialKeyRepeat = 25;
       KeyRepeat = 3;  # Smaller is faster
 
+      # This disables show-character-accents-menu,
+      # while enabling repeat-character-while-key-held
+      ApplePressAndHoldEnabled = false;
+
       # Disable "smart" autocorrect features
       NSAutomaticCapitalizationEnabled = false;
       NSAutomaticDashSubstitutionEnabled = false;

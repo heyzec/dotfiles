@@ -15,8 +15,9 @@
     # As brew would update them by uninstalling and installing the newest
     # version, it could lead to data loss.
     casks = [
-      "docker" # Docker Desktop
+      "docker"
       "arc"
+      "visual-studio-code"
     ];
 
     taps = [ ];

@@ -1,5 +1,5 @@
 # See https://rycee.gitlab.io/home-manager/options.html
-{ lib, pkgs, userSettings, ... }:
+{ lib, pkgs, config, userSettings, ... }:
 {
   # We're using the "Standalone installation" option, let home-manager install itself
   programs.home-manager.enable = true;
@@ -17,11 +17,18 @@
   #   TERMINAL = "foot";
   # };
 
-  home.activation."dotsman-install" = lib.hm.dag.entryAfter ["writeBoundary"] ''
-    PATH="${pkgs.gawk}/bin:${pkgs.git}/bin:$PATH"
-    # Using symlinks in when the dotfiles folder is mounted VM gives too many levels error
-    ${userSettings.dotfilesDir}/scripts/dotsman/dotsman.sh install all --no-dry-run
-  '';
+  # Own implementation of a "backend" of home.sessionVariables
+  # https://github.com/nix-community/home-manager/issues/2751
+  # programs.zsh.enable = true;
+  home.file.".profile".text = lib.strings.concatStringsSep "\n"
+    (lib.attrsets.mapAttrsToList (name: value: "${name}=${value}")
+      config.home.sessionVariables);
+
+  # home.activation."dotsman-install" = lib.hm.dag.entryAfter ["writeBoundary"] ''
+  #   PATH="${pkgs.gawk}/bin:${pkgs.git}/bin:$PATH"
+  #   # Using symlinks in when the dotfiles folder is mounted VM gives too many levels error
+  #   ${userSettings.dotfilesDir}/scripts/dotsman/dotsman.sh install all --no-dry-run
+  # '';
 
   heyzec.shell.enable = lib.strings.hasSuffix "darwin" pkgs.system;
 }
