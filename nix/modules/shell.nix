@@ -22,6 +22,7 @@
       bat-extras.batman
 
 
+      neovim
       tmux
       # ctpv # file previewer for lf, with image support
       lf # terminal file manager

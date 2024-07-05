@@ -19,3 +19,4 @@ result
 # Secrets
 nvim/chatgpt-key.gpg
 
+.DS_Store

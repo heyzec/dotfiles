@@ -1,5 +1,5 @@
 # See https://rycee.gitlab.io/home-manager/options.html
-{ lib, pkgs, userSettings, ... }:
+{ lib, pkgs, config, userSettings, ... }:
 {
   # We're using the "Standalone installation" option, let home-manager install itself
   programs.home-manager.enable = true;
@@ -14,9 +14,17 @@
   #   XDG_CURRENT_DESKTOP = "Hyprland";
   #   XDG_SESSION_DESKTOP="Hyprland";
   #   XDG_SESSION_TYPE="wayland";
+    EDITOR = "nvim";
     TERMINAL = "foot";
   };
   heyzec.shell.enable = true;
+
+  # Own implementation of a "backend" of home.sessionVariables
+  # https://github.com/nix-community/home-manager/issues/2751
+  # programs.zsh.enable = true;
+  home.file.".profile".text = lib.strings.concatStringsSep "\n"
+    (lib.attrsets.mapAttrsToList (name: value: "${name}=${value}")
+      config.home.sessionVariables);
 
   # home.activation."dotsman-install" = lib.hm.dag.entryAfter ["writeBoundary"] ''
   #   PATH="${pkgs.gawk}/bin:${pkgs.git}/bin:$PATH"
