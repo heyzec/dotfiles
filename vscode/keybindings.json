@@ -24,28 +24,20 @@
     // - window.enableMenuBarMnemonics: false (if not macos)
     // - window.titleBarStyle: native (if in linux)
     {
-        "command": "vscode-neovim.send",
         "key": "ctrl+h",
-        "when": "editorTextFocus && neovim.mode != insert",
-        "args": "<C-h>"
+        "command": "workbench.action.navigateLeft"
     },
     {
-        "command": "vscode-neovim.send",
         "key": "ctrl+j",
-        "when": "editorTextFocus && neovim.mode != insert",
-        "args": "<C-j>"
+        "command": "workbench.action.navigateDown"
     },
     {
-        "command": "vscode-neovim.send",
         "key": "ctrl+k",
-        "when": "editorTextFocus && neovim.mode != insert",
-        "args": "<C-k>"
+        "command": "workbench.action.navigateUp"
     },
     {
-        "command": "vscode-neovim.send",
         "key": "ctrl+l",
-        "when": "editorTextFocus && neovim.mode != insert",
-        "args": "<C-l>"
+        "command": "workbench.action.navigateRight"
     },
 
     // ----------------------Other workarounds----------------------
