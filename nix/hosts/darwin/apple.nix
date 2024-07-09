@@ -27,6 +27,11 @@
         autohide-time-modifier = 0.4;
       };
 
+      "com.apple.menuextra.battery" = {
+        # Show battery percentage next to icon
+        ShowPercent = true;
+      };
+
       # To be installed by homebrew
       "theron.UnnaturalScrollWheels" = {
         LaunchAtLogin = true;
