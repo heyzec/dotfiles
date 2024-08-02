@@ -36,6 +36,13 @@
   # '';
 
   # services.kdeconnect.enable = true;
+  home.packages = with pkgs; [
+    telegram-desktop
+  ];
+
+  imports = [
+    ./lseg.nix
+  ];
 }
 
 # TODO: fix swhkd not starting, we need it for vm
