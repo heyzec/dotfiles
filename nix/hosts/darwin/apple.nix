@@ -32,10 +32,19 @@
         ShowPercent = true;
       };
 
-      # To be installed by homebrew
-      "theron.UnnaturalScrollWheels" = {
-        LaunchAtLogin = true;
-      };
+      # AppleSymbolicHotKeys = {
+      #   "119" = {
+      #     enabled = 1;
+      #     value = {
+      #         parameters = [
+      #             65535,
+      #             19,
+      #             262144
+      #         ];
+      #         type = "standard";
+      #     };
+      #   };
+      # };
     };
   };
 }

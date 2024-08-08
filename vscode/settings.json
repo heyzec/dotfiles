@@ -99,6 +99,7 @@
   "gitblame.inlineMessageFormat": "${author.name} (${time.ago})",
   "gitblame.statusBarMessageFormat": "${commit.summary}",
   "editor.fontFamily": "JetBrainsMono Nerd Font",
+  "git.openRepositoryInParentFolders": "never",
 }
 // Unfortunately we cannot rename the file extension to jsonc
 // vim: filetype=jsonc

@@ -9,7 +9,9 @@
       upgrade = true;
     };
 
-    brews = [ ];
+    brews = [
+      "awscli-local"
+    ];
 
     # Update these applicatons manually.
     # As brew would update them by unninstalling and installing the newest
