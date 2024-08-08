@@ -12,19 +12,13 @@ ifApp, ifDevice, ifVar, ifDeviceExists, ifInputSource, ifKeyboardType, ifEventCh
 withCondition, withMapper, withModifier
 } from 'karabiner.ts'
 
+let hyper: any = ['option', 'control', 'shift', 'command']
 
 export const rules = () => [
   rule('Better Caps Lock').manipulators([
     map('caps_lock').toHyper().toIfAlone('escape'),
-    withModifier(['option', 'control', 'shift', 'command'])({
-      h: toKey('left_arrow'),
-      j: toKey('down_arrow'),
-      k: toKey('up_arrow'),
-      l: toKey('right_arrow'),
-    })
-  ]),
 
-  rule('Shift Shift').manipulators([
+    // Restore capslock
     withModifier(['left_shift'])({
       right_shift: toKey('caps_lock'),
     }),
@@ -33,60 +27,38 @@ export const rules = () => [
     })
   ]),
 
-  rule('Terminal').manipulators([
-        withModifier('command')({
-            return_or_enter: to$('~/dotfiles/scripts/new-hyper-window.sh'),
-        })
+  rule('Arrows').manipulators([
+    withModifier(hyper)({
+      h: toKey('left_arrow'),
+      j: toKey('down_arrow'),
+      k: toKey('up_arrow'),
+      l: toKey('right_arrow'),
+    }),
   ]),
 
   // Requires enabling these shortcuts in MacOS settings
-  rule('Workspaces').manipulators([
+  rule('Workspaces - Absolute').manipulators([
     withModifier('command')({
       1: toKey('1', 'control'),
-    }),
-    withModifier('command')({
       2: toKey('2', 'control'),
-    }),
-    withModifier('command')({
       3: toKey('3', 'control'),
-    }),
-    withModifier('command')({
       4: toKey('4', 'control'),
-    }),
-    withModifier('command')({
       5: toKey('5', 'control'),
-    }),
-    withModifier('command')({
       6: toKey('6', 'control'),
     }),
   ]),
 
-    // rule('swap').manipulators([
-    //     // dont do this
-    //     // map('left_command').to('left_control'),
-    //     // map('left_control').to('left_command')
-    //
-    //     withModifier('command')({
-    //         h: toKey('left_arrow', 'control')
-    //
-    //     }),
-    //     withModifier('command')({
-    //         j: toKey('down_arrow', 'control')
-    //
-    //     }),
-    //     withModifier('command')({
-    //         k: toKey('up_arrow', 'control')
-    //
-    //     }),
-    //     withModifier('command')({
-    //         l: toKey('right_arrow', 'control')
-    //
-    //     }),
-    //     // withModifier('control')({
-    //     //     l: toKey('l', 'command')
-    //     //
-    //     // }),
-    //
-    // ])
+  rule('Workspaces - Relative').manipulators([
+    withModifier(hyper)({
+      d: toKey('left_arrow', 'control'),
+      f: toKey('right_arrow', 'control'),
+    }),
+  ]),
+
+  // rule('Terminal').manipulators([
+  //   withModifier('command')({
+  //       return_or_enter: to$('~/dotfiles/scripts/new-hyper-window.sh'),
+  //   })
+  // ]),
 ]
 
