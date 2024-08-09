@@ -1,0 +1,5 @@
+[main]
+# Swap leftalt and meta
+leftalt = layer(meta)
+meta = layer(alt)
+

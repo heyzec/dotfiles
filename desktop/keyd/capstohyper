@@ -1,0 +1,39 @@
+[main]
+# Maps capslock to escape when pressed and control when held
+capslock = overload(nav, esc)
+# Restore capslock with holding both shifts
+leftshift+rightshift = capslock
+
+
+# Consider moving everything below to swhkd
+[nav]
+h = left
+j = down
+k = up
+l = right
+
+u = C-left
+i = C-down
+o = C-up
+p = C-right
+
+n = home
+m = pagedown
+, = pageup
+. = end
+
+q = mute
+w = volumedown
+e = volumeup
+r = playpause
+a = previoussong
+s = nextsong
+
+d = C-S-A-M-d
+f = C-S-A-M-f
+
+
+[nav+shift]
+q = micmute
+h = C-left
+l = C-right
