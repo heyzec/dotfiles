@@ -58,6 +58,7 @@ is_same_file() {
 ###############################################################################
 
 # parse_sections <filename>
+# Get all sections available in <filename>
 parse_sections() {
     filename="$1"
     # Note: BSD grep does not support GNU grep's -P flag
@@ -87,6 +88,54 @@ extract_value() {
     echo "$key_value_pairs" | grep "^$key=" | sed "s/^$key=//"
 }
 
+
+validate_config() {
+    filename="$1"
+    all_sections=$(parse_sections $filename)
+    for section in $all_sections; do
+        key_value_pairs=$(extract_section "$section" "$items_file")
+
+        # Extract values
+        src=$(extract_value src "$key_value_pairs")
+        dest=$(extract_value dest "$key_value_pairs")
+        call=$(extract_value call "$key_value_pairs")
+        cd=$(extract_value cd "$key_value_pairs")
+        file=$(extract_value file "$key_value_pairs")
+
+        # Check for bad keys combinations
+        if [ -n "$src" ] && [ -z "$dest" ]; then
+            echo "Warning: [$section] src defined without dest!"
+        fi
+        if [ -n "$dest" ] && [ -z "$src" ]; then
+            echo "Warning: [$section] dest defined without src!"
+        fi
+        if [ -n "$cd" ] && [ -z "$file" ]; then
+            echo "Warning: [$section] cd defined without file!"
+        fi
+
+        # Check for existence
+        if [ -n "$src" ] && [ ! -e "$src" ]; then
+            echo "Warning: [$section] src does not exist!"
+        fi
+        if [ -n "$cd" ] && [ ! -e "$cd" ]; then
+            echo "Warning: [$section] cd does not exist!"
+        fi
+
+        if [ -n "$cd" ]; then
+            if [ -e "$cd" ]; then
+                if (cd "$cd"; [ ! -e "$file" ]); then
+                    echo "Warning: [$section] file does not exist1!"
+                fi
+            fi
+        else
+            if [ -n "$file" ] && [ ! -e "$file" ]; then
+                echo "Warning: [$section] file does not exist2!"
+            fi
+        fi
+    done
+
+
+}
 
 ###############################################################################
 # Tasks
@@ -149,6 +198,8 @@ link_section() (
 run_rofi() {
     # Parse section headers in config file
     all_sections="$(parse_sections "$items_file")"
+
+    # validate_config $items_file
 
     # Let user select which config
     selected_config_name=$( (echo "$all_sections") | rofi -dmenu -p "Select config file")

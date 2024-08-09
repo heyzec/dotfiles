@@ -98,7 +98,10 @@
   "gitblame.inlineMessageEnabled": true,
   "gitblame.inlineMessageFormat": "${author.name} (${time.ago})",
   "gitblame.statusBarMessageFormat": "${commit.summary}",
-  "editor.fontFamily": "monospace"
+  "editor.fontFamily": "monospace",
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
 }
 // Unfortunately we cannot rename the file extension to jsonc
 // vim: filetype=jsonc

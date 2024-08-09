@@ -8,6 +8,7 @@
     {
       home.packages = with pkgs; [
         flavours
+    # gnome.adwaita-icon-theme
       ];
 
       # https://wiki.archlinux.org/title/GTK
@@ -18,7 +19,7 @@
         iconTheme = {
           # https://github.com/vinceliuice/vimix-icon-theme
           name = "Vimix-Black";
-          package = pkgs.vimix-gtk-themes;
+          package = pkgs.vimix-icon-theme;
         };
       };
 

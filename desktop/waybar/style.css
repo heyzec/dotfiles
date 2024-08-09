@@ -133,6 +133,7 @@ tooltip label {
 /* } */
 
 #tray {
+    color: red;
     font-family: Roboto, heyzec-polybar-icons, Helvetica, Arial, sans-serif;
     padding-right: 5px;
 }

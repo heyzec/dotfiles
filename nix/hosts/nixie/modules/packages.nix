@@ -29,6 +29,7 @@
     git-crypt           # encrypt files in a git repository
     gocryptfs           # file-based encryption as a mountable FUSE filesystem
     (callPackage ../../../packages/gocryptfs-scripts.nix {})
+    (python3Packages.callPackage ../../../packages/wasg.nix {})
     rclone              # manage files on cloud storage
     restic              # push-based backup tool
     wireguard-tools     # tools for configuring wireguard, a VPN protocol (e.g. wg, wg-quick)
@@ -99,7 +100,6 @@
     overskride           # GUI bluetooth manager
     qimgv                # simple image viewer
     remmina              # remote desktop client
-    sane-airscan         # library and CLI to use scanners
     transmission_4-gtk     # lightweight BitTorrent client
     vlc                  # video player
 

@@ -34,6 +34,8 @@
     linux-wifi-hotspot
     bottles
     mindustry
+    obsidian
+    syncthing
   ];
 }
 

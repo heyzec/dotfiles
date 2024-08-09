@@ -22,6 +22,8 @@
   virtualisation = {
     docker.enable = true;
     libvirtd.enable = true;
+    # Enable swtpm, a TPM emulator, needed by Windows 11 VMs
+    libvirtd.qemu.swtpm.enable = true;
   };
 
   documentation.dev.enable = true;
@@ -31,6 +33,40 @@
     tor-browser-bundle-bin
 
     wl-color-picker
+    localsend
+    swtpm
+    naps2
   ];
+  
+  services.syncthing = {
+    enable = true;
+    user = "heyzec";
+    group = "users";
+    dataDir = "/home/heyzec";
+    configDir = "/home/heyzec/.config/syncthing";
+    settings = {
+      overrideDevices = true;
+      overrideFolders = true;
+      devices = {
+        "S20FE" = { id = "CMS62ZT-RSXEEHA-XM7YQ64-QC3425Q-DA3KGBS-W6OAZNN-SV2PD6U-NWBP7AX"; };
+      };
+      folders = {
+        "Obsidian" = {
+          id = "vault";
+          path = "/home/heyzec/Documents/Vault";
+          devices = [ "S20FE" ];
+        };
+      };
+    };
+  };
+  # systemd.services = {
+  #   "syncthing" = {
+  #     serviceConfig = {
+  #       UMask = "0777";
+  #     };
+  #   };
+  # };
+
+
 }
 

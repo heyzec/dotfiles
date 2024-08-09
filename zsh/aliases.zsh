@@ -95,5 +95,9 @@ function mergerequests() {
 	git log --format=%B $commit1..$commit2 | awk '/See merge request/ {print "- " $4}'
 }
 
+function back() {
+    nohup "$@" &> /dev/null &
+}
+
 
 # vim: set noexpandtab:

@@ -3,15 +3,27 @@ let
   name = "ddns";
   description = "Update DDNS entry for heyzec.mooo.com";
   ddns_updater = /* bash */ ''
-      msg=$(${pkgs.wget}/bin/wget -q -O - https://freedns.afraid.org/dynamic/update.php?${(import ./ddns.crypt.nix).api-key})
-      echo $msg
 
-      if $(echo $msg | grep -q 'ERROR: Address .* has not changed.'); then
-        exit 0
-      fi
+    # save stdout and stderr separately
+    # https://stackoverflow.com/a/33166477
+    rm -f stdout stderr || true
+    mkfifo stdout stderr
+    # HTTP HACK!!
+    ${pkgs.wget}/bin/wget -O - http://freedns.afraid.org/dynamic/update.php?${(import ./ddns.crypt.nix).api-key} >stdout 2>stderr &
+    exec {fdout}<stdout {fderr}<stderr
+    rm stdout stderr
+    stdout=$(cat <&$fdout)
+    stderr=$(cat <&$fderr)
 
-      exit 1
-    '';
+    echo $stdout
+
+    if $(echo $stdout | grep -q 'ERROR: Address .* has not changed.'); then
+      exit 0
+    fi
+
+    echo $stderr
+    exit 1
+  '';
 in
 {
   # Update DDNS entry for heyzec.mooo.com
