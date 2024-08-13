@@ -3,6 +3,9 @@
     # Only ask for password if running for longer than 10 seconds
     screensaver.askForPasswordDelay = 10;
 
+    # Don't rearrange spaces based on most recent use (user to arrange manually)
+    dock.mru-spaces = false;
+
     NSGlobalDomain = {
       InitialKeyRepeat = 25;
       KeyRepeat = 3;  # Smaller is faster

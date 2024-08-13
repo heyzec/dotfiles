@@ -34,6 +34,7 @@
   # services.kdeconnect.enable = true;
   home.packages = with pkgs; [
     telegram-desktop
+    localsend
   ];
 
   imports = [
