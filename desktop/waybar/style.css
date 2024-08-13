@@ -4,7 +4,7 @@
     border: none;
     /* border: 1px solid red; */
     border-radius: 0;
-    font-family: Roboto Mono, heyzec-polybar-icons, Helvetica, Arial, sans-serif;
+    font-family: monospace; /* Use system default font */
     font-size: 13px;
     min-height: 0;
 }
@@ -133,7 +133,7 @@ tooltip label {
 /* } */
 
 #tray {
-    font-family: Roboto, heyzec-polybar-icons, Helvetica, Arial, sans-serif;
+    font-family: sans-serif; /* Use system default font */
     padding-right: 5px;
 }
 #custom-wlogout {
