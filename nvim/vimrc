@@ -268,13 +268,3 @@ endfunction
 
 " }}} 4. THINGS THAT SHOULD BE PLUGINS
 
-" In later neovim versions, these will be deprecated, use vim.lsp.diagnostic.config()
-" instead. See :h diagnostic-signs
-" nf-fa-times_circle
-sign define DiagnosticSignError text= texthl=DiagnosticSignError linehl= numhl=
-" nf-fa-warning
-sign define DiagnosticSignWarn text= texthl=DiagnosticSignWarn linehl= numhl=
-" nf-fa-info_circle
-sign define DiagnosticSignInfo text= texthl=DiagnosticSignInfo linehl= numhl=
-" nf-fa-lightbulb
-sign define DiagnosticSignHint text= texthl=DiagnosticSignHint linehl= numhl=
