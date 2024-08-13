@@ -2,7 +2,7 @@
   users.users."pi" = {
     isNormalUser = true;
     uid = 1000;
-    extraGroups = [ "wheel" "video" ]; # Enable ‘sudo’ for the user.
+    extraGroups = [ "wheel" "video" ];
     openssh.authorizedKeys.keys = (import ./users.crypt.nix).pi-keys;
   };
   users.users."restic" = {

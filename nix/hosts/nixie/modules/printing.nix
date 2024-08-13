@@ -6,7 +6,13 @@
 
   # SCANNERS
   hardware.sane = {
-    enable = true; extraBackends = [ pkgs.utsushi ];
+    enable = true;
+
+    drivers.scanSnap.enable = true;
+    extraBackends = with pkgs; [
+      utsushi # for some Epson scanners
+      sane-airscan         # for "driverless" scanning
+    ];
   };
   # use epsonscan nexttime
   services.udev.packages = [ pkgs.utsushi ];

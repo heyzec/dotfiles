@@ -3,7 +3,7 @@
   xdg.mimeApps = {
     enable = true;
     defaultApplications = let
-      defaultBrowser = "floorp.desktop";
+      defaultBrowser = "firefox.desktop";
     in {
       "text/plain" = ["org.gnome.TextEditor.desktop"];
       "inode/directory" = ["thunar.desktop"];

@@ -3,8 +3,14 @@
   nixpkgs.config.allowUnfree = true;
 
   nix = {
-    settings.experimental-features = [ "nix-command" "flakes" ];
-    settings.auto-optimise-store = true; # hard links duplicate files
+    # Refer to man nix.conf for setting explainations
+    settings = {
+      experimental-features = [ "nix-command" "flakes" ];
+      auto-optimise-store = true; # hard links duplicate files
+      connect-timeout = 10; # the default of 300 is too large
+      tarball-ttl = 604800; # refresh tarballs once a week instead of every hour
+      warn-dirty = false; # don't warn about dirty git trees
+    };
     gc = {
       automatic = true;
       dates = "weekly";
@@ -19,7 +25,6 @@
     git-crypt #        # Needed to decrypt our dotfiles repo
     comma #            # Run software without installing
     nix-output-monitor # prettify nix command outputs
-
   ];
 
   # NixOS System Version (Do not touch!!)
