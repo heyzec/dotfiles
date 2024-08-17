@@ -1,41 +1,24 @@
 { pkgs, ... }:
-let
-  name = "ddns";
-  description = "Update DDNS entry for heyzec.mooo.com";
-  ddns_updater = /* bash */ ''
-      msg=$(${pkgs.wget}/bin/wget -q -O - https://freedns.afraid.org/dynamic/update.php?${(import ./ddns.crypt.nix).api-key})
-      echo $msg
-
-      if $(echo $msg | grep -q 'ERROR: Address .* has not changed.'); then
-        exit 0
-      fi
-
-      exit 1
-    '';
-in
 {
-  # Update DDNS entry for heyzec.mooo.com
-  systemd.services = {
-    ${name} = {
-      inherit description;
-      onFailure = [ "notify-failure@%n.service" ];
-      serviceConfig = {
-        Type = "oneshot";
-      };
-      script = ddns_updater;
-    };
-  };
+  services.ddclient = {
+    enable = true;
 
-  systemd.timers = {
-    ${name} = {
-      inherit description;
-      timerConfig = {
-        # Every 15 minutes
-        OnCalendar = "*:0/15";
-        RandomizedDelaySec = 30;
-        Unit = "${name}.service";
-      };
-      wantedBy = [ "timers.target" ];
-    };
+    # The following block of code mirrors the traditional /etc/ddclient/ddclient.conf
+    # For guide on using ddclient with DeSEC, see
+    # https://desec.readthedocs.io/en/latest/dyndns/configure.html#manual-configuration-other-systems
+    protocol = "dyndns2";
+    ssl = true;
+    server = "update.dedyn.io";
+    username = "heyzec.dedyn.io";
+    passwordFile = let
+      passwordFile = pkgs.writeText "token.txt" ''
+        ${(import ./ddns.crypt.nix).token}
+      '';
+    in
+      "${passwordFile}";
+    domains = [ "heyzec.dedyn.io" ];
+
+    # Fix for NixOS ddclient module
+    use = "cmd, cmd='${pkgs.curl}/bin/curl https://checkipv4.dedyn.io/'";
   };
 }
