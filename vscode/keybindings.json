@@ -125,3 +125,6 @@
         "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus"
     },
 ]
+
+// Unfortunately we cannot rename the file extension to jsonc
+// vim: filetype=jsonc

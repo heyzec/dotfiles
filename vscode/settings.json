@@ -92,4 +92,14 @@
   // ##                           4. EXTENSIONS SETTINGS                          ##
   // ##                                                                           ##
   // ###############################################################################
+
+  // ext install waderyan.gitblame
+  "gitblame.inlineMessageEnabled": true,
+  "gitblame.inlineMessageFormat": "${author.name} (${time.ago})",
+  "gitblame.inlineMessageMargin": 2,
+  "gitblame.statusBarMessageFormat": "${commit.summary}",
+  "gitblame.delayBlame": 250
 }
+
+// Unfortunately we cannot rename the file extension to jsonc
+// vim: filetype=jsonc
