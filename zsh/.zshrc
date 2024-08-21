@@ -175,6 +175,11 @@ fi
 ##                                                                           ##
 ###############################################################################
 
+# Color support for ls and some other commands (use .dircolors)
+# Tell certain commands to use nvim (e.g. git, fc, sudoedit)
+if has nvim; then
+	export EDITOR=nvim
+fi
 
 # Color support for ls and some other commands (use .dircolors)
 if has dircolors; then
