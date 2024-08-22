@@ -49,8 +49,12 @@ fi
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
-alias open='xdg-open'
 alias reload="exec $SHELL -l"
+
+# /bin/open exists on MacOS but not Linux
+if ! command -v open &>/dev/null; then
+	alias open='xdg-open'
+fi
 
 
 alias reload-swhkd='sudo pkill -HUP swhkd'
