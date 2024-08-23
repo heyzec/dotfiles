@@ -29,7 +29,8 @@ bind n findnext --search-from-view
 bind N findnext --search-from-view --reverse
 bind gI js tri.excmds.hint("-c", tri.excmds.INPUTTAGS_selectors)
 unbind --mode=hint <Space>
-bind <BS> back
+" NOOOO disasterous if accidentally filling up forms
+" bind <BS> back
 
 
 " Website specific

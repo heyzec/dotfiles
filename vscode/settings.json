@@ -99,7 +99,10 @@
   "gitblame.inlineMessageFormat": "${author.name} (${time.ago})",
   "gitblame.inlineMessageMargin": 2,
   "gitblame.statusBarMessageFormat": "${commit.summary}",
-  "gitblame.delayBlame": 250
+  "gitblame.delayBlame": 250,
+  "files.exclude": {
+    "**/.direnv": true
+  }
 }
 
 // Unfortunately we cannot rename the file extension to jsonc

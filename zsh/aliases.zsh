@@ -77,6 +77,7 @@ if has lf; then
 fi
 
 
+
 ###############################################################################
 # 4. Useful functions
 ###############################################################################
@@ -103,6 +104,10 @@ function mergerequests() {
 	commit1=$1
 	commit2=$2
 	git log --format=%B $commit1..$commit2 | awk '/See merge request/ {print "- " $4}'
+}
+
+function back() {
+	nohup "$@" &> /dev/null &
 }
 
 

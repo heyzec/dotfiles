@@ -8,6 +8,7 @@
     {
       home.packages = with pkgs; [
         flavours
+    # gnome.adwaita-icon-theme
       ];
 
       # https://wiki.archlinux.org/title/GTK

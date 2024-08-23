@@ -1,5 +1,8 @@
 { config, ... }:
 {
+  wayland.windowManager.hyprland.extraConfig = ''
+     hello
+  '';
   home.file.Documents = {
     source = config.lib.file.mkOutOfStoreSymlink /media/D/Documents;
     target = "Documents";

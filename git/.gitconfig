@@ -110,8 +110,8 @@
 [merge]
 	conflictStyle = diff3
 [core]
-    pager = diffr | less -R
+	pager = diffr | less -R
 [interactive]
-    diffFilter = diffr
+	diffFilter = diffr
 
 # vim: filetype=gitconfig noexpandtab commentstring=#\ %s
