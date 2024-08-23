@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running `nixos-help`).
 
-{ config, lib, pkgs, ... }:
+{ lib, ... }:
 
 {
   security.polkit.enable = true;
@@ -11,5 +11,14 @@
 
   nixpkgs.hostPlatform = lib.mkDefault "aarch64-linux";
   powerManagement.cpuFreqGovernor = lib.mkDefault "ondemand";
+
+  services.caddy.enable = true;
+  services.caddy.extraConfig = ''
+    heyzec.dedyn.io
+
+    reverse_proxy * localhost:8123
+  '';
+
+  services.fail2ban.enable = true;
 }
 
