@@ -1,3 +1,4 @@
+# TODO: debug permissions and visibility of share
 {
   services.samba = {
     enable = true;
