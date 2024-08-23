@@ -32,5 +32,8 @@
 
     wl-color-picker
   ];
+  
+  programs.zsh.enable = true;
+  heyzec.shell.enable = true;
 }
 
