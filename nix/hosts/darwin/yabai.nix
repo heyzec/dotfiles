@@ -1,0 +1,3 @@
+{
+  services.yabai.enable = true;
+}
