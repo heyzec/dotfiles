@@ -268,3 +268,13 @@ endfunction
 
 " }}} 4. THINGS THAT SHOULD BE PLUGINS
 
+" Return to last edit position when opening files (:help last-position-jump)
+augroup RestoreCursor
+  autocmd!
+  autocmd BufRead * autocmd FileType <buffer> ++once
+    \ let s:line = line("'\"")
+    \ | if s:line >= 1 && s:line <= line("$") && &filetype !~# 'commit'
+    \      && index(['xxd', 'gitrebase'], &filetype) == -1
+    \ |   execute "normal! g`\""
+    \ | endif
+augroup END
