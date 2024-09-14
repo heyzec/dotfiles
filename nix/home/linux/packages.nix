@@ -17,6 +17,7 @@
     pdfsam-basic           # PDF editing
     xournalpp        # tablet notetaking software
     joplin-desktop
+    obisidan
 
 
     # [Specialised CTF Tools]
