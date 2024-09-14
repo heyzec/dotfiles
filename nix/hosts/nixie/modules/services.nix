@@ -38,7 +38,7 @@
       enable = true;
       extraArgs = [
         "--avoid '^(Hyprland)$'"
-          "--prefer '^(electron)$'"
+        "--prefer '^(electron)$'"
       ];
     };
 
@@ -67,8 +67,8 @@
           "node_modules"
         ];
       prunePaths = [
-        "/mnt/D"
-          "/media/D"
+        "/mnt"
+        "/media/D"
       ];
     };
 
