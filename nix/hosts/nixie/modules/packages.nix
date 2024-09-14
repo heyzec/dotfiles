@@ -58,7 +58,6 @@
     playerctl              # media control
     rofi-wayland           # application launcher
     swaybg                 # wallpaper setter for wayland
-    swaylock-effects       # screen locker for sway
     # wlogout                # logout menu
 
     # flameshot               # screen capture
