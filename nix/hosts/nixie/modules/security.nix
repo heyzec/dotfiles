@@ -1,6 +1,8 @@
 {
   security = {
     polkit.enable = true;
-    pam.services.swaylock = {};
+    pam.services.hyprlock = {};
   };
+
+  programs.hyprlock.enable = true;
 }
