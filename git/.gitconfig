@@ -109,6 +109,9 @@
 	status = never
 [merge]
 	conflictStyle = diff3
+	tool = nvimdiff
+[merge "nvimdiff"]
+	cmd = "nvim -d \"$LOCAL\" \"$REMOTE\" \"$MERGED\" -c 'wincmd w' -c 'wincmd J'"
 [core]
 	pager = diffr | less -R
 [interactive]
