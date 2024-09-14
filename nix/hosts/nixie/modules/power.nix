@@ -8,6 +8,6 @@
 
     commandBlankScreen = "hyprctl dispatch dpms off";
     commandUnblankScreen = "hyprctl dispatch dpms on";
-    commandLockScreen = "swaylock";
+    commandLockScreen = "hyprlock";
   };
 }
