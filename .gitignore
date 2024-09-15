@@ -16,6 +16,3 @@ nix/result
 *.qcow2
 result
 
-# Secrets
-nvim/chatgpt-key.gpg
-
