@@ -1,11 +1,6 @@
-# define a custom 'delete' command
-cmd delete ${{
-    set -f
-    printf "$fx\n"
-    printf "delete? [y/n]"
-    read ans
-    [ "$ans" = "y" ] && rm -rf $fx
-}}
+# ${{}} regular shell command (drop to terminal)
+# &{{}} async shell command
+# %{{}} piping shell command (output to statline)
 
 # use ctpv to preview files, including images
 # on wayland terminals that support sixel, add "set chafasixel" to ~/.config/ctpv/config
@@ -13,3 +8,54 @@ set sixel true
 set previewer ctpv
 set cleaner ctpvclear
 
+set filesep '\0'
+
+# A custom 'delete' command
+cmd delete ${{
+	set -f
+	printf "$fx\n" | xxd
+	printf "delete? [y/n]"
+	read ans
+	[ "$ans" = "y" ] && printf "$fx\n" | tr '\n' '\0' | xargs rm -rf
+}}
+
+cmd open ${{
+	case $(file --mime-type $f -b) in
+		text/*|application/javascript|application/json|application/xml)
+			$EDITOR "$fx"
+			;;
+		*)
+			$OPENER "$fx"
+			;;
+	esac
+}}
+
+cmd set-prompt &{{
+	fmt="$(starship prompt | sed -e '2!d' -e 's/%[{}]//g')"
+	lf -remote "send $id set promptfmt \"$fmt\""
+}}
+set-prompt
+
+# Integrate with zoxide
+cmd z %{{
+	result="$(zoxide query --exclude $PWD $@ | sed 's/\\/\\\\/g;s/"/\\"/g')"
+	lf -remote "send $id cd \"$result\""
+}}
+cmd zi ${{
+	result="$(zoxide query -i | sed 's/\\/\\\\/g;s/"/\\"/g')"
+	lf -remote "send $id cd \"$result\""
+}}
+
+cmd on-cd &{{
+	lf -remote "send set-prompt"
+}}
+
+# Make shell cd to folder (requires config in zsh)
+map Q &{{
+	tmp="/tmp/LF_LAST_DIR_PATH"
+	echo "$PWD" > $tmp
+	lf -remote "send $id quit"
+}}
+
+
+# vim: set noexpandtab:

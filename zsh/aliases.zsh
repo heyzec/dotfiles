@@ -56,14 +56,24 @@ alias reload="exec $SHELL -l"
 alias reload-swhkd='sudo pkill -HUP swhkd'
 
 
-alias backup='cd /home/heyzec/Desktop/restic-backup-scripts && ./hacky-backup.sh'
-
 # alias vim='nvim'
 alias pwdc='echo -n $(pwd) | wl-copy'
 
 
 if has lf; then
-	alias lfcd='cd "$(command lf -print-last-dir "$@")"'
+	function lf() {
+		tmp="/tmp/LF_LAST_DIR_PATH"
+		env lf "$@"
+		if [ ! -f "$tmp" ]; then
+			return
+		fi
+
+		dir="$(cat "$tmp")"
+		rm -f "$tmp"
+		if [ -d "$dir" ]; then
+			cd "$dir"
+		fi
+	}
 fi
 
 
