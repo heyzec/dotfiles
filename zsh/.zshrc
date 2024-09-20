@@ -3,7 +3,7 @@
 
 ###############################################################################
 ##                                                                           ##
-##           1. ZSH native completion (adapted from default .zshrc)          ##
+##           1. ZSH simple defaults (adapted from default .zshrc)            ##
 ##                                                                           ##
 ###############################################################################
 setopt histignorealldups sharehistory
@@ -21,7 +21,7 @@ unsetopt BEEP  # Disable beeping in zsh instead of globally in terminal
 
 ###############################################################################
 ##                                                                           ##
-##           1. ZSH native completion (adapted from default .zshrc)          ##
+##           2. ZSH native completion (adapted from default .zshrc)          ##
 ##                                                                           ##
 ###############################################################################
 
@@ -53,7 +53,7 @@ zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 
 ###############################################################################
 ##                                                                           ##
-##                               1. Keybindings                              ##
+##                               3. Keybindings                              ##
 ##                                                                           ##
 ###############################################################################
 
@@ -74,6 +74,7 @@ key[End]="${terminfo[kend]}"
 key[PageUp]="${terminfo[kpp]}"
 key[PageDown]="${terminfo[knp]}"
 key[Delete]="${terminfo[kdch1]}"
+# These are ncurses extensions and not terminfo standard
 key[Control-Left]="${terminfo[kLFT5]}"
 key[Control-Right]="${terminfo[kRIT5]}"
 
@@ -99,7 +100,7 @@ fi
 
 ###############################################################################
 ##                                                                           ##
-##                         1. Personal customisations                        ##
+##                         4. Personal customisations                        ##
 ##                                                                           ##
 ###############################################################################
 
@@ -170,10 +171,15 @@ fi
 
 ###############################################################################
 ##                                                                           ##
-##                     1. External shell program integration                 ##
+##                     5. External shell program integration                 ##
 ##                                                                           ##
 ###############################################################################
 
+# Color support for ls and some other commands (use .dircolors)
+# Tell certain commands to use nvim (e.g. git, fc, sudoedit)
+if has nvim; then
+	export EDITOR=nvim
+fi
 
 # Color support for ls and some other commands (use .dircolors)
 if has dircolors; then
@@ -223,7 +229,7 @@ fi
 
 ###############################################################################
 ##                                                                           ##
-##                               1. ZSH plugins                              ##
+##                               6. ZSH plugins                              ##
 ##                                                                           ##
 ###############################################################################
 
@@ -263,6 +269,16 @@ repos=(
 
 plugin-load $repos
 
+###############################################################################
+##                                                                           ##
+##                               6. Miscellaneous                            ##
+##                                                                           ##
+###############################################################################
+
+# Source ~/.zshrc if it exists, where device-specific zsh configs are placed (not tracked)
+if [ -e ~/.zshrc ]; then
+	source ~/.zshrc
+fi
 
 
 unset -f has

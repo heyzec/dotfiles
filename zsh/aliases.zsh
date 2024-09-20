@@ -49,8 +49,12 @@ fi
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
-alias open='xdg-open'
 alias reload="exec $SHELL -l"
+
+# /bin/open exists on MacOS but not Linux
+if ! command -v open &>/dev/null; then
+	alias open='xdg-open'
+fi
 
 
 alias reload-swhkd='sudo pkill -HUP swhkd'
@@ -65,6 +69,7 @@ alias pwdc='echo -n $(pwd) | wl-copy'
 if has lf; then
 	alias lfcd='cd "$(command lf -print-last-dir "$@")"'
 fi
+
 
 
 ###############################################################################
@@ -93,6 +98,10 @@ function mergerequests() {
 	commit1=$1
 	commit2=$2
 	git log --format=%B $commit1..$commit2 | awk '/See merge request/ {print "- " $4}'
+}
+
+function back() {
+	nohup "$@" &> /dev/null &
 }
 
 
