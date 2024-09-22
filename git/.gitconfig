@@ -87,14 +87,19 @@
 
 [init]
 	defaultBranch = main
-	# templatedir = ~/.git-templates
 [pull]
 	ff = only
 [diff]
-	#tool = nvimdiff
-	tool = vscode
-[diff "vscode"]
+	tool = nvimdiff
+[difftool "vscode"]
+	# Use with git difftool --tool vscode
 	cmd = code --wait --diff $LOCAL $REMOTE
+[merge]
+	conflictStyle = zdiff3
+	tool = nvimdiff
+[mergetool "vscode"]
+	# Use with git mergetool --tool vscode
+	cmd = code --wait $MERGED
 [instaweb]
 	httpd = python
 [help]
@@ -102,7 +107,9 @@
 [column]
 	ui = auto
 	status = never
-[merge]
-	conflictStyle = diff3
+[core]
+	pager = "pre=$(which diffr); ${pre:-cat} | less -R"
+[interactive]
+	diffFilter = "pre=$(which diffr); ${pre:-cat}"
 
 # vim: filetype=gitconfig noexpandtab commentstring=#\ %s
