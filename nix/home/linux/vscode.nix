@@ -2,23 +2,14 @@
 {
   programs.vscode = {
     enable = true;
+    # Whether extensions can be modified by Visual Studio Code
+    mutableExtensionsDir = true;
+
     extensions = with pkgs.vscode-extensions; [
       asvetliakov.vscode-neovim
-
-      formulahendry.code-runner
+      waderyan.gitblame
       usernamehw.errorlens
-
-      ms-python.python
-      ms-python.vscode-pylance
-      ms-pyright.pyright
-      ms-vscode.cpptools
-      golang.go
-
-      ms-vscode.makefile-tools
-
-      yzhang.markdown-all-in-one
-      james-yu.latex-workshop
-      firefox-devtools.vscode-firefox-debug
+      esbenp.prettier-vscode
     ];
   };
 }
