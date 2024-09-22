@@ -102,7 +102,8 @@
   "gitblame.delayBlame": 250,
   "files.exclude": {
     "**/.direnv": true
-  }
+  },
+  "git.openRepositoryInParentFolders": "never"
 }
 
 // Unfortunately we cannot rename the file extension to jsonc
