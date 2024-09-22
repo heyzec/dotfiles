@@ -48,7 +48,6 @@
 
   // Autosave, by default after 1000ms
   "files.autoSave": "afterDelay",
-  // "editor.formatOnSave": true,
 
   // Automatically deal with whitespaces
   "files.trimTrailingWhitespace": true,
@@ -81,10 +80,12 @@
 
   // In web dev, prettier is a common standard
   "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
   },
   "[typescriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
   },
 
 
