@@ -13,10 +13,24 @@
   powerManagement.cpuFreqGovernor = lib.mkDefault "ondemand";
 
   services.caddy.enable = true;
+  services.caddy.logFormat = ''
+    level DEBUG
+  '';
+  services.caddy.globalConfig = ''
+    debug
+  '';
   services.caddy.extraConfig = ''
-    heyzec.dedyn.io
+    heyzec.dedyn.io {
+      reverse_proxy * localhost:8123
+    }
+    sa-modules.heyzec.dedyn.io {
+      header {
+          Access-Control-Allow-Origin *
+      }
 
-    reverse_proxy * localhost:8123
+      root * /media/shared/sa-modules
+      file_server
+    }
   '';
 
   services.fail2ban.enable = true;
