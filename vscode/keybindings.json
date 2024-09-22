@@ -45,7 +45,7 @@
     // https://github.com/vscode-neovim/vscode-neovim/issues/1222
     {
         "key": "n",
-        "when": "editorTextFocus && neovim.mode != insert",
+        "when": "editorTextFocus && neovim.mode && neovim.mode != insert",
         "command": "runCommands",
         "args": {
             "commands": [
@@ -66,7 +66,7 @@
     },
     {
         "key": "shift+n",
-        "when": "editorTextFocus && neovim.mode != insert",
+        "when": "editorTextFocus && neovim.mode && neovim.mode != insert",
         "command": "runCommands",
         "args": {
             "commands": [
