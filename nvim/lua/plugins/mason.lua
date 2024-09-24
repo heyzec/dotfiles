@@ -47,30 +47,21 @@ return {
 
 
         mason_tool_installer.setup({
-            -- Add non-project specific LSPs here
-            -- Also see nix/modules/neovim.nix
             ensure_installed = {
-                -- Bash
-                'bash-language-server',      -- LSP, installed via npm
-                'shellcheck',                -- linter, installed via binary on Github
+                'bash-language-server',      -- Bash, LSP, npm
+                'shellcheck',                -- Bash, linting, binary (Github)
 
-                -- Lua for neovim
-                'lua-language-server',       -- LSP, installed via binary on Github
+                -- 'nil',                       -- Nix, LSP, cargo
 
-                -- Nix
-                'nil',                       -- LSP, installed via cargo
+                'lua-language-server',       -- Lua, LSP, binary (Github)
+                'pyright',                   -- Python, LSP, npm
 
-                -- Python
-                'pyright',                   -- LSP, installed via npm
+                -- For Mason installed clangd, includes will not work on nixos
+                -- Use nixpkgs instead
+                -- 'clangd',                    -- C++, LSP, binary (Github)
 
-                -- Misc
-                -- The next 4 are all from hrsh7th/vscode-langservers-extracted
-                'css-lsp',                   -- LSP via npm
-                'eslint-lsp',                -- LSP for js/ts via npm
-                'html-lsp',                  -- LSP via npm
-                'json-lsp',                  -- LSP via npm
-
-                'yaml-language-server',
+                -- 'html-lsp',
+                -- 'isort',
             }
         })
     end,
