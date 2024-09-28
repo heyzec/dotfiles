@@ -1,9 +1,35 @@
-{ pkgs, ... }:
-{
+{ pkgs, ... }: let
+  # Add non-project specific LSPs here
+  # Also see nvim/lua/plugins/mason.lua
+  extraPackages = with pkgs; [
+    # Shell
+    nodePackages.bash-language-server # LSP
+    shellcheck           # linter
+
+    # Lua for neovim
+    lua-language-server # LSP
+
+    # Nix
+    cargo gccgo  # Needed by mason-tool-installer to install nil
+    nil          # LSP for nix
+    nixpkgs-fmt  # External formatter used by nil
+
+    # Misc
+    vscode-langservers-extracted # css, eslint, html, json
+    yaml-language-server
+  ];
+in {
   programs = {
     neovim = {
-      package = pkgs.neovim-unwrapped;
-
+      package = pkgs.symlinkJoin {
+        name = "neovim-unwrapped-wrapped";
+        paths = [ pkgs.neovim-unwrapped ];
+        nativeBuildInputs = [ pkgs.makeBinaryWrapper ];
+        postBuild = ''
+          wrapProgram $out/bin/nvim \
+            --prefix PATH : ${pkgs.lib.makeBinPath extraPackages}
+        '';
+      };
       enable = true;
       defaultEditor = true;
 
@@ -14,19 +40,5 @@
       # configure = {};
     };
   };
-
-
-  # Add LSPs here
-  # NOTE: If would like to make these binaries not available system-wide and only in neovim,
-  # will need to create wrapper around neovim package (not override!) to avoid rebuilds
-  environment.systemPackages = with pkgs; [
-    # == NixOS ==
-    nil          # LSP for nix
-    nixpkgs-fmt  # External formatter used by nil
-
-    clang-tools_16  # for C++ LSP - clangd
-    shellcheck
-    nodePackages.bash-language-server
-  ];
 }
 
