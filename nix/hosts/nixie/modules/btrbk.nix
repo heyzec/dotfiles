@@ -29,7 +29,7 @@
 
           snapshot_preserve_min = "latest";
           snapshot_preserve = "7d 4w 1m";
-          snapshot_dir = "/mnt/root/@home/.snapshots/";
+          snapshot_dir = "@snapshots";
 
           target_preserve_min = "latest";
           target_preserve = "7d 4w 1m";
