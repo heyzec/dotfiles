@@ -1,4 +1,6 @@
-{
+let
+  endpoint = "heyzec.dedyn.io:40478";
+in {
   # Note: To generate config at default location, name instance to be "btrbk" instead
   services.btrbk.instances = {
     "data" = {
@@ -15,7 +17,7 @@
 
           target_preserve_min = "latest";
           target_preserve = "7d 4w 1m";
-          target = "ssh://heyzec.mooo.com:40478/media/backups/btrbk/data";
+          target = "ssh://${endpoint}/media/backups/btrbk/data";
         };
       };
     };
@@ -29,11 +31,11 @@
 
           snapshot_preserve_min = "latest";
           snapshot_preserve = "7d 4w 1m";
-          snapshot_dir = "/mnt/root/@home/.snapshots/";
+          snapshot_dir = "@snapshots";
 
           target_preserve_min = "latest";
           target_preserve = "7d 4w 1m";
-          target = "ssh://heyzec.mooo.com:40478/media/backups/btrbk/home";
+          target = "ssh://${endpoint}/media/backups/btrbk/home";
         };
       };
     };
@@ -41,11 +43,10 @@
 
   systemd.services = {
     "btrbk-data" = {
-      onFailure = [ "notify-failure@%n.service" ];
+      onFailure = ["notify-failure@%n.service"];
     };
     "btrbk-home" = {
-      onFailure = [ "notify-failure@%n.service" ];
+      onFailure = ["notify-failure@%n.service"];
     };
   };
 }
-
