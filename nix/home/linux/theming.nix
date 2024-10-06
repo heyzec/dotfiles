@@ -41,11 +41,6 @@
         gtk.enable = true;
       };
 
-      xdg.configFile."hypr/nix.conf" = {
-        text = /* conf */ ''
-          exec-once = hyprctl setcursor ${cursorName} ${builtins.toString cursorSize}
-        '';
-      };
     })
   ];
 }
