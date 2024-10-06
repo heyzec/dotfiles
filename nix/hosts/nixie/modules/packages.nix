@@ -116,7 +116,7 @@
     ##### Others #####
     cryptor             # frontend for gocryptfs
     wayland-protocols
-    tartube-yt-dlp      # frontend for yt-dlp, a maintained fork of youtube-dl
+    tartube             # frontend for youtube-dl
 
     ##### Other application package types #####
     appimage-run
