@@ -42,6 +42,7 @@
 
       ##### Network Diagnostics #####
       nmap # port scanner
+      dig  # check DNS entries
       (if stdenv.isLinux then traceroute else null) # track route taken by packets
     ];
 
