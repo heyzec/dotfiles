@@ -1,5 +1,6 @@
 { pkgs, ... }:
 {
+  # Refer to home-manager for entry-point to configurations
   programs.hyprland = {
     enable = true;
     xwayland.enable = true;
