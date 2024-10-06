@@ -64,6 +64,7 @@ in {
           # See https://www.reddit.com/r/hyprland/comments/1czd5j8/firefox_title_bar_and_tabs_do_not_appear_on/
           # May be fixed in future versions of Firefox
           "browser.fullscreen.autohide" = false;
+          "middlemouse.paste" = false;
         };
         userContent = ''
           /* For web-search-navigator extension  */
