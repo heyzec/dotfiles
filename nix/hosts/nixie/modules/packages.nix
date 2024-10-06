@@ -96,7 +96,6 @@
     gthumb               # image viewer with simple editing tools
     libvncserver         # for remmina to support VNC
     mate.atril           # simple pdf viewer
-    overskride           # GUI bluetooth manager
     qimgv                # simple image viewer
     remmina              # remote desktop client
     transmission_4-gtk     # lightweight BitTorrent client
