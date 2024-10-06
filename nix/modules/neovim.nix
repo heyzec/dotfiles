@@ -1,7 +1,7 @@
 { pkgs, ... }: let
   # Add non-project specific LSPs here
   # Also see nvim/lua/plugins/mason.lua
-  extraPackages = with pkgs; [
+  extraPackages = with pkgs; lib.lists.remove null [
     # Shell
     nodePackages.bash-language-server # LSP
     shellcheck           # linter
@@ -10,7 +10,8 @@
     lua-language-server # LSP
 
     # Nix
-    cargo gccgo  # Needed by mason-tool-installer to install nil
+    (if stdenv.isx86_64 then cargo else null)  # rustc is very large in file size
+    (if stdenv.isx86_64 then gccgo else null)  # gccgo cannot build on arm?
     nil          # LSP for nix
     nixpkgs-fmt  # External formatter used by nil
 
