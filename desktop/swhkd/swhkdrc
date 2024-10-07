@@ -81,23 +81,29 @@ super + shift + escape
 
 # Duplicated for use on multiple keyboards
 super + escape
-    @enter applications && sh -c 'echo "Launch: [b]rowser [f]iles [m]essages" > /tmp/mode && pkill -35 waybar'
+    # @enter applications && sh -c 'echo "Launch: [b]rowser [f]iles [m]essages" > /tmp/mode && pkill -35 waybar'
+    @enter applications
 super + grave
-    @enter applications && sh -c 'echo "Launch: [b]rowser [f]iles [m]essages" > /tmp/mode && pkill -35 waybar'
+    @enter applications
+    # @enter applications && sh -c 'echo "Launch: [b]rowser [f]iles [m]essages" > /tmp/mode && pkill -35 waybar'
 
 mode applications
 ## Launch // Browser // <><Grave> b ##
 b
-    @escape && gtk-launch $(xdg-settings get default-web-browser) && echo "" > /tmp/mode && pkill -35 waybar
+    # @escape && gtk-launch $(xdg-settings get default-web-browser) && echo "" > /tmp/mode && pkill -35 waybar
 ## Launch // File Explorer // <><Grave> f ##
+   @escape && gtk-launch $(xdg-settings get default-web-browser)
 f
-    @escape && thunar && echo "" > /tmp/mode && pkill -35 waybar
+    # @escape && thunar && echo "" > /tmp/mode && pkill -35 waybar
+    @escape && thunar
 m
-    @escape && telegram-desktop && echo "" > /tmp/mode && pkill -35 waybar
+    # @escape && telegram-desktop && echo "" > /tmp/mode && pkill -35 waybar
+    @escape && telegram-desktop
 j
-    @escape && bash -c '(cd ~/.local/share/applications/; gtk-launch $(basename $(find ~/.local/share/applications/ -iname "*joplin*")))' && echo "" > /tmp/mode && pkill -35 waybar
+    # @escape && bash -c '(cd ~/.local/share/applications/; gtk-launch $(basename $(find ~/.local/share/applications/ -iname "*joplin*")))' && echo "" > /tmp/mode && pkill -35 waybar
 escape
-    @escape && echo "" > /tmp/mode && pkill -35 waybar
+    # @escape && echo "" > /tmp/mode && pkill -35 waybar
+    @escape
 endmode
 
 # super + escape
