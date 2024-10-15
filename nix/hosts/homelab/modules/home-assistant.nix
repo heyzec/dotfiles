@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, ... }:
 {
   services.home-assistant = {
     enable = true;
@@ -28,14 +28,6 @@
       automation = "!include automations.yaml";
     };
   };
-  networking.firewall.allowedTCPPorts = [ 1883 8123 8080 ];
-  environment.systemPackages = with pkgs; [
-    bluez               # bluetooth related commands (e.g. bluetoothctl)
-  ];
-  hardware.bluetooth.enable = true;
-  services.blueman.enable = true;
-  hardware.raspberry-pi."4".bluetooth.enable = true;
-
 
   services.mosquitto = {
     enable = true;
@@ -55,4 +47,9 @@
       frontend = true;
     };
   };
+
+  networking.firewall.allowedTCPPorts = [ 1883 8123 8080 ];
+  services.caddy.virtualHosts."ha.heyzec.dedyn.io".extraConfig = ''
+    reverse_proxy * localhost:8123
+  '';
 }
