@@ -38,10 +38,14 @@ return {
 
 
         cmp.setup({
-            -- Highlight first selection
-            completion = {
-                completeopt = 'menu,menuone,noinsert'
-            },
+            preselect = cmp.PreselectMode.None,
+            -- completion = {
+            --     -- default is "menu,preview"
+            --     -- menu: use a popup menu
+            --     -- menuone: show menu even if there is only one match
+            --     -- noinsert: do not insert text until selected by user
+            --     completeopt = 'menu,menuone,noinsert'
+            -- },
             snippet = {
                 expand = function(args)
                     luasnip.lsp_expand(args.body)
@@ -58,21 +62,6 @@ return {
                     i = cmp.mapping.confirm({ select = true }),
                     c = nil,
                 }),
-                ['<Tab>'] = cmp.mapping(
-                    function(fallback)
-                        if cmp.visible() then
-                            cmp.select_next_item()
-                        elseif luasnip.expand_or_jumpable() then
-                            luasnip.expand_or_jump()
-                        -- elseif has_words_before() then
-                            -- cmp.complete()
-                        else
-                            fallback()
-                        end
-                    end
-                ),
-
-                ['<S-Tab>'] = cmp.mapping.select_prev_item(),
                 ['<C-n>'] = cmp.mapping.select_next_item(),
                 ['<C-p>'] = cmp.mapping.select_prev_item(),
                 ['<Down>'] = cmp.mapping.select_next_item(),
