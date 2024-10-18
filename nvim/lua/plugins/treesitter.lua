@@ -3,6 +3,9 @@ return {
     -- https://github.com/nvim-treesitter/nvim-treesitter/issues/4945#issuecomment-1691168369
     {
         "nvim-treesitter/nvim-treesitter",
+        -- Treesitter is very terrible with working properly non-latest parsers
+        -- We hardcode this version: https://www.reddit.com/r/neovim/comments/1ds8kcp/comment/lbef8yl
+        commit = "5a8e9644c49f992f47bacd7900f4404df6fd9d38",
         build = ":TSUpdate",
 
         event = vim.g.vscode and nil or { "LazyFile", "VeryLazy" },
