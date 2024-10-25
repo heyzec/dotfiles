@@ -19,10 +19,10 @@
   };
 
   # Don't add parameters to within { ... }, explicitly index it from inputs instead
-  outputs = { self, ... }@inputs: let
+  outputs = {self, ...} @ inputs: let
     # ---- SYSTEM SETTINGS ---- #
     systemSettings = {
-      system = "x86_64-linux";      # system arch
+      system = "x86_64-linux"; # system arch
       hostname = "nixie";
       timezone = "Asia/Singapore";
       locale = "en_SG.UTF-8";
@@ -33,8 +33,8 @@
     userSettings = rec {
       username = "heyzec";
       homeDir = "/home/${username}";
-      dotfilesDir = "~/dotfiles";              # path to dotfiles repo, used by vm (good to start with ~)
-      flakeDir = "/home/heyzec/dotfiles/nix";  # path to flake repo, used by nh
+      dotfilesDir = "~/dotfiles"; # path to dotfiles repo, used by vm (good to start with ~)
+      flakeDir = "/home/heyzec/dotfiles/nix"; # path to flake repo, used by nh
     };
 
     # ----- Override SYSTEM and USER SETTINGS on a per-host basis here ----- #
@@ -52,21 +52,29 @@
     # https://github.com/bangedorrunt/nix/blob/tdt/flake.nix#L94-L97
     mkLib = nixpkgs:
       nixpkgs.lib.extend
-      (self: super: {heyzec = import ./lib { pkgs = pkgsForSystem "x86_64-linux"; lib = self; }; } // inputs.home-manager.lib);
+      (self: super:
+        {
+          heyzec = import ./lib {
+            pkgs = pkgsForSystem "x86_64-linux";
+            lib = self;
+          };
+        }
+        // inputs.home-manager.lib);
     lib = mkLib inputs.nixpkgs;
 
     # Needed by home manager in standalone mode (?)
-    pkgsForSystem = system : import inputs.nixpkgs {
-      inherit system;
-      config = {
-        allowUnfree = true;
+    pkgsForSystem = system:
+      import inputs.nixpkgs {
+        inherit system;
+        config = {
+          allowUnfree = true;
+        };
       };
-    };
 
     # This allows us to access stable packages:
     # - unstable: pkgs.<program>
     # - stable:   pkgs.stable.<program>
-    nixpkgs-stable-module = ({
+    nixpkgs-stable-module = {
       nixpkgs.overlays = [
         (final: prev: {
           stable = import inputs.nixpkgs-stable {
@@ -75,14 +83,14 @@
           };
         })
       ];
-    });
+    };
 
-    label-generation-module = ({
+    label-generation-module = {
       system.nixos.label =
-      if self.sourceInfo ? lastModifiedDate && self.sourceInfo ? shortRev
-      then "${inputs.nixpkgs.lib.substring 0 8 self.sourceInfo.lastModifiedDate}.${self.sourceInfo.shortRev}"
-      else inputs.nixpkgs.lib.warn "Repo is dirty, revision will not be available in system label" "dirty";
-      });
+        if self.sourceInfo ? lastModifiedDate && self.sourceInfo ? shortRev
+        then "${inputs.nixpkgs.lib.substring 0 8 self.sourceInfo.lastModifiedDate}.${self.sourceInfo.shortRev}"
+        else inputs.nixpkgs.lib.warn "Repo is dirty, revision will not be available in system label" "dirty";
+    };
 
     # Additional pass these arguments to each module
     customArgs = {
@@ -90,19 +98,31 @@
       inherit lib;
     };
 
-    getSpecialArgs = name :
-      if builtins.hasAttr name specificSettings then
-        customArgs // {
+    getSpecialArgs = name:
+      if builtins.hasAttr name specificSettings
+      then
+        customArgs
+        // {
           systemSettings = systemSettings // specificSettings.${name}.systemSettings;
           userSettings = userSettings // specificSettings.${name}.userSettings;
         }
-      else customArgs // {
-        systemSettings = systemSettings;
-        userSettings = userSettings;
-      };
-  in
-  {
+      else
+        customArgs
+        // {
+          systemSettings = systemSettings;
+          userSettings = userSettings;
+        };
+  in {
     legacyPackages."x86_64-darwin" = pkgsForSystem "x86_64-darwin";
+
+    devShells."x86_64-linux".default = let
+      pkgs = pkgsForSystem "x86_64-linux";
+    in
+      pkgs.mkShell {
+        packages = with pkgs; [
+          alejandra
+        ];
+      };
 
     nixosConfigurations = {
       # The standard configuration (home manager standalone)
@@ -124,7 +144,7 @@
           ./hosts/nixie
           nixpkgs-stable-module
           inputs.home-manager.nixosModules.home-manager
-          ({
+          {
             home-manager = {
               extraSpecialArgs = getSpecialArgs "heyzec";
               users = {
@@ -137,7 +157,7 @@
               useGlobalPkgs = true;
               useUserPackages = true;
             };
-          })
+          }
         ];
       };
 
@@ -155,7 +175,7 @@
     homeConfigurations = {
       "heyzec" = inputs.home-manager.lib.homeManagerConfiguration {
         pkgs = pkgsForSystem (getSpecialArgs "heyzec").systemSettings.system;
-        extraSpecialArgs = lib.recursiveUpdate (getSpecialArgs "heyzec") { systemSettings.isHome = true; };
+        extraSpecialArgs = lib.recursiveUpdate (getSpecialArgs "heyzec") {systemSettings.isHome = true;};
         modules = [
           ./home
           ./modules/shell.nix
@@ -165,7 +185,7 @@
 
       "darwin" = inputs.home-manager.lib.homeManagerConfiguration {
         pkgs = pkgsForSystem (getSpecialArgs "darwin").systemSettings.system;
-        extraSpecialArgs = lib.recursiveUpdate (getSpecialArgs "darwin") { systemSettings.isHome = true; };
+        extraSpecialArgs = lib.recursiveUpdate (getSpecialArgs "darwin") {systemSettings.isHome = true;};
         modules = [
           ./home
           ./modules/shell.nix
@@ -184,5 +204,5 @@
     };
   };
 }
-
 # vim: set ts=2 sts=2 sw=2:
+
