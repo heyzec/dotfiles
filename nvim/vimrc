@@ -213,10 +213,10 @@ vnoremap <leader>s "zy:%s/<C-r>z//g<Left><Left>
 " Switching between splits (ctrl + h,j,k,l)
 " We choose ctrl over alt because vim-tmux-navigator defaults to ctrl+hjkl
 " Use map over noremap to trigger vscode-neovim's default maps (if vscode)
-" map <C-h>     <C-w>h
-" map <C-j>     <C-w>j
-" map <C-k>     <C-w>k
-" map <C-l>     <C-w>l
+map <C-h>     <C-w>h
+map <C-j>     <C-w>j
+map <C-k>     <C-w>k
+map <C-l>     <C-w>l
 tnoremap <C-h> <C-\><C-n><c-w>h
 tnoremap <C-j> <C-\><C-n><c-w>j
 tnoremap <C-k> <C-\><C-n><c-w>k
