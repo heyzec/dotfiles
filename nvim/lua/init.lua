@@ -33,3 +33,6 @@ vim.diagnostic.config({
         },
     },
 })
+
+
+vim.opt.conceallevel = 2

@@ -230,7 +230,7 @@
         // nf-fa-power_off
         "format": "",
         "interval": "once",
-        "on-click": "wlogout -p layer-shell",
+        "on-click": "/run/current-system/sw/bin/wlogout -p layer-shell",
     },
 
     "group/audio": {

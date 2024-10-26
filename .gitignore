@@ -1,3 +1,6 @@
+# Flakes
+.direnv/
+
 # Neovim
 nvim/viminfo
 nvim/.netrwhist
