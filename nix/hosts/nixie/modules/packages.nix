@@ -111,7 +111,6 @@
     (pkgs.writeShellScriptBin "kde-open5" ''
       xdg-open "$@"
     '')
-    vscode           # IDE-like text editor
 
     ##### Others #####
     cryptor             # frontend for gocryptfs
