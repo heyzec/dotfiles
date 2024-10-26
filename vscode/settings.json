@@ -42,12 +42,12 @@
   // Some explanation of useful settings here:
   // https://blog.danskingdom.com/Visual-Studio-Code-default-settings-to-change
 
-  // Make it smaller, the default is 14
+  // Use system font; make it smaller (the default is 14)
+  "editor.fontFamily": "monospace",
   "editor.fontSize": 13,
 
   // Autosave, by default after 1000ms
   "files.autoSave": "afterDelay",
-  // "editor.formatOnSave": true,
 
   // Automatically deal with whitespaces
   "files.trimTrailingWhitespace": true,
@@ -67,6 +67,23 @@
   // VSCode asking for updates too frequently, we disable auto-update checks
   "update.mode": "manual",
 
+  // Version of VSCode installed by NixOS may not be the latest, and extensions may not backward compatible
+  "extensions.autoCheckUpdates": false,
+  "extensions.autoUpdate": false,
+
+  // Tell vscode not to intercept some control sequences used by vim
+  "terminal.integrated.commandsToSkipShell": [
+    "-workbench.action.quickOpen" // Ctrl-E
+  ],
+
+  // Exclude certain files from explorer
+  "files.exclude": {
+    "**/.direnv": true,
+  },
+
+  // Don't show this annoying warning, we'll open manually via the Git sidebar if needed
+  "git.openRepositoryInParentFolders": "never",
+
   // Others
   "workbench.editor.pinnedTabsOnSeparateRow": true,
   "workbench.tree.enableStickyScroll": true,
@@ -79,11 +96,13 @@
   // ###############################################################################
 
   // In web dev, prettier is a common standard
-  "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  "[javascript][javascriptreact][typescript][typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
   },
-  "[typescriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  "[json][jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
   },
 
 
@@ -98,7 +117,7 @@
   "gitblame.inlineMessageFormat": "${author.name} (${time.ago})",
   "gitblame.inlineMessageMargin": 2,
   "gitblame.statusBarMessageFormat": "${commit.summary}",
-  "gitblame.delayBlame": 250
+  "gitblame.delayBlame": 250,
 }
 
 // Unfortunately we cannot rename the file extension to jsonc
