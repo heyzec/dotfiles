@@ -76,7 +76,9 @@ local git_commits       = action("🔭 Git Commits", telescope.git_commits)
 local git_status        = action("🔭 Git Status", telescope.git_status)
 
 -- Extensions
-local undo              = action("🔭 Undo", function() if telescope_ext then telescope_ext.undo.undo() end end)
+local undo              = action("🔭 Undo",
+    function() if telescope_ext then telescope_ext.undo.undo() end end,
+    vscode("workbench.action.localHistory.restoreViaPicker"))
 
 
 ------------------------2.2. LSP----------------------------
