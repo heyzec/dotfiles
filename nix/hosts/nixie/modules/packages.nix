@@ -91,7 +91,7 @@
     chromium             # open-source chrome
     font-manager         # easily manage desktop fonts
     gnome-text-editor    # simple text editor
-    gnome.simple-scan    # frontend for SANE
+    simple-scan          # frontend for SANE
     gparted              # frontend to parted, a partitioning tool
     gthumb               # image viewer with simple editing tools
     libvncserver         # for remmina to support VNC
@@ -115,7 +115,7 @@
     ##### Others #####
     cryptor             # frontend for gocryptfs
     wayland-protocols
-    tartube             # frontend for youtube-dl
+    tartube-yt-dlp      # frontend for yt-dlp, a maintained fork of youtube-dl
 
     ##### Other application package types #####
     appimage-run
