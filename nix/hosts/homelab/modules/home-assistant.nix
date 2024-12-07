@@ -11,6 +11,9 @@
       "zha"
       "mqtt"
       "samsungtv"
+      "api"
+      "python_script"
+      "tasmota"
     ];
     extraPackages = ps:
       with ps; [
@@ -38,6 +41,10 @@
 
       automation = "!include automations.yaml";
       script = "!include scripts.yaml";
+
+      shell_command = {
+        encode_bmb_code = "python /etc/home-assistant/ir/main.py {{ code }}";
+      };
     };
   };
 
