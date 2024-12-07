@@ -1,36 +1,32 @@
-{ pkgs, ... }: let
+{pkgs, ...}: let
   # The port that WireGuard listens to - recommended that this be changed from default
   wireguardPort = 51820;
   # Address of this host ("server"-ish) within the VPN subnet
   ipv4Address = "192.168.2.253/24";
 in {
-  networking = {
-    hostName = "raspberrypi"; # Define your hostname.
-    useDHCP = false;
-    interfaces.eth0.useDHCP = true;
-    # interfaces.eth0.macAddress = "b8:00:00:00:00:00";
-    interfaces.wlan0.useDHCP = true;
-    firewall.enable = false;
-  };
-
   # Enable NAT
   networking.nat = {
     enable = true;
     enableIPv6 = true;
     externalInterface = "eth0";
-    internalInterfaces = [ "wg0" ];
+    internalInterfaces = ["wg0"];
   };
   # Open ports in the firewall
   networking.firewall = {
-    allowedTCPPorts = [ 53 ];
-    allowedUDPPorts = [ 53 wireguardPort ];
+    allowedTCPPorts = [53];
+    allowedUDPPorts = [53 wireguardPort];
   };
 
   networking.wg-quick.interfaces = {
     # "wg0" is the network interface name. You can name the interface arbitrarily.
     "wg0" = {
       # Determines the IP/IPv6 address and subnet of the client's end of the tunnel interface
-      address = [ ipv4Address /* "fdc9:281f:04d7:9ee9::1/64" */ ];
+      address = [
+        ipv4Address
+        /*
+        "fdc9:281f:04d7:9ee9::1/64"
+        */
+      ];
       listenPort = wireguardPort;
       # Path to the server's private key
       privateKeyFile = "/home/pi/wireguard/private";
@@ -57,12 +53,12 @@ in {
         # Laptop
         {
           publicKey = (import ./wireguard.crypt.nix).laptop-key;
-          allowedIPs = [ "192.168.2.1/32" ];
+          allowedIPs = ["192.168.2.1/32"];
         }
         # Phone
         {
           publicKey = (import ./wireguard.crypt.nix).phone-key;
-          allowedIPs = [ "192.168.2.2/32" ];
+          allowedIPs = ["192.168.2.2/32"];
         }
       ];
     };

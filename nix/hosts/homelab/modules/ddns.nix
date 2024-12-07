@@ -1,28 +1,22 @@
-{ pkgs, ... }:
-{
-  # Update DDNS entry for heyzec.mooo.com
-  systemd.services."dns" = {
-    path = with pkgs; [
-      iproute2
-      gnugrep
-      wget
-    ];
-    script = ''
-      /home/pi/router-scripts/check_router.sh && /home/pi/router-scripts/ddns_updater.sh
-    '';
-    serviceConfig = {
-      WorkingDirectory = "/home/pi";
-      Type = "oneshot";
-    };
-  };
-  systemd.timers."dns" = {
-    wantedBy = [ "timers.target" ];
-    timerConfig = {
-      OnCalendar = "";
-      RandomizedDelaySec = 30;
-      Unit = "dns.service";
-    };
-  };
-# 1,31 * * * * /home/pi/router-scripts/check_router.sh && /home/pi/router-scripts/ddns_updater.sh
-}
+{pkgs, ...}: {
+  services.ddclient = {
+    enable = true;
 
+    # The following block of code mirrors the traditional /etc/ddclient/ddclient.conf
+    # For guide on using ddclient with DeSEC, see
+    # https://desec.readthedocs.io/en/latest/dyndns/configure.html#manual-configuration-other-systems
+    protocol = "dyndns2";
+    ssl = true;
+    server = "update.dedyn.io";
+    username = "heyzec.dedyn.io";
+    passwordFile = let
+      passwordFile = pkgs.writeText "token.txt" ''
+        ${(import ./ddns.crypt.nix).token}
+      '';
+    in "${passwordFile}";
+    domains = ["heyzec.dedyn.io"];
+
+    # Fix for NixOS ddclient module
+    usev4 = "cmd, cmd='${pkgs.curl}/bin/curl https://checkipv4.dedyn.io/'";
+  };
+}
