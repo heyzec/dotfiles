@@ -40,6 +40,15 @@ return {
         },
         ---@diagnostic disable-next-line: missing-fields
         opts = {
+            -- Use nvim-treesitter README's default list of parsers to install by default
+            -- For Nix systems, run neovim in a nix shell with gcc once to do the installing
+            ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "markdown", "markdown_inline"},
+            -- Note to self: Do not install automatically, since it is likely to fail on Nix systems!
+            auto_install = false,
+
+            -- From here on, we configure the applications of treesitter:
+            -- [H]ighlight, [L]ocals, [F]olds, [I]ndents, In[j]ections
+            -- TODO: Consider conditionally disabling highlight for large files, see README for function
             highlight = { enable = true },
             indent = { enable = true },
             refactor = {
@@ -56,8 +65,6 @@ return {
                     },
                 },
             },
-            -- Note to self: Do not install automatically, since it is likely to fail on Nix systems!
-            auto_install = false,
             incremental_selection = {
                 enable = true,
                 keymaps = {
