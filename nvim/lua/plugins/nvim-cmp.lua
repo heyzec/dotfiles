@@ -1,4 +1,6 @@
 return {
+    -- Let's try using blink.cmp
+    enabled = false,
     -- Provide code completion menu
     "hrsh7th/nvim-cmp", -- Autocompletion
     dependencies = {

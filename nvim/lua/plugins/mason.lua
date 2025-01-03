@@ -27,9 +27,9 @@ return {
             PATH = "append",
         })
 
-        -- to enable autocompletion (assign to every lsp server config)
-        local capabilities = vim.lsp.protocol.make_client_capabilities()
-        capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
+        -- -- to enable autocompletion (assign to every lsp server config)
+        -- local capabilities = vim.lsp.protocol.make_client_capabilities()
+        -- capabilities = require('blink.cmp').default_capabilities(capabilities)
 
 
         -- Define configs for each specific language here
@@ -39,7 +39,7 @@ return {
                 require("lspconfig")[server_name].setup {
                     -- Removed, we config keymaps using the autocmd LspAttach
                     -- on_attach = on_attach,
-                    capabilities = capabilities,
+                    capabilities = require('blink.cmp').get_lsp_capabilities(),
                     settings = servers[server_name],
                 }
             end,
