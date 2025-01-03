@@ -52,14 +52,6 @@ let &t_EI = "\e[2 q"                            " change to block cursor when le
 set list
 set listchars=tab:\|\ ,trail:·,nbsp:⎵           " tabs, non-breaking spaces, trailing spaces
 
-if !has('g:vscode')
-    augroup visualise_chars
-        autocmd!
-        " only show eol when in insert mode
-        autocmd ModeChanged n:[vV] set listchars+=eol:↲
-        autocmd ModeChanged [vV]:n set listchars-=eol:↲
-    augroup end
-endif
 if !has('nvim')                                 " make these chars display in gray instead of blue
     highlight SpecialKey ctermfg=244 guifg=#808080
 endif
