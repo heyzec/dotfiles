@@ -1,11 +1,9 @@
-{ userSettings, ... }:
-let
+{userSettings, ...}: let
   username = userSettings.username;
-in
-{
+in {
   heyzec.postgresql = {
     enable = true;
+    autoStart = false;
     username = username;
   };
 }
-
