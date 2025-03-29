@@ -54,7 +54,8 @@ end
 
 -- File Pickers
 local find_files = action("🔭 Find files", telescope.find_files, vscode('workbench.action.quickOpen'))
-local grep_files = action("🔭 Grep files", telescope.live_grep, vscode('workbench.action.showAllSymbols'))
+-- this requires the Periscope extension (this seems to be the best workaround available)
+local grep_files = action("🔭 Grep files", telescope.live_grep, vscode('periscope.search'))
 
 
 -- Vim Pickers
