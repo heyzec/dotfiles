@@ -38,7 +38,7 @@
       enable = true;
       extraArgs = [
         "--avoid '^(Hyprland)$'"
-          "--prefer '^(electron)$'"
+        "--prefer '^(electron)$'"
       ];
     };
 
