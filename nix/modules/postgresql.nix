@@ -11,7 +11,7 @@ in
         description = "Enable postgresql server with a default database";
       };
       username = lib.mkOption {
-        type = lib.types.string;
+        type = lib.types.str;
         description = "Username of main user to create a database for";
       };
     };

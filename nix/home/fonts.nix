@@ -8,7 +8,7 @@
     jetbrains-mono     # JetBrain's fonts for IDEs
 
     # Only install a selection of fonts from nerdfonts repository
-    (nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
+    nerd-fonts.jetbrains-mono
   ];
   fonts = {
     fontconfig.enable = true;
