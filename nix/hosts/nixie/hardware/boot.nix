@@ -12,8 +12,6 @@
     # https://wiki.archlinux.org/title/intel_graphics#Crash/freeze_on_low_power_Intel_CPUs
     # Disable GPU power management to fix random hangs
     "i915.enable_dc=0"
-    # https://www.reddit.com/r/archlinux/comments/gu0a8a/psa_solution_for_random_freezes_with_intel_igpu/
-    "i915.enable_psr=0"
   ];
   # Enable all sysrq functions (useful to recover from some issues):
   boot.kernel.sysctl."kernel.sysrq" = 1; # NixOS default: 16 (only the sync command)
