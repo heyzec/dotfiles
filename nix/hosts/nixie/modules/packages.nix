@@ -57,6 +57,7 @@
     libnotify              # library needed for dunst, a notification daemon
     playerctl              # media control
     rofi-wayland           # application launcher
+    smile                  # emoji picker
     swaybg                 # wallpaper setter for wayland
     # wlogout                # logout menu
 
