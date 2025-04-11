@@ -2,8 +2,7 @@
 
 {
   # PRINTERS
-  # Disable
-  services.printing.enable = false;
+  services.printing.enable = true;
 
   # SCANNERS
   hardware.sane = {
