@@ -125,6 +125,10 @@ in {
         # See https://github.com/nix-community/home-manager/issues/3698
         search.force = true;
       };
+      "vscode-debug-react" = {
+        name = "vscode-debug-react";
+        id = 1;
+      };
     };
   };
 }
