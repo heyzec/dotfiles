@@ -3,7 +3,13 @@
 " as an enforced single point of truth for Tridactyl's configuration.
 sanitize tridactyllocal tridactylsync
 
-" General Settings
+" ---------------------Website Blacklists----------------------
+" Loading configs is very slow, so :blacklistadd needs to be at the top
+blacklistadd www.hackerrank.com
+blacklistadd chatgpt.com
+blacklistadd canva.com
+
+" ----------------------General Settings-----------------------
 set theme shydactyl
 set smoothscroll true
 set hintchars 5432167890
@@ -14,13 +20,11 @@ set update.nag false
 " Use ctrl+i to edit text in neovim, moving cursor as appropriate
 set editorcmd $TERMINAL --title tridactyl -e nvim %f '+normal!%lGzv%c|'
 
-" Binds
+" ----------------------------Binds----------------------------
 unbind --mode=ex <C-a>
 unbind --mode=ex <C-c>
 unbind <C-f>
 unbind <C-b>
-" bind h tabprev
-" bind l tabnext
 bind J scrollpx -50
 bind K scrollpx 50
 bind / fillcmdline find
@@ -30,8 +34,12 @@ bind N findnext --search-from-view --reverse
 bind gI js tri.excmds.hint("-c", tri.excmds.INPUTTAGS_selectors)
 unbind --mode=hint <Space>
 
+" Make selecting tabs more comfortable
+set tabsort mru
+bind --mode=ex <ArrowUp> ex.prev_completion
+bind --mode=ex <ArrowDown> ex.next_completion
 
-" Website specific
+" -----------------------Website-specific----------------------
 " Wikipedia
 bindurl wikiwand.com yy composite js document.location.href.replace("wikiwand.com/en", "wikipedia.org/wiki") | clipboard yank
 
@@ -42,8 +50,10 @@ bindurl www.google.com i hint -J; form textarea
 bindurl www.google.com f hint -Jc #search div:not(.action-menu) > a, block-component a
 seturl www.google.com hintchars 1234567890
 
-unbindurl github.com j
-unbindurl github.com k
+" GitHub
+" Use Web Search Navigator's keybinds when viewing tree
+unbindurl github\.com/.+/.+/tree j
+unbindurl github\.com/.+/.+/tree k
 bindurl github\.com/search f hint -Jc [data-testid="results-list"] h3 a
 
 unbindurl gitlab.com j
@@ -52,9 +62,4 @@ unbindurl gitlab.com k
 unbindurl youtube.com j
 unbindurl youtube.com k
 
-blacklistadd www.hackerrank.com
-
-
-
 # vim: commentstring="\ %s
-
