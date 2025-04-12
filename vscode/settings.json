@@ -33,7 +33,6 @@
   "editor.stickyScroll.enabled": true,
   "editor.guides.bracketPairs": "active",
 
-
   // ###############################################################################
   // ##                                                                           ##
   // ##                             2. VSCODE SETTINGS                            ##
@@ -78,7 +77,7 @@
 
   // Exclude certain files from explorer
   "files.exclude": {
-    "**/.direnv": true,
+    "**/.direnv": true
   },
 
   // Don't show this annoying warning, we'll open manually via the Git sidebar if needed
@@ -87,7 +86,6 @@
   // Others
   "workbench.editor.pinnedTabsOnSeparateRow": true,
   "workbench.tree.enableStickyScroll": true,
-
 
   // ###############################################################################
   // ##                                                                           ##
@@ -98,13 +96,12 @@
   // In web dev, prettier is a common standard
   "[javascript][javascriptreact][typescript][typescriptreact]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.formatOnSave": true,
+    "editor.formatOnSave": true
   },
   "[json][jsonc]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.formatOnSave": true,
+    "editor.formatOnSave": true
   },
-
 
   // ###############################################################################
   // ##                                                                           ##
@@ -118,6 +115,7 @@
   "gitblame.inlineMessageMargin": 2,
   "gitblame.statusBarMessageFormat": "${commit.summary}",
   "gitblame.delayBlame": 250,
+  "diffEditor.ignoreTrimWhitespace": false
 }
 
 // Unfortunately we cannot rename the file extension to jsonc
