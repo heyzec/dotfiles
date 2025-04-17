@@ -25,7 +25,7 @@ super + control + space
 
 ## Launch // Dotfiles Editor  // <> o ##
 super + o
-    ~/dotfiles/scripts/dotsman/dotsman.sh rofi
+    ~/dotfiles/scripts/dotsman/dotsman.sh dmenu rofi -dmenu
 
 ## Launch // Emoji Picker // <> ; ##
 super + ;

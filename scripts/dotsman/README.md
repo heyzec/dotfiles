@@ -30,6 +30,15 @@ It is written to have as little dependencies as possible - almost nothing!
     To install all configs, run `dotsman install all`.
 
 
-3. To open the rofi menu, run `dotsman rofi`.
-It would make sense to set a keybind that calls this script in an appropriate place, e.g. window manager
+3. To use demu or a similar application to quickly select a config to edit, menu, run `dotsman rofi <demu-compatible program> [args...]`.
+It's recommended to bind this command to a key in your window manager or hotkey daemon for quick access.
 
+    Example 1: [Hyprland](https://github.com/hyprwm/Hyprland) + [rofi](https://github.com/davatorium/rofi):
+    ```text
+    bind = SUPER, b, exec, dotsman.sh dmenu rofi -dmenu
+    ```
+    Example 2: [swhkd](https://github.com/waycrate/swhkd) + [walker](https://github.com/abenz1267/walker):
+    ```text
+    super + o
+        dotsman.sh dmenu walker --dmenu --keepsort --placeholder "Select config:"
+    ```
