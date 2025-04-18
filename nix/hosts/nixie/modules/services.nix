@@ -58,20 +58,6 @@
 
     cron.enable = true;  # Temporary, until we migrate all to systemd timers
 
-    locate = {
-      enable = true;
-      package = pkgs.plocate;
-      localuser = null;  # to squelch warning: plocate does not support non-root updatedb
-        pruneNames = [
-        ".bzr" ".cache" ".git" ".hg" ".svn"  # defaults
-          "node_modules"
-        ];
-      prunePaths = [
-        "/mnt/D"
-          "/media/D"
-      ];
-    };
-
     thermald.enable = true;
   };
 
