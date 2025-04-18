@@ -62,8 +62,7 @@
     # wlogout                # logout menu
 
     # flameshot               # screen capture
-    grim                   # grab an image
-    slurp                  # select a region
+    grimblast              # wrapper script for grim (grab an image) and slurp (select a region)
     swappy                 # Wayland native snapshot editing tool
 
     cliphist               # wayland clipboard manager
