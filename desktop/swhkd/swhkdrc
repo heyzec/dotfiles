@@ -32,40 +32,31 @@ super + ;
     smile
 
 # Use wpctl to adjust volume of WirePlumber
-# $WOBSOCK = $XDG_RUNTIME_DIR/wob.sock
+{XF86AudioRaiseVolume, control + alt + super + c}
+    wpctl set-volume @DEFAULT_SINK@ 5%+ --limit 1.5 && wpctl get-volume @DEFAULT_SINK@ | sed 's/[^0-9]//g' > $XDG_RUNTIME_DIR/wob.sock {,}
 
-XF86AudioRaiseVolume
-    wpctl set-volume @DEFAULT_SINK@ 5%+ --limit 1.5 && wpctl get-volume @DEFAULT_SINK@ | sed 's/[^0-9]//g' > $XDG_RUNTIME_DIR/wob.sock
+{XF86AudioLowerVolume, control + alt + super + x}
+    wpctl set-volume @DEFAULT_SINK@ 5%- && wpctl get-volume @DEFAULT_SINK@ | sed 's/[^0-9]//g' > $XDG_RUNTIME_DIR/wob.sock {,}
 
-XF86AudioLowerVolume
-    wpctl set-volume @DEFAULT_SINK@ 5%- && wpctl get-volume @DEFAULT_SINK@ | sed 's/[^0-9]//g' > $XDG_RUNTIME_DIR/wob.sock
+{Shift+XF86AudioRaiseVolume, control + shift + alt + super + x}
+    wpctl set-volume @DEFAULT_SOURCE@ 5%+ --limit 1.5 {,}
 
-Shift+XF86AudioRaiseVolume
-    wpctl set-volume @DEFAULT_SOURCE@ 5%+ --limit 1.5
+{Shift+XF86AudioLowerVolume, control + shift + alt + super + c}
+    wpctl set-volume @DEFAULT_SOURCE@ 5%- {,}
 
-Shift+XF86AudioLowerVolume
-    wpctl set-volume @DEFAULT_SOURCE@ 5%-
+{@XF86AudioMute, control + alt + super + @z}
+    wpctl set-mute @DEFAULT_SINK@ toggle {,}
 
-XF86AudioMute
-    wpctl set-mute @DEFAULT_SINK@ toggle
-
-Shift+XF86AudioMute
-    wpctl set-mute @DEFAULT_SOURCE@ toggle
+{Shift+XF86AudioMute, control + shift + alt + super + @z}
+    wpctl set-mute @DEFAULT_SOURCE@ toggle {,}
 
 # Media player controls
-XF86AudioPlay
-    playerctl play-pause
+{@XF86AudioPlay, control + alt + super + @v}
+    playerctl play-pause {,}
 
 # Screen brightness controls
-XF86MonBrightnessUp
-    brightnessctl set +10% | sed -En 's/.*\(([0-9]+)%\).*/\1/p' > $XDG_RUNTIME_DIR/wob.sock
-XF86MonBrightnessDown
-    brightnessctl set 10%- | sed -En 's/.*\(([0-9]+)%\).*/\1/p' > $XDG_RUNTIME_DIR/wob.sock
-
-Shift+XF86MonBrightnessUp
-    brightnessctl -d ddcci14 set +10%
-Shift+XF86MonBrightnessDown
-    brightnessctl -d ddcci14 set 10%-
+# Ideally swhkd will capture XF86MonBrightnessUp and XF86MonBrightnessDown, but this is currently a limitation
+# We define them in hyprland config instead
 
 # Printscreen using flameshot
 # Current workaround for https://github.com/flameshot-org/flameshot/issues/2848#issuecomment-1199796142
@@ -116,7 +107,3 @@ j
 escape
     @escape && echo "" > /tmp/mode && pkill -35 waybar
 endmode
-
-# super + escape
-    # pkill waybar; waybar
-
