@@ -146,12 +146,12 @@ link_section() (
     fi
 )
 
-run_rofi() {
+run_dmenu() {
     # Parse section headers in config file
     all_sections="$(parse_sections "$items_file")"
 
-    # Let user select which config
-    selected_config_name=$( (echo "$all_sections") | rofi -dmenu -p "Select config file")
+    # Let user select which config using a dmenu-compatible program
+    selected_config_name=$( (echo "$all_sections") | "$@" )
 
     # Extract relevant section from config file
     key_value_pairs=$(extract_section "$selected_config_name" "$items_file")
@@ -248,7 +248,7 @@ run_install() {
 ###############################################################################
 
 usage_install='install <program> [--no-dry-run]'
-usage_rofi='rofi'
+usage_dmenu='dmenu <dmenu-compatible program> [args...]'
 
 show_usage() {
     echo 'usage:'
@@ -271,15 +271,20 @@ main() {
         exit 0
     fi
 
-    usage=$(show_usage "$usage_install" "$usage_rofi")
+    usage=$(show_usage "$usage_install" "$usage_dmenu")
 
     if [ $# -eq 0 ]; then
         echo "$usage"
         exit 1
     fi
 
-    if [ "$1" = 'rofi' ]; then
-        run_rofi
+    if [ "$1" = 'dmenu' ]; then
+        if [ "$2" = '' ]; then
+            echo "$usage"
+            exit 1
+        fi
+        shift 1
+        run_dmenu "$@"
         exit 0
     fi
 
