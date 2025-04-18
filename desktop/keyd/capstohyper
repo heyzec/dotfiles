@@ -6,34 +6,13 @@ leftshift+rightshift = capslock
 
 
 # Consider moving everything below to swhkd
-[nav]
+[nav:C-A-M]
 h = left
 j = down
 k = up
 l = right
 
-u = C-left
-i = C-down
-o = C-up
-p = C-right
 
-n = home
-m = pagedown
-, = pageup
-. = end
-
-q = mute
-w = volumedown
-e = volumeup
-r = playpause
-a = previoussong
-s = nextsong
-
-d = C-S-A-M-d
-f = C-S-A-M-f
-
-
-[nav+shift]
-q = micmute
+[nav+shift:C-S-A-M]
 h = C-left
 l = C-right
