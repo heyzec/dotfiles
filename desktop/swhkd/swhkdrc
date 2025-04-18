@@ -70,12 +70,12 @@ Shift+XF86MonBrightnessDown
 # Printscreen using flameshot
 # Current workaround for https://github.com/flameshot-org/flameshot/issues/2848#issuecomment-1199796142
 @Print
-    slurp | grim -g - - | wl-copy
+    grimblast --freeze copy area
     # Flameshot not working
     # flameshot gui --raw | copyq copy image/png -
 Shift+@Print
     # flameshot gui
-    grim -g "$(slurp)" - | swappy -f -
+    GRIMBLAST_EDITOR='swappy -f' grimblast --freeze edit area
 
 
 ## Launch // Logout Menu // <><Shift><Esc> ##
