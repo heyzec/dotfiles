@@ -27,6 +27,10 @@ super + control + space
 super + o
     ~/dotfiles/scripts/dotsman/dotsman.sh rofi
 
+## Launch // Emoji Picker // <> ; ##
+super + ;
+    smile
+
 # Use wpctl to adjust volume of WirePlumber
 # $WOBSOCK = $XDG_RUNTIME_DIR/wob.sock
 
