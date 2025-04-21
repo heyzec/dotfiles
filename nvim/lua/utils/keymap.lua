@@ -114,10 +114,8 @@ local function map_table_helper(tab, keylist)
             local prefix = table.concat(keylist, '', 1, #keylist - 1)
             local key = keylist[#keylist]
             if whichkey then
-                whichkey.register({
-                    [prefix] = {
-                        [key] = { name = v },
-                    }
+                whichkey.add({
+                    { prefix .. key, group = v },
                 })
             end
             goto continue

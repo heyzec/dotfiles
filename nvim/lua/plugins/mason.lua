@@ -9,6 +9,7 @@ return {
     dependencies = {
         "williamboman/mason-lspconfig.nvim",
         "WhoIsSethDaniel/mason-tool-installer.nvim",
+        -- TODO: Remove neodev, it is deprecated
         "folke/neodev.nvim", -- anotations for neovim api functions
     },
     cmd = "Mason",
