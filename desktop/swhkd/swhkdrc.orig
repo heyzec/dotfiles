@@ -1,0 +1,112 @@
+## Launch // Terminal // <> Enter ##
+super + enter
+    foot
+
+## Launch // Command Launcher // <><Ctrl> Enter ##
+super + control + return
+    notify-send "Quick Run" "$(rofi -show run)"
+
+# ## Launch // Application Launcher // <> Space ##
+super + space
+    rofi -show drun
+
+# ## Launch // Command // <><Shift> Space ##
+# bindsym $mod+shift+space exec --no-startup-id notify-send "Quick Run" "$(rofi -show run)"
+
+## Launch // Keybinding Viewer // <><Shift> ? ##
+super + shift + /
+    rofi -modi shortcut:~/.config/rofi/scripts/shortcut.py -show shortcut
+
+## Navigate // Window by Name // <><Ctrl> Space ##
+super + control + space
+    rofi -show window
+
+## Launch // File Search // <><Alt> Space ##
+
+## Launch // Dotfiles Editor  // <> o ##
+super + o
+    ~/dotfiles/scripts/dotsman/dotsman.sh rofi
+
+<<<<<<< HEAD
+## Launch // Emoji Picker // <> ; ##
+super + ;
+    smile
+||||||| parent of 679c2bb (big nonnix cleanup, need review)
+=======
+>>>>>>> 679c2bb (big nonnix cleanup, need review)
+
+# Use wpctl to adjust volume of WirePlumber
+# $WOBSOCK = $XDG_RUNTIME_DIR/wob.sock
+
+XF86AudioRaiseVolume
+    wpctl set-volume @DEFAULT_SINK@ 5%+ --limit 1.5 && wpctl get-volume @DEFAULT_SINK@ | sed 's/[^0-9]//g' > $XDG_RUNTIME_DIR/wob.sock
+
+XF86AudioLowerVolume
+    wpctl set-volume @DEFAULT_SINK@ 5%- && wpctl get-volume @DEFAULT_SINK@ | sed 's/[^0-9]//g' > $XDG_RUNTIME_DIR/wob.sock
+
+Shift+XF86AudioRaiseVolume
+    wpctl set-volume @DEFAULT_SOURCE@ 5%+ --limit 1.5
+
+Shift+XF86AudioLowerVolume
+    wpctl set-volume @DEFAULT_SOURCE@ 5%-
+
+XF86AudioMute
+    wpctl set-mute @DEFAULT_SINK@ toggle
+
+Shift+XF86AudioMute
+    wpctl set-mute @DEFAULT_SOURCE@ toggle
+
+# Media player controls
+XF86AudioPlay
+    playerctl play-pause
+
+# Screen brightness controls
+XF86MonBrightnessUp
+    brightnessctl set +10% | sed -En 's/.*\(([0-9]+)%\).*/\1/p' > $XDG_RUNTIME_DIR/wob.sock
+XF86MonBrightnessDown
+    brightnessctl set 10%- | sed -En 's/.*\(([0-9]+)%\).*/\1/p' > $XDG_RUNTIME_DIR/wob.sock
+
+Shift+XF86MonBrightnessUp
+    brightnessctl -d ddcci14 set +10%
+Shift+XF86MonBrightnessDown
+    brightnessctl -d ddcci14 set 10%-
+
+# Printscreen using flameshot
+# Current workaround for https://github.com/flameshot-org/flameshot/issues/2848#issuecomment-1199796142
+@Print
+    slurp | grim -g - - | wl-copy
+    # Flameshot not working
+    # flameshot gui --raw | copyq copy image/png -
+Shift+@Print
+    # flameshot gui
+    grim -g "$(slurp)" - | swappy -f -
+
+
+## Launch // Logout Menu // <><Shift><Esc> ##
+super + shift + escape
+    wlogout -p layer-shell
+
+# Duplicated for use on multiple keyboards
+super + escape
+    @enter applications && sh -c 'echo "Launch: [b]rowser [f]iles [m]essages" > /tmp/mode && pkill -35 waybar'
+super + grave
+    @enter applications && sh -c 'echo "Launch: [b]rowser [f]iles [m]essages" > /tmp/mode && pkill -35 waybar'
+
+mode applications
+## Launch // Browser // <><Grave> b ##
+b
+    @escape && gtk-launch $(xdg-settings get default-web-browser) && echo "" > /tmp/mode && pkill -35 waybar
+## Launch // File Explorer // <><Grave> f ##
+f
+    @escape && thunar && echo "" > /tmp/mode && pkill -35 waybar
+m
+    @escape && telegram-desktop && echo "" > /tmp/mode && pkill -35 waybar
+j
+    @escape && bash -c '(cd ~/.local/share/applications/; gtk-launch $(basename $(find ~/.local/share/applications/ -iname "*joplin*")))' && echo "" > /tmp/mode && pkill -35 waybar
+escape
+    @escape && echo "" > /tmp/mode && pkill -35 waybar
+endmode
+
+# super + escape
+    # pkill waybar; waybar
+
