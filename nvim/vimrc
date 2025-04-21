@@ -50,16 +50,11 @@ let &t_EI = "\e[2 q"                            " change to block cursor when le
 
 " -------------------Visualize hidden chars--------------------
 set list
-set listchars=tab:\|\ ,trail:·,nbsp:⎵           " tabs, non-breaking spaces, trailing spaces
+set listchars=
+set listchars+=trail:·                          " single leading space (lead and space unset)
+set listchars+=tab:▎┈,nbsp:◇                    " tabs (use same character as indent-blankline.nvim), non-breaking spaces
+set listchars+=extends:▶,precedes:◀             " for wrapped lines
 
-if !has('g:vscode')
-    augroup visualise_chars
-        autocmd!
-        " only show eol when in insert mode
-        autocmd ModeChanged n:[vV] set listchars+=eol:↲
-        autocmd ModeChanged [vV]:n set listchars-=eol:↲
-    augroup end
-endif
 if !has('nvim')                                 " make these chars display in gray instead of blue
     highlight SpecialKey ctermfg=244 guifg=#808080
 endif
@@ -104,6 +99,7 @@ if has('nvim')                                  " vim and nvim uses different un
     set undodir=/tmp                            " undo temp file directory
 endif
 set foldmethod=marker
+set linebreak
 " }}} Editing: Search, splits and indentation
 
 " }}} 2. BASIC VIM CONFIGURATIONS
@@ -131,21 +127,27 @@ if !has('nvim')
     execute "set <A-k>=\ek"
 endif
 
-
 " Basic keymappings {{{
 " context-based j and k - gj usually, but j if count is given
-nnoremap <expr> j v:count == 0 ? 'gj' : 'j'
-nnoremap <expr> k v:count == 0 ? 'gk' : 'k'
-nnoremap gj j
-nnoremap gk k
+if !exists('g:vscode')
+    nnoremap <expr> j v:count == 0 ? 'gj' : 'j'
+    nnoremap <expr> k v:count == 0 ? 'gk' : 'k'
+    nnoremap gj j
+    nnoremap gk k
+else
+    " gj and gk will be remapped by vscode-neovim
+    " https://github.com/vscode-neovim/vscode-neovim/blob/master/runtime/vscode/overrides/vscode-motion.vim
+    nmap <expr> j v:count == 0 ? "<Cmd>call VSCodeNotify('cursorMove', { 'to': 'down', 'by': 'wrappedLine', 'value': v:count1 })<CR>" : "j"
+    nmap <expr> k v:count == 0 ? "<Cmd>call VSCodeNotify('cursorMove', { 'to': 'up', 'by': 'wrappedLine', 'value': v:count1 })<CR>" : "k"
+endif
 
 " make Y more consistent - yank till end (like D and C)
 noremap Y y$
 
 
 " Don't use Ex mode, use Q for macros (idea: jesseliete)
+" In linewise Visual mode, Q now repeats last recorded register (see :h v_Q)
 nnoremap Q @qj
-xnoremap Q :norm @q<CR>
 " Do not show stupid `how did we get here?` window
 "nnoremap q: :echo 'No more Ex mode!'<CR>
 
@@ -170,6 +172,9 @@ nmap <leader>D "+D
 nmap <leader>p "+p
 vmap <leader>p "+p
 nmap <leader>P "+P
+
+" Shorthand for duplicating and commenting line (idea: santas)
+nmap yc yygccp
 
 " :w looks simple at first but it's not
 if !exists('g:vscode')
@@ -268,13 +273,13 @@ endfunction
 
 " }}} 4. THINGS THAT SHOULD BE PLUGINS
 
-" In later neovim versions, these will be deprecated, use vim.lsp.diagnostic.config()
-" instead. See :h diagnostic-signs
-" nf-fa-times_circle
-sign define DiagnosticSignError text= texthl=DiagnosticSignError linehl= numhl=
-" nf-fa-warning
-sign define DiagnosticSignWarn text= texthl=DiagnosticSignWarn linehl= numhl=
-" nf-fa-info_circle
-sign define DiagnosticSignInfo text= texthl=DiagnosticSignInfo linehl= numhl=
-" nf-fa-lightbulb
-sign define DiagnosticSignHint text= texthl=DiagnosticSignHint linehl= numhl=
+" Return to last edit position when opening files (:help last-position-jump)
+augroup RestoreCursor
+  autocmd!
+  autocmd BufRead * autocmd FileType <buffer> ++once
+    \ let s:line = line("'\"")
+    \ | if s:line >= 1 && s:line <= line("$") && &filetype !~# 'commit'
+    \      && index(['xxd', 'gitrebase'], &filetype) == -1
+    \ |   execute "normal! g`\""
+    \ | endif
+augroup END

@@ -68,8 +68,9 @@ local resume            = action("🔭 Resume", telescope.resume)
 
 -- Neovim LSP Pickers (non gotos)
 local diagnostics       = action("🔭 Diagnostics", telescope.diagnostics, vscode('workbench.action.view.problems'))
-local document_symbols  = action("🔭 Symbols", telescope.lsp_document_symbols)
-local workspace_symbols = action("🔭 Symbols", telescope.lsp_workspace_symbols)
+-- Assume this is similar to vim.lsp.buf.document_symbol() (gO)
+local document_symbols  = action("🔭 Document Symbols", telescope.lsp_document_symbols)
+local workspace_symbols = action("🔭 Workspace Symbols", telescope.lsp_workspace_symbols)
 
 -- Git Pickers
 local git_commits       = action("🔭 Git Commits", telescope.git_commits)
@@ -86,24 +87,30 @@ local undo              = action("🔭 Undo",
 -- See :help *g* for g-prefixed default keymaps
 local goto_def       = action('💬 [G]oto [D]efinition', telescope.lsp_definitions,
     vscode('editor.action.revealDefinition'))
-local goto_ref       = action('💬 [G]oto [R]eferences', telescope.lsp_references, vscode('editor.action.goToReferences'))
-local goto_impl      = action('💬 [G]oto [I]mplementation', telescope.lsp_implementations,
+-- Assume this is similar to vim.lsp.buf.references() (grr)
+local goto_ref       = action('💬 Goto [R]eferences', telescope.lsp_references, vscode('editor.action.goToReferences'))
+-- Assume this is similar to vim.lsp.buf.implementation() (gri)
+local goto_impl      = action('💬 Goto [I]mplementation', telescope.lsp_implementations,
     vscode('editor.action.goToImplementation'))
-local goto_type_def  = action('💬 [G]oto [T]ype Definition', telescope.lsp_type_definitions,
+local goto_type_def  = action('💬 Goto [T]ype Definition', telescope.lsp_type_definitions,
     vscode('editor.action.goToTypeDefinition'))
+local goto_prev_diagnostic = action('💬 Goto Prev Diagnostic', vim.diagnostic.goto_prev,
+    vscode('editor.action.marker.next'))
+local goto_next_diagnostic = action('💬 Goto Next Diagnostic', vim.diagnostic.goto_next,
+    vscode('editor.action.marker.next'))
 
 -- Info
 local show_hover          = action('💬 Hover', hover.hover, vscode('editor.action.showHover'))
 local signature_help = action('💬 Signature Help', vim.lsp.buf.signature_help)
 
--- Actions
-local code_action    = action('💬 [C]ode [A]ction (Quick))',
+-- Code actions
+local code_action    = action('💬 Code Action (Quick))',
     function()
         vim.lsp.buf.code_action({ only = { "quickfix" } })
     end,
     vscode('editor.action.quickFix'))
-local code_refactor  = action('💬 [C]ode Action', vim.lsp.buf.code_action, vscode('editor.action.refactor'))
-local code_rename    = action('💬 [C]ode Smart Rename', vim.lsp.buf.rename, vscode('editor.action.rename'))
+local code_refactor  = action('💬 Code Action (Re[f]actor)', vim.lsp.buf.code_action, vscode('editor.action.refactor'))
+local code_rename    = action('💬 Code Re[n]ame', vim.lsp.buf.rename, vscode('editor.action.rename'))
 local code_format    = action('💬 Format Document',
     function()
         vim.lsp.buf.format { async = true }
@@ -154,9 +161,14 @@ local hover_switch_prev = action("hover.nvim (prev source)", function() hover.ho
 local mappings = {
     ['g'] = {
         ['d'] = goto_def,  -- overrides default gd (goto local declaration)
-        ['r'] = goto_ref,  -- overrides default gr (replace virtual characters)
-        ['I'] = goto_impl, -- overrides default gI (insert text in column 1)
         ['y'] = goto_type_def,
+
+        -- In future Neovim versions, these keymaps will become defaults
+        ['rn'] = code_rename,
+        ['ra'] = code_action,
+        ['rr'] = goto_ref,
+        ['ri'] = goto_impl,
+        ['O'] = document_symbols,
     },
 
     ['K'] = show_hover,                         -- overrides default K (to lookup word on cursor)
@@ -166,7 +178,9 @@ local mappings = {
     ['<C-n>'] = hover_switch_next,         -- overrides default <C-n> (down)
     ['<C-p>'] = hover_switch_prev,         --overrides default <C-p> (up)
 
-    ['gO'] = document_symbols,             -- overrides default gO (outline of buffer for man, help)
+    ['[d'] = goto_prev_diagnostic,
+    [']d'] = goto_next_diagnostic,
+
 
     ['=='] = code_format,
 
@@ -209,11 +223,10 @@ local mappings = {
 
         ['c'] = {
             '💬 code',
-            ['a'] = code_action,
             ['f'] = code_refactor,
-            ['r'] = code_rename,
         },
 
+        -- TODO: These keymaps are shadowed
         ['g'] = {
             'git',
             ['s'] = git_status,
