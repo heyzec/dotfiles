@@ -2,6 +2,26 @@
 # &{{}} async shell command
 # %{{}} piping shell command (output to statline)
 
+cmd open ${{
+    case $(file --mime-type $f -b) in
+        text/*) $EDITOR $fx;;
+    esac
+}}
+
+cmd z %{{
+	result="$(zoxide query --exclude $PWD $@ | sed 's/\\/\\\\/g;s/"/\\"/g')"
+	lf -remote "send $id cd \"$result\""
+}}
+
+cmd zi ${{
+	result="$(zoxide query -i | sed 's/\\/\\\\/g;s/"/\\"/g')"
+	lf -remote "send $id cd \"$result\""
+}}
+
+cmd on-cd &{{
+        zoxide add "$PWD"
+}}
+
 # use ctpv to preview files, including images
 # on wayland terminals that support sixel, add "set chafasixel" to ~/.config/ctpv/config
 set sixel true
