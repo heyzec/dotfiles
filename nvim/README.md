@@ -66,3 +66,13 @@ Plugins organised according to sections in [vimawesome.com](https://vimawesome.c
 - [The Rad Lectures - How to setup Neovim from Scratch - Complete Guide](https://www.youtube.com/watch?v=ZjMzBd1Dqz8)
 - [typecraft - From 0 to IDE in NEOVIM from scratch](https://www.youtube.com/watch?v=zHTeCSVAFNY)
 
+## Debugging Lua configs with VS Code
+1. Open the `debug.code-workspace` workspace with VS Code.
+
+2. Run Neovim with "debug mode":
+    ```sh
+    nvim --cmd "lua init_debug=true"
+    ```
+    Neovim should wait for debugger to be attached, with the message "Server started on port 8086".
+
+3. Launch the "Debug Neovim via OSV" debug configuration in VS Code. This should trigger Neovim to continue its normal loading of configs.
