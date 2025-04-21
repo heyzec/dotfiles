@@ -1,0 +1,12 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug Neovim via OSV",
+            "type": "lua",
+            "request": "attach",
+            "address": "127.0.0.1:8086",
+            "debugServer": 8086,
+        },
+    ]
+}
