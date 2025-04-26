@@ -2,6 +2,10 @@ return {
   {
     'saghen/blink.cmp',
     event = 'VimEnter',
-    opts = {},
+    --- @module 'blink.cmp'
+    --- @type blink.cmp.Config
+    opts = {
+      -- preset = 'default',
+    },
   },
 }
