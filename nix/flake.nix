@@ -159,6 +159,7 @@
         modules = [
           ./home
           ./modules/shell.nix
+          ./modules/neovim.nix
           nixpkgs-stable-module
         ];
       };
