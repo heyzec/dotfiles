@@ -34,7 +34,7 @@ return {
         ensure_installed = {},
         automatic_installation = false,
         handlers = {
-          require 'heyzec.utils.lsp',
+          require('heyzec.utils.lsp').lsp_setup_handler,
         },
       }
     end,
