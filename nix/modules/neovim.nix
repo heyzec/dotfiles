@@ -1,4 +1,10 @@
-{ config, lib, pkgs, systemSettings, ... }: let
+{
+  config,
+  lib,
+  pkgs,
+  systemSettings,
+  ...
+}: let
   # Add non-project specific LSPs here
   # Also see nvim/lua/plugins/mason.lua
   extraPackages = with pkgs; [
@@ -49,11 +55,11 @@ in {
             name = "neovim-unwrapped-wrapped";
             meta = pkgs.neovim-unwrapped.meta;
             lua = pkgs.neovim-unwrapped.lua;
-            paths = [ pkgs.neovim-unwrapped ];
-            nativeBuildInputs = [ pkgs.makeBinaryWrapper ];
+            paths = [pkgs.neovim-unwrapped];
+            nativeBuildInputs = [pkgs.makeBinaryWrapper];
             postBuild = let
               # path = builtins.trace (pkgs.lib.makeBinPath extraPackages);
-              path = (pkgs.lib.makeBinPath extraPackages);
+              path = pkgs.lib.makeBinPath extraPackages;
             in ''
               wrapProgram $out/bin/nvim \
                 --prefix PATH : ${path}
@@ -75,12 +81,24 @@ in {
     };
 
     hmConfig = {
+      home.packages = with pkgs; [
+        lua-language-server
+        stylua
+        nil
+        alejandra
+        nodePackages.prettier
+        vscode-langservers-extracted
+      ];
       xdg.configFile."nvim/lua/generated.lua" = {
         text = ''
           test file generated
         '';
       };
     };
-
-  in lib.mkIf cfg.enable ( if !systemSettings.isHome then nixosConfig else hmConfig);
+  in
+    lib.mkIf cfg.enable (
+      if !systemSettings.isHome
+      then nixosConfig
+      else hmConfig
+    );
 }
