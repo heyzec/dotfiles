@@ -22,26 +22,19 @@ return {
       { 'williamboman/mason.nvim', opts = {} },
       'williamboman/mason-lspconfig.nvim',
       'WhoIsSethDaniel/mason-tool-installer.nvim',
+      'saghen/blink.cmp', -- should this be here?
     },
     config = function()
-      -- Extend capabilities, e.g. by blink
-      local capabilities = require('blink.cmp').get_lsp_capabilities()
-      -- Define server-specific configs (capabilities)
-      local servers = {
-        lua_ls = {},
-      }
       -- Kickstart defines this from servers table
       local ensure_installed = {}
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
       -- I think this is to tell Mason to setup lsp when they are installed
       require('mason-lspconfig').setup {
+        ensure_installed = {},
+        automatic_installation = false,
         handlers = {
-          function(server_name)
-            local server = servers[server_name] or {}
-            server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-            require('lspconfig')[server_name].setup(server)
-          end,
+          require 'heyzec.utils.lsp',
         },
       }
     end,

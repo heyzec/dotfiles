@@ -23,8 +23,12 @@ require('lazy').setup(plugins, {
   },
 })
 
-require('lspconfig').lua_ls.setup {}
-require('lspconfig').nil_ls.setup {}
-require('lspconfig').jsonls.setup {}
+local setup = require 'heyzec.utils.lsp'
+setup('lua_ls')
+setup('nil_ls')
+setup('jsonls')
+-- require('lspconfig').lua_ls.setup {}
+-- require('lspconfig').nil_ls.setup {}
+-- require('lspconfig').jsonls.setup {}
 
 require 'heyzec.keymaps'
