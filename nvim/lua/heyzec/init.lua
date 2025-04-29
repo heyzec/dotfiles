@@ -1,3 +1,11 @@
+-- vim.g.heyzec_use_mason = false
+require 'heyzec.tooling'
+
+
+-- Think about the dependencies. heyzec.utils.lsp, lazy plugins (mason, formatter)
+-- Mason will call lsp-config handler for installed LSPs. This seems to be a must
+-- So, we need to setup our stuff before lazy
+
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
@@ -22,7 +30,5 @@ require('lazy').setup(plugins, {
     notify = false,
   },
 })
-
-require('heyzec.utils.lsp').setup_lsps()
 
 require 'heyzec.keymaps'

@@ -1,3 +1,16 @@
+local tooling_utils = require 'heyzec.utils.tooling'
+local use_mason = vim.g.heyzec_use_mason
+
+local mason_dependencies = {}
+if use_mason then
+  mason_dependencies = {
+    'williamboman/mason.nvim',
+    'williamboman/mason-lspconfig.nvim',
+    -- Automatically install LSPs and related tools to stdpath for Neovim
+    'WhoIsSethDaniel/mason-tool-installer.nvim',
+  }
+end
+
 return {
   -- We've determined this brace is needed for `vim` to be defined and more
   -- But is this the place to go?
@@ -16,17 +29,20 @@ return {
   {
     'neovim/nvim-lspconfig',
     dependencies = {
-      -- Automatically install LSPs and related tools to stdpath for Neovim
-      -- Mason must be loaded before its dependents so we need to set it up here.
-      -- NOTE: `opts = {}` is the same as calling `require('mason').setup({})`
-      { 'williamboman/mason.nvim', opts = {} },
-      'williamboman/mason-lspconfig.nvim',
-      'WhoIsSethDaniel/mason-tool-installer.nvim',
+      mason_dependencies,
+
       'saghen/blink.cmp', -- should this be here?
     },
     config = function()
+      if not use_mason then
+        tooling_utils.setup_servers()
+        return
+      end
+
       -- Kickstart defines this from servers table
-      local ensure_installed = {}
+      local ensure_installed = tooling_utils.get_ensure_installed()
+      -- Mason must be loaded before its dependents so we need to set it up here.
+      require('mason').setup {}
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
       -- I think this is to tell Mason to setup lsp when they are installed
@@ -34,7 +50,7 @@ return {
         ensure_installed = {},
         automatic_installation = false,
         handlers = {
-          require('heyzec.utils.lsp').lsp_setup_handler,
+          tooling_utils.setup_server,
         },
       }
     end,

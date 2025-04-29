@@ -13,6 +13,8 @@ return {
         desc = '[F]ormat buffer',
       },
     },
+    --- @module 'conform'
+    --- @type conform.setupOpts
     opts = {
       notify_on_error = false,
       -- No need, we use <leader>w
@@ -30,7 +32,7 @@ return {
       --     }
       --   end
       -- end,
-      formatters_by_ft = require('heyzec.utils.lsp').formatters_config,
+      formatters_by_ft = require('heyzec.utils.tooling').get_formatters_config(),
     },
   },
 }
