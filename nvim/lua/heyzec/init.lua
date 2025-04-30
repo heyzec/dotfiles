@@ -32,3 +32,5 @@ require('lazy').setup(plugins, {
 })
 
 require 'heyzec.keymaps'
+
+

@@ -1,3 +1,4 @@
+M = require 'heyzec.utils.tooling'
 return {
   { -- Autoformat
     'stevearc/conform.nvim',
