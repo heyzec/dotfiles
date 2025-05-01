@@ -1,84 +1,241 @@
-local builtin = require 'telescope.builtin'
-vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
-vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
-vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[S]earch [F]iles' })
-vim.keymap.set('n', '<leader>ss', builtin.builtin, { desc = '[S]earch [S]elect Telescope' })
-vim.keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
-vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[S]earch by [G]rep' })
-vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
-vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
-vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
-vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
+-- This file contains remaps such as
+-- - Advanced features that original vim is unable to do, e.g. lsp
+-- - vscode-neovim remaps
 
--- In this case, we create a function that lets us more easily define mappings specific
--- for LSP related items. It sets the mode, buffer and description for us each time.
-local map = function(keys, func, desc, mode)
-  mode = mode or 'n'
-  vim.keymap.set(mode, keys, func, { desc = 'LSP: ' .. desc })
+-- ###############################################################################
+-- ##                                                                           ##
+-- ##                              1. UTILITIES                                 ##
+-- ##                                                                           ##
+-- ###############################################################################
+--
+
+local keymap_utils = require 'heyzec.utils.keymaps'
+local prequire = keymap_utils.prequire
+local map_table = keymap_utils.map_table
+local action = keymap_utils.create_conditional_action
+local bind = keymap_utils.create_bind
+
+-- Create callback that runs a VS Code command
+local function vscode(cmd)
+  return function()
+    require('vscode-neovim').call(cmd)
+  end
 end
 
--- I do not believe in conditional setting of keymaps. Instead, they should always be available.
+local telescope = {}
+local telescope_ext = {}
+local hover = {}
+local barbar = {}
+if not vim.g.vscode then
+  telescope = prequire 'telescope.builtin'
+  telescope_ext = prequire('telescope').extensions
+  hover = prequire 'hover'
+  barbar = prequire 'barbar.api'
+end
 
--- Rename the variable under your cursor.
---  Most Language Servers support renaming across files, etc.
-map('grn', vim.lsp.buf.rename, '[R]e[n]ame')
+-- From vimrc
+if vim.g.vscode then
+  vim.keymap.set('n', '<leader>s', vscode 'editor.action.startFindReplaceAction')
+end
 
--- Execute a code action, usually your cursor needs to be on top of an error
--- or a suggestion from your LSP for this to activate.
-map('gra', vim.lsp.buf.code_action, '[G]oto Code [A]ction', { 'n', 'x' })
+-- ###############################################################################
+-- ##                                                                           ##
+-- ##                             2. DEFINE ACTIONS                             ##
+-- ##                                                                           ##
+-- ###############################################################################
 
--- Find references for the word under your cursor.
-map('grr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
-
--- Jump to the implementation of the word under your cursor.
---  Useful when your language has ways of declaring types without an actual implementation.
-map('gri', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
-
--- Jump to the definition of the word under your cursor.
---  This is where a variable was first declared, or where a function is defined, etc.
---  To jump back, press <C-t>.
-map('grd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
-
--- WARN: This is not Goto Definition, this is Goto Declaration.
---  For example, in C this would take you to the header.
-map('grD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
-
--- Fuzzy find all the symbols in your current document.
---  Symbols are things like variables, functions, types, etc.
-map('gO', require('telescope.builtin').lsp_document_symbols, 'Open Document Symbols')
-
--- Fuzzy find all the symbols in your current workspace.
---  Similar to document symbols, except searches over your entire project.
-map('gW', require('telescope.builtin').lsp_dynamic_workspace_symbols, 'Open Workspace Symbols')
-
--- Jump to the type of the word under your cursor.
---  Useful when you're not sure what type a variable is and you want to see
---  the definition of its *type*, not where it was *defined*.
-map('grt', require('telescope.builtin').lsp_type_definitions, '[G]oto [T]ype Definition')
-
--- Slightly advanced example of overriding default behavior and theme
-vim.keymap.set('n', '<leader>/', function()
-  -- You can pass additional configuration to Telescope to change the theme, layout, etc.
-  builtin.current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
-    winblend = 10,
-    previewer = false,
-  })
-end, { desc = '[/] Fuzzily search in current buffer' })
-
--- It's also possible to pass additional configuration options.
---  See `:help telescope.builtin.live_grep()` for information about particular keys
-vim.keymap.set('n', '<leader>s/', function()
-  builtin.live_grep {
-    grep_open_files = true,
-    prompt_title = 'Live Grep in Open Files',
-  }
-end, { desc = '[S]earch [/] in Open Files' })
-
--- Shortcut for searching your Neovim configuration files
-vim.keymap.set('n', '<leader>sn', function()
-  builtin.find_files { cwd = vim.fn.stdpath 'config' }
-end, { desc = '[S]earch [N]eovim files' })
-
-vim.keymap.set('n', '<leader>w', function()
+local function format()
   require('conform').format { async = true, lsp_format = 'fallback' }
+end
+
+local save_or_format = action('Save/Format', format, vscode 'workbench.action.files.save')
+
+------------------------2.1. Telescope----------------------
+-- See https://github.com/nvim-telescope/telescope.nvim?tab=readme-ov-file#pickers for list
+
+-- Vim Pickers
+local find_buffers = action('󰈔 Buffers', telescope.buffers)
+local find_oldfiles = action(' Oldfiles', telescope.oldfiles)
+local find_commands = action('Command History', telescope.commands)
+local marks = action('Marks', telescope.marks)
+local jumplist = action('Jumplist', telescope.jumplist)
+local keymaps = action('Keymaps', telescope.keymaps)
+
+-- Neovim Pickers
+local search_diagnostics = action('Diagnostics', telescope.diagnostics, vscode 'workbench.action.view.problems')
+
+-- Find files and Grep
+local find_files = action('󰈔 Find files', telescope.find_files, vscode 'workbench.action.quickOpen')
+local search_files = action(' Grep files', telescope.live_grep, vscode 'workbench.action.showAllSymbols')
+local search_by_word = action(' Grep files', telescope.grep_string)
+local search_vim_configs = action('Neovim Configs', function()
+  telescope.live_grep { cwd = vim.fn.stdpath 'config' }
 end)
+
+-- Git Pickers
+local git_commits = action('󰊢 Git Commits', telescope.git_commits)
+local git_status = action('󰊢 Git Status', telescope.git_status)
+
+-- Others
+local resume = action('Resume', telescope.resume)
+local undo = action('Undo', function()
+  if telescope_ext.undo then
+    telescope_ext.undo.undo()
+  end
+end, vscode 'workbench.action.localHistory.restoreViaPicker')
+
+------------------------2.2. LSP----------------------------
+-- Goto
+-- See :help *g* for g-prefixed default keymaps
+local goto_def = action('💬 [G]oto [D]efinition', telescope.lsp_definitions, vscode 'editor.action.revealDefinition')
+local goto_ref = action('💬 Goto [R]eferences', telescope.lsp_references, vscode 'editor.action.goToReferences')
+local goto_impl = action('💬 Goto [I]mplementation', telescope.lsp_implementations, vscode 'editor.action.goToImplementation')
+local goto_type_def = action('💬 Goto [T]ype Definition', telescope.lsp_type_definitions, vscode 'editor.action.goToTypeDefinition')
+local goto_prev_diagnostic = action('💬 Goto Prev Diagnostic', vim.diagnostic.goto_prev, vscode 'editor.action.marker.next')
+local goto_next_diagnostic = action('💬 Goto Next Diagnostic', vim.diagnostic.goto_next, vscode 'editor.action.marker.next')
+
+-- Info
+local show_hover = action('💬 Hover', hover.hover, vscode 'editor.action.showHover')
+local signature_help = action('💬 Signature Help', vim.lsp.buf.signature_help)
+
+-- Searches
+local search_document_symbols = action('💬 Document Symbols', telescope.lsp_document_symbols)
+local search_workspace_symbols = action('💬 Workspace Symbols', telescope.lsp_workspace_symbols)
+
+-- Code actions
+local code_action = action('💬 Code Action (Quick))', function()
+  vim.lsp.buf.code_action { only = { 'quickfix' } }
+end, vscode 'editor.action.quickFix')
+local code_refactor = action('💬 Code Action (Re[f]actor)', vim.lsp.buf.code_action, vscode 'editor.action.refactor')
+local code_rename = action('💬 Code Re[n]ame', vim.lsp.buf.rename, vscode 'editor.action.rename')
+
+local code_format = action('Format Document', format, vscode 'editor.action.formatDocument')
+
+------------------------2.3. Extensions-----------------------
+-- Neotree
+-- If drawer is open, but not focused, don't close, instead focus to it.
+-- Benefit: If access wrong file, can tap to go back to nav another file
+-- If intention is to close, then just press it again
+local explorer = action(
+  '🗃️ Toggle Explorer',
+  function()
+    vim.cmd 'Neotree reveal'
+  end,
+  -- Part [1]: If buffer is (1) closed or (2) open but unfocused, open and focus to the explorer
+  -- Part [2]: Otherwise, close the panel
+  -- Not possible to map here, because keys are not sent to neovim when buffer unfocused.
+  -- Refer to map in keybindings.json
+  vscode 'workbench.view.explorer'
+)
+
+-- Barbar
+-- API: https://github.com/romgrk/barbar.nvim/blob/master/lua/barbar/api.lua
+local barbar_pin = action('📌 Pin', function()
+  vim.cmd 'BufferPin'
+end)
+local barbar_pick = action('📌 Pick', barbar.pick_buffer)
+local function barbar_goto(n)
+  return action('📌 Goto pinned', function()
+    barbar.goto_buffer(n)
+  end)
+end
+
+-- Hover
+-- Actions to switch panes in the hover popup
+local hover_switch_next = action('hover.nvim (next source)', function()
+  hover.hover_switch 'next'
+end)
+local hover_switch_prev = action('hover.nvim (prev source)', function()
+  hover.hover_switch 'previous'
+end)
+
+-- ###############################################################################
+-- ##                                                                           ##
+-- ##                             3. DEFINE MAPPINGS                            ##
+-- ##                                                                           ##
+-- ###############################################################################
+local mappings = {
+  ['g'] = {
+    ['d'] = goto_def, -- overrides default gd (goto local declaration)
+    ['y'] = goto_type_def,
+
+    -- In future Neovim versions, these keymaps will become defaults
+    ['rn'] = code_rename,
+    ['ra'] = code_action,
+    ['rr'] = goto_ref,
+    ['ri'] = goto_impl,
+    ['O'] = search_document_symbols,
+  },
+
+  ['K'] = show_hover, -- overrides default K (lookup word on cursor)
+  ['gK'] = signature_help,
+  ['<C-k>'] = bind('i', signature_help), -- overrides default i_<C-k> (insert digraphs)
+  ['<C-n>'] = hover_switch_next, -- overrides default <C-n> (down)
+  ['<C-p>'] = hover_switch_prev, --overrides default <C-p> (up)
+
+  ['[d'] = goto_prev_diagnostic,
+  [']d'] = goto_next_diagnostic,
+
+  ['=='] = code_format,
+
+  ['\\'] = explorer,
+
+  ['<leader>'] = {
+    ['w'] = save_or_format,
+
+    -- Some telescope actions
+    ['<space>'] = find_files,
+    ['/'] = search_files,
+    [':'] = find_commands,
+    ['.'] = find_oldfiles,
+    ['r'] = resume,
+
+    -- Barbar as harpoon
+    ['h'] = {
+      '📌 harpoon',
+      ['a'] = barbar_pin,
+      ['p'] = barbar_pick,
+    },
+
+    ['s'] = {
+      ' search',
+      ['b'] = find_buffers,
+      ['e'] = search_diagnostics,
+      ['f'] = find_files,
+      ['g'] = search_files,
+      ['j'] = jumplist,
+      ['k'] = keymaps,
+      ['m'] = marks,
+      ['o'] = find_oldfiles,
+      ['s'] = search_document_symbols,
+      ['S'] = search_workspace_symbols,
+      ['v'] = search_vim_configs,
+      ['w'] = search_by_word,
+      ['u'] = undo,
+    },
+
+    ['c'] = {
+      -- { 'code', icon = ' ' },
+      ['f'] = code_refactor,
+    },
+
+    ['g'] = {
+      'git',
+      ['s'] = git_status,
+      ['c'] = git_commits,
+    },
+
+    -- Use barbar to quickly switch "tabs" like Harpoon
+    ['1'] = barbar_goto(1),
+    ['2'] = barbar_goto(2),
+    ['3'] = barbar_goto(3),
+    -- ['4'] = barbar_goto(4),
+    -- ['5'] = barbar_goto(5),
+    -- ['6'] = barbar_goto(6),
+    -- ['7'] = barbar_goto(7),
+    -- ['8'] = barbar_goto(8),
+    -- ['9'] = barbar_goto(9),
+  },
+}
+
+map_table(mappings)

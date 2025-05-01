@@ -6,10 +6,10 @@ return {
     'MunifTanjim/nui.nvim',
     -- -- {"3rd/image.nvim", opts = {}}, -- Optional image support in preview window: See `# Preview Mode` for more information
   },
-  keys = {
-    -- TODO: this key should use Neotree if install, else fallback to Lexplore
-    { '\\', ':Neotree reveal<CR>', desc = 'NeoTree reveal', silent = true },
-  },
+  -- keys = {
+  --   -- TODO: this key should use Neotree if install, else fallback to Lexplore
+  --   { '\\', ':Neotree reveal<CR>', desc = 'NeoTree reveal', silent = true },
+  -- },
   opts = {
     filesystem = {
       window = {
