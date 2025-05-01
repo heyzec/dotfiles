@@ -199,7 +199,6 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 --  To update plugins you can run
 --    :Lazy update
 --
--- NOTE: Here is where you install your plugins.
 -- require('lazy').setup( {
 --   ui = {
 --     -- If you are using a Nerd Font: set icons to an empty table which will use the

@@ -48,6 +48,7 @@ M.define_formatter = function(ft, formatter)
 end
 
 -- ========== Tooling-facing APIs ==========
+local extra_capabilities
 
 --- Setup a single LSP server.
 --- We don't need to define filetype as this is done automatically by lspconfig.
@@ -55,7 +56,14 @@ end
 --- @param server_name string Name of LSP server.
 M.setup_server = function(server_name)
   -- Extend capabilities, e.g. by blink
-  local extra_capabilities = require('blink.cmp').get_lsp_capabilities()
+  if extra_capabilities == nil then
+    local ok, result = pcall(require, 'blink.cmp')
+    if ok then
+      extra_capabilities = result.get_lsp_capabilities()
+    else
+      extra_capabilities = {}
+    end
+  end
   local server = servers[server_name] or {}
   server.capabilities = vim.tbl_deep_extend('force', {}, extra_capabilities, server.capabilities or {})
   require('lspconfig')[server_name].setup(server)
