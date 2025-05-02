@@ -188,6 +188,7 @@ local function map_table_helper(tbl, keylist)
       -- else
       -- end
 
+      -- Document existing key chains
       M.map_prefix(prefix, desc, icon)
       -- if whichkey then
       --   whichkey.add {

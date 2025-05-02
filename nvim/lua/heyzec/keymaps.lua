@@ -7,7 +7,6 @@
 -- ##                              1. UTILITIES                                 ##
 -- ##                                                                           ##
 -- ###############################################################################
---
 
 local keymap_utils = require 'heyzec.utils.keymaps'
 local prequire = keymap_utils.prequire
@@ -55,11 +54,12 @@ local save_or_format = action('Save/Format', format, vscode 'workbench.action.fi
 
 -- Vim Pickers
 local find_buffers = action('󰈔 Buffers', telescope.buffers)
-local find_oldfiles = action(' Oldfiles', telescope.oldfiles)
+local find_oldfiles = action(' Oldfiles', telescope.oldfiles, vscode 'workbench.action.openRecent')
 local find_commands = action('Command History', telescope.commands)
 local marks = action('Marks', telescope.marks)
 local jumplist = action('Jumplist', telescope.jumplist)
 local keymaps = action('Keymaps', telescope.keymaps)
+local vim_help = action('Help', telescope.help_tags)
 
 -- Neovim Pickers
 local search_diagnostics = action('Diagnostics', telescope.diagnostics, vscode 'workbench.action.view.problems')
@@ -99,8 +99,8 @@ local show_hover = action('💬 Hover', hover.hover, vscode 'editor.action.showH
 local signature_help = action('💬 Signature Help', vim.lsp.buf.signature_help)
 
 -- Searches
-local search_document_symbols = action('💬 Document Symbols', telescope.lsp_document_symbols)
-local search_workspace_symbols = action('💬 Workspace Symbols', telescope.lsp_workspace_symbols)
+local search_document_symbols = action('💬 Document Symbols', telescope.lsp_document_symbols, vscode 'workbench.action.gotoSymbol')
+local search_workspace_symbols = action('💬 Workspace Symbols', telescope.lsp_workspace_symbols, vscode 'workbench.action.showAllSymbols')
 
 -- Code actions
 local code_action = action('💬 Code Action (Quick))', function()
@@ -130,9 +130,10 @@ local explorer = action(
 
 -- Barbar
 -- API: https://github.com/romgrk/barbar.nvim/blob/master/lua/barbar/api.lua
-local barbar_pin = action('📌 Pin', function()
+local barbar_pin_toggle = action('📌 Pin', function()
   vim.cmd 'BufferPin'
-end)
+end, vscode 'workbench.action.pinEditor')
+local barbar_unpin_vscode = action('📌 Pin', nil, vscode 'workbench.action.unpinEditor')
 local barbar_pick = action('📌 Pick', barbar.pick_buffer)
 local function barbar_goto(n)
   return action('📌 Goto pinned', function()
@@ -193,7 +194,8 @@ local mappings = {
     -- Barbar as harpoon
     ['h'] = {
       '📌 harpoon',
-      ['a'] = barbar_pin,
+      ['a'] = barbar_pin_toggle,
+      ['A'] = barbar_unpin_vscode,
       ['p'] = barbar_pick,
     },
 
@@ -204,6 +206,7 @@ local mappings = {
       ['f'] = find_files,
       ['g'] = search_files,
       ['j'] = jumplist,
+      ['h'] = vim_help,
       ['k'] = keymaps,
       ['m'] = marks,
       ['o'] = find_oldfiles,
@@ -220,7 +223,7 @@ local mappings = {
     },
 
     ['g'] = {
-      'git',
+      '󰊢 git',
       ['s'] = git_status,
       ['c'] = git_commits,
     },
