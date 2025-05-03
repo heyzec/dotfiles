@@ -150,6 +150,23 @@ local hover_switch_prev = action('hover.nvim (prev source)', function()
   hover.hover_switch 'previous'
 end)
 
+------------------------2.4. Toggle settings-----------------------
+
+local function toggle(setting_name, namespace)
+  if namespace == nil then
+    namespace = 'o'
+  end
+  return action('Spell', function()
+    local result = not vim[namespace][setting_name]
+    vim[namespace][setting_name] = result
+    vim.notify('Toggled ' .. setting_name .. ' to ' .. tostring(result))
+  end)
+end
+
+local toggle_spell = toggle 'spell'
+local toggle_wrap = toggle 'wrap'
+local toggle_auto_save = toggle('auto_save', 'g')
+
 -- ###############################################################################
 -- ##                                                                           ##
 -- ##                             3. DEFINE MAPPINGS                            ##
@@ -238,7 +255,14 @@ local mappings = {
     -- ['7'] = barbar_goto(7),
     -- ['8'] = barbar_goto(8),
     -- ['9'] = barbar_goto(9),
-  },
+
+    -- 2.4. Settings
+    ['t'] = {
+      ['s'] = toggle_auto_save,
+      ['w'] = toggle_wrap,
+      ['z'] = toggle_spell,
+    },
+  }, -- <leader>
 }
 
 map_table(mappings)
