@@ -2,6 +2,9 @@ local lsp_utils = require 'heyzec.utils.tooling'
 local define_server = lsp_utils.define_server
 local define_formatter = lsp_utils.define_formatter
 
+-- These tools need to be made available in the PATH
+-- Possibly by editing nix/modules/neovim.nix
+
 -- Lua
 define_server('lua_ls', {
   capabilities = {},

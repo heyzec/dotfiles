@@ -5,29 +5,31 @@
   systemSettings,
   ...
 }: let
-  # Add non-project specific LSPs here
-  # Also see nvim/lua/plugins/mason.lua
-  extraPackages = with pkgs; [
+  # These tools also need to be configured in Neovim
+  # Edit nvim/lua/heyzec/tooling.lua
+  tooling = with pkgs; [
+    # Lua for neovim
+    lua-language-server # server
+    stylua # formatter
+
+    # Nix
+    nil # server
+    alejandra # formatter
+
+    # Others
+    nodePackages.prettier # formatter
+    vscode-langservers-extracted # servers for json and more
+
     # # Shell
     # nodePackages.bash-language-server # LSP
     # shellcheck           # linter
-
-    # # Lua for neovim
-    # lua-language-server # LSP
-
-    # # Nix
-    # cargo gccgo  # Needed by mason-tool-installer to install nil
-    # nil          # LSP for nix
-    # nixpkgs-fmt  # External formatter used by nil
-
-    # # Misc
-    # vscode-langservers-extracted # css, eslint, html, json
-    # yaml-language-server
-
-    # No C compiler found! "cc", "gcc", "clang", "cl", "zig" are not executable.
-    # We need a compiler
-    gcc
   ];
+  extraPackages = with pkgs;
+    [
+      # C compiler needer for Treesitter to build parsers
+      gcc
+    ]
+    ++ tooling;
 in {
   options = {
     heyzec.neovim = {
@@ -89,11 +91,6 @@ in {
         nodePackages.prettier
         vscode-langservers-extracted
       ];
-      xdg.configFile."nvim/lua/generated.lua" = {
-        text = ''
-          test file generated
-        '';
-      };
     };
   in
     lib.mkIf cfg.enable (

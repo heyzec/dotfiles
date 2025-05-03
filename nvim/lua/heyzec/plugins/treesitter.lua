@@ -10,7 +10,7 @@ return {
     },
     opts = {
       -- Install these parsers (nvim-treesitter says these must be needed!)
-      -- ensure_installed = { 'c', 'lua', 'vim', 'vimdoc', 'query', 'markdown', 'markdown_inline' },
+      ensure_installed = { 'c', 'lua', 'vim', 'vimdoc', 'query', 'markdown', 'markdown_inline' },
       auto_install = true,
       -- Note to self: Do not install automatically, since it is likely to fail on Nix systems!
       -- auto_install = false,
