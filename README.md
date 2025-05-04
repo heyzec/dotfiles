@@ -1,6 +1,8 @@
 # dotfiles
 
+
 Here lies my current (but always evolving) config files to some stuff I use.
+
 
 
 ## More READMEs
@@ -14,7 +16,6 @@ Here lies my current (but always evolving) config files to some stuff I use.
 |Type|Program|
 |---|---|
 |Window Manager|[Hyprland](https://github.com/hyprwm/Hyprland)|
-|Launcher|[Rofi (Wayland Fork)](https://github.com/lbonn/rofi)|
 |Status Bar|[Waybar](https://github.com/Alexays/Waybar)|
 |Terminal|[Foot](https://codeberg.org/dnkl/foot)|
 |Editor|[Neovim](https://github.com/neovim/neovim)|
@@ -28,3 +29,5 @@ There is a simple install script located at the root of the repo. It can be used
 ```
 For more details, take a look here: [dotsman.sh](scripts/dotsman)
 
+fo
+f

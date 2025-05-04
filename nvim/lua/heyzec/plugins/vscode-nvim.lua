@@ -1,8 +1,8 @@
 return {
   'Mofiqul/vscode.nvim',
-  priority = 1000, -- load this before all the other start plugins.
+  priority = 1000, -- load this before all the other plugins
   config = function()
-    -- load the colorscheme
+    -- set the colorscheme
     vim.cmd.colorscheme 'vscode'
   end,
 }

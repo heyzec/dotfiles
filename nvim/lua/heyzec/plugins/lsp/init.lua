@@ -33,7 +33,7 @@ return {
     dependencies = {
       mason_dependencies,
 
-      'saghen/blink.cmp', -- should this be here?
+      -- 'saghen/blink.cmp', -- should this be here?
     },
     config = function()
       if not use_mason then

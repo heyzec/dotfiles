@@ -3,14 +3,12 @@
 return {
   'lewis6991/hover.nvim',
   lazy = false,
-  config = function()
-    require('hover').setup {
-      init = function()
-        -- Define your providers here
-        require 'hover.providers.lsp'
-        require 'hover.providers.diagnostic'
-        require 'hover.providers.man'
-      end,
-    }
-  end,
+  opts = {
+    init = function()
+      -- Define your providers here
+      require 'hover.providers.lsp'
+      require 'hover.providers.diagnostic'
+      require 'hover.providers.man'
+    end,
+  },
 }
