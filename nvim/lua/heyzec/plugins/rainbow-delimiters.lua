@@ -1,6 +1,7 @@
+-- Colorize bracket pairs, powered by treesitter
 return {
   'HiPhish/rainbow-delimiters.nvim',
   main = 'rainbow-delimiters.setup',
-  -- Will be configured by 'indent-blankline.nvim'
+  -- will be configured by 'indent-blankline.nvim'
   opts = {},
 }

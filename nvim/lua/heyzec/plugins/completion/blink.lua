@@ -1,16 +1,23 @@
+-- Provides auto-completion
 return {
   'saghen/blink.cmp',
   event = 'InsertEnter',
-  -- lazy = false,
+  -- use a release tag to download pre-built binaries
+  version = '1.*',
   --- @module 'blink.cmp'
   --- @type blink.cmp.Config
   opts = {
+    -- keymaps:
+    -- - 'default' for mappings similar to vim built-in completion
+    -- - 'super-tab' for mappings similar to vscode (tab to accept, arrow keys to navigate)
+    -- - 'enter' for mappings similar to 'super-tab' but with 'enter' to accept
+
     keymap = {
       preset = 'default',
       ['<CR>'] = { 'accept', 'fallback' },
     },
     completion = {
-      list = { selection = { preselect = false, auto_insert = false } },
+      list = { selection = { preselect = false, auto_insert = true } },
       menu = {
         border = 'rounded',
         draw = {
@@ -25,7 +32,7 @@ return {
       },
     },
     -- show function signature while typing arguments
-    signature = {
+    signature = { -- experimental
       enabled = true,
       window = { border = 'rounded' },
     },

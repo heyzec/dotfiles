@@ -1,9 +1,9 @@
+-- Show available keybindings in popup
 return {
   'folke/which-key.nvim',
   event = 'VeryLazy',
   opts = {
-    icons = {
-      rules = false,
-    },
+    -- Don't set icons automatically based on desc
+    icons = { rules = false },
   },
 }

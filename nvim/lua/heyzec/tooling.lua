@@ -16,7 +16,7 @@ define_server 'nil_ls'
 define_formatter('nix', 'alejandra')
 
 -- Others
-define_server 'jsonls'
+define_server 'jsonls' -- hrsh7th/vscode-langservers-extracted
 define_formatter('typescriptreact', 'prettier')
 -- javascript = { "prettierd", "prettier", stop_after_first = true },
 

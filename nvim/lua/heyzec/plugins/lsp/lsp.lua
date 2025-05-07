@@ -4,8 +4,11 @@ local use_mason = vim.g.heyzec_use_mason
 local mason_dependencies = {}
 if use_mason then
   mason_dependencies = {
+    -- Manage external editor tooling i.e LSP servers
     'williamboman/mason.nvim',
+    -- better mason and lsp-config integration
     'williamboman/mason-lspconfig.nvim',
+    -- declaratively specify which tools to automatically install via mason
     -- Automatically install LSPs and related tools to stdpath for Neovim
     'WhoIsSethDaniel/mason-tool-installer.nvim',
   }
@@ -15,6 +18,7 @@ return {
   -- We've determined this brace is needed for `vim` to be defined and more
   -- But is this the place to go?
   {
+    -- anotations for neovim api functions (that was for old neodev)
     -- `lazydev` configures Lua LSP for your Neovim config, runtime and plugins
     -- used for completion, annotations and signatures of Neovim apis
     'folke/lazydev.nvim',
@@ -29,6 +33,7 @@ return {
   -- Useful status updates for LSP.
   { 'j-hui/fidget.nvim', opts = {} },
   {
+    -- Language Server Protocol (LSP) support TODO: not true
     'neovim/nvim-lspconfig',
     dependencies = {
       mason_dependencies,

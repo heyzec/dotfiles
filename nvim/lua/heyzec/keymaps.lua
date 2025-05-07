@@ -9,7 +9,6 @@
 -- ###############################################################################
 
 local keymap_utils = require 'heyzec.utils.keymaps'
--- local prequire = keymap_utils.prequire
 local map_table = keymap_utils.map_table
 local action = keymap_utils.create_conditional_action
 local bind = keymap_utils.create_bind
@@ -53,31 +52,31 @@ end, vscode 'workbench.action.files.save')
 -- See https://github.com/nvim-telescope/telescope.nvim?tab=readme-ov-file#pickers for list
 
 -- Vim Pickers
-local find_buffers = action('󰈔 Buffers', '<cmd>Telescope buffers<CR>')
-local find_oldfiles = action(' Oldfiles', '<cmd>Telescope oldfiles<CR>', vscode 'workbench.action.openRecent')
-local find_commands = action('Command History', '<cmd>Telescope commands<CR>')
-local marks = action('Marks', '<cmd>Telescope marks<CR>')
-local jumplist = action('Jumplist', '<cmd>Telescope jumplist<CR>')
-local keymaps = action('Keymaps', '<cmd>Telescope keymaps<CR>')
-local vim_help = action('Help', '<cmd>Telescope help_tags<CR>')
+local find_buffers = action('󰈔 Buffers', '<Cmd>Telescope buffers<CR>')
+local find_oldfiles = action(' Oldfiles', '<Cmd>Telescope oldfiles<CR>', vscode 'workbench.action.openRecent')
+local find_commands = action('Command History', '<Cmd>Telescope commands<CR>')
+local marks = action('Marks', '<Cmd>Telescope marks<CR>')
+local jumplist = action('Jumplist', '<Cmd>Telescope jumplist<CR>')
+local keymaps = action('Keymaps', '<Cmd>Telescope keymaps<CR>')
+local vim_help = action('Help', '<Cmd>Telescope help_tags<CR>')
 
 -- Neovim Pickers
-local search_diagnostics = action('Diagnostics', '<cmd>Telescope diagnostics<CR>', vscode 'workbench.action.view.problems')
+local search_diagnostics = action('Diagnostics', '<Cmd>Telescope diagnostics<CR>', vscode 'workbench.action.view.problems')
 
 -- Find files and Grep
-local find_files = action('󰈔 Find files', '<cmd>Telescope find_files<CR>', vscode 'workbench.action.quickOpen')
-local search_files = action(' Grep files', '<cmd>Telescope live_grep<CR>', vscode 'workbench.action.showAllSymbols')
-local search_by_word = action(' Grep files', '<cmd>Telescope grep_string<CR>')
+local find_files = action('󰈔 Find files', '<Cmd>Telescope find_files<CR>', vscode 'workbench.action.quickOpen')
+local search_files = action(' Grep files', '<Cmd>Telescope live_grep<CR>', vscode 'workbench.action.showAllSymbols')
+local search_by_word = action(' Grep files', '<Cmd>Telescope grep_string<CR>')
 local search_vim_configs = action('Neovim Configs', function()
   require('telescope.builtin').live_grep { cwd = vim.fn.stdpath 'config' }
 end)
 
 -- Git Pickers
-local git_commits = action('󰊢 Git Commits', '<cmd>Telescope git_commits<CR>')
-local git_status = action('󰊢 Git Status', '<cmd>Telescope git_status<CR>')
+local git_commits = action('󰊢 Git Commits', '<Cmd>Telescope git_commits<CR>')
+local git_status = action('󰊢 Git Status', '<Cmd>Telescope git_status<CR>')
 
 -- Others
-local resume = action('Resume', '<cmd>Telescope lsp_references<CR>')
+local resume = action('Resume', '<Cmd>Telescope resume<CR>')
 local undo = action('Undo', function()
   local telescope_ext = require('telescope').extensions
   if telescope_ext.undo then
@@ -88,10 +87,10 @@ end, vscode 'workbench.action.localHistory.restoreViaPicker')
 ------------------------2.2. LSP----------------------------
 -- Goto
 -- See :help *g* for g-prefixed default keymaps
-local goto_def = action('💬 [G]oto [D]efinition', '<cmd>Telescope lsp_definitions<CR>', vscode 'editor.action.revealDefinition')
-local goto_ref = action('💬 Goto [R]eferences', '<cmd>Telescope lsp_references<CR>', vscode 'editor.action.goToReferences')
-local goto_impl = action('💬 Goto [I]mplementation', '<cmd>Telescope lsp_implementations<CR>', vscode 'editor.action.goToImplementation')
-local goto_type_def = action('💬 Goto [T]ype Definition', '<cmd>Telescope lsp_type_definitions<CR>', vscode 'editor.action.goToTypeDefinition')
+local goto_def = action('💬 [G]oto [D]efinition', '<Cmd>Telescope lsp_definitions<CR>', vscode 'editor.action.revealDefinition')
+local goto_ref = action('💬 Goto [R]eferences', '<Cmd>Telescope lsp_references<CR>', vscode 'editor.action.goToReferences')
+local goto_impl = action('💬 Goto [I]mplementation', '<Cmd>Telescope lsp_implementations<CR>', vscode 'editor.action.goToImplementation')
+local goto_type_def = action('💬 Goto [T]ype Definition', '<Cmd>Telescope lsp_type_definitions<CR>', vscode 'editor.action.goToTypeDefinition')
 local goto_prev_diagnostic = action('💬 Goto Prev Diagnostic', vim.diagnostic.goto_prev, vscode 'editor.action.marker.next')
 local goto_next_diagnostic = action('💬 Goto Next Diagnostic', vim.diagnostic.goto_next, vscode 'editor.action.marker.next')
 
@@ -102,8 +101,8 @@ end, vscode 'editor.action.showHover')
 local signature_help = action('💬 Signature Help', vim.lsp.buf.signature_help)
 
 -- Searches
-local search_document_symbols = action('💬 Document Symbols', '<cmd>Telescope lsp_document_symbols<CR>', vscode 'workbench.action.gotoSymbol')
-local search_workspace_symbols = action('💬 Workspace Symbols', '<cmd>Telescope lsp_workspace_symbols<CR>', vscode 'workbench.action.showAllSymbols')
+local search_document_symbols = action('💬 Document Symbols', '<Cmd>Telescope lsp_document_symbols<CR>', vscode 'workbench.action.gotoSymbol')
+local search_workspace_symbols = action('💬 Workspace Symbols', '<Cmd>Telescope lsp_workspace_symbols<CR>', vscode 'workbench.action.showAllSymbols')
 
 -- Code actions
 local code_action = action('💬 Code Action (Quick))', function()
@@ -121,7 +120,7 @@ local code_format = action('Format Document', format, vscode 'editor.action.form
 -- If intention is to close, then just press it again
 local explorer = action(
   '🗃️ Toggle Explorer',
-  '<cmd>Neotree reveal<CR>',
+  '<Cmd>Neotree reveal<CR>',
   -- Part [1]: If buffer is (1) closed or (2) open but unfocused, open and focus to the explorer
   -- Part [2]: Otherwise, close the panel
   -- Not possible to map here, because keys are not sent to neovim when buffer unfocused.
@@ -131,13 +130,13 @@ local explorer = action(
 
 -- Barbar
 -- API: https://github.com/romgrk/barbar.nvim/blob/master/lua/barbar/api.lua
-local barbar_pin_toggle = action('📌 Pin', '<cmd>BufferPin<CR>', vscode 'workbench.action.pinEditor')
+local barbar_pin_toggle = action('📌 Pin', '<Cmd>BufferPin<CR>', vscode 'workbench.action.pinEditor')
 local barbar_unpin_vscode = action('📌 Pin', nil, vscode 'workbench.action.unpinEditor')
-local barbar_pick = action('📌 Pick', '<cmd>BufferPick<CR>')
+local barbar_pick = action('📌 Pick', '<Cmd>BufferPick<CR>')
 -- possible?
--- local barbar_pick = action('📌 Pick', '<cmd>BufferPick<CR>', vscode 'workbench.action.quickOpen')
+-- local barbar_pick = action('📌 Pick', '<Cmd>BufferPick<CR>', vscode 'workbench.action.quickOpen')
 local function barbar_goto(n)
-  return action('📌 Goto pinned', '<cmd>BufferGoto ' .. n .. '<CR>')
+  return action('📌 Goto pinned', '<Cmd>BufferGoto ' .. n .. '<CR>')
 end
 
 -- Hover

@@ -1,10 +1,10 @@
--- Using barbar as a harpoon-like workflow
--- https://github.com/romgrk/barbar.nvim/issues/525
+-- Tabline plugin, but used as a harpoon-like workflow
+-- See https://github.com/romgrk/barbar.nvim/issues/525
 return {
   'romgrk/barbar.nvim',
   dependencies = {
-    -- 'lewis6991/gitsigns.nvim', -- OPTIONAL: for git status
-    'nvim-tree/nvim-web-devicons', -- OPTIONAL: for file icons
+    -- soft dependency: for file icons
+    -- 'nvim-tree/nvim-web-devicons',
   },
   version = '^1.0.0',
   cmd = { 'BufferPick', 'BufferGoto', 'BufferPin' },
@@ -25,7 +25,7 @@ return {
     },
   },
   keys = {
-    { 'gt', '<cmd>BufferNext<cr>', mode = 'n', desc = '📌 Go to next tab' },
-    { 'gT', '<cmd>BufferPrevious<cr>', mode = 'n', desc = '📌 Go to previous tab' },
+    { 'gt', '<Cmd>BufferNext<CR>', mode = 'n', desc = '📌 Go to next tab' },
+    { 'gT', '<Cmd>BufferPrevious<CR>', mode = 'n', desc = '📌 Go to previous tab' },
   },
 }

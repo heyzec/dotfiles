@@ -1,5 +1,4 @@
--- Hover plugin framework for Neovim
--- To show multiple info in hover window
+-- Show popup window with info from multiple sources
 return {
   'lewis6991/hover.nvim',
   event = 'InsertEnter',

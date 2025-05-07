@@ -1,10 +1,33 @@
 -----------------------------------------------------------
+-- Return cursor position
+-----------------------------------------------------------
+-- See `:help last-position-jump`
+vim.api.nvim_create_autocmd('BufRead', {
+  desc = 'Return to last edit position when opening files',
+  group = vim.api.nvim_create_augroup('RestoreCursor', {}),
+  callback = function()
+    local ft = vim.opt_local.filetype:get()
+    -- don't apply to git messages
+    if ft == 'gitcommit' or ft == 'gitrebase' then
+      return
+    end
+    -- get position of last saved edit
+    local markpos = vim.api.nvim_buf_get_mark(0, '"')
+    local line, col = markpos[1], markpos[2]
+    -- if in range, go there
+    if line > 1 and line <= vim.api.nvim_buf_line_count(0) then
+      vim.api.nvim_win_set_cursor(0, { line, col })
+    end
+  end,
+})
+
+-----------------------------------------------------------
 -- Highlight on yank
 -----------------------------------------------------------
 -- See `:help vim.highlight.on_yank()`
 vim.api.nvim_create_autocmd('TextYankPost', {
   desc = 'Highlight when yanking (copying) text',
-  group = vim.api.nvim_create_augroup('YankHighlight', { clear = true }),
+  group = vim.api.nvim_create_augroup('YankHighlight', {}),
   callback = function()
     vim.highlight.on_yank { timeout = 800 }
   end,
@@ -18,7 +41,7 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 -- for normal mode: relative movements <3
 local cmdline_group = vim.api.nvim_create_augroup('CmdlineLinenr', {})
 -- debounce cmdline enter events to make sure we don't have flickering for non user cmdline use
--- e.g. mappings using : instead of <cmd>
+-- e.g. mappings using : instead of <Cmd>
 local cmdline_debounce_timer
 
 vim.api.nvim_create_autocmd('CmdlineEnter', {

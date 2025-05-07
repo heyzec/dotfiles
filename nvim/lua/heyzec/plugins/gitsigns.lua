@@ -1,4 +1,4 @@
--- git related signs to the gutter, as well as utilities for managing changes
+-- Show git signs in the gutter, and other git integrations (e.g. blame, hunks)
 return {
   'lewis6991/gitsigns.nvim',
   event = 'VeryLazy',
@@ -9,6 +9,7 @@ return {
     current_line_blame = true,
     current_line_blame_opts = {
       delay = 250,
+      -- TODO: comment this
       use_focus = false,
     },
     -- message with a margin of 2 spaces

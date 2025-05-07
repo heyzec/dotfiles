@@ -1,3 +1,4 @@
+-- Highlight text representing color codes with actual colors
 return {
   'norcalli/nvim-colorizer.lua',
   event = 'BufReadPost',

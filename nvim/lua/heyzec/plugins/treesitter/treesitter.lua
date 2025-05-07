@@ -1,19 +1,19 @@
+-- better integration Treesitter for language-aware features, e.g. improved syntax highlighting
 return {
   {
     'nvim-treesitter/nvim-treesitter',
     cond = true, -- load this plugin, even in VSCode
-    -- Update parsers when lazy.nvim updates this plugin
+    -- update parsers when lazy.nvim updates this plugin
     build = ':TSUpdate',
     event = 'VeryLazy',
     dependencies = {
-      { 'nvim-treesitter/nvim-treesitter-textobjects', cond = true }, -- TODO: this this cond needed?
+      -- Extra modules
+      { 'nvim-treesitter/nvim-treesitter-textobjects', cond = true },
     },
     opts = {
-      -- Install these parsers (nvim-treesitter says these must be needed!)
+      -- install these parsers (nvim-treesitter says these must be needed!)
       ensure_installed = { 'c', 'lua', 'vim', 'vimdoc', 'query', 'markdown', 'markdown_inline' },
       auto_install = true,
-      -- Note to self: Do not install automatically, since it is likely to fail on Nix systems!
-      -- auto_install = false,
 
       -- ========== Configure builtin modules ==========
       -- 1. Syntax highlighting
@@ -30,8 +30,7 @@ return {
       },
       -- 3. Indenting
       indent = { enable = true },
-      -- 4. Folding
-      -- For completeness, we list this module here, but configuring is not done via opts.
+      -- 4. Folding (configured separately, not via opts)
 
       -- ========== Configure extra modules ==========
       -- 1. Text objects
@@ -81,8 +80,9 @@ return {
   {
     'nvim-treesitter/nvim-treesitter-context',
     event = 'VeryLazy',
-    enabled = true,
-    opts = { mode = 'cursor', max_lines = 3 },
-    cond = true,
+    opts = {
+      mode = 'cursor',
+      max_lines = 3,
+    },
   },
 }

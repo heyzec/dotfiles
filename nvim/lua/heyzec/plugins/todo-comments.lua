@@ -1,8 +1,10 @@
--- Highlight todo, notes, etc in comments
+-- Highlight todo in comments
 return {
   'folke/todo-comments.nvim',
-  -- event = 'VimEnter',
   event = 'VeryLazy',
-  dependencies = { 'nvim-lua/plenary.nvim' },
+  dependencies = {
+    -- hard dependency: lua utilities library
+    'nvim-lua/plenary.nvim',
+  },
   opts = { signs = false },
 }

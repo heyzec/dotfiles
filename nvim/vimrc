@@ -69,11 +69,11 @@ set smartcase                                   " ... unless term contains an up
 set incsearch                                   " incremental search (default in nvim)
 set hlsearch                                    " highlight text while searching (default in nvim)
 if has('nvim')
-    set inccommand=nosplit                      " visual feedback while substituting
+    set inccommand=split                        " visual feedback and live preview while substituting
 endif
 
 " Clear highlights for search results with Esc
-nnoremap <Esc> <cmd>nohlsearch<CR>
+nnoremap <Esc> <Cmd>nohlsearch<CR>
 
 " ---------------------------Buffers---------------------------
 set splitbelow                                  " natural splits - :sp places new win below
@@ -138,14 +138,6 @@ endif
 
 " make Y more consistent - yank till end (like D and C)
 noremap Y y$
-
-
-" Don't use Ex mode, use Q for macros (idea: jesseliete)
-" In linewise Visual mode, Q now repeats last recorded register (see :h v_Q)
-nnoremap Q @qj
-" Do not show stupid `how did we get here?` window
-"nnoremap q: :echo 'No more Ex mode!'<CR>
-
 
 " Ctrl + Backspace - delete previous word
 " Use Ctrl+Shift+w because Ctrl+w does not work for Telescope
@@ -267,14 +259,3 @@ endfunction
 
 
 " }}} 4. THINGS THAT SHOULD BE PLUGINS
-
-" Return to last edit position when opening files (:help last-position-jump)
-augroup RestoreCursor
-  autocmd!
-  autocmd BufRead * autocmd FileType <buffer> ++once
-    \ let s:line = line("'\"")
-    \ | if s:line >= 1 && s:line <= line("$") && &filetype !~# 'commit'
-    \      && index(['xxd', 'gitrebase'], &filetype) == -1
-    \ |   execute "normal! g`\""
-    \ | endif
-augroup END

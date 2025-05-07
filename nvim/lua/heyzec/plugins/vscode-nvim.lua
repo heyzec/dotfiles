@@ -1,3 +1,4 @@
+-- Color scheme inspired by VSCode
 return {
   'Mofiqul/vscode.nvim',
   priority = 1000, -- load this before all the other plugins
