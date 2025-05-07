@@ -2,7 +2,7 @@
 -- To show multiple info in hover window
 return {
   'lewis6991/hover.nvim',
-  lazy = false,
+  event = 'InsertEnter',
   opts = {
     init = function()
       -- Define your providers here

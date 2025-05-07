@@ -1,5 +1,6 @@
 return {
   'lukas-reineke/indent-blankline.nvim',
+  event = 'VeryLazy',
   main = 'ibl',
   config = function()
     -- Follow VSCode defaults (3 colors, no red)

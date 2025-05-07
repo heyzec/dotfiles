@@ -55,11 +55,11 @@ M.map_prefix = function(prefix, desc, icon)
   end
 end
 
---- @alias action { [1]: string, [2]: function }
+--- @alias action { [1]: string, [2]: function | string }
 
 --- Create an action type, a container that holds callbacks
 --- @param desc string Description of action
---- @param callback function Function to perform action
+--- @param callback function | string Function / Ex command to perform action
 --- @return action
 local function create_action(desc, callback)
   return { desc, callback }
@@ -92,8 +92,8 @@ end
 
 --- Create an action based on whether Neovim is embedded in VS Code
 --- @param desc string Description of action
---- @param normal_callback function | nil Function to perform action in Neovim
---- @param vscode_callback function | nil Function to perform action in VS Code
+--- @param normal_callback function | string | nil Function / Ex command to perform action in Neovim
+--- @param vscode_callback function | string | nil Function / Ex command to perform action in VS Code
 --- @return action | nil
 M.create_conditional_action = function(desc, normal_callback, vscode_callback)
   if not vim.g.vscode and normal_callback then
@@ -109,19 +109,16 @@ local function is_action(t)
   if type(t) ~= 'table' then
     return false
   end
-  if #t < 2 then
+  if #t ~= 2 then
     return false
   end
-  if type(t[1]) ~= 'string' or type(t[2]) ~= 'function' then
+  if type(t[1]) ~= 'string' then
     return false
   end
-  if #t == 2 then
-    return true
+  if type(t[2]) ~= 'function' and type(t[2]) ~= 'string' then
+    return false
   end
-  if #t == 3 and type(t[3]) == 'function' then
-    return true
-  end
-  return false
+  return true
 end
 
 --- @alias bind { [1]: string, [2]: action }

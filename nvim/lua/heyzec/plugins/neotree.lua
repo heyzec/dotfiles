@@ -10,6 +10,7 @@ return {
   --   -- TODO: this key should use Neotree if install, else fallback to Lexplore
   --   { '\\', ':Neotree reveal<CR>', desc = 'NeoTree reveal', silent = true },
   -- },
+  cmd = 'Neotree',
   opts = {
     filesystem = {
       window = {

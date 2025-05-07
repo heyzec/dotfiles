@@ -1,6 +1,6 @@
 return {
   'folke/which-key.nvim',
-  event = 'VimEnter',
+  event = 'VeryLazy',
   opts = {
     icons = {
       rules = false,

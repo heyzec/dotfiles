@@ -1,6 +1,6 @@
 return {
   'nvim-lualine/lualine.nvim',
-  enabled = true,
+  event = 'VeryLazy',
   opts = {
     options = {
       component_separators = '|',

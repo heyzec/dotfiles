@@ -3,7 +3,7 @@ return {
   {
     'nvim-telescope/telescope.nvim',
     -- enabled = false,
-    event = 'VimEnter', -- is this needed?
+    -- event = 'VimEnter', -- is this needed?
     dependencies = {
       'nvim-lua/plenary.nvim',
       -- { 'nvim-telescope/telescope-fzf-native.nvim', build = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release'
@@ -12,6 +12,7 @@ return {
       -- E.g. LSP Code action to use Telescoep instead of ???
       'nvim-telescope/telescope-ui-select.nvim',
     },
+    cmd = 'Telescope',
     config = function()
       -- TODO: Cleanup
       local telescope = require 'telescope'

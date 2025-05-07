@@ -7,7 +7,7 @@ return {
     'nvim-tree/nvim-web-devicons', -- OPTIONAL: for file icons
   },
   version = '^1.0.0',
-  lazy = false,
+  cmd = { 'BufferPick', 'BufferGoto', 'BufferPin' },
   init = function()
     vim.g.barbar_auto_setup = false
   end,
