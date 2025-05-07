@@ -3,9 +3,9 @@ local whichkey
 
 -- ========== Keymap wrappers ==========
 
---- Attempts to parse icon and description from a descriptor.
---- A descriptor is a string of the format "<one-unicode-len-icon> <desc>"
---- @param s string
+---Attempts to parse icon and description from a descriptor.
+---A descriptor is a string of the format "<one-unicode-len-icon> <desc>"
+---@param s string
 local function parse_descriptor(s)
   local matches = {}
   for match in string.gmatch(s, '%S+') do
@@ -21,10 +21,10 @@ local function parse_descriptor(s)
   return description, icon
 end
 
--- Convenience wrapper around vim.keymap.set with sane defaults
---- @param keys string
---- @param callback function | string
---- @param descriptor string
+---Convenience wrapper around vim.keymap.set with sane defaults
+---@param keys string
+---@param callback function | string
+---@param descriptor string
 M.map = function(keys, callback, descriptor, extra)
   local mode, desc, icon
   desc, icon = parse_descriptor(descriptor)
@@ -38,11 +38,6 @@ M.map = function(keys, callback, descriptor, extra)
   end
 end
 
--- -- Convenience wrapper around vim.keymap.set for easy descriptions
--- M.map_desc = function(keys, callback, desc)
---   M.map(keys, callback, { desc = desc })
--- end
-
 -- Wrapper to document key chains
 M.map_prefix = function(prefix, descriptor)
   local desc, icon = parse_descriptor(descriptor)
@@ -55,7 +50,7 @@ end
 
 -- ========== prequire, a wrapper of require ==========
 
---- Mock object which does not raise errors when indexed or called.
+---Mock object which does not raise errors when indexed or called.
 local sentinel
 sentinel = setmetatable({}, {
   __call = function()
@@ -66,8 +61,8 @@ sentinel = setmetatable({}, {
   end,
 })
 
---- Attempts to `require` a module.
---- Returns a mock object on failure.
+---Attempts to `require` a module.
+---Returns a mock object on failure.
 M.prequire = function(module_name)
   local status, lib = pcall(require, module_name)
   if status then
@@ -78,26 +73,26 @@ end
 
 -- ========== Custom container types: Actions and Binds ==========
 
---- @class Base
---- @field type string
+---@class Base
+---@field type string
 
---- @class Action : Base
---- @field desc string
---- @field callback function | string
+---@class Action : Base
+---@field desc string
+---@field callback function | string
 
---- Create an action type, a container that holds callbacks
---- @param desc string Description of action
---- @param callback function | string Function / Ex command to perform action
---- @return Action
+---Create an action type, a container that holds callbacks
+---@param desc string Description of action
+---@param callback function | string Function / Ex command to perform action
+---@return Action
 local function create_action(desc, callback)
   return { type = 'action', desc = desc, callback = callback }
 end
 
---- Create an action based on whether Neovim is embedded in VS Code
---- @param desc string Description of action
---- @param normal_callback function | string | nil Function / Ex command to perform action in Neovim
---- @param vscode_callback function | string | nil Function / Ex command to perform action in VS Code
---- @return Action | nil
+---Create an action based on whether Neovim is embedded in VS Code
+---@param desc string Description of action
+---@param normal_callback function | string | nil Function / Ex command to perform action in Neovim
+---@param vscode_callback function | string | nil Function / Ex command to perform action in VS Code
+---@return Action | nil
 M.create_conditional_action = function(desc, normal_callback, vscode_callback)
   if not vim.g.vscode and normal_callback then
     return create_action(desc, normal_callback)
@@ -112,19 +107,19 @@ local function is_action(t)
   return t.type == 'action'
 end
 
---- @class Bindlet : Base
---- @field mode string
---- @field action Action
---- @field extra table
+---@class Bindlet : Base
+---@field mode string
+---@field action Action
+---@field extra table
 
---- @class Bind : Base
---- @field binds Bindlet[]
+---@class Bind : Base
+---@field binds Bindlet[]
 
---- Create a bind type
---- @param ... { [1]: string, [2]: Action, [3]: table | nil}
---- @return Bind | nil
+---Create a bind type
+---@param ... { [1]: string, [2]: Action, [3]: table | nil}
+---@return Bind | nil
 M.create_bind = function(...)
-  --- @type Bind
+  ---@type Bind
   local bind = { type = 'bind', binds = {} }
   local args = { ... }
   for _, v in ipairs(args) do
@@ -144,22 +139,22 @@ end
 
 -- ========== Main function for parsing table and make mappings ==========
 
---- @param obj table | Action | Bind
---- @param keylist table
+---@param obj table | Action | Bind
+---@param keylist table
 local function map_table_helper(obj, keylist)
   -- Base cases
   if obj == nil then
     return
   end
   if is_action(obj) then
-    --- @cast obj Action
+    ---@cast obj Action
     local action = obj
     local key = table.concat(keylist)
     M.map(key, action.callback, action.desc)
     return
   end
   if is_bind(obj) then
-    --- @cast obj Bind
+    ---@cast obj Bind
     local bind = obj
     for _, bindlet in ipairs(bind.binds) do
       local key = table.concat(keylist)
@@ -193,8 +188,8 @@ local function map_table_helper(obj, keylist)
   end
 end
 
---- Configures multiple mappings in a form of a nested table
---- @param mappings table
+---Configures multiple mappings in a form of a nested table
+---@param mappings table
 M.map_table = function(mappings)
   if not vim.g.vscode then
     whichkey = require 'which-key'

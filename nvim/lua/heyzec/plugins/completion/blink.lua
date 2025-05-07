@@ -4,8 +4,8 @@ return {
   event = 'InsertEnter',
   -- use a release tag to download pre-built binaries
   version = '1.*',
-  --- @module 'blink.cmp'
-  --- @type blink.cmp.Config
+  ---@module 'blink.cmp'
+  ---@type blink.cmp.Config
   opts = {
     -- keymaps:
     -- - 'default' for mappings similar to vim built-in completion
