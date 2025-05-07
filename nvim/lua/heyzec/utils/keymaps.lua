@@ -1,6 +1,3 @@
--- local debug = require('utils.lua').debug
--- local dump = require('utils.lua').dump
-
 local M = {}
 local whichkey
 
@@ -25,44 +22,35 @@ local function parse_descriptor(s)
 end
 
 -- Convenience wrapper around vim.keymap.set with sane defaults
-M.map = function(keys, callback, extra)
+--- @param keys string
+--- @param callback function | string
+--- @param descriptor string
+M.map = function(keys, callback, descriptor, extra)
   local mode, desc, icon
+  desc, icon = parse_descriptor(descriptor)
   if extra then
     mode = extra.mode or 'n'
-    -- local desc = (and extra.desc) or nil
-    if extra.desc then
-      desc, icon = parse_descriptor(extra.desc)
-    end
   end
   if whichkey then
-    whichkey.add { keys, callback, mode = mode, desc = desc, icon = icon }
+    whichkey.add(vim.tbl_deep_extend('force', { keys, callback }, extra or {}, { mode = mode, desc = desc, icon = icon }))
   else
-    vim.keymap.set(mode, keys, callback, { desc = desc })
+    vim.keymap.set(mode, keys, callback, extra or {})
   end
 end
 
--- Convenience wrapper around vim.keymap.set for easy descriptions
-M.map_desc = function(keys, callback, desc)
-  M.map(keys, callback, { desc = desc })
-end
+-- -- Convenience wrapper around vim.keymap.set for easy descriptions
+-- M.map_desc = function(keys, callback, desc)
+--   M.map(keys, callback, { desc = desc })
+-- end
 
---
-M.map_prefix = function(prefix, desc, icon)
+-- Wrapper to document key chains
+M.map_prefix = function(prefix, descriptor)
+  local desc, icon = parse_descriptor(descriptor)
   if whichkey then
     whichkey.add {
       { prefix, group = desc, icon = icon },
     }
   end
-end
-
---- @alias action { [1]: string, [2]: function | string }
-
---- Create an action type, a container that holds callbacks
---- @param desc string Description of action
---- @param callback function | string Function / Ex command to perform action
---- @return action
-local function create_action(desc, callback)
-  return { desc, callback }
 end
 
 -- ========== prequire, a wrapper of require ==========
@@ -90,11 +78,26 @@ end
 
 -- ========== Custom container types: Actions and Binds ==========
 
+--- @class Base
+--- @field type string
+
+--- @class Action : Base
+--- @field desc string
+--- @field callback function | string
+
+--- Create an action type, a container that holds callbacks
+--- @param desc string Description of action
+--- @param callback function | string Function / Ex command to perform action
+--- @return Action
+local function create_action(desc, callback)
+  return { type = 'action', desc = desc, callback = callback }
+end
+
 --- Create an action based on whether Neovim is embedded in VS Code
 --- @param desc string Description of action
 --- @param normal_callback function | string | nil Function / Ex command to perform action in Neovim
 --- @param vscode_callback function | string | nil Function / Ex command to perform action in VS Code
---- @return action | nil
+--- @return Action | nil
 M.create_conditional_action = function(desc, normal_callback, vscode_callback)
   if not vim.g.vscode and normal_callback then
     return create_action(desc, normal_callback)
@@ -106,92 +109,78 @@ M.create_conditional_action = function(desc, normal_callback, vscode_callback)
 end
 
 local function is_action(t)
-  if type(t) ~= 'table' then
-    return false
-  end
-  if #t ~= 2 then
-    return false
-  end
-  if type(t[1]) ~= 'string' then
-    return false
-  end
-  if type(t[2]) ~= 'function' and type(t[2]) ~= 'string' then
-    return false
-  end
-  return true
+  return t.type == 'action'
 end
 
---- @alias bind { [1]: string, [2]: action }
+--- @class Bindlet : Base
+--- @field mode string
+--- @field action Action
+--- @field extra table
+
+--- @class Bind : Base
+--- @field binds Bindlet[]
 
 --- Create a bind type
---- @param mode string
---- @param action action | nil
---- @return bind | nil
-M.create_bind = function(mode, action)
-  if not action then
-    return nil
+--- @param ... { [1]: string, [2]: Action, [3]: table | nil}
+--- @return Bind | nil
+M.create_bind = function(...)
+  --- @type Bind
+  local bind = { type = 'bind', binds = {} }
+  local args = { ... }
+  for _, v in ipairs(args) do
+    local mode, action, extra = v[1], v[2], v[3]
+    assert(mode ~= 'string')
+    assert(is_action(action))
+    assert(type(extra) == 'table' or extra == nil)
+    local bindlet = { type = 'bindlet', mode = mode, action = action, extra = extra }
+    vim.list_extend(bind.binds, { bindlet })
   end
-  return { mode, action }
+  return bind
 end
 
 local function is_bind(t)
-  if type(t) ~= 'table' then
-    return false
-  end
-  if #t ~= 2 then
-    return false
-  end
-  return type(t[1]) == 'string' and is_action(t[2])
+  return t.type == 'bind'
 end
 
 -- ========== Main function for parsing table and make mappings ==========
 
---- @param tbl table
-local function map_table_helper(tbl, keylist)
+--- @param obj table | Action | Bind
+--- @param keylist table
+local function map_table_helper(obj, keylist)
   -- Base cases
-  if tbl == nil then
+  if obj == nil then
     return
   end
-  if type(tbl) == 'function' then
+  if is_action(obj) then
+    --- @cast obj Action
+    local action = obj
     local key = table.concat(keylist)
-    M.map_desc(key, tbl)
+    M.map(key, action.callback, action.desc)
     return
   end
-  if is_action(tbl) then
-    local key = table.concat(keylist)
-    M.map_desc(key, tbl[2], tbl[1])
-    return
-  end
-  if is_bind(tbl) then
-    local key = table.concat(keylist)
-    local action = tbl[2]
-    M.map(key, action[2], {
-      mode = tbl[1],
-      desc = action[1],
-    })
+  if is_bind(obj) then
+    --- @cast obj Bind
+    local bind = obj
+    for _, bindlet in ipairs(bind.binds) do
+      local key = table.concat(keylist)
+      assert(type(bindlet.action.desc) == 'string')
+      M.map(
+        key,
+        bindlet.action.callback,
+        bindlet.action.desc,
+        vim.tbl_deep_extend('force', bindlet.extra or {}, {
+          mode = bindlet.mode,
+        })
+      )
+    end
     return
   end
 
-  for k, v in pairs(tbl) do
-    -- Detecting metadata
+  for k, v in pairs(obj) do
     if k == 1 then
-      local prefix = table.concat(keylist)
-      -- local prefix = table.concat(keylist, '', 1, #keylist - 1)
-      -- local key = keylist[#keylist]
-      local desc, icon = parse_descriptor(v)
-      -- elseif type(v) == 'table' then
-      --   group = v[1]
-      --   icon = v.icon
-      -- else
-      -- end
-
       -- Document existing key chains
-      M.map_prefix(prefix, desc, icon)
-      -- if whichkey then
-      --   whichkey.add {
-      --     { prefix, group = desc, icon = icon },
-      --   }
-      -- end
+      local prefix = table.concat(keylist)
+      M.map_prefix(prefix, v)
       goto continue
     end
 

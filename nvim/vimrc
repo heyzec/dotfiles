@@ -107,14 +107,14 @@ set confirm                                     " ask instead of failing for som
 
 " Use this function to create keymaps with descriptions for neovim
 " while remaining compatible with vim
-function s:nnoremap(key, cmd, desc)
-    if has('nvim')
-        " TODO: This seemse hacky, rethink this
-        call luaeval("require('heyzec.utils.keymaps').map(_A[1], _A[2], { desc = _A[3] })", [a:key, a:cmd, a:desc])
-    else
-        execute 'nnoremap ' . a:key . ' ' . a:cmd
-    endif
-endfunction
+"function s:nnoremap(key, cmd, desc)
+"    if has('nvim')
+"        " TODO: This seemse hacky, rethink this
+"        call luaeval("require('heyzec.utils.keymaps').map(_A[1], _A[2], { desc = _A[3] })", [a:key, a:cmd, a:desc])
+"    else
+"        execute 'nnoremap ' . a:key . ' ' . a:cmd
+"    endif
+"endfunction
 
 " Let the Alt key be mappable (only need fix for vim)
 if !has('nvim')
@@ -165,13 +165,13 @@ nmap yc yygccp
 
 " :w looks simple at first but it's not
 if !exists('g:vscode')
-    call s:nnoremap('<leader>w', ':w<CR>', 'Write to buffer')
+    "call s:nnoremap('<leader>w', ':w<CR>', 'Write to buffer')
 else
     " remapped in keymaps.lua if vscode exists
 endif
 
 " cd vim into the directory of the current buffer
-call s:nnoremap('<leader>c', ':cd %:p:h<CR>', 'cd into buffer directory')
+"call s:nnoremap('<leader>c', ':cd %:p:h<CR>', 'cd into buffer directory')
 
 " Tabs to switch buffers (not a useful remap)
 " if !exists('g:vscode')
@@ -192,14 +192,6 @@ else
 endif
 " }}}
 
-" [s]ubstitutions {{{
-if !exists('g:vscode')
-    nnoremap <leader>s :%s//g<Left><Left>
-else
-    " remapped in keymaps.lua if vscode exists
-endif
-vnoremap <leader>s "zy:%s/<C-r>z//g<Left><Left>
-" }}}
 
 " Splits controls {{{
 " Switching between splits (ctrl + h,j,k,l)

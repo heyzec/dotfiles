@@ -20,17 +20,17 @@ local function vscode(cmd)
   end
 end
 
--- From vimrc
-if vim.g.vscode then
-  vim.keymap.set('n', '<leader>s', vscode 'editor.action.startFindReplaceAction')
-end
-
 -- ###############################################################################
 -- ##                                                                           ##
 -- ##                             2. DEFINE ACTIONS                             ##
 -- ##                                                                           ##
 -- ###############################################################################
 
+-- Substitutions
+local find_and_replace = action('Find/Replace', ':%s//g<Left><Left>', vscode 'editor.action.startFindReplaceAction')
+local find_and_replace_v = action('Find/Replace with selection prefilled', '"zy:%s/<C-r>z//g<Left><Left>')
+
+-- Writing and formatting
 local function write()
   local ok, result = pcall(vim.cmd.w)
   if not ok then
@@ -185,7 +185,7 @@ local mappings = {
 
   ['K'] = show_hover, -- overrides default K (lookup word on cursor)
   ['gK'] = signature_help,
-  ['<C-k>'] = bind('i', signature_help), -- overrides default i_<C-k> (insert digraphs)
+  ['<C-k>'] = bind { 'i', signature_help }, -- overrides default i_<C-k> (insert digraphs)
   ['<C-n>'] = hover_switch_next, -- overrides default <C-n> (down)
   ['<C-p>'] = hover_switch_prev, --overrides default <C-p> (up)
 
@@ -199,8 +199,10 @@ local mappings = {
   ['<leader>'] = {
     ['w'] = save_or_format,
 
+    ['f'] = bind({ 'n', find_and_replace, { silent = false } }, { 'v', find_and_replace_v, { silent = false } }),
+
     -- Some telescope actions
-    ['<space>'] = find_files,
+    ['<leader>'] = find_files,
     ['/'] = search_files,
     [':'] = find_commands,
     ['.'] = find_oldfiles,
