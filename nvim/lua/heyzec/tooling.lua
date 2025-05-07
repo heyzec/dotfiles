@@ -1,3 +1,6 @@
+-- Mason is disabled for NixOS systems, set vim.g.heyzec_use_mason to override
+vim.g.heyzec_use_mason = nil
+
 local lsp_utils = require 'heyzec.utils.tooling'
 local define_server = lsp_utils.define_server
 local define_formatter = lsp_utils.define_formatter

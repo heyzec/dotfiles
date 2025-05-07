@@ -16,7 +16,11 @@ local function is_nixos()
   return false
 end
 
-vim.g.heyzec_use_mason = not is_nixos()
+if vim.g.heyzec_use_mason == nil then
+  vim.g.heyzec_use_mason = not is_nixos()
+end
+
+-- ========== Stateful variables ==========
 
 --- @class (partial) vim.lsp.ClientConfig.P : vim.lsp.ClientConfig
 --- @type table<string, vim.lsp.ClientConfig.P>
@@ -26,6 +30,9 @@ local servers = {}
 --- @type table<string, string[]>
 --- All user-defined formatters per filetype
 local formatters = {}
+
+-- Extra LSP capabilities to be added to all LSP servers
+local extra_capabilities = {}
 
 M = {}
 
@@ -47,25 +54,21 @@ M.define_formatter = function(ft, formatter)
   formatters[ft] = { formatter }
 end
 
+--- Add extra capabilities to all LSP servers.
+--- @param capabilities table LSP capabilities
+M.add_capabilities = function(capabilities)
+  extra_capabilities = vim.tbl_deep_extend('error', extra_capabilities, capabilities)
+end
+
 -- ========== Tooling-facing APIs ==========
-local extra_capabilities
 
 --- Setup a single LSP server.
 --- We don't need to define filetype as this is done automatically by lspconfig.
 --- Wrapper of lspconfig.setup (which is in turn a wrapper of vim.lsp.start).
 --- @param server_name string Name of LSP server.
 M.setup_server = function(server_name)
-  -- Extend capabilities, e.g. by blink
-  if extra_capabilities == nil then
-    local ok, result = pcall(require, 'blink.cmp')
-    if ok then
-      extra_capabilities = result.get_lsp_capabilities()
-    else
-      extra_capabilities = {}
-    end
-  end
   local server = servers[server_name] or {}
-  server.capabilities = vim.tbl_deep_extend('force', {}, extra_capabilities, server.capabilities or {})
+  server.capabilities = vim.tbl_deep_extend('error', extra_capabilities, server.capabilities or {})
   require('lspconfig')[server_name].setup(server)
 end
 

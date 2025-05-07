@@ -1,11 +1,10 @@
--- vim.g.heyzec_use_mason = false
+
+-- This must be required before lazy.nvim
+-- (plugins like mason, conform need table of config on setup and cannot be delayed)
 require 'heyzec.tooling'
 
--- Think about the dependencies. heyzec.utils.lsp, lazy plugins (mason, formatter)
--- Mason will call lsp-config handler for installed LSPs. This seems to be a must
--- So, we need to setup our stuff before lazy
-
 -- Setup lazy.nvim and plugins
+-- If NVIM_INIT_DEBUG env var nonempty, debugger will be attached from this point onwards
 require 'heyzec.lazy'
 
 require 'heyzec.keymaps'

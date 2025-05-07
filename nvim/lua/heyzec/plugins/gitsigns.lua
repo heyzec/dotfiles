@@ -16,10 +16,10 @@ return {
     current_line_blame_formatter = '  <author> (<author_time:%R>) • <summary>',
   },
   config = function(_, opts)
+    require('gitsigns').setup(opts)
     -- Set sign colors
     -- the default of yellowish is harder to distinguish, use VSCode's blue
-    vim.cmd [[:highlight GitSignsChange guifg=#0078d4]]
-    vim.cmd [[:highlight link GitSignsCurrentLineBlame Comment]]
-    require('gitsigns').setup(opts)
+    vim.api.nvim_set_hl(0, 'GitSignsChange', { fg = '#0078d4' })
+    vim.api.nvim_set_hl(0, 'GitSignsCurrentLineBlame', { link = 'Comment' })
   end,
 }

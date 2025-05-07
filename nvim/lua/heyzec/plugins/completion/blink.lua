@@ -49,4 +49,10 @@ return {
       },
     },
   },
+  config = function(_, opts)
+    local blink = require 'blink.cmp'
+    local lsp_utils = require 'heyzec.utils.tooling'
+    lsp_utils.add_capabilities(blink.get_lsp_capabilities())
+    blink.setup(opts)
+  end,
 }

@@ -1,65 +1,42 @@
 local tooling_utils = require 'heyzec.utils.tooling'
 local use_mason = vim.g.heyzec_use_mason
 
-local mason_dependencies = {}
-if use_mason then
-  mason_dependencies = {
-    -- Manage external editor tooling i.e LSP servers
-    'williamboman/mason.nvim',
-    -- better mason and lsp-config integration
-    'williamboman/mason-lspconfig.nvim',
-    -- declaratively specify which tools to automatically install via mason
-    -- Automatically install LSPs and related tools to stdpath for Neovim
-    'WhoIsSethDaniel/mason-tool-installer.nvim',
-  }
-end
+-- TODO: Eventually update to use mason v2, which is a breaking change
+local mason_dependencies = {
+  -- manage external editor tooling, e.g. LSP servers
+  { 'mason-org/mason.nvim', cond = use_mason, version = '^1.0.0' },
+  -- better mason and lsp-config integration
+  { 'mason-org/mason-lspconfig.nvim', cond = use_mason, version = '^1.0.0' },
+  -- declaratively specify tools to automatically install via mason
+  { 'WhoIsSethDaniel/mason-tool-installer.nvim', cond = use_mason },
+}
 
 return {
-  -- We've determined this brace is needed for `vim` to be defined and more
-  -- But is this the place to go?
-  {
-    -- anotations for neovim api functions (that was for old neodev)
-    -- `lazydev` configures Lua LSP for your Neovim config, runtime and plugins
-    -- used for completion, annotations and signatures of Neovim apis
-    'folke/lazydev.nvim',
-    ft = 'lua',
-    opts = {
-      library = {
-        -- Load luvit types when the `vim.uv` word is found
-        { path = '${3rd}/luv/library', words = { 'vim%.uv' } },
-      },
-    },
+  -- Provide sensible defaults for LSP servers
+  'neovim/nvim-lspconfig',
+  dependencies = {
+    mason_dependencies,
+
+    -- our soft dependency
+    -- (blink must be loaded before mason-lspconfig calls lspconfig for blink's additional capabilities to be available)
+    'saghen/blink.cmp',
   },
-  -- Useful status updates for LSP.
-  { 'j-hui/fidget.nvim', opts = {} },
-  {
-    -- Language Server Protocol (LSP) support TODO: not true
-    'neovim/nvim-lspconfig',
-    dependencies = {
-      mason_dependencies,
+  config = function()
+    if not use_mason then
+      tooling_utils.setup_servers()
+      return
+    end
 
-      -- 'saghen/blink.cmp', -- should this be here?
-    },
-    config = function()
-      if not use_mason then
-        tooling_utils.setup_servers()
-        return
-      end
-
-      -- Kickstart defines this from servers table
-      local ensure_installed = tooling_utils.get_ensure_installed()
-      -- Mason must be loaded before its dependents so we need to set it up here.
-      require('mason').setup {}
-      require('mason-tool-installer').setup { ensure_installed = ensure_installed }
-
-      -- I think this is to tell Mason to setup lsp when they are installed
-      require('mason-lspconfig').setup {
-        ensure_installed = {},
-        automatic_installation = false,
-        handlers = {
-          tooling_utils.setup_server,
-        },
-      }
-    end,
-  },
+    local ensure_installed = tooling_utils.get_ensure_installed()
+    -- mason must be loaded before its dependents so we need to set it up here
+    require('mason').setup {}
+    -- install tools if not already installed
+    require('mason-tool-installer').setup { ensure_installed = ensure_installed }
+    -- setup mason-lspconfig to use configure servers if installed
+    require('mason-lspconfig').setup {
+      ensure_installed = {},
+      automatic_installation = false,
+      handlers = { tooling_utils.setup_server },
+    }
+  end,
 }
