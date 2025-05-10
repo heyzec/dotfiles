@@ -15,9 +15,9 @@ vim.opt.rtp:prepend(lazypath)
 
 local not_vscode = not vim.g.vscode
 
-require('utils.plugin').setup()
+require('heyzec.utils.plugin').setup()
 
-local plugins = "plugins"
+local plugins = "heyzec.plugins"
 require("lazy").setup(plugins, {
   defaults = {
     cond = not_vscode,

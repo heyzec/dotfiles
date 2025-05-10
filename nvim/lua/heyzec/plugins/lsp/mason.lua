@@ -1,7 +1,7 @@
 -- Setup mason so it can manage external tooling
 -- Use mason-tool-installer to declaratively install
 
-local servers = require("utils.lsp").servers
+local servers = require("heyzec.utils.lsp").servers
 
 return {
     -- Manage external editor tooling i.e LSP servers

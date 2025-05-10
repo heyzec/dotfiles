@@ -115,7 +115,7 @@ set linebreak
 " while remaining compatible with vim
 function s:nnoremap(key, cmd, desc)
     if has('nvim')
-        call luaeval("require('utils.keymap').map(_A[1], _A[2], { desc = _A[3] })", [a:key, a:cmd, a:desc])
+        call luaeval("require('heyzec.utils.keymaps').map(_A[1], _A[2], { desc = _A[3] })", [a:key, a:cmd, a:desc])
     else
         execute 'nnoremap ' . a:key . ' ' . a:cmd
     endif
