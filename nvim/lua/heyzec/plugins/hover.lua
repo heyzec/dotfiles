@@ -1,15 +1,13 @@
--- Hover plugin framework for Neovim
--- To show multiple info in hover window
+-- Show popup window with info from multiple sources
 return {
-    "lewis6991/hover.nvim",
-    lazy = false,
-    config = function()
-        require("hover").setup {
-            init = function ()
-                require("hover.providers.lsp")
-                require("hover.providers.diagnostic")
-                require("hover.providers.man")
-            end
-        }
+  'lewis6991/hover.nvim',
+  event = 'InsertEnter',
+  opts = {
+    init = function()
+      -- Define your providers here
+      require 'hover.providers.lsp'
+      require 'hover.providers.diagnostic'
+      require 'hover.providers.man'
     end,
+  },
 }

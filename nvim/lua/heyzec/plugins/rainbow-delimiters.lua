@@ -1,14 +1,7 @@
+-- Colorize bracket pairs, powered by treesitter
 return {
-    "hiphish/rainbow-delimiters.nvim",
-    config = function ()
-        require('rainbow-delimiters.setup').setup {
-            -- Modified to not use red, instead follow VSCode default
-            highlight = {
-                'RainbowDelimiterYellow',
-                'RainbowDelimiterViolet',
-                'RainbowDelimiterBlue',
-            },
-        }
-    end,
+  'HiPhish/rainbow-delimiters.nvim',
+  main = 'rainbow-delimiters.setup',
+  -- will be configured by 'indent-blankline.nvim'
+  opts = {},
 }
-

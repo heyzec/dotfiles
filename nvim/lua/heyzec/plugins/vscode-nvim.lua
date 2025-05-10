@@ -1,7 +1,9 @@
+-- Color scheme inspired by VS Code
 return {
-    "Mofiqul/vscode.nvim",
-    lazy = false,
-    config = function()
-        vim.cmd("colorscheme vscode")
-    end,
+  'Mofiqul/vscode.nvim',
+  priority = 1000, -- load this before all the other plugins
+  config = function()
+    -- set the colorscheme
+    vim.cmd.colorscheme 'vscode'
+  end,
 }

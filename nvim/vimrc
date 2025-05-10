@@ -1,6 +1,6 @@
 " ------------------------------ ------------------------------
 " -------------------Map the leader key first-----------------
-let mapleader = "\<space>"                      " the easiest button to hit
+let mapleader = "\<Space>"                      " the easiest button to hit
 
 if !has('nvim')
     runtime plugins.vim
@@ -19,7 +19,7 @@ endif
 " See https://github.com/vscode-neovim/vscode-neovim#composite-escape-keys
 " for mapping jk to Esc in vscode-neovim
 if !exists('g:vscode')
-    inoremap <silent> jk <Esc><Right>
+    inoremap <silent> jk <Esc>
 endif
 
 set mouse=a                                     " enable mouse in all modes
@@ -27,8 +27,6 @@ set mouse=a                                     " enable mouse in all modes
 if !has('nvim')
     set ttymouse=xterm2                         " allow mouse through tmux, ssh
 endif
-
-" let mapleader = "\<space>"                    " is set above in PLUGINS section
 " }}}
 
 " Appearance: Ruler, cursor and visualising chars {{{
@@ -52,7 +50,7 @@ let &t_EI = "\e[2 q"                            " change to block cursor when le
 set list
 set listchars=
 set listchars+=trail:·                          " single leading space (lead and space unset)
-set listchars+=tab:▎┈,nbsp:◇                    " tabs (use same character as indent-blankline.nvim), non-breaking spaces
+set listchars+=tab:\|\\x20>,nbsp:␣              " tabs (|    >), non-breaking spaces
 set listchars+=extends:▶,precedes:◀             " for wrapped lines
 
 if !has('nvim')                                 " make these chars display in gray instead of blue
@@ -66,21 +64,16 @@ set wildmenu                                    " enable command line completion
 set wildmode=longest:full,full                  " don't default to 1st option e.g. `:e` (like bash)
 set wildignorecase                              " ignore case when searching
 
-set ignorecase                                  " searches are case insensitive
-set smartcase                                   " search case sensitive if contains an uppercase letter
+set ignorecase                                  " searches are case insensitive ...
+set smartcase                                   " ... unless term contains an uppercase letter
 set incsearch                                   " incremental search (default in nvim)
 set hlsearch                                    " highlight text while searching (default in nvim)
 if has('nvim')
-    set inccommand=nosplit                      " visual feedback while substituting
+    set inccommand=split                        " visual feedback and live preview while substituting
 endif
 
-" Allow quick clearing of highlighted search results
-" Using <Esc><Esc> as a vim mapping is glitchy, see online for reasons
-nnoremap <leader><Esc> :nohlsearch<CR>
-autocmd! InsertEnter * call feedkeys("\<Cmd>noh\<cr>" , 'n') " close hlsearch when typing (idea: siuoly)
-
-set wildmenu                                    " enable command line completion (default in nvim)
-set wildmode=longest:full,full                  " don't default to 1st option e.g. `:e` (like bash)
+" Clear highlights for search results with Esc
+nnoremap <Esc> <Cmd>nohlsearch<CR>
 
 " ---------------------------Buffers---------------------------
 set splitbelow                                  " natural splits - :sp places new win below
@@ -94,12 +87,14 @@ set expandtab                                   " insert 4 spaces when tab press
 
 " ---------------------------Others---------------------------
 set pumheight=10                                " limit popup menu height to 10
-if has('nvim')                                  " vim and nvim uses different undofiles
-    set undofile                                " enable persistent undo
-    set undodir=/tmp                            " undo temp file directory
+set undofile                                    " enable persistent undo
+if !has('nvim')                                 " vim and nvim uses different undofiles
+    set undodir=/tmp                            " don't put undofiles in same directory (the default for vim)
 endif
 set foldmethod=marker
 set linebreak
+set confirm                                     " ask instead of failing for some operations (e.g. saving)
+set updatetime=250                              " decrease update time (writing to swapfile) and CursorHold time
 " }}} Editing: Search, splits and indentation
 
 " }}} 2. BASIC VIM CONFIGURATIONS
@@ -110,16 +105,6 @@ set linebreak
 " ##                              3. KEYMAPPINGS                               ##
 " ##                                                                           ##
 " ###############################################################################
-
-" Use this function to create keymaps with descriptions for neovim
-" while remaining compatible with vim
-function s:nnoremap(key, cmd, desc)
-    if has('nvim')
-        call luaeval("require('heyzec.utils.keymaps').map(_A[1], _A[2], { desc = _A[3] })", [a:key, a:cmd, a:desc])
-    else
-        execute 'nnoremap ' . a:key . ' ' . a:cmd
-    endif
-endfunction
 
 " Let the Alt key be mappable (only need fix for vim)
 if !has('nvim')
@@ -143,14 +128,6 @@ endif
 
 " make Y more consistent - yank till end (like D and C)
 noremap Y y$
-
-
-" Don't use Ex mode, use Q for macros (idea: jesseliete)
-" In linewise Visual mode, Q now repeats last recorded register (see :h v_Q)
-nnoremap Q @qj
-" Do not show stupid `how did we get here?` window
-"nnoremap q: :echo 'No more Ex mode!'<CR>
-
 
 " Ctrl + Backspace - delete previous word
 " Use Ctrl+Shift+w because Ctrl+w does not work for Telescope
@@ -176,16 +153,6 @@ nmap <leader>P "+P
 " Shorthand for duplicating and commenting line (idea: santas)
 nmap yc yygccp
 
-" :w looks simple at first but it's not
-if !exists('g:vscode')
-    call s:nnoremap('<leader>w', ':w<CR>', 'Write to buffer')
-else
-    " remapped in keymaps.lua if vscode exists
-endif
-
-" cd vim into the directory of the current buffer
-call s:nnoremap('<leader>c', ':cd %:p:h<CR>', 'cd into buffer directory')
-
 " Tabs to switch buffers (not a useful remap)
 " if !exists('g:vscode')
 "     nnoremap <Tab>   :bnext<CR>
@@ -205,14 +172,6 @@ else
 endif
 " }}}
 
-" [s]ubstitutions {{{
-if !exists('g:vscode')
-    nnoremap <leader>s :%s//g<Left><Left>
-else
-    " remapped in keymaps.lua if vscode exists
-endif
-vnoremap <leader>s "zy:%s/<C-r>z//g<Left><Left>
-" }}}
 
 " Splits controls {{{
 " Switching between splits (ctrl + h,j,k,l)
@@ -272,14 +231,3 @@ endfunction
 
 
 " }}} 4. THINGS THAT SHOULD BE PLUGINS
-
-" Return to last edit position when opening files (:help last-position-jump)
-augroup RestoreCursor
-  autocmd!
-  autocmd BufRead * autocmd FileType <buffer> ++once
-    \ let s:line = line("'\"")
-    \ | if s:line >= 1 && s:line <= line("$") && &filetype !~# 'commit'
-    \      && index(['xxd', 'gitrebase'], &filetype) == -1
-    \ |   execute "normal! g`\""
-    \ | endif
-augroup END

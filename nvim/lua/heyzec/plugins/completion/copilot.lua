@@ -1,3 +1,5 @@
+-- GitHub Copilot in Neovim
 return {
-    "github/copilot.vim",
+  'github/copilot.vim',
+  event = 'BufReadPost',
 }
