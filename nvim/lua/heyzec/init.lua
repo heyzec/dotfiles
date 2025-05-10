@@ -1,12 +1,12 @@
-require('lazy-nvim')
+require('heyzec.lazy-nvim')
 
 if init_debug then
     require("osv").launch({port=8086, blocking=true})
     vim.cmd.sleep(1) -- Without this, breakpoints seem to be not registered fast enough
 end
 
-require('config.keymaps')
-require('config.autocommands')
+require('heyzec.config.keymaps')
+require('heyzec.config.autocommands')
 
 
 vim.diagnostic.config({

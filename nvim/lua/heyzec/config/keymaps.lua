@@ -8,9 +8,9 @@
 -- ##                                                                           ##
 -- ###############################################################################
 
-local map_table = require('utils.keymap').map_table
-local action = require('utils.keymap').create_action
-local bind = require('utils.keymap').create_bind
+local map_table = require('heyzec.utils.keymaps').map_table
+local action = require('heyzec.utils.keymaps').create_action
+local bind = require('heyzec.utils.keymaps').create_bind
 
 -- Create a callback that runs a vscode command
 local vscode = function(cmd)
