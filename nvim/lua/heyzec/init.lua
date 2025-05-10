@@ -1,21 +1,23 @@
-require('heyzec.lazy')
 
-if init_debug then
-    require("osv").launch({port=8086, blocking=true})
-    vim.cmd.sleep(1) -- Without this, breakpoints seem to be not registered fast enough
-end
+-- This must be required before lazy.nvim
+-- (plugins like mason, conform need table of config on setup and cannot be delayed)
+require 'heyzec.tooling'
 
-require('heyzec.keymaps')
-require('heyzec.autocmds')
+-- Setup lazy.nvim and plugins
+-- If NVIM_INIT_DEBUG env var nonempty, debugger will be attached from this point onwards
+require 'heyzec.lazy'
 
+require 'heyzec.keymaps'
+require 'heyzec.autocmds'
 
-vim.diagnostic.config({
-    signs = {
-        text = {
-            [vim.diagnostic.severity.ERROR] = '',
-            [vim.diagnostic.severity.WARN] = '',
-            [vim.diagnostic.severity.INFO] = '',
-            [vim.diagnostic.severity.HINT] = '',
-        },
+-- set gutter signs for diagnostics
+vim.diagnostic.config {
+  signs = {
+    text = {
+      [vim.diagnostic.severity.ERROR] = '',
+      [vim.diagnostic.severity.WARN] = '',
+      [vim.diagnostic.severity.INFO] = '',
+      [vim.diagnostic.severity.HINT] = '',
     },
-})
+  },
+}

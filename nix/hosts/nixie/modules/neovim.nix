@@ -1,0 +1,3 @@
+{
+  heyzec.neovim.enable = true;
+}

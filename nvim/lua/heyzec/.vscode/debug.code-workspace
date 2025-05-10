@@ -9,7 +9,7 @@
             // Since VSCode doesn't accept variables in code-workspace files,
             // we have to change this manually if the dotfiles folder is moved
             // See https://github.com/microsoft/vscode/issues/44755
-			"path": "../../../../.local/share/nvim/lazy"
+			"path": "../../../../../.local/share/nvim/lazy"
 		}
 	]
 }
