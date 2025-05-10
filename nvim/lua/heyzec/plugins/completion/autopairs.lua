@@ -1,6 +1,6 @@
+-- Insert matching bracket pairs automatically
 return {
-    "windwp/nvim-autopairs",
-    lazy = true,
-    event = "InsertEnter",
-    opts = {},
+  'windwp/nvim-autopairs',
+  event = 'InsertEnter',
+  opts = {},
 }
