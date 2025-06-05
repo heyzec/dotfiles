@@ -5,6 +5,8 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-24.11";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+    private.url = "github:heyzec/dotfiles-private";
+    # private.url = "git+file:///home/heyzec/dotfiles/private"; # for local testing
 
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -21,6 +23,10 @@
   outputs = {self, ...} @ inputs: let
     utils = (import nix/utils.nix) {inherit self inputs;};
     inherit (utils) mkNixosSystem mkNixosSystemWithHm mkHmConfig mkDarwinSystem;
+
+    # Only needed for devshell
+    system = "x86_64-linux";
+    pkgs = inputs.nixpkgs.legacyPackages."${system}";
   in {
     nixosConfigurations = {
       # The standard configuration (home manager standalone)
@@ -41,6 +47,12 @@
 
     darwinConfigurations = {
       "darwin" = mkDarwinSystem "darwin" {modules = [./nix/hosts/darwin];};
+    };
+
+    devShells.${system}.default = pkgs.mkShell {
+      packages = with pkgs; [
+        ragenix
+      ];
     };
   };
 }

@@ -1,4 +1,11 @@
-{pkgs, ...}: {
+{
+  inputs,
+  config,
+  pkgs,
+  ...
+}:
+if inputs.private.hasPrivate
+then {
   services.ddclient = {
     enable = true;
 
@@ -9,14 +16,11 @@
     ssl = true;
     server = "update.dedyn.io";
     username = "heyzec.dedyn.io";
-    passwordFile = let
-      passwordFile = pkgs.writeText "token.txt" ''
-        ${(import ./ddns.crypt.nix).token}
-      '';
-    in "${passwordFile}";
+    passwordFile = config.age.secrets.ddns.path;
     domains = ["heyzec.dedyn.io"];
 
     # Fix for NixOS ddclient module
     usev4 = "cmd, cmd='${pkgs.curl}/bin/curl https://checkipv4.dedyn.io/'";
   };
 }
+else {}

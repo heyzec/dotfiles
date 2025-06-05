@@ -94,5 +94,7 @@
     wireshark.package = pkgs.wireshark;
 
     obs-studio.enable = true;
+
+    localsend.enable = true;
   };
 }

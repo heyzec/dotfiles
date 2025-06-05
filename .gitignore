@@ -16,3 +16,5 @@ nix/result
 *.qcow2
 result
 
+# Secret repo
+private/
