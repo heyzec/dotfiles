@@ -111,5 +111,7 @@
 	pager = "pre=$(which diffr); ${pre:-cat} | less -R"
 [interactive]
 	diffFilter = "pre=$(which diffr); ${pre:-cat}"
+[commit]
+	template = ~/dotfiles/git/COMMIT_EDITMSG
 
 # vim: filetype=gitconfig noexpandtab commentstring=#\ %s
