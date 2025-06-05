@@ -1,4 +1,11 @@
-{pkgs, ...}: let
+{
+  inputs,
+  config,
+  pkgs,
+  ...
+}:
+if inputs.private.hasPrivate
+then let
   # The port that WireGuard listens to - recommended that this be changed from default
   wireguardPort = 51820;
   # Address of this host ("server"-ish) within the VPN subnet
@@ -28,8 +35,7 @@ in {
         */
       ];
       listenPort = wireguardPort;
-      # Path to the server's private key
-      privateKeyFile = "/home/pi/wireguard/private";
+      privateKeyFile = config.age.secrets.wireguard.path; # server's private key
 
       # This allows the wireguard server to route your traffic to the internet and hence be like a VPN
       postUp = ''
@@ -47,20 +53,10 @@ in {
         # ${pkgs.iptables}/bin/ip6tables -t nat -D POSTROUTING -s fdc9:281f:04d7:9ee9::1/64 -o eth0 -j MASQUERADE
       '';
 
-      peers = [
-        # Each peer to be specified on a different subnet
-        # https://superuser.com/questions/1670154/same-allowedips-for-multiple-peers-with-wireguard
-        # Laptop
-        {
-          publicKey = (import ./wireguard.crypt.nix).laptop-key;
-          allowedIPs = ["192.168.2.1/32"];
-        }
-        # Phone
-        {
-          publicKey = (import ./wireguard.crypt.nix).phone-key;
-          allowedIPs = ["192.168.2.2/32"];
-        }
-      ];
+      # Each peer to be specified on a different subnet
+      # https://superuser.com/questions/1670154/same-allowedips-for-multiple-peers-with-wireguard
+      peers = inputs.private.homelab.attributes.wireguard.peers;
     };
   };
 }
+else {}

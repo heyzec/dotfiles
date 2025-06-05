@@ -1,8 +1,17 @@
-{
-  imports = [
-    ./hardware
-    ./modules
-  ];
+{inputs, ...}: {
+  imports =
+    [
+      ./hardware
+      ./modules
+    ]
+    ++ (
+      if inputs.private.hasPrivate
+      then [
+        inputs.private.homelab.modules
+        inputs.private.homelab.secrets
+      ]
+      else []
+    );
 
   security.polkit.enable = true;
 
