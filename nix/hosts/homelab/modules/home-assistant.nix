@@ -20,7 +20,7 @@
         samsungtvws
       ];
     customComponents = [
-      (pkgs.callPackage ../../../packages/home-assistant/custom_components/samsungtv-tizen.nix {})
+      (pkgs.home-assistant.python.pkgs.callPackage ../../../packages/home-assistant/custom_components/samsungtv-tizen.nix {})
     ];
 
     # Your configuration.yaml as a Nix attribute set.

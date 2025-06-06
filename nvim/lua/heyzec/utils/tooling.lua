@@ -31,9 +31,6 @@ local servers = {}
 ---All user-defined formatters per filetype
 local formatters = {}
 
--- Extra LSP capabilities to be added to all LSP servers
-local extra_capabilities = {}
-
 M = {}
 
 -- ========== Config-facing APIs ==========
@@ -54,22 +51,15 @@ M.define_formatter = function(ft, formatter)
   formatters[ft] = { formatter }
 end
 
----Add extra capabilities to all LSP servers.
----@param capabilities table LSP capabilities
-M.add_capabilities = function(capabilities)
-  extra_capabilities = vim.tbl_deep_extend('error', extra_capabilities, capabilities)
-end
-
 -- ========== Tooling-facing APIs ==========
 
 ---Setup a single LSP server.
 ---We don't need to define filetype as this is done automatically by lspconfig.
----Wrapper of lspconfig.setup (which is in turn a wrapper of vim.lsp.start).
 ---@param server_name string Name of LSP server.
 M.setup_server = function(server_name)
   local server = servers[server_name] or {}
-  server.capabilities = vim.tbl_deep_extend('error', extra_capabilities, server.capabilities or {})
-  require('lspconfig')[server_name].setup(server)
+  vim.lsp.enable(server_name)
+  vim.lsp.config(server_name, server)
 end
 
 ---Setup all LSP servers as defined by the user.

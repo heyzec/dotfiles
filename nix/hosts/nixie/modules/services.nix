@@ -37,8 +37,10 @@
     earlyoom = {
       enable = true;
       extraArgs = [
-        "--avoid '^(Hyprland)$'"
-          "--prefer '^(electron)$'"
+        "--avoid"
+        "^(Hyprland)$"
+        "--prefer"
+        "^(electron)$"
       ];
     };
 

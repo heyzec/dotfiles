@@ -16,10 +16,6 @@ return {
   'neovim/nvim-lspconfig',
   dependencies = {
     mason_dependencies,
-
-    -- our soft dependency
-    -- (blink must be loaded before mason-lspconfig calls lspconfig for blink's additional capabilities to be available)
-    'saghen/blink.cmp',
   },
   config = function()
     if not use_mason then

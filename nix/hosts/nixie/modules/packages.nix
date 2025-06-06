@@ -62,7 +62,8 @@
     # wlogout                # logout menu
 
     # flameshot               # screen capture
-    grimblast              # wrapper script for grim (grab an image) and slurp (select a region)
+    # Use previous version until https://redirect.github.com/Alexays/Waybar/issues/4156 fixed
+    pkgs.stable.grimblast  # wrapper script for grim (grab an image) and slurp (select a region)
     swappy                 # Wayland native snapshot editing tool
 
     cliphist               # wayland clipboard manager

@@ -9,7 +9,6 @@ in {
   services.locate = {
     enable = true;
     package = pkgs.plocate;
-    localuser = null; # to squelch warning: plocate does not support non-root updatedb
     pruneNames = [
       ".bzr"
       ".cache"

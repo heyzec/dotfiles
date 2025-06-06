@@ -99,9 +99,12 @@ in {
           }
         '';
         search.engines = {
-          "Google".metaData.alias = "@g";
-
-          "Nix Packages" = {
+          google = {
+            name = "Google";
+            definedAliases = ["@g"];
+          };
+          nix-packages = {
+            name = "Nix Packages";
             urls = [
               {
                 template = "https://search.nixos.org/packages";

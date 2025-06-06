@@ -4,7 +4,7 @@
     serviceConfig = {
       WorkingDirectory = "/home/pi/heyzecBot";
       ExecStart = let
-        python = pkgs.python311.withPackages (ps: with ps; [
+        python = pkgs.python3.withPackages (ps: with ps; [
           python-dotenv
           requests
           python-telegram-bot

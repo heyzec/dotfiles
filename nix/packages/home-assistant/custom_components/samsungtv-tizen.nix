@@ -1,5 +1,4 @@
 {
-  stdenv,
   pkgs,
   fetchFromGitHub,
   buildHomeAssistantComponent,
@@ -16,7 +15,7 @@ buildHomeAssistantComponent rec {
     sha256 = "sha256-z6mIWuMQgFqo6WgnMCty1ur/iSxGTXok8snwUtRDkU8=";
   };
 
-  propagatedBuildInputs = with pkgs.python312Packages; [
+  propagatedBuildInputs = with pkgs.home-assistant.python.pkgs; [
     numpy
     websocket-client
     wakeonlan

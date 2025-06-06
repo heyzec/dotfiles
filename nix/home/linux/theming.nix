@@ -17,7 +17,7 @@
         };
         iconTheme = {
           # https://github.com/vinceliuice/vimix-icon-theme
-          name = "Vimix-Black";
+          name = "Vimix-black";
           package = pkgs.vimix-icon-theme;
         };
       };

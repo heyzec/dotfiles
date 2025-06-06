@@ -1,12 +1,9 @@
-{ pkgs, ... }: let
-  imgLink = "https://wallpaperaccess.com/full/674253.png";
-
-  image = pkgs.fetchurl {
-    url = imgLink;
-    sha256 = "sha256-SLEh6PSkBxsPAzkJyUTaVGFVh51wqI9zJN7ekGZLrfU=";
+{pkgs, ...}: let
+  theme = pkgs.sddm-astronaut.override {
+    themeConfig = {};
+    embeddedTheme = "jake_the_dog";
   };
-in
-{
+in {
   services.xserver = {
     enable = true;
     xkb = {
@@ -15,20 +12,25 @@ in
     };
   };
 
-  services.displayManager.sddm = {
-    enable = true;
-    # Temporarily replace theme because sddm-sugar-dark is broken
-    # theme = "sugar-dark";
-    theme = "catppuccin-sddm-corners";
+  services = {
+    displayManager.sddm = {
+      enable = true;
+      package = pkgs.kdePackages.sddm; # Use Qt6 SDDM (default is still Qt5)
+      theme = "sddm-astronaut-theme";
+      extraPackages = [theme]; # Propagate dependencies, e.g. QtMultimedia, to SDDM
+    };
   };
+  environment.systemPackages = [theme]; # Make theme available at /run/current-system/sw/share/sddm/themes
 
-  environment.systemPackages = with pkgs; [
-    # (sddm-sugar-dark.override {
-    #   themeConfig = {
-    #     Background = image;
-    #   };
-    # })
-    catppuccin-sddm-corners
-  ];
+  # Add fonts required by our chosen theme
+  fonts.fontconfig.localConf = ''
+    <?xml version="1.0"?>
+    <!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">
+    <fontconfig>
+      <dir>/run/current-system/sw/share/sddm/themes/sddm-astronaut-theme/Fonts</dir>
+    </fontconfig>
+  '';
+
+  # Workaround on 25.05: display manager may select "Hyprland (systemd)" session, which is broken
+  services.displayManager.defaultSession = "hyprland";
 }
-
