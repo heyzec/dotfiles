@@ -1,6 +1,6 @@
 ## Launch // Terminal // <> Enter ##
 super + enter
-    foot
+    foot --working-directory=$HOME/Desktop/
 
 ## Launch // Command Launcher // <><Ctrl> Enter ##
 super + control + return
