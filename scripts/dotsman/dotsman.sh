@@ -155,6 +155,10 @@ run_dmenu() {
 
     # Extract relevant section from config file
     key_value_pairs=$(extract_section "$selected_config_name" "$items_file")
+    if [ -z "$key_value_pairs" ]; then
+        notify "No valid entry selected!"
+        exit
+    fi
 
     # Extract values
     file=$(extract_value file "$key_value_pairs")
@@ -163,13 +167,14 @@ run_dmenu() {
     cd=$(extract_value cd "$key_value_pairs")
 
     selected_config_file_expanded=$(echo "$file" | subst)
+    notify "iam$selected_config_file_expanded"
     if [ -z "$selected_config_file_expanded" ]; then
-        notify "No valid entry selected!"
-        exit
+        notify "no file"
     fi
 
-    if ! [ -e "$selected_config_file_expanded" ]; then
-        notify "Path to $selected_config_name ($selected_config_file_expanded) does not exist!"
+    if ! [ -e "${cd:+${cd}/}$selected_config_file_expanded" ]; then
+        notify "Path to $selected_config_name (${cd:+${cd}/}$selected_config_file_expanded) does not exist!"
+        exit
     fi
 
     if [ "$sudo" = "true" ]; then
