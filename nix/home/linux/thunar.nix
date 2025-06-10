@@ -1,5 +1,5 @@
 {
-  # Thunar settings are hadnled by Xfconf. Use xfconf.settings
+  # Thunar settings are handled by Xfconf. Use xfconf.settings
   # Run xfconf-query -c thunar -m to see what are the appropriate keys
 
   xdg.configFile = {
