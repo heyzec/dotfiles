@@ -1,5 +1,10 @@
-{ lib, pkgs, config, systemSettings, ... }:
 {
+  lib,
+  pkgs,
+  config,
+  systemSettings,
+  ...
+}: {
   options = {
     heyzec.shell = {
       enable = lib.mkOption {
@@ -13,37 +18,60 @@
   config = let
     cfg = config.heyzec.shell;
 
-    packages = with pkgs; lib.lists.remove null [
-      ##### Required by .zshrc #####
-      starship
-      fzf
-      ripgrep
-      zoxide
-      eza
-      bat
-      bat-extras.batman
+    ifLinux = pkg:
+      if pkgs.stdenv.isLinux
+      then pkg
+      else null;
 
+    # Refer to https://wiki.archlinux.org/title/List_of_applications
+    # A: Documents
+    # B: Internet
+    # C: Multimedia
+    # D: Science
+    # E: Security
+    # F: Utilities
+    # G: Other
+    # and https://wiki.archlinux.org/title/Core_utilities (S)
+    packages = with pkgs;
+      lib.lists.remove null [
+        ##### Needed by dotfiles #####
+        ##### .zshrc #####
+        ripgrep #  # (S.3.8.1) grep alternative (code searcher)
+        fzf #      # (S.3.8.2) grep alternative (interactive filter)
+        bat #      # (S.3.1) cat alternative
+        zoxide #   # (S.3.2) cd alternative
+        eza #      # (S.3.5) ls alternative
+        bat-extras.batman
+        file #     # needed by lf
+        ##### lf #####
+        starship # # shell prompt customization
+        ##### git #####
+        diffr #    # (F.2.5.1) word-level diff highlighter
 
-      tmux
-      (if stdenv.isLinux then ctpv else null) # file previewer for lf, with image support
-      lf # terminal file manager
+        ##### Network #####
+        wget # (B.4.1.1) download files
+        nmap # (E.1) port scanner
+        dig # (Domain_name_resolution#Lookup_utilities) check DNS entries
+        (ifLinux traceroute) # (Network_tools#Traceroute) track route taken by packets
 
-      git
-      wget
-      zip
-      unzip
+        ##### Shell utilities #####
+        tmux #         # (F.1.4) terminal multiplexer
+        lf #           # (F.2.1.1) terminal file manager
+        zip #          # (F.2.4.1) archiving (Info-Zip)
+        unzip #        # (F.2.4.1) more archiving (Info-Zip)
+        xxd #          # (F.3.10) hex dump
+        (ifLinux ctpv) # file previewer for lf, with image support
+        psmisc #       # utilities that use /proc, e.g. pstree (note1)
 
-      xxd
-      file
-      pstree
-
-      diffr
-      lazygit
-
-      ##### Network Diagnostics #####
-      nmap # port scanner
-      (if stdenv.isLinux then traceroute else null) # track route taken by packets
-    ];
+        ##### Development #####
+        git #   # (F.3.2) the information manager from hell
+        jq #    # (F.3.12) JSON processor
+        lazygit # (Git#Graphical_front-ends) TUI for git
+        just #  # Makefile alternative to save project-specific commands
+        pet #   # CLI snippet manager
+      ];
+    # note1: don't use `pstree` package on nixpkgs,
+    # it seems to fail for process on running on other ttys, e.g. tmux
 
     commonConfig = lib.mkIf cfg.enable {
       programs.direnv.enable = true;
@@ -57,6 +85,8 @@
     hmConfig = lib.mkIf cfg.enable {
       home.packages = packages;
     };
-
-  in if !systemSettings.isHome then (lib.recursiveUpdate nixosConfig commonConfig) else (lib.recursiveUpdate hmConfig commonConfig);
+  in
+    if !systemSettings.isHome
+    then (lib.recursiveUpdate nixosConfig commonConfig)
+    else (lib.recursiveUpdate hmConfig commonConfig);
 }

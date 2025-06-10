@@ -1,7 +1,5 @@
-{
-  imports = [
-    ./boot.nix
-    ./filesystems.nix
-    ./raspberry-pi-4.nix
-  ];
+{lib, ...}: {
+  imports = lib.heyzec.umport {
+    path = ./.;
+  };
 }

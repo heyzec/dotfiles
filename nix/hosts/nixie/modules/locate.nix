@@ -1,5 +1,5 @@
 {
-  pkgs,
+  options,
   config,
   userSettings,
   ...
@@ -8,21 +8,20 @@
 in {
   services.locate = {
     enable = true;
-    package = pkgs.plocate;
-    pruneNames = [
-      ".bzr"
-      ".cache"
-      ".git"
-      ".hg"
-      ".svn" # defaults
-      "node_modules"
-    ];
-    prunePaths = [
-      "/nix/store"
-      "/mnt"
-      "/media/D"
-      "${homeDir}/.snapshots"
-      "${homeDir}/.local/share/Trash"
-    ];
+    pruneNames =
+      options.services.locate.pruneNames.default
+      ++ [
+        "node_modules"
+        ".direnv"
+      ];
+    prunePaths =
+      options.services.locate.prunePaths.default
+      ++ [
+        "/mnt"
+        "/media/D"
+        "/var/lib"
+        "${homeDir}/.snapshots"
+        "${homeDir}/.local/share/Trash"
+      ];
   };
 }

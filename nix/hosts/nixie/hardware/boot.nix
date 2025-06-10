@@ -1,8 +1,4 @@
-################################################################################
-##### Boot Settings
-################################################################################
-{ pkgs, ... }:
-{
+{pkgs, ...}: {
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.efi.efiSysMountPoint = "/efi";
@@ -17,7 +13,7 @@
   boot.kernel.sysctl."kernel.sysrq" = 1; # NixOS default: 16 (only the sync command)
 
   # To cross-compile
-  boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
+  boot.binfmt.emulatedSystems = ["aarch64-linux"];
   # Enable boot splash
   boot.plymouth.enable = true;
 
@@ -28,12 +24,15 @@
   ];
 
   # From hardware-configuration.nix
-  boot.initrd.availableKernelModules = [ "xhci_pci" "thunderbolt" "vmd" "nvme" "rtsx_pci_sdmmc" ];
+  boot.initrd.availableKernelModules = ["xhci_pci" "thunderbolt" "vmd" "nvme" "rtsx_pci_sdmmc"];
   boot.kernelModules = [
     "kvm-intel"
-    "v4l2loopback"  # For virtual camera support, e.g. OBS
+    "v4l2loopback" # For virtual camera support, e.g. OBS
   ];
   boot.extraModulePackages = with pkgs; [
     linuxPackages.v4l2loopback
   ];
+
+  # Delete /tmp on boot
+  boot.tmp.cleanOnBoot = true;
 }

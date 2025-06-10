@@ -1,31 +1,24 @@
-{ userSettings, ... }: {
-################################################################################
-##### User Accounts
-################################################################################
-  users.mutableUsers = false;
-  users.users.${userSettings.username} = {
-    isNormalUser = true;
-    uid = 1000;
-    description = "Main user of this device";
+{userSettings, ...}: {
+  users = {
+    mutableUsers = false;
 
-    extraGroups = [
-      # See here for a brief explaination of each group
-      # https://wiki.archlinux.org/title/users_and_groups#Group_list
-      "wheel"            # Access sudo command
-      "networkmanager"   # Access network manager
-      # "uinput"
-      # "input" # Unsafe
-      # "video"
-      "ic2"              # Control /dev/i2c-* devices
-    ] ++ [
-      "plocate"
-      "docker"           # Run docker without sudo
-      "wireshark"        # Capture interfaces without sudo
-      "libvirtd"
-      "beep" # Testing
-    ];
+    users.${userSettings.username} = {
+      isNormalUser = true;
+      uid = 1000;
+      description = "Main user of this device";
 
-    hashedPassword = (import ./users.crypt.nix).hashedPassword;
-    openssh.authorizedKeys.keys = (import ./users.crypt.nix).authorizedKeys;
+      # See here for a brief explanation of each group
+      # https://wiki.archlinux.org/title/Users_and_groups#Group_list
+      extraGroups = [
+        "wheel" #        # Access sudo command
+        "networkmanager" # Access network manager
+        "ic2" #          # Control /dev/i2c-* devices
+        "wireshark" #    # Capture interfaces without sudo
+        "libvirtd"
+      ];
+
+      hashedPassword = (import ./users.crypt.nix).hashedPassword;
+      openssh.authorizedKeys.keys = (import ./users.crypt.nix).authorizedKeys;
+    };
   };
 }
