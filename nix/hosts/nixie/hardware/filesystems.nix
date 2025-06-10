@@ -62,15 +62,6 @@
       fsType = "none";
       options = ["bind" "nofail"];
     };
-
-    ################################################################################
-    ##### Misc
-    ################################################################################
-    "/var/lib/docker/btrfs" = {
-      device = "/@/var/lib/docker/btrfs";
-      fsType = "none";
-      options = ["bind"];
-    };
   };
 
   swapDevices = [

@@ -1,0 +1,31 @@
+{
+  # ---- SYSTEM SETTINGS ---- #
+  systemSettings = {
+    system = "x86_64-linux"; # system arch
+    hostname = "nixie";
+    timezone = "Asia/Singapore";
+    locale = "en_SG.UTF-8";
+    isHome = false;
+  };
+
+  # ----- USER SETTINGS ----- #
+  userSettings = rec {
+    username = "heyzec";
+    homeDir = "/home/${username}";
+    dotfilesDir = "~/dotfiles"; # path to dotfiles repo, used by vm (good to start with ~)
+    flakeDir = "/home/heyzec/dotfiles"; # path to flake repo, used by nh
+  };
+
+  # ----- Override SYSTEM and USER SETTINGS on a per-host basis here ----- #
+  specificSettings = {
+    "homelab" = {
+      systemSettings.system = "aarch64-linux";
+    };
+    "darwin" = {
+      systemSettings.system = "x86_64-darwin";
+    };
+    "darwin-home" = {
+      userSettings.homeDir = "/Users/heyzec";
+    };
+  };
+}

@@ -1,8 +1,11 @@
-{ lib, systemSettings, ... }:
-{
-  imports = lib.heyzec.umport {
-    path = ./.;
-  } ++ [
-    ../overlays
-  ] ++ (if lib.strings.hasSuffix "linux" systemSettings.system then [ ./linux ] else []);
+{lib, ...}: {
+  imports =
+    lib.heyzec.umport {
+      path = ./.;
+    }
+    ++ [
+      ../modules/neovim.nix
+      ../modules/shell.nix
+      ./linux
+    ];
 }
