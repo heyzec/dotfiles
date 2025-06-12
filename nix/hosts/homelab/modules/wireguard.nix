@@ -6,7 +6,7 @@
 }:
 if inputs.private.hasPrivate
 then let
-  # The port that WireGuard listens to - recommended that this be changed from default
+  # The port that Wireguard listens to - recommended that this be changed from default
   wireguardPort = 51820;
   # Address of this host ("server"-ish) within the VPN subnet
   ipv4Address = "192.168.2.253/24";
