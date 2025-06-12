@@ -3,7 +3,7 @@
 Various different machines running NixOS.
 
 
-## nixie
+## devpad
 
 A Dell XPS 13 9310 that serves as my daily driver
 

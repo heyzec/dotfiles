@@ -27,7 +27,7 @@
     config = {
       default_config = {};
       homeassistant = {
-        internal_url = "http://raspberrypi.local:8123";
+        internal_url = "http://homelab.local:8123";
         external_url = "https://home.heyzec.dedyn.io";
       };
       http = {

@@ -1,6 +1,6 @@
 {
   networking = {
-    hostName = "raspberrypi";
+    hostName = "homelab";
     useDHCP = false;
     interfaces.eth0.useDHCP = true;
     # interfaces.eth0.macAddress = "b8:00:00:00:00:00";

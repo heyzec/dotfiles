@@ -2,7 +2,7 @@
   # ---- SYSTEM SETTINGS ---- #
   systemSettings = {
     system = "x86_64-linux"; # system arch
-    hostname = "nixie";
+    hostname = "devpad";
     timezone = "Asia/Singapore";
     locale = "en_SG.UTF-8";
     isHome = false;
