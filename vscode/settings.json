@@ -33,7 +33,6 @@
   "editor.stickyScroll.enabled": true,
   "editor.guides.bracketPairs": "active",
 
-
   // ###############################################################################
   // ##                                                                           ##
   // ##                             2. VSCODE SETTINGS                            ##
@@ -45,9 +44,6 @@
   // Use system font; make it smaller (the default is 14)
   "editor.fontFamily": "monospace",
   "editor.fontSize": 13,
-
-  // Autosave, by default after 1000ms
-  "files.autoSave": "afterDelay",
 
   // Automatically deal with whitespaces
   "files.trimTrailingWhitespace": true,
@@ -78,7 +74,7 @@
 
   // Exclude certain files from explorer
   "files.exclude": {
-    "**/.direnv": true,
+    "**/.direnv": true
   },
 
   // Don't show this annoying warning, we'll open manually via the Git sidebar if needed
@@ -87,7 +83,6 @@
   // Others
   "workbench.editor.pinnedTabsOnSeparateRow": true,
   "workbench.tree.enableStickyScroll": true,
-
 
   // ###############################################################################
   // ##                                                                           ##
@@ -99,12 +94,12 @@
   "[javascript][javascriptreact][typescript][typescriptreact]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": true,
+    "editor.tabSize": 2
   },
   "[json][jsonc]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.formatOnSave": true,
+    "editor.formatOnSave": true
   },
-
 
   // ###############################################################################
   // ##                                                                           ##
@@ -117,7 +112,7 @@
   "gitblame.inlineMessageFormat": "${author.name} (${time.ago})",
   "gitblame.inlineMessageMargin": 2,
   "gitblame.statusBarMessageFormat": "${commit.summary}",
-  "gitblame.delayBlame": 250,
+  "gitblame.delayBlame": 250
 }
 
 // Unfortunately we cannot rename the file extension to jsonc
