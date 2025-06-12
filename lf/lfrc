@@ -33,7 +33,7 @@ cmd delete ${{
 
 cmd open ${{
 	case $(file --mime-type $f -b) in
-		text/*|application/javascript|application/json|application/xml)
+		text/*|application/javascript|application/json|application/xml|inode/x-empty)
 			$EDITOR "$fx"
 			;;
 		*)
@@ -60,6 +60,7 @@ cmd zi ${{
 
 cmd on-cd &{{
 	lf -remote "send set-prompt"
+	zoxide add "$PWD"
 }}
 
 # Make shell cd to folder (requires config in zsh)
@@ -68,6 +69,5 @@ map Q &{{
 	echo "$PWD" > $tmp
 	lf -remote "send $id quit"
 }}
-
 
 # vim: set noexpandtab:
