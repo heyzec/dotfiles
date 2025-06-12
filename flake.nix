@@ -24,11 +24,11 @@
   in {
     nixosConfigurations = {
       # The standard configuration (home manager standalone)
-      "nixie" = mkNixosSystem "nixie" {modules = [./nix/hosts/nixie];};
+      "devpad" = mkNixosSystem "devpad" {modules = [./nix/hosts/devpad];};
       # The configuration for build-vm (home manager as a module)
-      "nixie-vm" = mkNixosSystemWithHm "nixie-vm" "heyzec" {
+      "devpad-vm" = mkNixosSystemWithHm "devpad-vm" "heyzec" {
         username = "heyzec";
-        modulesNixos = [./nix/hosts/nixie];
+        modulesNixos = [./nix/hosts/devpad];
         modulesHm = [./nix/home];
       };
       "homelab" = mkNixosSystem "homelab" {modules = [./nix/hosts/homelab];};
