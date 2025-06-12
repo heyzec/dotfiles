@@ -1,8 +1,4 @@
-################################################################################
-##### Networking Settings
-################################################################################
-{ systemSettings, ... }:
-{
+{systemSettings, ...}: {
   networking = {
     hostName = systemSettings.hostname;
     networkmanager.enable = true;
@@ -14,5 +10,6 @@
       ];
     };
   };
+
   services.mullvad-vpn.enable = true;
 }

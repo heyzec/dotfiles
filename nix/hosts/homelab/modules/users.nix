@@ -18,10 +18,6 @@ in {
     openssh.authorizedKeys.keys = ifHasPrivate keys.restic;
     home = "/restic";
   };
-  users.users."btrbk" = {
-    isNormalUser = true;
-    openssh.authorizedKeys.keys = keys.btrbk;
-  };
 
   users.groups."sftponly" = {};
 }

@@ -1,5 +1,7 @@
-let
-  endpoint = "heyzec.mooo.com:40478";
+{inputs, ...}:
+if inputs.private.hasPrivate
+then let
+  endpoint = inputs.private.devpad.attributes.btrbk.endpoint;
   backups_retention_policy = "7d 4w 12m";
   snapshots_retention_policy = "7d 4w 3m";
 in {
@@ -43,3 +45,4 @@ in {
     };
   };
 }
+else {}
