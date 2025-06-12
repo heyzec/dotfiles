@@ -184,11 +184,11 @@
         "agenix": "agenix"
       },
       "locked": {
-        "lastModified": 1749746915,
-        "narHash": "sha256-z+KynhqRw8utbe0/8y7Tb7iBkH0K8AEfXGrLHD1EiQA=",
+        "lastModified": 1749747842,
+        "narHash": "sha256-9Ny9M1WZyitVe2lNxX7af6JzE6gyMTXJlnR1PlDegHw=",
         "owner": "heyzec",
         "repo": "dotfiles-private",
-        "rev": "32e623bb1410cc86497c1a572c67fe1b3f317d72",
+        "rev": "60c4c3bbf7c1b2fce7a4248c70d11f42cf26f0c6",
         "type": "github"
       },
       "original": {
