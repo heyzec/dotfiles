@@ -206,6 +206,7 @@ fi
 if [ ! -z $fzf_folder ]; then
 	source "$fzf_folder/key-bindings.zsh"
 	source "$fzf_folder/completion.zsh"
+	FZF_CTRL_T_COMMAND='rg --files'
 else
 	checkhealth_missing+=(fzf)
 fi
