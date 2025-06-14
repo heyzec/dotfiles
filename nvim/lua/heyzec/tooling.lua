@@ -16,7 +16,24 @@ define_server 'lua_ls'
 define_formatter('lua', 'stylua')
 
 -- Nix
-define_server 'nil_ls'
+-- define_server 'nil_ls'
+define_server('nixd', {
+  settings = {
+    nixd = {
+      -- Not sure why I need to override to remove default nxipkgs definition. This is so that
+      -- This is so that we don't have duplication definition goto for NixOS options.
+      nixpkgs = {},
+      options = {
+        nixos = {
+          expr = '(builtins.getFlake ("git+file://" + toString ./.)).nixosConfigurations.devpad.options',
+        },
+        home_manager = {
+          expr = '(builtins.getFlake ("git+file://" + toString ./.)).homeConfigurations."heyzec".options',
+        },
+      },
+    },
+  },
+})
 define_formatter('nix', 'alejandra')
 
 -- C++
