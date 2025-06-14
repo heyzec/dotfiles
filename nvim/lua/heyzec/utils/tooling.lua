@@ -36,6 +36,7 @@ M = {}
 -- ========== Config-facing APIs ==========
 
 ---Add an LSP server.
+---The second parameter should be of type vim.lsp.Config (which extends vim.lsp.ClientConfig)
 M.define_server = function(server_name, config)
   if config == nil then
     config = {}
