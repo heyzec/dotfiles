@@ -93,7 +93,10 @@
     wireshark.enable = true;
     wireshark.package = pkgs.wireshark;
 
-    obs-studio.enable = true;
+    obs-studio = {
+      enable = true;
+      enableVirtualCamera = true;
+    };
 
     localsend.enable = true;
   };
