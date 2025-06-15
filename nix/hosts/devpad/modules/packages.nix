@@ -86,6 +86,7 @@
       wl-color-picker # simple color picker with GUI
       custom.gocryptfs-scripts
       custom.wasg
+      custom.wayland-displays
 
       ##### Containerisation and Virtualisation #####
       virt-manager # frontend for qemu (virtualisation.libvirtd.enable)
