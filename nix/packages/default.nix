@@ -4,4 +4,5 @@
   samsungtv-tizen = pkgs.home-assistant.python.pkgs.callPackage ./samsungtv-tizen.nix {};
   swhkd = pkgs.callPackage ./swhkd.nix {};
   wasg = pkgs.python3Packages.callPackage ./wasg.nix {};
+  wayland-displays = pkgs.callPackage ./wayland-displays.nix {};
 }
