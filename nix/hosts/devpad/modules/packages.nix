@@ -83,6 +83,7 @@
       wl-color-picker # simple color picker with GUI
       (callPackage ../../../packages/gocryptfs-scripts.nix {})
       (python3Packages.callPackage ../../../packages/wasg.nix {})
+      wayland-displays
 
       ##### Containerisation and Virtualisation #####
       virt-manager # frontend for qemu (virtualisation.libvirtd.enable)
