@@ -20,13 +20,25 @@
       else []
     );
 
+  # Some people put this in .zprofile
   environment.sessionVariables = {
+    # Follow XDG Base Directory specification
     XDG_CACHE_HOME = "$HOME/.cache";
     XDG_CONFIG_HOME = "$HOME/.config";
     XDG_DATA_HOME = "$HOME/.local/share";
     XDG_STATE_HOME = "$HOME/.local/state";
+    # Default programs
     TERMINAL = "foot";
+    BROWSER = "firefox";
+
+    # Offenders: Not fully XDG
+    PYTHON_HISTORY = "$XDG_CACHE_HOME/python_history";
   };
+  /*
+    export GOPATH="$XDG_DATA_HOME"/go, export GOMODCACHE="$XDG_CACHE_HOME"/go/mod
+  See how to get rid of .npm, .npmrc
+  export _Z_DATA="$XDG_DATA_HOME/z"
+  */
 
   programs = {
     dconf.enable = true;
