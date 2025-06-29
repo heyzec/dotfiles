@@ -1,7 +1,11 @@
-{ pkgs, ... }:
-{
+{pkgs, ...}: {
   # Use GNOME Keyring
   services.gnome.gnome-keyring.enable = true;
+
+  environment.sessionVariables = {
+    SSH_AUTH_SOCK = "$XDG_RUNTIME_DIR/keyring/ssh";
+  };
+
   security.pam.services.sddm.enableGnomeKeyring = true;
   environment.systemPackages = with pkgs; [
     # Needed by gnome-keyring-daemon, otherwise GUI will not prompt with error:
