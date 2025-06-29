@@ -44,6 +44,7 @@ define_formatter('cpp', 'clang_format')
 -- typescript-language-server is an LSP wrapper around Microsoft's tsserver
 -- nvim-lspconfig aliases typescript-language-server to ts_ls
 define_server 'ts_ls'
+define_server 'eslint'
 define_formatter('javascript', 'prettier')
 define_formatter('javascriptreact', 'prettier')
 define_formatter('typescript', 'prettier')
