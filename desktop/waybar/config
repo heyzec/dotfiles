@@ -7,6 +7,7 @@
 
     // Choose the order of the modules
     "modules-left": [
+        "niri/workspaces",
         "hyprland/workspaces",
         "hyprland/submap"
         // "custom/mode"
@@ -25,6 +26,13 @@
         "clock",
         "group/traymore",
     ],
+
+    // "niri/workspaces": {
+    //     "on-click": "activate",
+    //     "on-scroll-up": "hyprctl dispatch workspace e+1",
+    //     "on-scroll-down": "hyprctl dispatch workspace e-1",
+    //     "sort-by-number": true
+    // },
 
     "hyprland/workspaces": {
         "on-click": "activate",
