@@ -1,6 +1,6 @@
-{ pkgs, ... }:
-{
+{pkgs, ...}: {
   # Refer to home-manager for entry-point to configurations
+  programs.niri.enable = true;
   programs.hyprland = {
     enable = true;
     xwayland.enable = true;
