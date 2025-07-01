@@ -100,7 +100,7 @@ in {
     };
   };
 
-  services.hypridle.enable = true;
+  # services.hypridle.enable = true;
 
   systemd.user.services.wl-clip-persist = {
     Unit = {
