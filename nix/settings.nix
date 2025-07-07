@@ -25,7 +25,9 @@
       systemSettings.system = "x86_64-darwin";
     };
     "darwin-home" = {
-      userSettings.homeDir = "/Users/heyzec";
+      systemSettings.system = "x86_64-darwin";
+      userSettings.homeDir = "/Users/SP15013";
+      userSettings.username = "SP15013";
     };
   };
 }
