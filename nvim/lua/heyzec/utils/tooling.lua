@@ -1,23 +1,16 @@
--- Check if system is using NixOS
-local function is_nixos()
-  local f = io.open('/etc/os-release', 'r')
-  if not f then
-    return false
+-- Check if system has Nix package manager
+local function has_nix()
+  local f = io.open('/nix', 'r')
+  if f then
+    f:close()
+    return true
   end
 
-  for line in f:lines() do
-    if line == 'ID=nixos' then
-      f:close()
-      return true
-    end
-  end
-
-  f:close()
   return false
 end
 
 if vim.g.heyzec_use_mason == nil then
-  vim.g.heyzec_use_mason = not is_nixos()
+  vim.g.heyzec_use_mason = not has_nix()
 end
 
 -- ========== Stateful variables ==========
