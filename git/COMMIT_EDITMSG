@@ -1,0 +1,21 @@
+
+# TITLE: <type>(<optional scope>): <summary>
+# Keep to 50 chars.                              ^
+#
+# BODY: Explain *what* and *why* (not *how*)
+# Wrap at 72 chars.                                                    |
+#
+# FOOTER: Co-authored-by: name <name@example.com>
+#
+# Commit message types:
+# fix:      a bug fix (correlates with PATCH)
+# feat:     a new feature (correlates with MINOR)
+# refactor: code changes that neither fixes a bug or adds a feature
+# chore:    changes that doesn't modify src or test
+# build:    affects build system or external dependencies
+# ci:       changes to CI configuration files and scripts
+# docs:     documentation-only changes
+# perf:     changes that improves performance
+# revert:   a git revert of a previous commit
+# style:    changes that do not affect meaning of code
+# test:     adding missing tests or correcting existing tests
