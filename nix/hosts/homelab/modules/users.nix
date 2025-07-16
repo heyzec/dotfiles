@@ -1,5 +1,5 @@
 {inputs, ...}: let
-  keys = inputs.private.homelab.attributes.users.keys;
+  authorizedKeys = inputs.private.homelab.attributes.users.authorizedKeys;
   ifHasPrivate = expr:
     if inputs.private.hasPrivate
     then expr
@@ -9,13 +9,13 @@ in {
     isNormalUser = true;
     uid = 1000;
     extraGroups = ["wheel" "video"];
-    openssh.authorizedKeys.keys = ifHasPrivate keys.pi;
+    openssh.authorizedKeys.keys = ifHasPrivate authorizedKeys.pi;
   };
   users.users."restic" = {
     isNormalUser = true;
     uid = 1001;
     extraGroups = ["sftponly"];
-    openssh.authorizedKeys.keys = ifHasPrivate keys.restic;
+    openssh.authorizedKeys.keys = ifHasPrivate authorizedKeys.restic;
     home = "/restic";
   };
 
