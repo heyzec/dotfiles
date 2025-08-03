@@ -60,35 +60,6 @@ in {
     };
   };
 
-  # SWHKD
-  # # swhkd, the shortcut mapper
-  # exec-once = swhks
-  # # For some reason this will not work if we do not redirect output
-  # exec-once = pkexec swhkd -c "$HOME"/.config/swhkd/swhkdrc --device "keyd virtual keyboard" >/dev/null
-  systemd.user.services.swhkd = let
-    # Adopted from https://github.com/waycrate/swhkd/tree/main/contrib/init/systemd
-    hotkeys = pkgs.writeShellScript "hotkeys.sh" ''
-      killall swhks
-      swhks & pkexec swhkd -c "''${HOME}/.config/swhkd/swhkdrc" --device "keyd virtual keyboard"
-    '';
-  in {
-    Unit = {
-      Description = "swhkd hotkey daemon";
-      After = ["graphical-session.target"];
-      PartOf = ["graphical-session.target"];
-    };
-
-    Service = {
-      Type = "simple";
-      ExecStart = "${hotkeys}";
-      Restart = "on-failure";
-    };
-
-    Install = {
-      WantedBy = ["graphical-session.target"];
-    };
-  };
-
   # There are many wallpaper setters, but hyprpaper is the only one with a configurable HM module
   services.hyprpaper = let
     image = "$HOME/Pictures/Wallpapers/wallpaper";
