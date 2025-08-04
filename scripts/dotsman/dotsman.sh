@@ -45,6 +45,7 @@ subst() {
 is_same_file() {
     file1="$1"
     file2="$2"
+    # TODO: stat -c does not exist on macOS
     if [ "$(stat -L -c %d:%i "$file1")" = "$(stat -L -c %d:%i "$file2")" ]; then
         return 0
     else

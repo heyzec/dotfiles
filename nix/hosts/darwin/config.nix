@@ -1,18 +1,28 @@
-{ pkgs, config, ... }:
 {
-  nixpkgs.hostPlatform = "x86_64-darwin";
+  pkgs,
+  config,
+  systemSettings,
+  ...
+}: {
+  nixpkgs.hostPlatform = systemSettings.system;
+  nix.settings.extra-platforms = ["x86_64-darwin" "aarch64-darwin"];
 
   # Necessary for using flakes on this system.
   nix.settings.experimental-features = "nix-command flakes";
 
   # Create /etc/zshrc that loads the nix-darwin environment.
   programs.zsh.enable = true;
+  users.users."SP15013".shell = pkgs.zsh;
+  users.knownUsers = ["SP15013"];
+  users.users."SP15013".uid = 502;
+
+  # Use Touch ID for sudo in terminals
+  security.pam.services.sudo_local.touchIdAuth = true;
 
   environment.systemPackages = with pkgs; [
     alacritty
   ];
 
-  # system.activationScripts.postUserActivation.text = ''
   system.activationScripts.extraActivation.text = ''
     # Fix to automatically add applications to launchers
     # https://github.com/LnL7/nix-darwin/issues/214#issuecomment-2050027696

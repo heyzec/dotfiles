@@ -2,7 +2,7 @@
   imports = [
     # Keyboard
     {
-      services.karabiner-elements.enable = true;
+      # services.karabiner-elements.enable = true;
     }
     # Mouse
     {

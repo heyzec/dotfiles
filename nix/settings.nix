@@ -22,10 +22,10 @@
       systemSettings.system = "aarch64-linux";
     };
     "darwin" = {
-      systemSettings.system = "x86_64-darwin";
+      systemSettings.system = "aarch64-darwin";
     };
     "darwin-home" = {
-      systemSettings.system = "x86_64-darwin";
+      systemSettings.system = "aarch64-darwin";
       userSettings.homeDir = "/Users/SP15013";
       userSettings.username = "SP15013";
     };

@@ -5,7 +5,7 @@
 # use ctpv to preview files, including images
 # on wayland terminals that support sixel, add "set chafasixel" to ~/.config/ctpv/config
 set sixel true
-set previewer ctpv
+set previewer ~/dotfiles/lf/previewer
 set cleaner ctpvclear
 
 # lf by default doesn't handle spaces well, and the project wiki snippets don't factor this
