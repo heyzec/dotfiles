@@ -8,16 +8,18 @@ set sixel true
 set previewer ctpv
 set cleaner ctpvclear
 
+# == A custom 'delete' command ==
 # lf by default doesn't handle spaces well, and the project wiki snippets don't factor this
 # https://github.com/gokcehan/lf/issues/47
-# 1. lf's filesep by default is the newline character, so :delete on a file
-#    with a newline will fail since rm is looking for two files instead
-# 2. lf doesn't support using the null char as a filesep,
-#    mainly due POSIX disallowing null char in variables
-set filesep '\n'  # default
-
-# A custom 'delete' command
-# Test cases: touch 'a a' 'b b' 'c\nc' "d"$'\n'"d"
+# - lf's filesep by default is the newline character
+# - Our solution uses xargs as intermediate to avoid spaces in filename being splitted
+#   limitation: This breaks when files contain newline char instead
+# - lf doesn't support using the null char as a filesep, mainly due to
+#   POSIX disallowing null char in variables
+# - Test cases: touch 'a a' 'b b' 'c\nc' "d"$'\n'"d"
+#   - delete a, b, c individually, then all of them together
+#   - file d will fail as expected
+# - Ensure changes remain GNU and BSD compatible
 cmd delete ${{
 	set -f
 	printf "$fx\n"
@@ -25,7 +27,8 @@ cmd delete ${{
 	read ans
 	# Use xargs to avoid spaces in filename being splitted
 	# Limitation: This breaks when files contain newline char instead
-	[ "$ans" = "y" ] && printf "%s" "$fx" | sed 's/\\n/\x00/g' | xargs --null rm -rf
+	[ "$ans" != "y" ] && return
+	printf "%s" "$fx" | awk '{ printf "%s%c", $0, 0 }' | xargs --null rm -rf
 }}
 
 cmd open ${{
