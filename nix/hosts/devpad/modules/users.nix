@@ -17,6 +17,7 @@
 
         # See here for a brief explanation of each group
         # https://wiki.archlinux.org/title/Users_and_groups#Group_list
+        # Additional groups may be defined elsewhere, e.g. modules/packages.nix when program-specific
         extraGroups = [
           "wheel" #        # Access sudo command
           "networkmanager" # Access network manager
