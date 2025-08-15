@@ -54,4 +54,27 @@
     man-pages #     # Linux man pages
     man-pages-posix # POSIX man pages
   ];
+  services.printing.enable = true;
+  hardware.printers = {
+    ensureDefaultPrinter = "Epson-L360";
+    ensurePrinters = [
+      {
+        name = "Epson-L360";
+        deviceUri = "usb://EPSON/L360%20Series?serial=5647444B3331343958&interface=1";
+        location = "home";
+        # model = "epson-inkjet-printer-escpr/Epson-E-360_Series-epson-escpr-en.ppd";
+        model = "gutenprint.5.3://escp2-l310/expert";
+        ppdOptions = {
+          PageSize = "A4";
+        };
+      }
+    ];
+  };
+  services.printing.drivers = with pkgs; [
+    gutenprint
+    gutenprintBin
+    # epson-escpr2
+    # epson-escpr
+  ];
+  services.printing.logLevel = "debug";
 }
