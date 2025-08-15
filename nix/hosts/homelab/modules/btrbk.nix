@@ -9,7 +9,7 @@ then let
 in {
   services.btrbk.sshAccess = [
     {
-      roles = ["receive"];
+      roles = ["receive" "delete"];
       key = key;
     }
   ];
