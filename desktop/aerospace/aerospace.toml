@@ -134,8 +134,8 @@ automatically-unhide-macos-hidden-apps = false
     alt-r = ['reload-config', '''exec-and-forget osascript -e 'display dialog "Reloaded!"' ''']
 
     # Scratchpads
-    cmd-ctrl-alt-w = "exec-and-forget /usr/local/bin/aerospace-scratchpad show SeaTalk"
-    cmd-ctrl-alt-e = "exec-and-forget /usr/local/bin/aerospace-scratchpad show Obsidian"
+    cmd-ctrl-alt-w = "exec-and-forget /opt/homebrew/bin/aerospace-scratchpad show SeaTalk"
+    cmd-ctrl-alt-e = "exec-and-forget /opt/homebrew/bin/aerospace-scratchpad show Obsidian"
 
 
 # 'service' binding mode declaration.
