@@ -1,17 +1,19 @@
 ## Launch // Terminal // <> Enter ##
-super + enter
-    foot
+# super + enter
+    # Disabled until https://github.com/waycrate/swhkd/issues/320 fixed
+    # foot --working-directory=$HOME/Desktop/
 
 ## Launch // Command Launcher // <><Ctrl> Enter ##
 super + control + return
     notify-send "Quick Run" "$(rofi -show run)"
 
-# ## Launch // Application Launcher // <> Space ##
+## Launch // Application Launcher // <> Space ##
 super + space
     rofi -show drun
 
-# ## Launch // Command // <><Shift> Space ##
-# bindsym $mod+shift+space exec --no-startup-id notify-send "Quick Run" "$(rofi -show run)"
+## Launch // Command // <><Shift> Space ##
+super + shift + space
+    rofi -show run
 
 ## Launch // Keybinding Viewer // <><Shift> ? ##
 super + shift + /
@@ -21,42 +23,44 @@ super + shift + /
 super + control + space
     rofi -show window
 
-## Launch // File Search // <><Alt> Space ##
-
 ## Launch // Dotfiles Editor  // <> o ##
 super + o
-    ~/dotfiles/scripts/dotsman/dotsman.sh dmenu rofi -dmenu
+    ~/dotfiles/scripts/dotsman/dotsman.sh dmenu rofi -dmenu >/dev/null # not sure why fails without redirection
+
+## Launch // Clipboard History Viewer // <> c ##
+super + c
+    cliphist list | rofi -dmenu | cliphist decode | wl-copy
+# future: cliphist list | sed 's/\t/ /' | walker --dmenu | sed 's/ /\t/' | cliphist decode | wl-copy
 
 ## Launch // Emoji Picker // <> ; ##
 super + ;
     smile
 
 # Use wpctl to adjust volume of WirePlumber
-{XF86AudioRaiseVolume, control + alt + super + c}
-    wpctl set-volume @DEFAULT_SINK@ 5%+ --limit 1.5 && wpctl get-volume @DEFAULT_SINK@ | sed 's/[^0-9]//g' > $XDG_RUNTIME_DIR/wob.sock {,}
+{XF86AudioLowerVolume, XF86AudioRaiseVolume}
+    wpctl set-volume @DEFAULT_SINK@ {5%\-, 5%+ \-\-limit 1.5} && wpctl get-volume @DEFAULT_SINK@ | sed 's/[^0-9]//g' > $XDG_RUNTIME_DIR/wob.sock
 
-{XF86AudioLowerVolume, control + alt + super + x}
-    wpctl set-volume @DEFAULT_SINK@ 5%- && wpctl get-volume @DEFAULT_SINK@ | sed 's/[^0-9]//g' > $XDG_RUNTIME_DIR/wob.sock {,}
+control + alt + super + {x, c}
+    wpctl set-volume @DEFAULT_SINK@ {5%\-, 5%+ \-\-limit 1.5} && wpctl get-volume @DEFAULT_SINK@ | sed 's/[^0-9]//g' > $XDG_RUNTIME_DIR/wob.sock
 
-{Shift+XF86AudioRaiseVolume, control + shift + alt + super + x}
-    wpctl set-volume @DEFAULT_SOURCE@ 5%+ --limit 1.5 {,}
+Shift + {XF86AudioLowerVolume, XF86AudioRaiseVolume}
+    wpctl set-volume @DEFAULT_SOURCE@ {5%\-, 5%+ \-\-limit 1.5}
 
-{Shift+XF86AudioLowerVolume, control + shift + alt + super + c}
-    wpctl set-volume @DEFAULT_SOURCE@ 5%- {,}
+control + shift + alt + super + {x, c}
+    wpctl set-volume @DEFAULT_SOURCE@ {5%\-, 5%+ \-\-limit 1.5}
 
-{@XF86AudioMute, control + alt + super + @z}
-    wpctl set-mute @DEFAULT_SINK@ toggle {,}
+{_,Shift +} @XF86AudioMute
+    wpctl set-mute {@DEFAULT_SINK@, @DEFAULT_SOURCE@} toggle
 
-{Shift+XF86AudioMute, control + shift + alt + super + @z}
-    wpctl set-mute @DEFAULT_SOURCE@ toggle {,}
+control + {_, Shift +} alt + super + @z
+    wpctl set-mute {@DEFAULT_SINK@, @DEFAULT_SOURCE@} toggle
 
-# Media player controls
-{@XF86AudioPlay, control + alt + super + @v}
-    playerctl play-pause {,}
+{XF86MonBrightnessUp, XF86MonBrightnessDown}
+    brightnessctl set {+10%, 10%\-} | sed -En 's/.*\(([0-9]+)%\).*/\1/p' > $XDG_RUNTIME_DIR/wob.sock
 
-# Screen brightness controls
-# Ideally swhkd will capture XF86MonBrightnessUp and XF86MonBrightnessDown, but this is currently a limitation
-# We define them in hyprland config instead
+Shift + {XF86MonBrightnessUp, XF86MonBrightnessDown}
+    # https://github.com/rockowitz/ddcutil/labels/performance
+    ddcutil setvcp 10 {+, \-} 10 && ddcutil getvcp 10 -t | cut -d' ' -f4 > $XDG_RUNTIME_DIR/wob.sock
 
 # Printscreen using flameshot
 # Current workaround for https://github.com/flameshot-org/flameshot/issues/2848#issuecomment-1199796142
@@ -68,24 +72,9 @@ Shift+@Print
     # flameshot gui
     GRIMBLAST_EDITOR='swappy -f' grimblast --freeze edit area
 
-
 ## Launch // Logout Menu // <><Shift><Esc> ##
 super + shift + escape
-    @enter system && wlogout -p layer-shell
-mode system
-l
-    @escape && pkill wlogout && sleep 0.5 && swaylock
-s
-    @escape && pkill wlogout && sleep 0.5 && systemctl suspend
-h
-    @escape && pkill wlogout && sleep 0.5 && systemctl hibernate
-r
-    @escape && pkill wlogout && systemctl reboot
-Shift + s
-    @escape && pkill wlogout && systemctl poweroff -i
-escape
-    @escape && pkill wlogout
-endmode
+    wlogout -p layer-shell
 
 # Duplicated for use on multiple keyboards
 super + escape
@@ -94,16 +83,16 @@ super + grave
     @enter applications && sh -c 'echo "Launch: [b]rowser [f]iles [m]essages" > /tmp/mode && pkill -35 waybar'
 
 mode applications
-## Launch // Browser // <><Grave> b ##
-b
-    @escape && gtk-launch $(xdg-settings get default-web-browser) && echo "" > /tmp/mode && pkill -35 waybar
-## Launch // File Explorer // <><Grave> f ##
-f
-    @escape && thunar && echo "" > /tmp/mode && pkill -35 waybar
-m
-    @escape && telegram-desktop && echo "" > /tmp/mode && pkill -35 waybar
-j
-    @escape && bash -c '(cd ~/.local/share/applications/; gtk-launch $(basename $(find ~/.local/share/applications/ -iname "*joplin*")))' && echo "" > /tmp/mode && pkill -35 waybar
-escape
-    @escape && echo "" > /tmp/mode && pkill -35 waybar
+    ## Launch // Browser // <><Grave> b ##
+    b
+        @escape && gtk-launch $(xdg-settings get default-web-browser) && echo "" > /tmp/mode && pkill -35 waybar
+    ## Launch // File Explorer // <><Grave> f ##
+    f
+        @escape && thunar && echo "" > /tmp/mode && pkill -35 waybar
+    m
+        @escape && telegram-desktop && echo "" > /tmp/mode && pkill -35 waybar
+    j
+        @escape && bash -c '(cd ~/.local/share/applications/; gtk-launch $(basename $(find ~/.local/share/applications/ -iname "*joplin*")))' && echo "" > /tmp/mode && pkill -35 waybar
+    escape
+        @escape && echo "" > /tmp/mode && pkill -35 waybar
 endmode

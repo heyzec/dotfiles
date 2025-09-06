@@ -1,29 +1,34 @@
-{ pkgs, ... }:
-{
+{pkgs, ...}: {
   # keyd
   services.keyd = {
     enable = true;
     keyboards = {
       default = {
-        ids = [ ];
+        ids = [];
         # My config is added to /etc/keyd/ manually instead of via nix
       };
     };
   };
 
-  # swhkd
-  security.polkit.extraConfig = ''
-    polkit.addRule(function(action, subject) {
-        if (action.id == "org.freedesktop.policykit.exec" &&
-            action.lookup("program") == "/run/current-system/sw/bin/swhkd") {
-                return polkit.Result.YES;
-        }
-    });
-  '';
+  # swkhd
+  systemd.services.swhkd = {
+    description = "swhkd hotkey daemon";
+    after = ["graphical.target"];
+    partOf = ["graphical.target"];
+    wantedBy = ["graphical.target"];
+
+    environment = {
+      XDG_RUNTIME_DIR = "/run/user/1000"; # hacky
+    };
+    path = [];
+
+    script = ''
+      ${pkgs.swhkd}/bin/swhkd
+    '';
+  };
 
   environment.systemPackages = with pkgs; [
-    keyd  # Add keyd to programs too for manpage
+    keyd # Add keyd to programs too for manpage
     swhkd
   ];
 }
-
