@@ -1,0 +1,53 @@
+diff --git a/swhkd/src/daemon.rs b/swhkd/src/daemon.rs
+index 93ae1c6..fd8c3a3 100644
+--- a/swhkd/src/daemon.rs
++++ b/swhkd/src/daemon.rs
+@@ -4,7 +4,7 @@ use config::Hotkey;
+ use evdev::{AttributeSet, Device, InputEventKind, Key};
+ use nix::{
+     sys::stat::{umask, Mode},
+-    unistd::{setgid, setuid, Gid, Uid},
++    unistd::{setgid, setuid, Gid, Uid, initgroups},
+ };
+ use signal_hook::consts::signal::*;
+ use signal_hook_tokio::Signals;
+@@ -12,6 +12,7 @@ use std::{
+     collections::{HashMap, HashSet},
+     env,
+     error::Error,
++    ffi::CString,
+     fs::{self, File, OpenOptions, Permissions},
+     io::{Read, Write},
+     os::unix::{fs::PermissionsExt, net::UnixStream},
+@@ -60,7 +61,7 @@ struct Args {
+     debug: bool,
+ 
+     /// Take a list of devices from the user
+-    #[arg(short = 'D', long, num_args = 0.., value_delimiter = ' ')]
++    #[arg(short = 'D', long, num_args = 0.., value_delimiter = ',')]
+     device: Vec<String>,
+ 
+     /// Set a custom log file. (Defaults to ${XDG_DATA_HOME:-$HOME/.local/share}/swhks-current_unix_time.log)
+@@ -195,6 +196,9 @@ async fn main() -> Result<(), Box<dyn Error>> {
+             let log = log.clone();
+ 
+             // Set the user and group id to the invoking user for the thread
++            // Hardcode GID
++            // initgroups(&CString::new("heyzec").unwrap(), Gid::from_raw(100)).unwrap();
++            // setgid(Gid::from_raw(100)).unwrap();
+             setgid(Gid::from_raw(invoking_uid)).unwrap();
+             setuid(Uid::from_raw(invoking_uid)).unwrap();
+ 
+@@ -648,9 +652,9 @@ pub async fn send_command(
+ 
+ /// Get the UID of the user that is not a system user
+ fn get_uid() -> Result<u32, Box<dyn Error>> {
+-    let status_content = fs::read_to_string(format!("/proc/{}/loginuid", std::process::id()))?;
+-    let uid = status_content.trim().parse::<u32>()?;
+-    Ok(uid)
++    // Hardcoded to user 1000
++    // See https://github.com/waycrate/swhkd/issues/319
++    Ok(1000)
+ }
+ 
+ fn get_file_paths(runtime_dir: &str) -> (String, String) {
