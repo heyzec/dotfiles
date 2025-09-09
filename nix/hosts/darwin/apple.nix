@@ -5,9 +5,16 @@
 
     dock = {
       autohide = true;
+
       # https://apple.stackexchange.com/a/70598
       autohide-delay = 0.0;
       autohide-time-modifier = 0.4;
+
+      # https://nikitabobko.github.io/AeroSpace/guide#a-note-on-mission-control
+      expose-group-apps = true;
+
+      # Disable hot corner action for bottom-right (defaults to Quick Note)
+      wvous-br-corner = 1;
     };
 
     WindowManager = {
@@ -33,10 +40,17 @@
       "com.apple.trackpad.forceClick" = false;
     };
 
+    ".GlobalPreferences" = {
+      "com.apple.mouse.scaling" = 1.0; # Glitchy activation
+    };
+
     # CustomUserPreferences is like an escape hatch, use it only if nix-darwin has no related option
     CustomUserPreferences = {
       # NSGlobalDomain = {};
-      # "com.apple.dock" = {};
+      # See https://apple.stackexchange.com/questions/365048/disable-dictation-from-command-line
+      "com.apple.HIToolbox" = {
+        AppleDictationAutoEnable = false;
+      };
     };
   }; # system.defaults
 }
