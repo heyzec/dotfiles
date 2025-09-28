@@ -36,7 +36,7 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 -----------------------------------------------------------
 -- Change line number based on mode
 -----------------------------------------------------------
--- from https://github.com/dmxk062/dotfiles/blob/main/.config/nvim/lua/modules/autocommands.lua
+-- From https://www.reddit.com/r/neovim/comments/1h6orjg/comment/m0fbyvz
 -- for command mode: make it absolute for ranges etc
 -- for normal mode: relative movements <3
 local cmdline_group = vim.api.nvim_create_augroup('CmdlineLinenr', {})
@@ -55,7 +55,10 @@ vim.api.nvim_create_autocmd('CmdlineEnter', {
       vim.schedule_wrap(function()
         if vim.o.number then
           vim.o.relativenumber = false
-          vim.api.nvim__redraw { statuscolumn = true }
+          if vim.fn.getcmdtype() ~= '@' then
+            -- modification: do not redraw when waiting for input(), otherwise prompt texts will be gone
+            vim.api.nvim__redraw { statuscolumn = true }
+          end
         end
       end)
     )
