@@ -11,10 +11,15 @@ setopt histignorealldups sharehistory
 # Use emacs keybindings even if our EDITOR is set to vi
 bindkey -e
 
+ # TODO: does it make sense to set this here?
+# Needed on macos, else HISTFILE broken
+export XDG_CACHE_HOME="$HOME/.cache"
+export XDG_STATE_HOME="$HOME/.local/state"
+
 # Keep more lines of history within the shell
 HISTSIZE=10000
 SAVEHIST=10000
-HISTFILE="${XDG_STATE_HOME:-$HOME/.zsh_history}/zsh_history" # don't put histfile in home
+HISTFILE="$XDG_STATE_HOME/zsh_history" # don't put histfile in home
 
 # ZSH shell options and settings
 unsetopt BEEP  # Disable beeping in zsh instead of globally in terminal
