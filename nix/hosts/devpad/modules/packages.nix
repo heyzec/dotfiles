@@ -21,7 +21,7 @@
       ##### Used by dotfiles
       ################################################################################
       foot # (F.1.2) terminal emulator
-      rofi-wayland # (G.5.6) application launcher
+      rofi # (G.5.6) application launcher
 
       ##### To be daemonized with hyprland (via exec-once) #####
       # Clipboard
