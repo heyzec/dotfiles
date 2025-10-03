@@ -13,7 +13,7 @@
     stylua # formatter
 
     # Nix
-    nil # server
+    nixd # server
     alejandra # formatter
 
     # Others
