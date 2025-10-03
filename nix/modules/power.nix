@@ -59,7 +59,7 @@ in
 
   config = {
     # By default, lid switch is ignored when docked (but not on AC)
-    services.logind.lidSwitch = "suspend-then-hibernate";
+    services.logind.settings.Login.HandleLidSwitch = "suspend-then-hibernate";
 
     environment.etc = if ! cfg.enable then { } else {
       "hypr/hypridle.conf" = {
