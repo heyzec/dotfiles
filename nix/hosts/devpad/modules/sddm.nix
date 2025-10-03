@@ -30,7 +30,4 @@ in {
       <dir>/run/current-system/sw/share/sddm/themes/sddm-astronaut-theme/Fonts</dir>
     </fontconfig>
   '';
-
-  # Workaround on 25.05: display manager may select "Hyprland (systemd)" session, which is broken
-  services.displayManager.defaultSession = "hyprland";
 }
