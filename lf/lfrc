@@ -27,7 +27,7 @@ cmd delete ${{
 	read ans
 	# Use xargs to avoid spaces in filename being splitted
 	# Limitation: This breaks when files contain newline char instead
-	[ "$ans" != "y" ] && return
+	[ "$ans" != "y" ] && exit
 	printf "%s" "$fx" | awk '{ printf "%s%c", $0, 0 }' | xargs --null rm -rf
 }}
 
