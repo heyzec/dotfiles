@@ -14,7 +14,7 @@ bindkey -e
 # Keep 1000 lines of history within the shell and save it to ~/.zsh_history:
 HISTSIZE=1000
 SAVEHIST=1000
-HISTFILE=~/.zsh_history
+HISTFILE="${XDG_STATE_HOME:-$HOME}/zsh_history" # don't put histfile in home
 
 # ZSH shell options and settings
 unsetopt BEEP  # Disable beeping in zsh instead of globally in terminal
@@ -123,22 +123,6 @@ function checkhealth() {
 		return 1
 	fi
 }
-
-# # Virtual environments
-# export PATH="$HOME/.local/bin:$PATH"
-#
-# # rbenv
-# export PATH="$HOME/.rbenv/bin:$PATH"
-# eval "$(rbenv init - zsh)"
-#
-# # go
-# export PATH="$HOME/go/bin:$PATH"
-#
-# # nodenv
-# export PATH="$HOME/.nodenv/bin:$PATH"
-# eval "$(nodenv init -)"
-# export GOPATH="$HOME/go"
-
 
 # Quickly jump around
 setopt AUTO_PUSHD           # Push the current directory visited on the stack.
