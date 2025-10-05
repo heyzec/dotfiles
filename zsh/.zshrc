@@ -11,10 +11,11 @@ setopt histignorealldups sharehistory
 # Use emacs keybindings even if our EDITOR is set to vi
 bindkey -e
 
-# Keep 1000 lines of history within the shell and save it to ~/.zsh_history:
-HISTSIZE=1000
-SAVEHIST=1000
+# Keep more lines of history within the shell
+HISTSIZE=10000
+SAVEHIST=10000
 HISTFILE="${XDG_STATE_HOME:-$HOME}/zsh_history" # don't put histfile in home
+setopt HIST_IGNORE_SPACE
 
 # ZSH shell options and settings
 unsetopt BEEP  # Disable beeping in zsh instead of globally in terminal
@@ -131,9 +132,6 @@ setopt PUSHD_SILENT         # Do not print the directory stack after pushd or po
 alias d='dirs -v'
 for index ({0..9}) alias "d$index"="cd +${index}"; unset index
 
-
-
-# source $ZDOTDIR/plugins/zsh-expand/zsh-expand.plugin.zsh
 source $ZDOTDIR/aliases.zsh
 
 
@@ -194,14 +192,14 @@ fi
 
 # Use fzf keybindings
 if [ -d /usr/share/doc/fzf/examples/ ]; then
-    # Expected location for typical linux distributions
-    fzf_folder="/usr/share/doc/fzf/examples"
+	# Expected location for typical linux distributions
+	fzf_folder="/usr/share/doc/fzf/examples"
 elif [ -d /usr/local/opt/fzf/shell/ ]; then
-    # Expected location for MacOS
-    fzf_folder="/usr/local/opt/fzf/shell/"
+	# Expected location for MacOS
+	fzf_folder="/usr/local/opt/fzf/shell/"
 elif [ -n "${commands[fzf-share]}" ]; then
-    # For NixOS, we need to call this script to get the location
-    fzf_folder="$(fzf-share)"
+	# For NixOS, we need to call this script to get the location
+	fzf_folder="$(fzf-share)"
 fi
 if [ ! -z $fzf_folder ]; then
 	source "$fzf_folder/key-bindings.zsh"
