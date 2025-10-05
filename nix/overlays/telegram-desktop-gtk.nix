@@ -10,11 +10,14 @@
           buildInputs = [ pkgs.makeWrapper ];
         } ''
           mkdir $out
-          ln -s ${pkgs.telegram-desktop}/* $out
-          rm $out/bin
-          mkdir $out/bin
-          makeWrapper ${pkgs.telegram-desktop}/bin/Telegram $out/bin/Telegram \
+          cp -r ${pkgs.telegram-desktop}/* $out
+          chmod -R +w $out
+
+          wrapProgram $out/bin/Telegram \
             --set QT_QPA_PLATFORMTHEME gtk3
+
+          # Because the .desktop file can activate via dbus, we need to patch that too
+          sed -i "s|^Exec=.\+$|Exec=$out/bin/Telegram |" $out/share/dbus-1/services/org.telegram.desktop.service
         '');
       }
     )
