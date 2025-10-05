@@ -13,11 +13,6 @@ in {
   wayland.windowManager.hyprland = {
     enable = true;
   };
-  home.file.".config/test" = {
-    text = ''
-      test
-    '';
-  };
   xdg.configFile."hypr/hyprland.conf" = {
     text = ''
       # This line is what wayland.windowManager.hyprland module would generate
@@ -36,11 +31,14 @@ in {
     enable = true;
     allowImages = true;
   };
-  services.gnome-keyring = {
-    enable = true;
-    components = ["pkcs11" "secrets" "ssh"];
-  };
-  services.ssh-agent.enable = true;
+
+  # services.gnome-keyring = {
+  #   enable = true;
+  #   components = ["pkcs11" "secrets" "ssh"];
+  # };
+  # services.ssh-agent.enable = true;
+  services.gpg-agent.enable = true;
+  services.gpg-agent.enableSshSupport = true;
 
   systemd.user.services.indicator-sound-switcher = {
     Unit = {
@@ -52,35 +50,6 @@ in {
     Service = {
       Type = "simple";
       ExecStart = "${pkgs.indicator-sound-switcher}/bin/indicator-sound-switcher";
-      Restart = "on-failure";
-    };
-
-    Install = {
-      WantedBy = ["graphical-session.target"];
-    };
-  };
-
-  # SWHKD
-  # # swhkd, the shortcut mapper
-  # exec-once = swhks
-  # # For some reason this will not work if we do not redirect output
-  # exec-once = pkexec swhkd -c "$HOME"/.config/swhkd/swhkdrc --device "keyd virtual keyboard" >/dev/null
-  systemd.user.services.swhkd = let
-    # Adopted from https://github.com/waycrate/swhkd/tree/main/contrib/init/systemd
-    hotkeys = pkgs.writeShellScript "hotkeys.sh" ''
-      killall swhks
-      swhks & pkexec swhkd -c "''${HOME}/.config/swhkd/swhkdrc" --device "keyd virtual keyboard"
-    '';
-  in {
-    Unit = {
-      Description = "swhkd hotkey daemon";
-      After = ["graphical-session.target"];
-      PartOf = ["graphical-session.target"];
-    };
-
-    Service = {
-      Type = "simple";
-      ExecStart = "${hotkeys}";
       Restart = "on-failure";
     };
 
