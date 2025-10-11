@@ -134,6 +134,10 @@ local git_reset_hunk = action('Reset hunk', '<Cmd>Gitsigns reset_hunk<CR>', vsco
 -- Gitsigns require cursor to be on hunk, while VS Code will jump to next hunk if not on hunk
 local git_preview_hunk = action('Preview hunk', '<Cmd>Gitsigns preview_hunk_inline<CR>', vscode 'editor.action.dirtydiff.next')
 
+-- gitlinker.nvim
+local cmd = require('gitlinker').link
+local git_permalink = action('Get permalink', cmd, cmd)
+
 ---------------------2.4. Other Extensions--------------------
 -- Neotree
 -- If drawer is open, but not focused, don't close, instead focus to it.
@@ -274,6 +278,7 @@ local mappings = {
       ['S'] = git_unstage_hunk,
       ['r'] = git_reset_hunk,
       ['p'] = git_preview_hunk,
+      ['l'] = git_permalink,
     },
 
     -- Use barbar to quickly switch "tabs" like Harpoon
