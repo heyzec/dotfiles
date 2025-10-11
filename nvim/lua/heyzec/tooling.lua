@@ -37,6 +37,7 @@ define_formatter('nix', 'alejandra')
 
 -- C++
 define_server 'clangd'
+-- This breaks with mason (clang_format)
 define_formatter('cpp', 'clang_format')
 
 -- JavaScript / TypeScript
@@ -51,3 +52,7 @@ define_formatter('typescriptreact', 'prettier')
 
 -- Miscellaneous
 define_server 'jsonls' -- from hrsh7th/vscode-langservers-extracted
+
+-- Go
+define_server 'gopls'
+define_formatter('go', 'goimports')
