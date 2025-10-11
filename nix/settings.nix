@@ -25,7 +25,11 @@
       systemSettings.system = "aarch64-darwin";
     };
     "darwin-home" = {
-      userSettings.homeDir = "/Users/heyzec";
+      systemSettings.system = "aarch64-darwin";
+      userSettings = rec {
+        username = (import ./settings.crypt.nix).darwin.username;
+        homeDir = "/Users/${username}";
+      };
     };
   };
 }

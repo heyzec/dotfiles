@@ -15,7 +15,7 @@
   # imports = [inputs.nix-homebrew.darwinModules.nix-homebrew];
   # nix-homebrew = {
   #   enable = true;
-  #   user = "SP15013";
+  #   user = "<username here>";
   #   taps = {
   #     "homebrew/homebrew-core" = inputs.homebrew-core;
   #     "homebrew/homebrew-cask" = inputs.homebrew-cask;
