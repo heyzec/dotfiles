@@ -11,6 +11,7 @@
       "zha"
       "mqtt"
       "samsungtv"
+      "google_assistant"
     ];
     extraPackages = ps:
       with ps; [
@@ -38,6 +39,16 @@
 
       automation = "!include automations.yaml";
       script = "!include scripts.yaml";
+
+      google_assistant = {
+        project_id = "heyzec-0081bd";
+        service_account = "!include SERVICE_ACCOUNT.json";
+        report_state = true;
+        exposed_domains = [
+          "light"
+          "switch"
+        ];
+      };
     };
   };
 
