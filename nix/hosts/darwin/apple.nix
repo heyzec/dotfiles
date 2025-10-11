@@ -3,9 +3,28 @@
     # Only ask for password if running for longer than 10 seconds
     screensaver.askForPasswordDelay = 10;
 
+    dock = {
+      autohide = true;
+
+      # https://apple.stackexchange.com/a/70598
+      autohide-delay = 0.0;
+      autohide-time-modifier = 0.4;
+
+      # https://nikitabobko.github.io/AeroSpace/guide#a-note-on-mission-control
+      expose-group-apps = true;
+
+      # Disable hot corner action for bottom-right (defaults to Quick Note)
+      wvous-br-corner = 1;
+    };
+
+    WindowManager = {
+      EnableStandardClickToShowDesktop = false;
+    };
+
+    # defaults write -g ...
     NSGlobalDomain = {
       InitialKeyRepeat = 25;
-      KeyRepeat = 3;  # Smaller is faster
+      KeyRepeat = 3; # Smaller is faster
 
       # Disable "smart" autocorrect features
       NSAutomaticCapitalizationEnabled = false;
@@ -13,15 +32,25 @@
       NSAutomaticPeriodSubstitutionEnabled = false;
       NSAutomaticQuoteSubstitutionEnabled = false;
       NSAutomaticSpellingCorrectionEnabled = false;
+
+      # Disable special character popup
+      ApplePressAndHoldEnabled = false;
+
+      # Don't accidentally trigger Look Up feature when pressing harder on trackpad
+      "com.apple.trackpad.forceClick" = false;
     };
 
+    ".GlobalPreferences" = {
+      "com.apple.mouse.scaling" = 1.0; # Glitchy activation
+    };
+
+    # CustomUserPreferences is like an escape hatch, use it only if nix-darwin has no related option
     CustomUserPreferences = {
-      "com.apple.dock" = {
-        autohide = true;
-        # https://apple.stackexchange.com/a/70598
-        autohide-delay = 0;
-        autohide-time-modifier = 0.4;
+      # NSGlobalDomain = {};
+      # See https://apple.stackexchange.com/questions/365048/disable-dictation-from-command-line
+      "com.apple.HIToolbox" = {
+        AppleDictationAutoEnable = false;
       };
     };
-  };
+  }; # system.defaults
 }
