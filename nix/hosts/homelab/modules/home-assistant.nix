@@ -11,6 +11,7 @@
       "zha"
       "mqtt"
       "samsungtv"
+      "google_assistant"
     ];
     extraPackages = ps:
       with ps; [
@@ -25,6 +26,7 @@
 
     # Your configuration.yaml as a Nix attribute set.
     config = {
+      # This enables some defaults, see https://www.home-assistant.io/integrations/default_config
       default_config = {};
       homeassistant = {
         internal_url = "http://homelab.local:8123";
@@ -38,6 +40,16 @@
 
       automation = "!include automations.yaml";
       script = "!include scripts.yaml";
+
+      google_assistant = {
+        project_id = "heyzec-0081bd";
+        service_account = "!include SERVICE_ACCOUNT.json";
+        report_state = true;
+        exposed_domains = [
+          "light"
+          "switch"
+        ];
+      };
     };
   };
 
