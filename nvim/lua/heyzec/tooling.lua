@@ -85,6 +85,10 @@ define_formatter('javascriptreact', 'prettier')
 define_formatter('typescript', 'prettier')
 define_formatter('typescriptreact', 'prettier')
 
+-- Go
+define_server 'gopls'
+define_formatter('go', 'goimports')
+
 -- Callback to be invoked after lazy.nvim setup
 return function()
   tooling_utils.setup_servers()
