@@ -22,7 +22,7 @@
       systemSettings.system = "aarch64-linux";
     };
     "darwin" = {
-      systemSettings.system = "x86_64-darwin";
+      systemSettings.system = "aarch64-darwin";
     };
     "darwin-home" = {
       userSettings.homeDir = "/Users/heyzec";

@@ -43,7 +43,7 @@
 
     homeConfigurations = {
       "heyzec" = mkHmConfig "heyzec" {modules = [./nix/home];};
-      "darwin" = mkHmConfig "darwin" {modules = [./nix/home];};
+      "darwin" = mkHmConfig "darwin-home" {modules = [./nix/home];};
     };
 
     darwinConfigurations = {
