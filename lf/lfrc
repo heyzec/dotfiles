@@ -5,7 +5,7 @@
 # use ctpv to preview files, including images
 # on wayland terminals that support sixel, add "set chafasixel" to ~/.config/ctpv/config
 set sixel true
-set previewer ctpv
+set previewer ~/dotfiles/lf/previewer
 set cleaner ctpvclear
 
 # == A custom 'delete' command ==
