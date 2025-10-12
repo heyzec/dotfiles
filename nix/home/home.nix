@@ -21,7 +21,8 @@
   '';
 
   # Enable shell for Darwin systems (for Linux systems is enabled via a NixOS module)
-  heyzec.shell.enable = lib.strings.hasSuffix "darwin" pkgs.system;
+  heyzec.shell.enable = lib.mkDefault (lib.strings.hasSuffix "darwin" pkgs.system);
+  heyzec.neovim.enable = lib.mkDefault (lib.strings.hasSuffix "darwin" pkgs.system);
 
   home.stateVersion = "23.05";
 }
