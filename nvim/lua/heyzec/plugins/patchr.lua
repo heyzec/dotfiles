@@ -4,7 +4,7 @@ return {
   opts = {
     plugins = {
       ['plantuml-previewer.vim'] = {
-        '/home/heyzec/dotfiles/nvim/plantuml-previewer.patch',
+        '/Users/SIPSS0377/dotfiles/nvim/plantuml-previewer.patch',
       },
     },
   },
