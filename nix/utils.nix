@@ -104,6 +104,11 @@ in rec {
     specialArgs = getSpecialArgs name;
   in
     inputs.nix-darwin.lib.darwinSystem {
-      inherit specialArgs modules;
+      inherit specialArgs;
+      modules =
+        [
+          ./overlays
+        ]
+        ++ modules;
     };
 }

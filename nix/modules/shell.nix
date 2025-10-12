@@ -61,7 +61,7 @@
         unzip #        # (F.2.4.1) more archiving (Info-Zip)
         xxd #          # (F.3.10) hex dump
         (ifLinux ctpv) # file previewer for lf, with image support
-        psmisc #       # utilities that use /proc, e.g. pstree (note1)
+        (ifLinux psmisc) # utilities that use /proc, e.g. pstree (note1)
 
         ##### Development #####
         git #   # (F.3.2) the information manager from hell

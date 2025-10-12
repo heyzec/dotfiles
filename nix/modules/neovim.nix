@@ -74,7 +74,11 @@ in {
       environment.variables.EDITOR = lib.mkIf cfg.defaultEditor "nvim";
     };
 
-    hmConfig = {};
+    hmConfig = {
+      home.packages = [
+        neovim-custom-wrapped
+      ];
+    };
   in
     lib.mkIf cfg.enable (
       if !systemSettings.isHome
