@@ -24,9 +24,17 @@ valid_section_regex="[a-z-]+"
 ###############################################################################
 
 # notify <msg>...
-# Wrapper around notify-send
+# Wrapper to send desktop notifications
 notify() {
-    notify-send "dotsman" "$@"
+    if command -v notify-send > /dev/null 2>&1; then
+        notify-send "dotsman" "$@"
+        return
+    fi
+    if command -v terminal-notifier > /dev/null 2>&1; then
+        terminal-notifier -title "dotsman" -subtitle "$@"
+        return
+    fi
+    echo "No program for sending notification: $@"
 }
 
 # Wrapper around envsubst with a poor man's fallback
@@ -45,7 +53,19 @@ subst() {
 is_same_file() {
     file1="$1"
     file2="$2"
-    if [ "$(stat -L -c %d:%i "$file1")" = "$(stat -L -c %d:%i "$file2")" ]; then
+
+    # If using BSD stat instead of GNU, need to use -f instead of -c
+    # But, when this script is run from within Nix, it will have GNU stat
+    portable_stat() {
+        file="$1"
+        if stat --version >/dev/null 2>&1; then
+            stat -L -c %d:%i "$file" # GNU (Linux)
+        else
+            stat -Lf %d:%i "$file" # BSD/macOS
+        fi
+    }
+
+    if [ "$(portable_stat "$file1")" = "$(portable_stat "$file2")" ]; then
         return 0
     else
         return 1
@@ -173,7 +193,7 @@ run_dmenu() {
     fi
 
     if [ "$sudo" = "true" ]; then
-        editor="sudoedit"
+        editor="sudo -e" # the sudoedit wrapper doesn't exist on macos
     fi
 
     if [ -n "$posthook" ]; then
@@ -186,6 +206,7 @@ run_dmenu() {
     if [ -n "$cd" ]; then
         magic="cd $cd; $magic"
     fi
+    magic="cd $HOME/dotfiles; $magic"
     $terminal -e bash -o pipefail -c "$magic"
 }
 

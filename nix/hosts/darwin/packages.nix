@@ -3,5 +3,6 @@
   environment.systemPackages = with pkgs; [
     alacritty
     git-crypt
+    terminal-notifier # alternative to notify-send
   ];
 }
