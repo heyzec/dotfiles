@@ -12,6 +12,7 @@
 	ap = add --patch
 
 	b = branch
+	ba = branch --all
 
 	bib = bisect bad
 	big = bisect good
