@@ -130,6 +130,10 @@ automatically-unhide-macos-hidden-apps = true # Disable macOS "Hide application"
     ## Launch // Print screen via Flameshot // <⎇ > P ##
     alt-p = 'exec-and-forget osascript ~/dotfiles/scripts/flameshot.scpt'
 
+    alt-c = 'exec-and-forget /nix/store/kv6p64iaqjgxnnaypcdx7xnp73sxb5j9-clippers-0.1.0-3abd9ba/bin/clippers list | choose -x ::: | /nix/store/kv6p64iaqjgxnnaypcdx7xnp73sxb5j9-clippers-0.1.0-3abd9ba/bin/clippers pick'
+
+    alt-b = 'exec-and-forget /Users/SIPSS0377/Documents/Bruno/switcher.sh'
+
     # }}}
 
     alt-backtick = 'mode service'
