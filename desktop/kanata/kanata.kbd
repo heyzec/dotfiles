@@ -1,5 +1,7 @@
-;; See https://github.com/jtroo/kanata/blob/main/cfg_samples/kanata.kbd
-;; and https://github.com/jtroo/kanata/blob/main/cfg_samples/minimal.kbd
+;; Guide: https://github.com/jtroo/kanata/blob/main/docs/config.adoc
+;; Examples:
+;; - Minimal: https://github.com/jtroo/kanata/blob/main/cfg_samples/minimal.kbd
+;; - Full:    https://github.com/jtroo/kanata/blob/main/cfg_samples/kanata.kbd
 
 (defcfg
   process-unmapped-keys yes
@@ -57,6 +59,9 @@
 
   ;; The default Cmd-Opt-Shift-v to paste without formatting is bad
   (lmet lsft v) M-A-S-v 150 all-released ()
+
+  ;; Emoji picker
+  (lalt ;) C-M-spc 150 all-released ()
 )
 
 (defalias
