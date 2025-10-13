@@ -6,7 +6,8 @@
 # tell .zshrc (.zshenv in our case) to source the generated file
 # See https://nix-community.github.io/home-manager/index.xhtml#_why_are_the_session_variables_not_set
 {
-  home.sessionVariables = {
+  # There must not be runtime dependencies here, as the variables will be set in any otder
+  home.sessionVariables = rec {
     # Define user directories based on XDG Base Directory specification
     # See https://wiki.archlinux.org/title/XDG_Base_Directory
     XDG_CONFIG_HOME = "$HOME/.config"; # user-specific configs (~> /etc)
@@ -17,9 +18,9 @@
     # Fixes for offenders of not following XDG
     # See https://wiki.archlinux.org/title/XDG_Base_Directory#Partial
     # Python
-    PYTHON_HISTORY = "$XDG_STATE_HOME/python_history";
+    PYTHON_HISTORY = "${XDG_STATE_HOME}/python_history";
     # Go
-    GOPATH = "$XDG_DATA_HOME/go";
-    GOMODCACHE = "$XDG_CACHE_HOME/go/mod";
+    GOPATH = "${XDG_DATA_HOME}/go";
+    GOMODCACHE = "${XDG_CACHE_HOME}/go/mod";
   };
 }
