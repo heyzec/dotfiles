@@ -69,7 +69,7 @@
   fn (tap-hold 200 200 fn (layer-toggle fn))
   opt (tap-hold 200 200 alt lalt)
   cmd (tap-hold 200 200 met lmet)
-  print C-S-M-4
+  print A-p
 )
 
 
