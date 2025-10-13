@@ -6,6 +6,9 @@ in {
   # Enable configuring by home-manager, but program itself is made available by NixOS
   # Don't use wayland.windowManager.hyprland module, otherwise hyprland version may be incompatible with newer NixOS
   # (e.g. crash bug when home profile accidentally not updated)
+  wayland.windowManager.hyprland = {
+    enable = true;
+  };
   xdg.configFile."hypr/hyprland.conf" = {
     text = ''
       # This line is what wayland.windowManager.hyprland module would generate
@@ -16,4 +19,10 @@ in {
       exec-once=hyprctl setcursor ${config.home.pointerCursor.name} ${toString config.home.pointerCursor.size}
     '';
   };
+
+  #   trace: warning: The option `services.gpg-agent.pinentryPackage' defined in `/nix/store/wwazwjdk02kl7wmz9kvgw9km6hxh7h0s-source/nix/home/linux/hyprland.nix' has been renamed to `services.gpg-agent.pinentry.package'.
+  # services.ssh-agent.enable = true;
+  # services.gpg-agent.enable = true;
+  # services.gpg-agent.pinentryPackage = pkgs.pinentry-gnome3;
+  # services.gpg-agent.enableSshSupport = true;
 }

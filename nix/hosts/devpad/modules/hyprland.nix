@@ -1,7 +1,6 @@
-{ pkgs, ... }:
-{
-  # Refer to home-manager for entry-point to configurations
+{pkgs, ...}: {
   programs.hyprland = {
+    withUWSM = true; # Otherwise, we will not reach graphical-session.target
     enable = true;
     xwayland.enable = true;
   };
