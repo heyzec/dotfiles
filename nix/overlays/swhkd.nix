@@ -9,13 +9,13 @@
         (final: prev: {
           swhkd = pkgs.rustPlatform.buildRustPackage rec {
             pname = "swhkd";
-            version = "c5c4071459a6465a3743a8bb5bb990e27cdf315b";
+            version = "ae372e0aff2e87fbfed11d79bcd7fd9ef5f68a60";
 
             src = pkgs.fetchFromGitHub {
               owner = "waycrate";
               repo = "swhkd";
               rev = version;
-              hash = "sha256-Tv9+UBDBuRD3equ2XNmyt3Fm1+9DxkRzqV4M7PWnBLA=";
+              hash = "sha256-EhbRIlI+RsZjPjbYmgu4WzOHJ8udTtlxgJ2kr9iHyd0=";
             };
             patches = [./swhkd.patch];
 

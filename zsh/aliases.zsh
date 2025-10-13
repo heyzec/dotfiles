@@ -57,9 +57,6 @@ if ! command -v open &>/dev/null; then
 fi
 
 
-alias reload-swhkd='sudo pkill -HUP swhkd'
-
-
 # alias vim='nvim'
 alias pwdc='echo -n $(pwd) | wl-copy'
 
