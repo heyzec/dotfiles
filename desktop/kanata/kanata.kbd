@@ -1,0 +1,76 @@
+;; Guide: https://github.com/jtroo/kanata/blob/main/docs/config.adoc
+;; Examples:
+;; - Minimal: https://github.com/jtroo/kanata/blob/main/cfg_samples/minimal.kbd
+;; - Full:    https://github.com/jtroo/kanata/blob/main/cfg_samples/kanata.kbd
+
+(defcfg
+  process-unmapped-keys yes
+  concurrent-tap-hold yes
+)
+
+(deflocalkeys-macos
+  print 210 ;; By default, kanata on MacOS will not recognise KEY_PRINT
+)
+
+(defsrc
+  esc  f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  f12
+  caps
+  lsft rsft
+  fn lctl lalt lmet
+  print
+)
+
+(deflayer default
+  _    brdn brup mctl sls  dtn  dnd  ◀◀   ▶⏸   ▶▶   mute vold volu
+  @cap
+  _    _
+  @fn _ _ _
+  @print
+)
+
+;; F-row key issues on MacOS
+;; https://github.com/jtroo/kanata/issues/975
+(deflayer fn
+  _    f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  f12
+  _
+  _    _
+  _ _ _ _
+  _
+)
+
+(deflayermap hyper
+  ;; Arrows
+  h left
+  j down
+  k up
+  l right
+
+  ;; Try to not hardcode
+  w C-A-M-w
+  e C-A-M-e
+  d C-A-M-d
+  f C-A-M-f
+)
+
+(defchordsv2
+  ;; Works but caps lock LED light doesn't turn on
+  ;; https://github.com/jtroo/kanata/issues/1364
+  ;; (lsft rsft) caps 300 all-released ()
+
+  ;; The default Cmd-Opt-Shift-v to paste without formatting is bad
+  (lmet lsft v) M-A-S-v 150 all-released ()
+
+  ;; Emoji picker
+  (lalt ;) C-M-spc 150 all-released ()
+)
+
+(defalias
+  cap (tap-hold-press 200 200 esc (layer-toggle hyper))
+  fn (tap-hold 200 200 fn (layer-toggle fn))
+  opt (tap-hold 200 200 alt lalt)
+  cmd (tap-hold 200 200 met lmet)
+  print C-S-M-4
+)
+
+
+;; vim: filetype=kanata commentstring=;;\ %s:
