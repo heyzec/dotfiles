@@ -1,5 +1,6 @@
 { pkgs, ... }:
 {
+  # TODO: Remove, this is deprecated upstream since 2014
   systemd.user.services."polkit-agent" = {
     Unit = {
       Description = "polkit-gnome-authentication-agent-1";

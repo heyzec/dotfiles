@@ -1,7 +1,8 @@
-################################################################################
-##### Services
-################################################################################
-{pkgs, ...}: {
+{
+  pkgs,
+  lib,
+  ...
+}: {
   services = {
     dbus = {
       enable = true;
@@ -48,4 +49,12 @@
 
     thermald.enable = true;
   };
+
+  programs.waybar.enable = true;
+  systemd.user.services.waybar.environment = lib.mkForce {
+    PATH = "/run/current-system/sw/bin";
+  };
+
+  # Implicitly enables gcr-ssh-agent, a new replacement of GNOME Keyring's SSH component
+  services.gnome.gnome-keyring.enable = true;
 }

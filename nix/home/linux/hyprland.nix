@@ -6,6 +6,9 @@ in {
   # Enable configuring by home-manager, but program itself is made available by NixOS
   # Don't use wayland.windowManager.hyprland module, otherwise hyprland version may be incompatible with newer NixOS
   # (e.g. crash bug when home profile accidentally not updated)
+  wayland.windowManager.hyprland = {
+    enable = true;
+  };
   xdg.configFile."hypr/hyprland.conf" = {
     text = ''
       # This line is what wayland.windowManager.hyprland module would generate
