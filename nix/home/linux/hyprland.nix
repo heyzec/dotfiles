@@ -19,10 +19,4 @@ in {
       exec-once=hyprctl setcursor ${config.home.pointerCursor.name} ${toString config.home.pointerCursor.size}
     '';
   };
-
-  #   trace: warning: The option `services.gpg-agent.pinentryPackage' defined in `/nix/store/wwazwjdk02kl7wmz9kvgw9km6hxh7h0s-source/nix/home/linux/hyprland.nix' has been renamed to `services.gpg-agent.pinentry.package'.
-  # services.ssh-agent.enable = true;
-  # services.gpg-agent.enable = true;
-  # services.gpg-agent.pinentryPackage = pkgs.pinentry-gnome3;
-  # services.gpg-agent.enableSshSupport = true;
 }
