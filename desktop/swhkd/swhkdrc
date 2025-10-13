@@ -1,7 +1,6 @@
 ## Launch // Terminal // <> Enter ##
-# super + enter
-    # Disabled until https://github.com/waycrate/swhkd/issues/320 fixed
-    # foot --working-directory=$HOME/Desktop/
+super + enter
+    foot --working-directory=$HOME/Desktop/
 
 ## Launch // Command Launcher // <><Ctrl> Enter ##
 super + control + return
