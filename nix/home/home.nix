@@ -17,7 +17,7 @@
   home.activation."dotsman-install" = lib.hm.dag.entryAfter ["writeBoundary"] ''
     PATH="${pkgs.gawk}/bin:${pkgs.git}/bin:$PATH"
     # Using symlinks in when the dotfiles folder is mounted VM gives too many levels error
-    ${userSettings.dotfilesDir}/scripts/dotsman/dotsman.sh install all --no-dry-run
+    ${userSettings.dotfilesDir}/scripts/dotsman/dotsman.sh install all --yes
   '';
 
   # Enable shell for Darwin systems (for Linux systems is enabled via a NixOS module)

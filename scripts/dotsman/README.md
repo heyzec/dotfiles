@@ -30,15 +30,19 @@ It is written to have as little dependencies as possible - almost nothing!
     To install all configs, run `dotsman install all`.
 
 
-3. To use dmenu or a similar application to quickly select a config to edit, menu, run `dotsman rofi <dmenu-compatible program> [args...]`.
+3. To use dmenu or a similar application to quickly select a config to edit, menu, run `dotsman edit <dmenu-compatible program> [args...]`.
 It's recommended to bind this command to a key in your window manager or hotkey daemon for quick access.
 
     Example 1: [Hyprland](https://github.com/hyprwm/Hyprland) + [rofi](https://github.com/davatorium/rofi):
     ```text
-    bind = SUPER, b, exec, dotsman.sh dmenu rofi -dmenu
+    bind = SUPER, b, exec, dotsman.sh edit rofi -dmenu
     ```
     Example 2: [swhkd](https://github.com/waycrate/swhkd) + [walker](https://github.com/abenz1267/walker):
     ```text
     super + o
-        dotsman.sh dmenu walker --dmenu --keepsort --placeholder "Select config:"
+        dotsman.sh edit walker --dmenu --keepsort --placeholder "Select config:"
+    ```
+    Example 3: Shell alias with [fzf](https://github.com/junegunn/fzf):
+    ```sh
+    alias dots="dotsman.sh edit -here fzf"
     ```

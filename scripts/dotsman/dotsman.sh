@@ -1,5 +1,6 @@
 #!/bin/sh
 # dotsman.sh
+# Script to quickly install and edit dotfiles
 
 # Exit immediately if any command fails
 set -e
@@ -166,15 +167,22 @@ link_section() (
     fi
 )
 
-run_dmenu() {
+gen_dmenu_cmd() {
     # Parse section headers in config file
     all_sections="$(parse_sections "$items_file")"
 
     # Let user select which config using a dmenu-compatible program
     selected_config_name=$( (echo "$all_sections") | "$@" )
+    if [ -z "$selected_config_name" ]; then
+        exit
+    fi
 
     # Extract relevant section from config file
     key_value_pairs=$(extract_section "$selected_config_name" "$items_file")
+    if [ -z "$key_value_pairs" ]; then
+        notify "No valid entry selected!"
+        exit
+    fi
 
     # Extract values
     file=$(extract_value file "$key_value_pairs")
@@ -188,8 +196,9 @@ run_dmenu() {
         exit
     fi
 
-    if ! [ -e "$selected_config_file_expanded" ]; then
-        notify "Path to $selected_config_name ($selected_config_file_expanded) does not exist!"
+    if ! [ -e "${cd:+${cd}/}$selected_config_file_expanded" ]; then
+        notify "Path to $selected_config_name (${cd:+${cd}/}$selected_config_file_expanded) does not exist!"
+        exit
     fi
 
     if [ "$sudo" = "true" ]; then
@@ -197,7 +206,7 @@ run_dmenu() {
     fi
 
     if [ -n "$posthook" ]; then
-        cmd="$posthook"
+        cmd="echo Posthook: $posthook; $posthook"
     else
         cmd=':'
     fi
@@ -207,7 +216,17 @@ run_dmenu() {
         magic="cd $cd; $magic"
     fi
     magic="cd $HOME/dotfiles; $magic"
-    $terminal -e bash -o pipefail -c "$magic"
+    echo "$magic"
+}
+
+run_dmenu_spawn() {
+    dmenu_cmd=$(gen_dmenu_cmd "$@")
+    $terminal -e bash -o pipefail -c "$dmenu_cmd"
+}
+
+run_dmenu_here() {
+    dmenu_cmd=$(gen_dmenu_cmd "$@")
+    bash -o pipefail -c "$dmenu_cmd"
 }
 
 # run_install <program>
@@ -218,10 +237,10 @@ run_install() {
         program="$1"
         dry_run=true
     elif [ $# -eq 2 ]; then
-        if [ "$1" = '--no-dry-run' ]; then
+        if [ "$1" = '--yes' ]; then
             program="$2"
             dry_run=false
-        elif [ "$2" = '--no-dry-run' ]; then
+        elif [ "$2" = '--yes' ]; then
             program="$1"
             dry_run=false
         else
@@ -233,43 +252,51 @@ run_install() {
         exit 1
     fi
 
-    # Parse section headers in config file
-    all_sections="$(parse_sections "$items_file")"
+    while true; do # this loop runs at most twice
+        # Parse section headers in config file
+        all_sections="$(parse_sections "$items_file")"
 
-    if ! echo "$all_sections" | grep -q "^$program\$"; then
-        if [ "$program" != "all" ]; then
-            echo "$program is not a valid entry!"
-            echo "$items_file contains these programs:"
-            # shellcheck disable=SC2086
-            echo $all_sections
-            exit 1
-        fi
-    fi
-
-    if [ "$program" = "all" ]; then
-        for section in $all_sections; do
-            key_value_pairs=$(extract_section "$section" "$items_file")
-            call=$(extract_value call "$key_value_pairs")
-            if [ -n "$call" ]; then
-                echo "Skipping: $section"
-                continue
+        if ! echo "$all_sections" | grep -q "^$program\$"; then
+            if [ "$program" != "all" ]; then
+                echo "$program is not a valid entry!"
+                echo "$items_file contains these programs:"
+                # shellcheck disable=SC2086
+                echo $all_sections
+                exit 1
             fi
-            link_section "$section"
-        done;
-    else
-        link_section "$program"
-    fi
-    if [ "$dry_run" = true ]; then
-        echo "Run again with --no-dry-run"
-    fi
+        fi
+
+        if [ "$program" = "all" ]; then
+            for section in $all_sections; do
+                key_value_pairs=$(extract_section "$section" "$items_file")
+                call=$(extract_value call "$key_value_pairs")
+                if [ -n "$call" ]; then
+                    echo "Skipping: $section"
+                    continue
+                fi
+                link_section "$section"
+            done;
+        else
+            link_section "$program"
+        fi
+
+        if [ "$dry_run" = false ]; then
+            break
+        fi
+        read -p "Confirm? [Y/n]" answer
+        case "$answer" in
+            [Yy]* | "" ) dry_run=false ;;
+            * ) echo "Aborting."; break ;;
+        esac
+    done
 }
 
 ###############################################################################
 # Main
 ###############################################################################
 
-usage_install='install <program> [--no-dry-run]'
-usage_dmenu='dmenu <dmenu-compatible program> [args...]'
+usage_install='install <program> [--yes]'
+usage_dmenu='edit [-spawn | -here] <dmenu-compatible program> [args...]'
 
 show_usage() {
     echo 'usage:'
@@ -281,36 +308,51 @@ show_usage() {
 
 
 main() {
-    # Behave differently if called from a symlink named "install"
+    usage=$(show_usage "$usage_install" "$usage_dmenu")
+
+    # Behave differently if called from symlinks
     if [ "$(basename "$0")" = 'install' ]; then
-        usage=$(show_usage "$usage_install")
+        subcommand='install'
+    elif [ "$(basename "$0")" = 'edit' ]; then
+        subcommand='edit'
+    else
         if [ $# -eq 0 ]; then
             echo "$usage"
             exit 1
         fi
-        run_install "$@"
-        exit 0
-    fi
-
-    usage=$(show_usage "$usage_install" "$usage_dmenu")
-
-    if [ $# -eq 0 ]; then
-        echo "$usage"
-        exit 1
-    fi
-
-    if [ "$1" = 'dmenu' ]; then
-        if [ "$2" = '' ]; then
+        if [ "$1" = 'edit' ]; then
+            subcommand='edit'
+            shift 1
+        elif [ "$1" = 'install' ]; then
+            subcommand='install'
+            shift 1
+        else
             echo "$usage"
             exit 1
         fi
-        shift 1
-        run_dmenu "$@"
-        exit 0
     fi
 
-    if [ "$1" = 'install' ]; then
-        shift 1
+    if [ "$subcommand" = 'edit' ]; then
+        spawn=true
+        if [ "$1" = '-spawn' ]; then
+            shift 1
+        elif [ "$1" = '-here' ]; then
+            shift 1
+            spawn=false
+        fi
+
+        if [ "$1" = '' ]; then
+            echo "$usage"
+            exit 1
+        fi
+
+        if [ "$spawn" = "true" ]; then
+            run_dmenu_spawn "$@"
+        else
+            run_dmenu_here "$@"
+        fi
+        exit 0
+    elif [ "$subcommand" = 'install' ]; then
         run_install "$@"
         exit 0
     fi
