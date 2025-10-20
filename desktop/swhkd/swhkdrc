@@ -24,7 +24,7 @@ super + control + space
 
 ## Launch // Dotfiles Editor  // <> o ##
 super + o
-    ~/dotfiles/scripts/dotsman/dotsman.sh dmenu rofi -dmenu >/dev/null # not sure why fails without redirection
+    ~/dotfiles/scripts/dotsman/dotsman.sh edit -spawn rofi -dmenu >/dev/null # not sure why fails without redirection
 
 ## Launch // Clipboard History Viewer // <> c ##
 super + c

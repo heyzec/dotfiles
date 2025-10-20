@@ -75,6 +75,7 @@ if has lf; then
 	}
 fi
 
+alias dots="$HOME/dotfiles/edit -here fzf"
 
 
 ###############################################################################
