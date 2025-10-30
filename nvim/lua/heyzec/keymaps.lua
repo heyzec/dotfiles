@@ -77,7 +77,7 @@ end, write)
 -- Vim Pickers
 local find_buffers = action('󰈔 Buffers', '<Cmd>Telescope buffers<CR>')
 local find_oldfiles = action(' Oldfiles', '<Cmd>Telescope oldfiles<CR>', vscode 'workbench.action.openRecent')
-local find_commands = action('Command History', '<Cmd>Telescope commands<CR>')
+local find_commands = action('Command History', '<Cmd>Telescope command_history<CR>')
 local marks = action('Marks', '<Cmd>Telescope marks<CR>')
 local jumplist = action('Jumplist', '<Cmd>Telescope jumplist<CR>')
 local keymaps = action('Keymaps', '<Cmd>Telescope keymaps<CR>')
