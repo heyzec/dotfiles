@@ -2,17 +2,16 @@
 // ## Theming
 // ###############################################################################
 settings.theme = `
+:root {
+  --text: #262626;
+}
 .sk_theme {
     font-family: Input Sans Condensed, Charcoal, sans-serif;
-    font-size: 12pt;
-    background: #24272e;
-    color: #abb2bf;
+    background: #f6f6f6;
+    color: var(--text);
 }
 .sk_theme tbody {
-    color: #fff;
-}
-.sk_theme input {
-    color: #d0d0d0;
+    /*color: #fff;*/
 }
 .sk_theme .url {
     color: #61afef;
@@ -25,24 +24,93 @@ settings.theme = `
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+
     border-radius: 12px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 4px 100px rgba(0, 0, 0, 0.5);
+
+    font-size: 10pt;
+    font-weight: 550;
+    letter-spacing: 0.01em;
 }
+
+.sk_theme #sk_omnibarSearchArea .prompt .separator {
+    display: block;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    padding: 0;
+    border: 0;
+}
+.sk_theme #sk_omnibarSearchArea .prompt .separator::after {
+    visibility: visible;
+    content: "🔍";
+}
+
+.sk_theme #sk_omnibarSearchArea input {
+    /* color: #d0d0d0;*/
+}
+
+.sk_theme #sk_omnibarSearchResult {
+    margin: 10px;
+}
+
 .sk_theme .omnibar_highlight {
-    color: #528bff;
+    color: inherit;
 }
 .sk_theme .omnibar_timestamp {
-    color: #e5c07b;
+    display: none;
+}
+.sk_theme .omnibar_folder {
+    display: none;
 }
 .sk_theme .omnibar_visitcount {
     color: #98c379;
 }
+
+.sk_theme #sk_omnibarSearchResult ul li {
+    padding: 5px;
+    border-radius: 8px;
+}
+
 .sk_theme #sk_omnibarSearchResult ul li:nth-child(odd) {
-    background: #303030;
+    background: inherit;
+}
+
+.sk_theme #sk_omnibarSearchResult ul li.focused div.url{
+    color: #bbbcff; /* arc probably used opacity */
 }
 .sk_theme #sk_omnibarSearchResult ul li.focused {
-    background: #3e4452;
+    background: #7c7dff !important;
+    color: white;
 }
+.sk_theme #sk_omnibarSearchResult ul li:hover {
+    background: #ececec;
+}
+
+.sk_theme #sk_omnibarSearchResult li .icon {
+    padding: 4px;
+    border-radius: 3px;
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+}
+
+.sk_theme #sk_omnibarSearchResult li.focused .icon {
+    background: #ffffff;
+}
+
+.sk_theme #sk_omnibarSearchResult li div.url {
+    color: #959595;
+    font-weight: 300;
+}
+
+.sk_theme #sk_omnibarSearchResult .text-container {
+    display: flex;
+    flex-shrink: 0;
+    gap: 10px;
+    margin: 10px 0px;
+}
+
 #sk_status, #sk_find {
     font-size: 20pt;
 }`;
