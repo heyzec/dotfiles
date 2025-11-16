@@ -145,7 +145,10 @@ local git_permalink = action('Get permalink', cmd, cmd)
 -- If intention is to close, then just press it again
 local explorer = action(
   '🗃️ Toggle Explorer',
-  '<Cmd>Neotree reveal<CR>',
+  function()
+    local fyler = require 'fyler'
+    fyler.toggle { kind = 'split_left_most' }
+  end,
   -- Part [1]: If buffer is (1) closed or (2) open but unfocused, open and focus to the explorer
   -- Part [2]: Otherwise, close the panel
   -- Not possible to map here, because keys are not sent to neovim when buffer unfocused.
