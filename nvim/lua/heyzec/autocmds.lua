@@ -109,3 +109,17 @@ vim.api.nvim_create_autocmd('LspAttach', {
     end
   end,
 })
+
+vim.api.nvim_create_autocmd({ 'WinEnter', 'BufEnter' }, {
+  group = vim.api.nvim_create_augroup('active_cursorline', {}),
+  callback = function(event)
+    vim.opt_local.cursorline = true
+  end,
+})
+
+vim.api.nvim_create_autocmd({ 'WinLeave', 'BufLeave' }, {
+  group = 'active_cursorline',
+  callback = function(event)
+    vim.opt_local.cursorline = false
+  end,
+})
