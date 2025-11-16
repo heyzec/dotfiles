@@ -44,15 +44,24 @@ local function write()
 end
 
 local function format()
-  return require('conform').format { async = true, lsp_format = 'fallback' }
+  local conform = require 'conform'
+  local formatters, lsp_used = conform.list_formatters_to_run()
+  local output = {}
+  for i, e in ipairs(formatters) do
+    if e.available then
+      output[i] = e.name
+    end
+  end
+  local ok = conform.format { async = true, lsp_format = 'fallback' }
+  return ok, table.concat(output, ', ')
 end
 
 local save_or_format = action('Save/Format', function()
   local message = write()
   if message then
-    local ok = format()
+    local ok, formatters = format()
     if ok then
-      message = message .. ' (formatted)'
+      message = message .. ' (formatted with ' .. formatters .. ')'
     end
     vim.notify(message, vim.log.levels.INFO)
   end
