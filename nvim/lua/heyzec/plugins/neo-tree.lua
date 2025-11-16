@@ -1,6 +1,7 @@
 -- File tree explorer
 return {
   'nvim-neo-tree/neo-tree.nvim',
+  enabled = false,
   dependencies = {
     -- hard dependency: lua utilities library (e.g. scanning filesystem)
     'nvim-lua/plenary.nvim',
