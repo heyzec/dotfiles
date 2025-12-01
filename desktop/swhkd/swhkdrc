@@ -89,7 +89,7 @@ mode applications
     f
         @escape && thunar && echo "" > /tmp/mode && pkill -35 waybar
     m
-        @escape && telegram-desktop && echo "" > /tmp/mode && pkill -35 waybar
+        @escape && Telegram && echo "" > /tmp/mode && pkill -35 waybar
     j
         @escape && bash -c '(cd ~/.local/share/applications/; gtk-launch $(basename $(find ~/.local/share/applications/ -iname "*joplin*")))' && echo "" > /tmp/mode && pkill -35 waybar
     escape
