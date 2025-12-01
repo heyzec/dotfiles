@@ -1,0 +1,2 @@
+serve:
+    nix shell nixpkgs#esbuild --command esbuild src/surfingkeys.js --bundle --outfile=dist/surfingkeys.js --serve --watch

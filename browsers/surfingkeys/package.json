@@ -1,0 +1,7 @@
+{
+  "name": "surfingkeys",
+  "version": "1.0.0",
+  "dependencies": {
+    "json5": "^2.2.3"
+  }
+}
