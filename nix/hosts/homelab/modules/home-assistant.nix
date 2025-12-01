@@ -55,7 +55,6 @@
   services.zigbee2mqtt = {
     enable = true;
     settings = {
-      homeassistant = config.services.home-assistant.enable;
       frontend = true;
       serial = {
         adapter = "ember";

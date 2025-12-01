@@ -3,7 +3,7 @@
 {
   home.packages = with pkgs; [
     noto-fonts         # Google's fonts
-    noto-fonts-emoji   # Google's open-source Emoji 14.0
+    noto-fonts-color-emoji   # Google's open-source Emoji 14.0
 
     jetbrains-mono     # JetBrain's fonts for IDEs
 

@@ -1,4 +1,8 @@
-{pkgs, ...}: {
+{
+  pkgs,
+  userSettings,
+  ...
+}: {
   # Refer to https://wiki.archlinux.org/title/List_of_applications
   # A: Documents
   # B: Internet
@@ -21,7 +25,7 @@
       ##### Used by dotfiles
       ################################################################################
       foot # (F.1.2) terminal emulator
-      rofi-wayland # (G.5.6) application launcher
+      rofi # (G.5.6) application launcher
 
       ##### To be daemonized with hyprland (via exec-once) #####
       # Clipboard
@@ -73,9 +77,10 @@
       # If application is a command-line utility, consider adding to modules/shell.nix
 
       pdfgrep # (A.6.1/4) grep text within PDFs
-      rclone # (B.4.4.1) manage files on cloud storage
-      btop # (F.6.1.1) TUI alternative to top
       wireguard-tools # (B.1.2) tools for configuring wireguard, a VPN protocol (e.g. wg, wg-quick)
+      rclone # (B.4.4.1) manage files on cloud storage
+      file-roller # (F.2.4.2) GUI archive manager
+      btop # (F.6.1.1) TUI alternative to top
       btdu # disk usage profiler for btrfs
       git-crypt # encrypt files in a git repository
       gocryptfs # file-based encryption as a mountable FUSE filesystem

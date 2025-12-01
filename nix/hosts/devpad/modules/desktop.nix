@@ -37,8 +37,5 @@
   # Soft dependency for thunar (e.g. trash, removable media, remote FS)
   services.gvfs.enable = true;
 
-  # Has dbus services (added to services.dbus.packages)
-  programs.file-roller.enable = true;
-
   # Transmission has a module but it's for daemon
 }
