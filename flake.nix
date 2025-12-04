@@ -9,7 +9,7 @@
     # private.url = "git+file:///home/heyzec/dotfiles/private"; # for local testing
 
     home-manager = {
-      url = "github:heyzec/home-manager";
+      url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-darwin = {
