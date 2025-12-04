@@ -111,4 +111,8 @@ in rec {
         ]
         ++ modules;
     };
+
+  # Alternative to flake-utils.lib.eachSystem
+  forSystems = systems: function:
+    inputs.nixpkgs.lib.genAttrs systems (system: function inputs.nixpkgs.legacyPackages.${system});
 }

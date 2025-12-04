@@ -22,11 +22,7 @@
 
   outputs = {self, ...} @ inputs: let
     utils = (import nix/utils.nix) {inherit self inputs;};
-    inherit (utils) mkNixosSystem mkNixosSystemWithHm mkHmConfig mkDarwinSystem;
-
-    # Only needed for devshell
-    system = "x86_64-linux";
-    pkgs = inputs.nixpkgs.legacyPackages."${system}";
+    inherit (utils) mkNixosSystem mkNixosSystemWithHm mkHmConfig mkDarwinSystem forSystems;
   in {
     nixosConfigurations = {
       # The standard configuration (home manager standalone)
@@ -49,10 +45,11 @@
       "darwin" = mkDarwinSystem "darwin" {modules = [./nix/hosts/darwin];};
     };
 
-    devShells.${system}.default = pkgs.mkShell {
-      packages = with pkgs; [
-        ragenix
-      ];
-    };
+    devShells = let
+      systems = ["x86_64-linux" "aarch64-darwin"];
+    in
+      forSystems systems (pkgs: {
+        nix = pkgs.callPackage nix/shell.nix {};
+      });
   };
 }
