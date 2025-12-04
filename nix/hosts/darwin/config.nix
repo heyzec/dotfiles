@@ -18,6 +18,10 @@ in {
   programs.zsh.enable = true;
   users.users."${username}".shell = pkgs.zsh;
 
+  environment.variables = {
+    NH_DARWIN_FLAKE = userSettings.flakeDir;
+  };
+
   system.activationScripts.extraActivation.text =
     # bash
     ''
