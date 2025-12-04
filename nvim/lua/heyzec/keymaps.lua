@@ -52,7 +52,10 @@ local function format()
       output[i] = e.name
     end
   end
-  local ok = conform.format { async = true, lsp_format = 'fallback' }
+  if #output == 0 and lsp_used then
+    output[1] = 'LSP'
+  end
+  local ok = conform.format { async = true }
   return ok, table.concat(output, ', ')
 end
 
@@ -61,6 +64,7 @@ local save_or_format = action('Save/Format', function()
   if message then
     local ok, formatters = format()
     if ok then
+      -- fix inaccuracy: we display formatted with XXX before the async formatting actually completes
       message = message .. ' (formatted with ' .. formatters .. ')'
     end
     vim.notify(message, vim.log.levels.INFO)
