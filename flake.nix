@@ -51,6 +51,7 @@
     in
       forSystems systems (pkgs: {
         nix = pkgs.callPackage nix/shell.nix {};
+        surfingkeys = pkgs.callPackage browsers/surfingkeys/shell.nix {};
       });
   };
 }
