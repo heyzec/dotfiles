@@ -21,6 +21,10 @@ in {
   # Use Touch ID for sudo in terminals
   security.pam.services.sudo_local.touchIdAuth = true;
 
+  environment.variables = {
+    NH_DARWIN_FLAKE = userSettings.flakeDir;
+  };
+
   system.activationScripts.extraActivation.text =
     # bash
     ''
