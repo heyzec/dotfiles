@@ -9,6 +9,7 @@ return {
       router = {
         browse = {
           -- Add custom git instances here
+          ['git%.garena%.com'] = require('gitlinker.routers').github_browse,
         },
       },
     }
