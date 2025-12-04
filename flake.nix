@@ -40,7 +40,7 @@
 
     homeConfigurations = {
       "heyzec" = mkHmConfig "heyzec" {modules = [./nix/home];};
-      "darwin" = mkHmConfig "darwin" {modules = [./nix/home];};
+      "${(import nix/settings.crypt.nix).darwin.username}" = mkHmConfig "darwin" {modules = [./nix/home];};
     };
 
     darwinConfigurations = {

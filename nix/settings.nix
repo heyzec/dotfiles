@@ -27,6 +27,7 @@
       userSettings = rec {
         username = (import ./settings.crypt.nix).darwin.username;
         homeDir = "/Users/${username}";
+        flakeDir = "${homeDir}/dotfiles"; # path to flake repo, used by nh
       };
     };
   };
