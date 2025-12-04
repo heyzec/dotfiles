@@ -1,9 +1,5 @@
-# Neovim
-nvim/viminfo
-nvim/.netrwhist
-nvim/plug-config/
-nvim/plugged/
-nvim/autoload/
+# Nix direnv shells
+.direnv/
 
 # Zsh
 zsh/.zcompdump
