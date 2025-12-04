@@ -1,1 +1,2 @@
 *.crypt.nix filter=git-crypt diff=git-crypt
+shopee/** filter=git-crypt diff=git-crypt
