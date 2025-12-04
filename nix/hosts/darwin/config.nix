@@ -18,8 +18,10 @@ in {
   programs.zsh.enable = true;
   users.users."${username}".shell = pkgs.zsh;
 
-  # Use Touch ID for sudo in terminals
-  security.pam.services.sudo_local.touchIdAuth = true;
+  security.pam.services.sudo_local = {
+    touchIdAuth = true; # Use Touch ID for sudo in terminals
+    reattach = true; # Fixes Touch ID not working inside tmux
+  };
 
   environment.variables = {
     NH_DARWIN_FLAKE = userSettings.flakeDir;
