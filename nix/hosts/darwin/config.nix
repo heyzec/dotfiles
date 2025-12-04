@@ -18,9 +18,6 @@ in {
   programs.zsh.enable = true;
   users.users."${username}".shell = pkgs.zsh;
 
-  # Use Touch ID for sudo in terminals
-  security.pam.services.sudo_local.touchIdAuth = true;
-
   system.activationScripts.extraActivation.text =
     # bash
     ''
