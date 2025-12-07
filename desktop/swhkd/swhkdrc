@@ -28,8 +28,7 @@ super + o
 
 ## Launch // Clipboard History Viewer // <> c ##
 super + c
-    cliphist list | rofi -dmenu | cliphist decode | wl-copy
-# future: cliphist list | sed 's/\t/ /' | walker --dmenu | sed 's/ /\t/' | cliphist decode | wl-copy
+    clippers list | sed 's/:::/\x0/g' | tr '\n' ' '  | rofi -sep '\0' -dmenu | clippers pick
 
 ## Launch // Emoji Picker // <> ; ##
 super + ;

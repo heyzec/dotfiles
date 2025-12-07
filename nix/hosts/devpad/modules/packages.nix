@@ -88,6 +88,7 @@
       custom.gocryptfs-scripts
       custom.wasg
       inputs.wayland-displays.packages.${pkgs.system}.default
+      custom.clippers
 
       ##### Containerisation and Virtualisation #####
       virt-manager # frontend for qemu (virtualisation.libvirtd.enable)
