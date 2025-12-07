@@ -1,11 +1,100 @@
-commit 1fbb93a21b20510d694beb9640f6c66651d4568d
-Author: heyzec <61238538+heyzec@users.noreply.github.com>
-Date:   Sun Oct 12 22:23:49 2025 +0800
-
-    Hacky patches for 3 issues
-
+diff --git a/flake.nix b/flake.nix
+index eb5bfcd..d8156da 100644
+--- a/flake.nix
++++ b/flake.nix
+@@ -13,6 +13,90 @@
+ 
+       targetSystems = [ "aarch64-linux" "x86_64-linux" ];
+     in {
++      packages = nixpkgs.lib.genAttrs targetSystems (system:
++        let
++          pkgs = pkgsFor system;
++          mkSwhkd = { withRfkill ? true }:  pkgs.rustPlatform.buildRustPackage {
++            pname = "swhkd";
++            version =
++              let
++                cargoToml = builtins.fromTOML (builtins.readFile ./swhkd/Cargo.toml);
++              in cargoToml.package.version;
++
++            src = ./.;
++
++            cargoLock = {
++              lockFile = ./Cargo.lock;
++              outputHashes = {
++                "sweet-0.4.0" = "sha256-Ky2afQ5HyO1a6YT8Jjl6az1jczq+MBKeuRmFwmcvg6U=";
++              };
++            };
++
++            nativeBuildInputs = with pkgs; [
++              pkg-config
++              scdoc
++            ];
++
++            buildInputs = with pkgs; [
++              udev
++            ];
++
++            # Build specific workspace members
++            buildAndTestSubdir = null;  # We're building from workspace root
++
++            # Override the build phase to build specific binaries
++            buildPhase = ''
++              runHook preBuild
++              cargo build --release --bin swhkd  --features no_rfkill
++              cargo build --release --bin swhkd ${pkgs.lib.optionalString (!withRfkill) "--features no_rfkill"}
++              cargo build --release --bin swhks
++              runHook postBuild
++            '';
++
++            # Don't run tests during build
++            # doCheck = false;
++
++            postBuild = ''
++              # Generate man pages from .scd files
++              for f in docs/*.scd; do
++                if [ -f "$f" ]; then
++                  target="''${f%.scd}"
++                  scdoc < "$f" | gzip > "$target.gz"
++                fi
++              done
++            '';
++
++            installPhase = ''
++              runHook preInstall
++
++              # Install binaries
++              install -Dm755 target/release/swhkd $out/bin/swhkd
++              install -Dm755 target/release/swhks $out/bin/swhks
++
++              # Install man pages
++              find ./docs -type f -name "*.1.gz" \
++                -exec install -Dm644 {} -t $out/share/man/man1 \;
++              find ./docs -type f -name "*.5.gz" \
++                -exec install -Dm644 {} -t $out/share/man/man5 \;
++
++              runHook postInstall
++            '';
++
++            meta = with pkgs.lib; {
++              description = "Simple Wayland HotKey Daemon";
++              homepage = "https://github.com/waycrate/swhkd";
++              license = licenses.bsd2;
++              platforms = platforms.linux;
++              mainProgram = "swhkd";
++            };
++          };
++        in {
++          swhkd = mkSwhkd { withRfkill = true; };
++          swhkd-no-rfkill = mkSwhkd { withRfkill = false; };
++          default = self.packages.${system}.swhkd;
++
++        });
++
+       devShells = nixpkgs.lib.genAttrs targetSystems (system:
+         let pkgs = pkgsFor system;
+         in {
 diff --git a/swhkd/src/daemon.rs b/swhkd/src/daemon.rs
-index 9b3d794..ab6b87f 100644
+index 9b3d794..93a5116 100644
 --- a/swhkd/src/daemon.rs
 +++ b/swhkd/src/daemon.rs
 @@ -4,7 +4,7 @@ use config::Hotkey;
@@ -13,18 +102,22 @@ index 9b3d794..ab6b87f 100644
  use nix::{
      sys::stat::{umask, Mode},
 -    unistd::{setgid, setuid, Gid, Uid},
-+    unistd::{setgid, setuid, Gid, Uid, initgroups},
++    unistd::{setgid, setuid, Gid, Uid, User},
  };
  use signal_hook::consts::signal::*;
  use signal_hook_tokio::Signals;
-@@ -12,6 +12,7 @@ use std::{
+@@ -12,9 +12,10 @@ use std::{
      collections::{HashMap, HashSet},
      env,
      error::Error,
 +    ffi::CString,
      fs::{self, File, OpenOptions, Permissions},
      io::{Read, Write},
-     os::unix::{fs::PermissionsExt, net::UnixStream},
+-    os::unix::{fs::PermissionsExt, net::UnixStream},
++    os::unix::{fs::PermissionsExt, net::UnixStream, process::CommandExt},
+     path::{Path, PathBuf},
+     process::{exit, id, Command, Stdio},
+     sync::{Arc, Mutex},
 @@ -60,7 +61,9 @@ struct Args {
      debug: bool,
  
@@ -36,19 +129,34 @@ index 9b3d794..ab6b87f 100644
      device: Vec<String>,
  
      /// Set a custom log file. (Defaults to ${XDG_DATA_HOME:-$HOME/.local/share}/swhks-current_unix_time.log)
-@@ -195,7 +198,10 @@ async fn main() -> Result<(), Box<dyn Error>> {
+@@ -194,16 +197,20 @@ async fn main() -> Result<(), Box<dyn Error>> {
+             let pairs = pairs.clone();
              let log = log.clone();
  
-             // Set the user and group id to the invoking user for the thread
+-            // Set the user and group id to the invoking user for the thread
 -            setgid(Gid::from_raw(invoking_uid))
-+            // PATCHED: Hardcode GID
-+            // See https://github.com/waycrate/swhkd/issues/320
-+            let _ = initgroups(&CString::new("heyzec").unwrap(), Gid::from_raw(100));
-+            setgid(Gid::from_raw(100))
-                 .expect(&format!("Failed to set group-id to {}", invoking_uid));
-             setuid(Uid::from_raw(invoking_uid))
-                 .expect(&format!("Failed to set user-id to {}", invoking_uid));
-@@ -650,14 +656,17 @@ pub async fn send_command(
+-                .expect(&format!("Failed to set group-id to {}", invoking_uid));
+-            setuid(Uid::from_raw(invoking_uid))
+-                .expect(&format!("Failed to set user-id to {}", invoking_uid));
++            // Command execution with user privileges
++            let user_uid = Uid::from_raw(invoking_uid);
++            let user = User::from_uid(user_uid)
++                .expect("Failed to get user info")
++                .expect(&format!("User with UID {} not found", invoking_uid));
++
++            let username = CString::new(user.name.as_str())
++                .expect("Failed to convert username to CString");
+ 
+-            // Command execution
+             let mut cmd = Command::new("sh");
+             cmd.arg("-c")
+                 .arg(command)
++                .uid(invoking_uid)
++                .gid(user.gid.as_raw())
+                 .stdin(Stdio::null())
+                 .stdout(match File::open(&log) {
+                     Ok(file) => file,
+@@ -650,14 +657,17 @@ pub async fn send_command(
  
  /// Get the UID of the user that is not a system user
  fn get_uid() -> Result<u32, Box<dyn Error>> {
@@ -74,3 +182,24 @@ index 9b3d794..ab6b87f 100644
  }
  
  fn get_file_paths(runtime_dir: &str) -> (String, String) {
+diff --git a/swhkd/src/perms.rs b/swhkd/src/perms.rs
+index 3b17c60..bcde3f2 100644
+--- a/swhkd/src/perms.rs
++++ b/swhkd/src/perms.rs
+@@ -1,5 +1,5 @@
+ use nix::unistd::{Gid, Uid, User};
+-use std::process::exit;
++use std::{ffi::CString, process::exit};
+ 
+ pub fn _drop_privileges(user_uid: u32) {
+     let user_uid = Uid::from_raw(user_uid);
+@@ -20,7 +20,8 @@ pub fn raise_privileges() {
+ 
+ fn set_initgroups(user: &nix::unistd::User, gid: u32) {
+     let gid = Gid::from_raw(gid);
+-    match nix::unistd::initgroups(&user.gecos, gid) {
++    let username = CString::new(user.name.as_str()).expect("Failed to convert username to CString");
++    match nix::unistd::initgroups(&username, gid) {
+         Ok(_) => log::debug!("Setting initgroups..."),
+         Err(e) => {
+             log::error!("Failed to set init groups: {:#?}", e);
