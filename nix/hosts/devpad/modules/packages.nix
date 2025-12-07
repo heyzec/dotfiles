@@ -86,8 +86,8 @@
       gocryptfs # file-based encryption as a mountable FUSE filesystem
       overskride # GUI bluetooth manager
       wl-color-picker # simple color picker with GUI
-      (callPackage ../../../packages/gocryptfs-scripts.nix {})
-      (python3Packages.callPackage ../../../packages/wasg.nix {})
+      custom.gocryptfs-scripts
+      custom.wasg
       wayland-displays
 
       ##### Containerisation and Virtualisation #####
