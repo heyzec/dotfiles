@@ -12,16 +12,19 @@
         default = false;
         description = "Enable zsh with useful tools for a CLI workflow";
       };
+      packages = lib.mkOption {
+        type = lib.types.listOf lib.types.package;
+      };
     };
   };
 
   config = let
     cfg = config.heyzec.shell;
 
-    ifLinux = pkg:
-      if pkgs.stdenv.isLinux
-      then pkg
-      else null;
+    # ifLinux = pkg:
+    #   if pkgs.stdenv.isLinux
+    #   then pkg
+    #   else null;
 
     # Refer to https://wiki.archlinux.org/title/List_of_applications
     # A: Documents
@@ -52,7 +55,7 @@
         wget # (B.4.1.1) download files
         nmap # (E.1) port scanner
         dig # (Domain_name_resolution#Lookup_utilities) check DNS entries
-        (ifLinux traceroute) # (Network_tools#Traceroute) track route taken by packets
+        # (ifLinux traceroute) # (Network_tools#Traceroute) track route taken by packets
 
         ##### Shell utilities #####
         tmux #         # (F.1.4) terminal multiplexer
@@ -60,8 +63,8 @@
         zip #          # (F.2.4.1) archiving (Info-Zip)
         unzip #        # (F.2.4.1) more archiving (Info-Zip)
         xxd #          # (F.3.10) hex dump
-        (ifLinux ctpv) # file previewer for lf, with image support
-        (ifLinux psmisc) # utilities that use /proc, e.g. pstree (note1)
+        # (ifLinux ctpv) # file previewer for lf, with image support
+        # (ifLinux psmisc) # utilities that use /proc, e.g. pstree (note1)
 
         ##### Development #####
         git #   # (F.3.2) the information manager from hell
@@ -85,8 +88,10 @@
     hmConfig = lib.mkIf cfg.enable {
       home.packages = packages;
     };
-  in
-    if !systemSettings.isHome
-    then (lib.recursiveUpdate nixosConfig commonConfig)
-    else (lib.recursiveUpdate hmConfig commonConfig);
+  in {
+    heyzec.shell.packages = packages;
+  };
+  # if !systemSettings.isHome
+  # then (lib.recursiveUpdate nixosConfig commonConfig)
+  # else (lib.recursiveUpdate hmConfig commonConfig);
 }

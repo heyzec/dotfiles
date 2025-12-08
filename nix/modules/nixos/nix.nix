@@ -48,6 +48,7 @@
     then "${inputs.nixpkgs.lib.substring 0 8 self.sourceInfo.lastModifiedDate}.${self.sourceInfo.shortRev}"
     else inputs.nixpkgs.lib.warn "Repo is dirty, revision will not be available in system label" "dirty";
 
+  # TODO: Move this out!
   # NixOS System Version (Do not touch!!)
   system.stateVersion = "23.05";
 }

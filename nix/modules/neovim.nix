@@ -45,6 +45,10 @@ in {
         default = true;
         description = "When enabled, configures neovim to be the default editor using the EDITOR environment variable.";
       };
+      package = lib.mkOption {
+        type = lib.types.package;
+        description = "The Neovim package to install. Should usually not be changed.";
+      };
     };
   };
   config = let
@@ -79,10 +83,12 @@ in {
         neovim-custom-wrapped
       ];
     };
-  in
-    lib.mkIf cfg.enable (
-      if !systemSettings.isHome
-      then nixosConfig
-      else hmConfig
-    );
+  in {
+    heyzec.neovim.package = neovim-custom-wrapped;
+  };
+  # lib.mkIf cfg.enable (
+  #   if !systemSettings.isHome
+  #   then nixosConfig
+  #   else hmConfig
+  # );
 }

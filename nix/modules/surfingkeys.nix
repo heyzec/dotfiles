@@ -1,5 +1,6 @@
 {
   lib,
+  config,
   pkgs,
   ...
 }: {
@@ -20,22 +21,30 @@
   config = let
     root = "/home/heyzec/dotfiles/browsers/surfingkeys";
     command = "${pkgs.esbuild}/bin/esbuild ${root}/surfingkeys.ts --bundle --outfile=${root}/dist/surfingkeys.js --serve --watch=forever";
+    isNixos = true;
   in
-    if pkgs.stdenv.isLinux
-    then {
-      systemd.user.services.surfingkeys = {
-        Service = {
-          ExecStart = "${pkgs.wl-clip-persist}/bin/wl-clip-persist --clipboard regular";
-        };
-      };
-    }
-    else {
-      launchd.daemons.surfingkeys = {
-        inherit command;
-        serviceConfig = {
-          KeepAlive = true;
-          RunAtLoad = true;
-        };
-      };
-    };
+    # if isNixos
+    # then {
+    #   systemd.user.services.surfingkeys = {
+    #     Service = {
+    #     };
+    #   };
+    # }
+    # else {
+    # };
+    # lib.mkMerge [
+    #   (lib.mkIf isNixos {
+    #     environment.systemPackages = [pkgs.htop];
+    #   })
+    #   (lib.mkIf (!isNixos) {
+    #     home = {
+    #       packages = [pkgs.htop];
+    #     };
+    #   })
+    # ];
+    lib.mkMerge [
+      (lib.mkIf false {
+        home = {};
+      })
+    ];
 }
