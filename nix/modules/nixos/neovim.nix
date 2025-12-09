@@ -6,7 +6,7 @@
   cfg = config.heyzec.neovim;
 in {
   imports = [
-    ../neovim.nix
+    ../shared/neovim.nix
   ];
   environment.systemPackages = [
     cfg.package

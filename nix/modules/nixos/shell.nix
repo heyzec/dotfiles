@@ -2,7 +2,7 @@
   cfg = config.heyzec.shell;
 in {
   imports = [
-    ../shell.nix
+    ../shared/shell.nix
   ];
 
   environment.systemPackages = cfg.packages;
