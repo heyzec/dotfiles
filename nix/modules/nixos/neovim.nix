@@ -8,6 +8,7 @@ in {
   imports = [
     ../shared/neovim.nix
   ];
+
   environment.systemPackages = [
     cfg.package
   ];
