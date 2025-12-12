@@ -34,4 +34,7 @@
     man-pages #     # Linux man pages
     man-pages-posix # POSIX man pages
   ];
+
+  # NixOS System Version (Do not touch!!)
+  system.stateVersion = "23.05";
 }

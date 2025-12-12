@@ -5,12 +5,14 @@
 #
 # It serves as a wrapper over hypridle, wlogout and systemd-sleep.
 # hypridle must still be daemonised manually with config at /etc/hypr/hypridle.conf (this is non-standard)
-
-{ lib, config, pkgs, ... }:
-let
-  cfg = config.heyzec.power;
-in
 {
+  lib,
+  config,
+  pkgs,
+  ...
+}: let
+  cfg = config.heyzec.power;
+in {
   options = {
     heyzec.power = {
       enable = lib.mkOption {
@@ -61,62 +63,76 @@ in
     # By default, lid switch is ignored when docked (but not on AC)
     services.logind.settings.Login.HandleLidSwitch = "suspend-then-hibernate";
 
-    environment.etc = if ! cfg.enable then { } else {
-      "hypr/hypridle.conf" = {
-        text = ''
-          general {
-            after_sleep_cmd = ${cfg.commandLockScreen};
-          }
-        '' +
-        (if cfg.blankAfter == null then "" else
-        (if cfg.commandBlankScreen == null || cfg.commandUnblankScreen == null then
-          abort "commandBlankScreen and commandUnblankScreen must be specified if blankAfter is specified" else
-          ''
-            listener {
-              timeout = ${toString cfg.blankAfter}
-              on-timeout = ${cfg.commandBlankScreen}
-              on-resume = ${cfg.commandUnblankScreen}
-            }
-          '')
-        ) +
-
-        (if cfg.sleepAfter == null then "" else ''
-          listener {
-            timeout = ${toString cfg.sleepAfter}
-            on-timeout = systemctl suspend-then-hibernate
-          }
-        '');
+    environment.etc =
+      if ! cfg.enable
+      then {}
+      else {
+        # Refer to https://github.com/hyprwm/hypridle/issues/176 for file location
+        "xdg/hypr/hypridle.conf" = {
+          text =
+            ''
+              general {
+                after_sleep_cmd = ${cfg.commandLockScreen};
+              }
+            ''
+            + (
+              if cfg.blankAfter == null
+              then ""
+              else
+                (
+                  if cfg.commandBlankScreen == null || cfg.commandUnblankScreen == null
+                  then abort "commandBlankScreen and commandUnblankScreen must be specified if blankAfter is specified"
+                  else ''
+                    listener {
+                      timeout = ${toString cfg.blankAfter}
+                      on-timeout = ${cfg.commandBlankScreen}
+                      on-resume = ${cfg.commandUnblankScreen}
+                    }
+                  ''
+                )
+            )
+            + (
+              if cfg.sleepAfter == null
+              then ""
+              else ''
+                listener {
+                  timeout = ${toString cfg.sleepAfter}
+                  on-timeout = systemctl suspend-then-hibernate
+                }
+              ''
+            );
+        };
       };
-    };
 
     # Added to [Sleep] section
     systemd.sleep.extraConfig =
-      if cfg.enable && cfg.hibernateAfter != null then ''
+      if cfg.enable && cfg.hibernateAfter != null
+      then ''
         HibernateDelaySec=${builtins.toString cfg.hibernateAfter}
-      '' else "";
-
+      ''
+      else "";
 
     environment.systemPackages = [
       # wlogout, patched with our commands
       (pkgs.runCommand "wlogout"
         {
-          buildInputs = [ pkgs.makeWrapper ];
+          buildInputs = [pkgs.makeWrapper];
         } ''
-        mkdir $out
-        ln -s ${pkgs.wlogout}/* $out
-        rm $out/etc
-        mkdir -p $out/etc/wlogout
-        ln -s ${pkgs.wlogout}/etc/wlogout/* $out/etc/wlogout
-        rm $out/etc/wlogout/layout
-        cp ${pkgs.wlogout}/etc/wlogout/layout $out/etc/wlogout/layout
+          mkdir $out
+          ln -s ${pkgs.wlogout}/* $out
+          rm $out/etc
+          mkdir -p $out/etc/wlogout
+          ln -s ${pkgs.wlogout}/etc/wlogout/* $out/etc/wlogout
+          rm $out/etc/wlogout/layout
+          cp ${pkgs.wlogout}/etc/wlogout/layout $out/etc/wlogout/layout
 
-        substituteInPlace $out/etc/wlogout/layout \
-          --replace "systemctl suspend" "systemctl suspend-then-hibernate"
+          substituteInPlace $out/etc/wlogout/layout \
+            --replace "systemctl suspend" "systemctl suspend-then-hibernate"
 
-        # TODO: Try to make swaylock respond to loginctl instead
-        substituteInPlace $out/etc/wlogout/layout \
-          --replace "loginctl lock-session" commandLock
-      '')
+          # TODO: Try to make swaylock respond to loginctl instead
+          substituteInPlace $out/etc/wlogout/layout \
+            --replace "loginctl lock-session" commandLock
+        '')
     ];
   };
 }

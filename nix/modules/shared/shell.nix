@@ -2,7 +2,6 @@
   lib,
   pkgs,
   config,
-  systemSettings,
   ...
 }: {
   options = {
@@ -12,12 +11,13 @@
         default = false;
         description = "Enable zsh with useful tools for a CLI workflow";
       };
+      packages = lib.mkOption {
+        type = lib.types.listOf lib.types.package;
+      };
     };
   };
 
   config = let
-    cfg = config.heyzec.shell;
-
     ifLinux = pkg:
       if pkgs.stdenv.isLinux
       then pkg
@@ -72,21 +72,10 @@
       ];
     # note1: don't use `pstree` package on nixpkgs,
     # it seems to fail for process on running on other ttys, e.g. tmux
+  in {
+    programs.direnv.enable = true;
+    programs.direnv.nix-direnv.enable = true;
 
-    commonConfig = lib.mkIf cfg.enable {
-      programs.direnv.enable = true;
-      programs.direnv.nix-direnv.enable = true;
-    };
-
-    nixosConfig = lib.mkIf cfg.enable {
-      environment.systemPackages = packages;
-    };
-
-    hmConfig = lib.mkIf cfg.enable {
-      home.packages = packages;
-    };
-  in
-    if !systemSettings.isHome
-    then (lib.recursiveUpdate nixosConfig commonConfig)
-    else (lib.recursiveUpdate hmConfig commonConfig);
+    heyzec.shell.packages = packages;
+  };
 }
