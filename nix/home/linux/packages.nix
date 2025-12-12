@@ -17,7 +17,7 @@
 
     ##### B. Internet #####
     # (B.5.5.9) Instant messaging clients (Other IM clients)
-    telegram-desktop-gtk # # Telegram client (patched to use GTK3 over QT filepicker, see overlays)
+    telegram-desktop #     # Telegram client (patched to use GTK3 over QT filepicker, see overlays)
     wasistlos #            # unofficial client
     webcord #              # Alternative Discord client
     teams-for-linux

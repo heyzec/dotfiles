@@ -1,8 +1,6 @@
 {
-  config,
   lib,
   pkgs,
-  systemSettings,
   ...
 }: let
   # These tools also need to be configured in Neovim
@@ -45,11 +43,12 @@ in {
         default = true;
         description = "When enabled, configures neovim to be the default editor using the EDITOR environment variable.";
       };
+      package = lib.mkOption {
+        type = lib.types.package;
+      };
     };
   };
   config = let
-    cfg = config.heyzec.neovim;
-
     # Two modifications of this wrapper
     # 1. Make it less NixOS-specific by removing Treesitter parsers generated with Nix
     # 2. Add our extra packages to the PATH
@@ -66,23 +65,7 @@ in {
             --prefix PATH : ${pkgs.lib.makeBinPath extraPackages}
         '')
     ) {};
-
-    nixosConfig = {
-      environment.systemPackages = [
-        neovim-custom-wrapped
-      ];
-      environment.variables.EDITOR = lib.mkIf cfg.defaultEditor "nvim";
-    };
-
-    hmConfig = {
-      home.packages = [
-        neovim-custom-wrapped
-      ];
-    };
-  in
-    lib.mkIf cfg.enable (
-      if !systemSettings.isHome
-      then nixosConfig
-      else hmConfig
-    );
+  in {
+    heyzec.neovim.package = neovim-custom-wrapped;
+  };
 }

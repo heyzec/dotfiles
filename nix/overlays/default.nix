@@ -1,7 +1,5 @@
-{ lib, ... }:
-{
-  imports = lib.heyzec.umport {
+{lib, ...}: {
+  nixpkgs.overlays = map (p: import p) (lib.heyzec.umport {
     path = ./.;
-    exclude = [ "utils.nix" ];
-  };
+  });
 }

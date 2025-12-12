@@ -56,7 +56,7 @@ in rec {
       system = specialArgs.systemSettings.system;
       modules =
         [
-          ./modules
+          ./modules/nixos
           ./overlays
         ]
         ++ modules;
@@ -95,6 +95,7 @@ in rec {
       extraSpecialArgs = lib.recursiveUpdate specialArgs {systemSettings.isHome = true;};
       modules =
         [
+          ./modules/home
           ./overlays
         ]
         ++ modules;
@@ -107,6 +108,7 @@ in rec {
       inherit specialArgs;
       modules =
         [
+          ./modules/darwin
           ./overlays
         ]
         ++ modules;

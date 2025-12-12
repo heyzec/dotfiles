@@ -1,6 +1,5 @@
 {
   pkgs,
-  userSettings,
   ...
 }: {
   # Refer to https://wiki.archlinux.org/title/List_of_applications
@@ -43,8 +42,7 @@
       brightnessctl # (F.6.11) backlight control
       ddcutil #     # change monitor settings using DDC/CI
       # Screenshotting
-      # use previous version until https://redirect.github.com/Alexays/Waybar/issues/4156 fixed
-      pkgs.stable.grimblast # (C.2.13/1.1) wrapper script for grim (grab an image) and slurp (select a region)
+      grimblast #           # (C.2.13/1.1) wrapper script for grim (grab an image) and slurp (select a region)
       swappy #              # Wayland native snapshot editing tool
       # Everything else
       smile #     # (F.4.1) emoji picker
@@ -86,8 +84,8 @@
       gocryptfs # file-based encryption as a mountable FUSE filesystem
       overskride # GUI bluetooth manager
       wl-color-picker # simple color picker with GUI
-      (callPackage ../../../packages/gocryptfs-scripts.nix {})
-      (python3Packages.callPackage ../../../packages/wasg.nix {})
+      custom.gocryptfs-scripts
+      custom.wasg
 
       ##### Containerisation and Virtualisation #####
       virt-manager # frontend for qemu (virtualisation.libvirtd.enable)

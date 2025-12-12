@@ -3,7 +3,6 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-24.11";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     private.url = "github:heyzec/dotfiles-private";
     # private.url = "git+file:///home/heyzec/dotfiles/private"; # for local testing
