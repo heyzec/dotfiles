@@ -12,7 +12,7 @@ buildHomeAssistantComponent rec {
     owner = "ollo69";
     repo = "ha-samsungtv-smart";
     rev = "v${version}";
-    sha256 = "sha256-z6mIWuMQgFqo6WgnMCty1ur/iSxGTXok8snwUtRDkU8=";
+    hash = "sha256-z6mIWuMQgFqo6WgnMCty1ur/iSxGTXok8snwUtRDkU8=";
   };
 
   propagatedBuildInputs = with pkgs.home-assistant.python.pkgs; [

@@ -4,8 +4,6 @@
       path = ./.;
     }
     ++ [
-      ../modules/neovim.nix
-      ../modules/shell.nix
       ./linux
     ];
 }

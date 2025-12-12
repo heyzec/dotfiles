@@ -1,5 +1,4 @@
-{ lib, ... }:
-{
+{lib, ...}: {
   imports = lib.heyzec.umport {
     path = ./.;
   };

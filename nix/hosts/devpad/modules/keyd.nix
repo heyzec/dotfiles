@@ -23,12 +23,12 @@
     path = [];
 
     script = ''
-      ${pkgs.swhkd}/bin/swhkd
+      ${pkgs.custom.swhkd}/bin/swhkd
     '';
   };
 
   environment.systemPackages = with pkgs; [
     keyd # Add keyd to programs too for manpage
-    swhkd
+    custom.swhkd
   ];
 }
