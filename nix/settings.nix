@@ -20,6 +20,7 @@
   specificSettings = {
     "homelab" = {
       systemSettings.system = "aarch64-linux";
+      userSettings = {}; # don't remove this line without testing build of homelab
     };
     "darwin" = {
       systemSettings.system = "aarch64-darwin";

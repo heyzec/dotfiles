@@ -1,0 +1,7 @@
+{
+  "name": "surfingkeys",
+  "version": "1.0.0",
+  "devDependencies": {
+    "esbuild": "^0.27.2"
+  }
+}
