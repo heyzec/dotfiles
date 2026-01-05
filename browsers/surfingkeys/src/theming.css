@@ -1,0 +1,117 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap');
+
+:root {
+  --text: #262626;
+}
+.sk_theme {
+    font-family: Roboto, sans-serif
+    background: #f6f6f6;
+    color: var(--text);
+}
+.sk_theme tbody {
+    /*color: #fff;*/
+}
+.sk_theme .url {
+    color: #61afef;
+}
+.sk_theme .annotation {
+    color: #56b6c2;
+}
+#sk_omnibar {
+    width: 60%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    border-radius: 12px;
+    box-shadow: 0 4px 100px rgba(0, 0, 0, 0.5);
+
+    font-size: 11pt;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+}
+
+.sk_theme #sk_omnibarSearchArea .prompt .separator {
+    display: block;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    padding: 0;
+    border: 0;
+}
+.sk_theme #sk_omnibarSearchArea .prompt .separator::after {
+    visibility: visible;
+    content: "🔍";
+}
+
+.sk_theme #sk_omnibarSearchArea input {
+    /* color: #d0d0d0;*/
+}
+
+.sk_theme #sk_omnibarSearchResult {
+    margin: 10px;
+}
+
+.sk_theme .omnibar_highlight {
+    color: inherit;
+}
+.sk_theme .omnibar_timestamp {
+    display: none;
+}
+.sk_theme .omnibar_folder {
+    display: none;
+}
+.sk_theme .omnibar_visitcount {
+    color: #98c379;
+}
+
+.sk_theme #sk_omnibarSearchResult ul li {
+    padding: 5px;
+    border-radius: 8px;
+}
+
+.sk_theme #sk_omnibarSearchResult ul li > * {
+    margin: 10px 0px;
+}
+
+.sk_theme #sk_omnibarSearchResult ul li:nth-child(odd) {
+    background: inherit;
+}
+
+.sk_theme #sk_omnibarSearchResult ul li.focused div.url{
+    color: #bbbcff; /* arc probably used opacity */
+}
+.sk_theme #sk_omnibarSearchResult ul li.focused {
+    background: #7c7dff !important;
+    color: white;
+}
+.sk_theme #sk_omnibarSearchResult ul li:hover {
+    background: #ececec;
+}
+
+.sk_theme #sk_omnibarSearchResult li .icon {
+    padding: 4px;
+    border-radius: 3px;
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+}
+
+.sk_theme #sk_omnibarSearchResult li.focused .icon {
+    background: #ffffff;
+}
+
+.sk_theme #sk_omnibarSearchResult li div.url {
+    color: #959595;
+    font-weight: 300;
+}
+
+.sk_theme #sk_omnibarSearchResult .text-container {
+    display: flex;
+    flex-shrink: 0;
+    gap: 10px;
+}
+
+#sk_status, #sk_find {
+    font-size: 20pt;
+}

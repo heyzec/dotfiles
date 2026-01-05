@@ -1,0 +1,14 @@
+/* For web-search-navigator extension */
+/* Add a vertical line instead of an arrow next to selected result */
+/* https://github.com/infokiller/web-search-navigator/issues/427 */
+
+.wsn-google-focused-link {
+  border-left: 3px solid #2586fc !important;
+  transform: translate(-11px, 0) !important;
+  padding-left: 8px;
+  margin-left: -11px;
+}
+
+.wsn-google-focused-link::before {
+    display: none !important;
+}

@@ -1,0 +1,10 @@
+{
+  "name": "surfingkeys-conf",
+  "version": "0.0.0",
+  "bin": {
+    "serve": "./serve.js"
+  },
+  "dependencies": {
+    "esbuild": "^0.27.2"
+  }
+}

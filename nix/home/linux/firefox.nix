@@ -8,11 +8,7 @@
     "uBlock0@raymondhill.net" # uBlock Origin
     "{ffadac89-63bb-4b04-be90-8cb2aa323171}" # Web Search Navigator
     "{446900e4-71c2-419f-a6a7-df9c091e268b}" # Bitwarden Password Manager
-    # Tridactyl: Pin version, see tridactyl#4944
-    [
-      "tridactyl.vim@cmcaine.co.uk"
-      "https://addons.mozilla.org/firefox/downloads/file/4036604/tridactyl_vim-1.23.0.xpi"
-    ]
+    "{a8332c60-5b6d-41ee-bfc8-e9bb331d34ad}" # Surfingkeys
     "{762f9885-5a13-4abd-9c77-433dcd38b8fd}" # Return YouTube Dislike
     "deArrow@ajay.app" # DeArrow
     "sponsorBlocker@ajay.app" # SponsorBlock for YouTube - Skip Sponsorships
@@ -46,7 +42,6 @@
 in {
   programs.firefox = {
     enable = true;
-    nativeMessagingHosts = [pkgs.tridactyl-native];
     policies = {
       # See https://mozilla.github.io/policy-templates/
       DisableTelemetry = true;
@@ -87,17 +82,7 @@ in {
           "browser.fullscreen.autohide" = false;
           "middlemouse.paste" = false;
         };
-        userContent = ''
-          /* For web-search-navigator extension  */
-          /* Add a vertical line instead of an arrow next to selected result */
-          /* https://github.com/infokiller/web-search-navigator/issues/427 */
-          .wsn-google-focused-link {
-              border-left: 3px solid #2586fc !important;
-              transform: translate(-3px, 0) !important;
-              padding-left: 8px;
-              margin-left: -11px;
-          }
-        '';
+        # userContent = "/* CSS content */";
         search.engines = {
           google = {
             name = "Google";

@@ -1,0 +1,2 @@
+serve:
+    nix run -f default.nix  # abstraction over `node serve.js`
