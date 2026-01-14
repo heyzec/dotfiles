@@ -122,6 +122,11 @@
         "command": "editor.action.inlineSuggest.commit",
         "when": "textInputFocus && inlineSuggestionHasIndentationLessThanTabSize && inlineSuggestionVisible && !editorTabMovesFocus",
     },
+    {
+        "key": "\\",
+        "command": "workbench.action.toggleSidebarVisibility",
+        "when": "sideBarFocus && !inputFocus"
+    }
 ]
 
 // Unfortunately we cannot rename the file extension to jsonc
