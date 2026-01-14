@@ -1,5 +1,9 @@
-{inputs, ...}:
-if inputs.private.hasPrivate
+{
+  inputs,
+  hasPrivate,
+  ...
+}:
+if hasPrivate
 then let
   endpoint = inputs.private.devpad.attributes.btrbk.endpoint;
   backups_retention_policy = "7d 4w 12m";

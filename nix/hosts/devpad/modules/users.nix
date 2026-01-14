@@ -3,6 +3,7 @@
   config,
   lib,
   userSettings,
+  hasPrivate,
   ...
 }: {
   users = {
@@ -25,7 +26,7 @@
         ];
       }
       // (
-        if inputs.private.hasPrivate
+        if hasPrivate
         then {
           hashedPasswordFile = config.age.secrets.password.path;
           openssh.authorizedKeys.keys = inputs.private.devpad.attributes.users.authorizedKeys;

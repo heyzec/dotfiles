@@ -2,9 +2,10 @@
   inputs,
   config,
   pkgs,
+  hasPrivate,
   ...
 }:
-if inputs.private.hasPrivate
+if hasPrivate
 then let
   # The port that Wireguard listens to - recommended that this be changed from default
   wireguardPort = 51820;

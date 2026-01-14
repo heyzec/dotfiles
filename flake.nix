@@ -4,8 +4,7 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
-    private.url = "github:heyzec/dotfiles-private";
-    # private.url = "git+file:///home/heyzec/dotfiles/private"; # for local testing
+    # private.url = "github:heyzec/dotfiles-private"; # use "git+file:///path/to/private" for local testing
 
     home-manager = {
       url = "github:nix-community/home-manager";

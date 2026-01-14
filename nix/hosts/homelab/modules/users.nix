@@ -1,7 +1,11 @@
-{inputs, ...}: let
+{
+  inputs,
+  hasPrivate,
+  ...
+}: let
   authorizedKeys = inputs.private.homelab.attributes.users.authorizedKeys;
   ifHasPrivate = expr:
-    if inputs.private.hasPrivate
+    if hasPrivate
     then expr
     else [];
 in {

@@ -2,8 +2,10 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 {
+  config,
   inputs,
   pkgs,
+  hasPrivate,
   ...
 }: {
   imports =
@@ -12,7 +14,7 @@
       ./modules
     ]
     ++ (
-      if inputs.private.hasPrivate
+      if hasPrivate
       then [
         inputs.private.devpad.modules
         inputs.private.devpad.secrets

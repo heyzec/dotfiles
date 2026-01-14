@@ -45,7 +45,7 @@
         then specificSettings.${name}.userSettings
         else {}
       );
-    hasPrivate = inputs.private.hasPrivate;
+    hasPrivate = builtins.hasAttr "private" inputs;
   };
 in rec {
   mkNixosSystem = name: {modules}: let

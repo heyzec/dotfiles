@@ -1,1 +1,3 @@
 *.crypt.nix filter=git-crypt diff=git-crypt
+flake.nix filter=unhide-flake-nix
+flake.lock filter=unhide-flake-lock

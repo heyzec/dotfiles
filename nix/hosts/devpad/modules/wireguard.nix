@@ -2,9 +2,10 @@
   inputs,
   config,
   pkgs,
+  hasPrivate,
   ...
 }:
-if inputs.private.hasPrivate
+if hasPrivate
 then {
   # Define connection with NetworkManager
   environment.etc."NetworkManager/system-connections/wg0.nmconnection" = {

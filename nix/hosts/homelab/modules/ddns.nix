@@ -1,10 +1,10 @@
 {
-  inputs,
   config,
   pkgs,
+  hasPrivate,
   ...
 }:
-if inputs.private.hasPrivate
+if hasPrivate
 then {
   services.ddclient = {
     enable = true;

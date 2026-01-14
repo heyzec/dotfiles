@@ -163,7 +163,7 @@
         "type": "github"
       }
     },
-    "private": {
+    "private-hidden": {
       "inputs": {
         "agenix": "agenix"
       },
@@ -187,8 +187,7 @@
         "nix-colors": "nix-colors",
         "nix-darwin": "nix-darwin",
         "nixos-hardware": "nixos-hardware",
-        "nixpkgs": "nixpkgs",
-        "private": "private"
+        "nixpkgs": "nixpkgs"
       }
     },
     "systems": {

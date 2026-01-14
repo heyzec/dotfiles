@@ -1,11 +1,15 @@
-{inputs, ...}: {
+{
+  inputs,
+  hasPrivate,
+  ...
+}: {
   imports =
     [
       ./hardware
       ./modules
     ]
     ++ (
-      if inputs.private.hasPrivate
+      if hasPrivate
       then [
         inputs.private.homelab.modules
         inputs.private.homelab.secrets
