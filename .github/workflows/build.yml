@@ -1,0 +1,28 @@
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install QEMU
+        # Needed for cross-compilation
+        # See https://discourse.nixos.org/t/nix-github-actions-aarch64/11034/4
+        run: |
+          sudo apt-get install -y qemu-user-static
+      - name: Nothing but Nix (reclaim space on runner)
+        uses: wimpysworld/nothing-but-nix@main
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31
+        with:
+          nix_path: nixpkgs=channel:nixos-unstable
+          extra_nix_config: |
+            extra-platforms = aarch64-linux
+      - name: Build
+        run: |
+          nix build .#nixosConfigurations.devpad.config.system.build.toplevel
+          nix build .#nixosConfigurations.homelab.config.system.build.toplevel
+          nix build .#homeConfigurations.heyzec.activationPackage
