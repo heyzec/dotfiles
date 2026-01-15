@@ -14,6 +14,10 @@
       url = "github:LnL7/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    shopeepkgs = {
+      url = "git+file:///Users/SIPSS0377/hacks/shopeepkgs";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     nix-colors.url = "github:misterio77/nix-colors";
   };
