@@ -16,28 +16,34 @@ define_server 'lua_ls'
 define_formatter('lua', 'stylua')
 
 -- Nix
-define_server('nixd', {
-  settings = {
-    nixd = {
-      -- Not sure why I need to override to remove default nixpkgs definition.
-      -- This is so that we don't have duplication definition goto for NixOS options.
-      nixpkgs = {},
-      options = {
-        nixos = {
-          expr = '(builtins.getFlake ("git+file://" + toString ./.)).nixosConfigurations.devpad.options',
-        },
-        home_manager = {
-          expr = '(builtins.getFlake ("git+file://" + toString ./.)).homeConfigurations.heyzec.options',
+if vim.g.heyzec_use_mason then
+  -- mason doesn't have nixd yet
+  -- https://github.com/mason-org/mason.nvim/issues/1570
+  define_server 'nil_ls'
+else
+  define_server('nixd', {
+    settings = {
+      nixd = {
+        -- Not sure why I need to override to remove default nixpkgs definition.
+        -- This is so that we don't have duplication definition goto for NixOS options.
+        nixpkgs = {},
+        options = {
+          nixos = {
+            expr = '(builtins.getFlake ("git+file://" + toString ./.)).nixosConfigurations.devpad.options',
+          },
+          home_manager = {
+            expr = '(builtins.getFlake ("git+file://" + toString ./.)).homeConfigurations.heyzec.options',
+          },
         },
       },
     },
-  },
-})
+  })
+end
 define_formatter('nix', 'alejandra')
 
 -- C++
 define_server 'clangd'
-define_formatter('cpp', 'clang_format')
+define_formatter('cpp', 'clang-format')
 
 -- JavaScript / TypeScript
 -- typescript-language-server is an LSP wrapper around Microsoft's tsserver

@@ -26,8 +26,11 @@
     [
       # C compiler needed for Treesitter to build parsers
       gcc
+      tree-sitter
       # Node needed for some Neovim plugins, e.g. Copilot
       nodejs
+      # Rust needed by Mason to install some tools, e.g. alejandra
+      cargo
     ]
     ++ tooling;
 in {
