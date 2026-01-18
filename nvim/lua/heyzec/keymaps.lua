@@ -44,15 +44,28 @@ local function write()
 end
 
 local function format()
-  return require('conform').format { async = true, lsp_format = 'fallback' }
+  local conform = require 'conform'
+  local formatters, lsp_used = conform.list_formatters_to_run()
+  local output = {}
+  for i, e in ipairs(formatters) do
+    if e.available then
+      output[i] = e.name
+    end
+  end
+  if #output == 0 and lsp_used then
+    output[1] = 'LSP'
+  end
+  local ok = conform.format { async = true }
+  return ok, table.concat(output, ', ')
 end
 
 local save_or_format = action('Save/Format', function()
   local message = write()
   if message then
-    local ok = format()
+    local ok, formatters = format()
     if ok then
-      message = message .. ' (formatted)'
+      -- fix inaccuracy: we display formatted with XXX before the async formatting actually completes
+      message = message .. ' (formatted with ' .. formatters .. ')'
     end
     vim.notify(message, vim.log.levels.INFO)
   end
@@ -64,7 +77,7 @@ end, write)
 -- Vim Pickers
 local find_buffers = action('󰈔 Buffers', '<Cmd>Telescope buffers<CR>')
 local find_oldfiles = action(' Oldfiles', '<Cmd>Telescope oldfiles<CR>', vscode 'workbench.action.openRecent')
-local find_commands = action('Command History', '<Cmd>Telescope commands<CR>')
+local find_commands = action('Command History', '<Cmd>Telescope command_history<CR>')
 local marks = action('Marks', '<Cmd>Telescope marks<CR>')
 local jumplist = action('Jumplist', '<Cmd>Telescope jumplist<CR>')
 local keymaps = action('Keymaps', '<Cmd>Telescope keymaps<CR>')
