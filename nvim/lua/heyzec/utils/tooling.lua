@@ -15,8 +15,8 @@ end
 
 -- ========== Stateful variables ==========
 
----@class (partial) vim.lsp.ClientConfig.P : vim.lsp.ClientConfig
----@type table<string, vim.lsp.ClientConfig.P>
+---@class (partial) vim.lsp.Config.P : vim.lsp.Config
+---@type table<string, vim.lsp.Config.P|fun():vim.lsp.Config.P>
 ---All user-defined LSP servers
 local servers = {}
 
@@ -29,7 +29,8 @@ M = {}
 -- ========== Config-facing APIs ==========
 
 ---Add an LSP server.
----The second parameter should be of type vim.lsp.Config (which extends vim.lsp.ClientConfig)
+---@param server_name string Name of LSP server (aligned with nvim-lspconfig)
+---@param config? vim.lsp.Config.P|fun(nil):vim.lsp.Config.P
 M.define_server = function(server_name, config)
   if config == nil then
     config = {}
@@ -51,9 +52,20 @@ end
 ---We don't need to define filetype as this is done automatically by lspconfig.
 ---@param server_name string Name of LSP server.
 M.setup_server = function(server_name)
+  ---@type vim.lsp.ClientConfig
+  local config
   local server = servers[server_name] or {}
-  vim.lsp.enable(server_name)
-  vim.lsp.config(server_name, server)
+  if type(server) == 'function' then
+    config = server()
+  else
+    config = server
+  end
+  vim.lsp.config(server_name, config)
+
+  -- If using Mason, mason-lspconfig will automatically setup installed servers
+  if not vim.g.heyzec_use_mason then
+    vim.lsp.enable(server_name)
+  end
 end
 
 ---Setup all LSP servers as defined by the user.

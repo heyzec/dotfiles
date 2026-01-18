@@ -1,10 +1,14 @@
 -- This must be required before lazy.nvim
 -- (plugins like mason, conform need table of config on setup and cannot be delayed)
-require 'heyzec.tooling'
+local setup_tools = require 'heyzec.tooling'
 
 -- Setup lazy.nvim and plugins
 -- If NVIM_INIT_DEBUG env var nonempty, debugger will be attached from this point onwards
 require 'heyzec.lazy'
+
+-- Trigger callback to continue with setup, as some tool configs have a dependency
+-- on plugins loaded by lazy.nvim, e.g. jsonls on schemastore
+setup_tools()
 
 require 'heyzec.keymaps'
 require 'heyzec.autocmds'
