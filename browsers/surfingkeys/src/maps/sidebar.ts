@@ -35,3 +35,65 @@ Object.keys(mappings).forEach((key) => {
   }
   api.mapkey("\\", "Sidebar", callback, { domain: domainRegex });
 });
+
+// api.mapkey(
+//   "|",
+//   "Sidebar",
+//   function () {
+//     document
+//       .querySelector('span:is([aria-label="left"], [aria-label="right"])')
+//       .click();
+//   },
+//   { domain: /space\.shopee\.io/ },
+// );
+
+// api.mapkey(
+//   "\\",
+//   "Sidebar",
+//   function () {
+//     const event = new KeyboardEvent("keydown", {
+//       key: "[",
+//       code: "BracketLeft",
+//       keyCode: 219,
+//       which: 219,
+//       bubbles: true,
+//       cancelable: true,
+//     });
+//
+//     document.dispatchEvent(event);
+//     api.unmap("[");
+//     api.Normal.feedkeys("[");
+//     return;
+//
+//     const url = new URL(window.location.href);
+//     if (url.searchParams.has("filter")) {
+//       try {
+//         const elem = document
+//           // .querySelector("span:is(.toggle-filter-panel, .ui-undock)")
+//           .querySelector(".toggle-filter-panel");
+//         // .querySelector(".ui-undock")
+//         // .click();
+//         // api.Normal.feedkeys("[");
+//       } catch (err) {
+//         api.Front.showPopup(err.toString());
+//       }
+//     } else {
+//       document.querySelector("button.aui-sidebar-toggle").click();
+//     }
+//   },
+//   // { domain: jira },
+// );
+//
+// api.mapkey(
+//   "\\",
+//   "Sidebar",
+//   function () {
+//     document.querySelector("a.expand-collapse-trigger").click();
+//   },
+//   { domain: confluence },
+// );
+//
+// api.imapkey("<Meta-s>", "Sidebar", function () {
+//   api.Front.showPopup("Hi");
+// });
+
