@@ -1,0 +1,42 @@
+diff --git a/lua/hover/actions.lua b/lua/hover/actions.lua
+index 7299a64..c822956 100644
+--- a/lua/hover/actions.lua
++++ b/lua/hover/actions.lua
+@@ -200,10 +200,12 @@ local function run_provider(provider, providers, bufnr, popts)
+   local result = async.await(2, provider.execute, {
+     bufnr = bufnr,
+     pos = popts.pos or api.nvim_win_get_cursor(0),
+-  }) or { lines = { 'No result' } }
++  })
+ 
+   async.scheduler()
+-  show_hover(provider.id, providers, config, result, opts)
++  if result then
++    show_hover(provider.id, providers, config, result, opts)
++  end
+   return true
+ end
+ 
+diff --git a/lua/hover/providers/lsp.lua b/lua/hover/providers/lsp.lua
+index d3168fe..3c1dc41 100644
+--- a/lua/hover/providers/lsp.lua
++++ b/lua/hover/providers/lsp.lua
+@@ -62,7 +62,17 @@ function LSPProvider:execute(params, done)
+       if vim.tbl_isempty(lines) then
+         lines = { 'empty' }
+       end
+-      done({ lines = lines, filetype = 'markdown' })
++
++      local outlines = {}
++      for _, line in ipairs(lines) do
++        -- remove stray backslashes before adding the line
++        if line:find('\\') then
++          line = line:gsub('\\', '')
++        end
++        table.insert(outlines, line)
++      end
++
++      done({ lines = outlines, filetype = 'markdown' })
+     end
+   end, params.bufnr)
+ end
