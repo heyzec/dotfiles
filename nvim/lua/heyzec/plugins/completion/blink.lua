@@ -1,7 +1,7 @@
 -- Provides auto-completion
 return {
   'saghen/blink.cmp',
-  event = 'InsertEnter',
+  event = {'InsertEnter', 'CmdlineEnter'},
   -- use a release tag to download pre-built binaries
   version = '1.*',
   ---@module 'blink.cmp'

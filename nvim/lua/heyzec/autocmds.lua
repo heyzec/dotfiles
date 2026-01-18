@@ -39,44 +39,46 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 -- From https://www.reddit.com/r/neovim/comments/1h6orjg/comment/m0fbyvz
 -- for command mode: make it absolute for ranges etc
 -- for normal mode: relative movements <3
-local cmdline_group = vim.api.nvim_create_augroup('CmdlineLinenr', {})
--- debounce cmdline enter events to make sure we don't have flickering for non user cmdline use
--- e.g. mappings using : instead of <Cmd>
-local cmdline_debounce_timer
+if not vim.g.vscode then
+  local cmdline_group = vim.api.nvim_create_augroup('CmdlineLinenr', {})
+  -- debounce cmdline enter events to make sure we don't have flickering for non user cmdline use
+  -- e.g. mappings using : instead of <Cmd>
+  local cmdline_debounce_timer
 
-vim.api.nvim_create_autocmd('CmdlineEnter', {
-  group = cmdline_group,
-  callback = function()
-    cmdline_debounce_timer = vim.uv.new_timer()
-    ---@diagnostic disable-next-line: need-check-nil
-    cmdline_debounce_timer:start(
-      100,
-      0,
-      vim.schedule_wrap(function()
-        if vim.o.number then
-          vim.o.relativenumber = false
-          if vim.fn.getcmdtype() ~= '@' then
-            -- modification: do not redraw when waiting for input(), otherwise prompt texts will be gone
-            vim.api.nvim__redraw { statuscolumn = true }
+  vim.api.nvim_create_autocmd('CmdlineEnter', {
+    group = cmdline_group,
+    callback = function()
+      cmdline_debounce_timer = vim.uv.new_timer()
+      ---@diagnostic disable-next-line: need-check-nil
+      cmdline_debounce_timer:start(
+        100,
+        0,
+        vim.schedule_wrap(function()
+          if vim.o.number then
+            vim.o.relativenumber = false
+            if vim.fn.getcmdtype() ~= '@' then
+              -- modification: do not redraw when waiting for input(), otherwise prompt texts will be gone
+              vim.api.nvim__redraw { statuscolumn = true }
+            end
           end
-        end
-      end)
-    )
-  end,
-})
+        end)
+      )
+    end,
+  })
 
-vim.api.nvim_create_autocmd('CmdlineLeave', {
-  group = cmdline_group,
-  callback = function()
-    if cmdline_debounce_timer then
-      cmdline_debounce_timer:stop()
-      cmdline_debounce_timer = nil
-    end
-    if vim.o.number then
-      vim.o.relativenumber = true
-    end
-  end,
-})
+  vim.api.nvim_create_autocmd('CmdlineLeave', {
+    group = cmdline_group,
+    callback = function()
+      if cmdline_debounce_timer then
+        cmdline_debounce_timer:stop()
+        cmdline_debounce_timer = nil
+      end
+      if vim.o.number then
+        vim.o.relativenumber = true
+      end
+    end,
+  })
+end
 
 -----------------------------------------------------------
 -- Document highlight on cursor hold
@@ -107,5 +109,21 @@ vim.api.nvim_create_autocmd('LspAttach', {
         end,
       })
     end
+  end,
+})
+
+-----------------------------------------------------------
+-- Only show cursorline in the active window
+-----------------------------------------------------------
+vim.api.nvim_create_autocmd({ 'WinEnter', 'BufEnter' }, {
+  group = vim.api.nvim_create_augroup('active_cursorline', {}),
+  callback = function(event)
+    vim.opt_local.cursorline = true
+  end,
+})
+vim.api.nvim_create_autocmd({ 'WinLeave', 'BufLeave' }, {
+  group = 'active_cursorline',
+  callback = function(event)
+    vim.opt_local.cursorline = false
   end,
 })
