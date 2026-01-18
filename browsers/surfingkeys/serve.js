@@ -18,7 +18,7 @@ async function main() {
 
   let { hosts, port } = await ctx.serve({
     servedir: "dist",
-    port: 8123,
+    port: 8125,
   });
   console.log(`Serving on http://${hosts[0]}:${port}`);
 }

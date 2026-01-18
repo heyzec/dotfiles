@@ -2,13 +2,13 @@ function runMe() {
   const originalOpen = XMLHttpRequest.prototype.open;
   const originalSend = XMLHttpRequest.prototype.send;
 
-  XMLHttpRequest.prototype.open = function (method, url) {
+  XMLHttpRequest.prototype.open = function(method, url) {
     this._url = url;
     return originalOpen.apply(this, arguments);
   };
 
-  XMLHttpRequest.prototype.send = function () {
-    this.addEventListener("load", function () {
+  XMLHttpRequest.prototype.send = function() {
+    this.addEventListener("load", function() {
       window.dispatchEvent(
         new CustomEvent("XHR_INTERCEPT_EVENT", {
           detail: {
@@ -200,3 +200,38 @@ api.mapkey(
     domain: /www\.google\.com/,
   },
 );
+
+// See https://github.com/infokiller/web-search-navigator/issues/427#issuecomment-1236426192
+if (window.location.hostname === "www.google.com") {
+  const style = document.createElement("style");
+  document.head.appendChild(style);
+  style.textContent = `
+.wsn-google-focused-link::before,
+.wsn-google-focused-map::before {
+    border-left: 3px solid #2586fc !important;
+    content: "";
+    display: block;
+    height: 100%;
+    margin-right: 10px;
+    left: -10px;
+    position: absolute;
+}
+`;
+}
+
+// Autoclose Seatalk
+if (window.location.hostname === "link.seatalk.io") {
+  let count = 1;
+  function iter() {
+    if (count >= 0) {
+      document.querySelector(".content-wrapper > div > .text").innerHTML =
+        `Closing in ${count} seconds...`;
+      count--;
+    } else {
+      window.close();
+    }
+  }
+  iter();
+  setInterval(iter, 1000);
+}
+

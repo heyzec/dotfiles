@@ -2,3 +2,4 @@
 // ## Injects (Poor man's Tampermonkey)
 // ###############################################################################
 import "./web-search-navigator"
+import "./ocean.crypt"
