@@ -14,9 +14,12 @@
     nixd # server
     alejandra # formatter
 
+    # Config files
+    vscode-langservers-extracted # server (includes html, css, json, eslint)
+    yaml-language-server # server
+
     # Others
     nodePackages.prettier # formatter
-    vscode-langservers-extracted # servers for json and more
 
     # # Shell
     # nodePackages.bash-language-server # LSP

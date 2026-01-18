@@ -8,11 +8,6 @@ return {
     -- Provide sensible defaults for LSP servers
     'neovim/nvim-lspconfig',
     -- there is no longer a need to call setup() on nvim-lspconfig
-    config = function()
-      if not use_mason then
-        tooling_utils.setup_servers()
-      end
-    end,
   },
   {
     -- manage external editor tooling, e.g. LSP servers

@@ -1,5 +1,6 @@
 {
   "Comment.nvim": { "branch": "master", "commit": "e30b7f2008e52442154b66f7c519bfd2f1e32acb" },
+  "SchemaStore.nvim": { "branch": "main", "commit": "fb7b9034285a5658c746faa12eff8c1c9d9b11b1" },
   "auto-save.nvim": { "branch": "main", "commit": "5fbcaac0a2698c87a9a1bd2083cb6949505cca12" },
   "barbar.nvim": { "branch": "master", "commit": "53b5a2f34b68875898f0531032fbf090e3952ad7" },
   "blink.cmp": { "branch": "main", "commit": "b19413d214068f316c78978b08264ed1c41830ec" },
