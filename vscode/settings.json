@@ -116,6 +116,11 @@
   "gitblame.inlineMessageMargin": 2,
   "gitblame.statusBarMessageFormat": "${commit.summary}",
   "gitblame.delayBlame": 250,
+
+  // For Cursor
+  "window.commandCenter": true,
+  "workbench.activityBar.orientation": "vertical",
+  "workbench.colorTheme": "Default Dark Modern"
 }
 
 // Unfortunately we cannot rename the file extension to jsonc
