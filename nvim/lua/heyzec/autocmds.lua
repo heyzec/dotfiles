@@ -127,3 +127,20 @@ vim.api.nvim_create_autocmd({ 'WinLeave', 'BufLeave' }, {
     vim.opt_local.cursorline = false
   end,
 })
+
+-----------------------------------------------------------
+-- Enable/disable Cursor tab completion based on nvim mode
+-----------------------------------------------------------
+if vim.g.vscode then
+  vim.api.nvim_create_autocmd("InsertEnter", {
+    callback = function()
+      require('vscode').action("editor.action.enableCppGlobally")
+    end,
+  })
+
+  vim.api.nvim_create_autocmd("InsertLeave", {
+    callback = function()
+      require('vscode').action("editor.cpp.disableenabled")
+    end,
+  })
+end
