@@ -90,6 +90,7 @@ local search_diagnostics = action('Diagnostics', '<Cmd>Telescope diagnostics<CR>
 local find_files = action('󰈔 Find files', '<Cmd>Telescope find_files<CR>', vscode 'workbench.action.quickOpen')
 -- this requires the Periscope VS Code extension (JoshMu.periscope)
 local search_files = action(' Grep files', '<Cmd>Telescope live_grep<CR>', vscode 'periscope.search')
+local search_current_file = action(' Grep current file', '<Cmd>Telescope current_buffer_fuzzy_find<CR>', vscode 'periscope.searchCurrentFile')
 local search_by_word = action(' Grep files by word', '<Cmd>Telescope grep_string<CR>')
 local search_vim_configs = action('Neovim Configs', function()
   require('telescope.builtin').live_grep { cwd = vim.fn.stdpath 'config' }
@@ -251,6 +252,7 @@ local mappings = {
     -- Some telescope actions
     ['<leader>'] = find_files,
     ['/'] = search_files,
+    ['?'] = search_current_file,
     [':'] = find_commands,
     ['.'] = find_oldfiles,
     ['r'] = resume,
