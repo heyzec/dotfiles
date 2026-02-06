@@ -2,6 +2,7 @@
 // Place your key bindings in this file to override the defaults
 // See https://www.whitphx.info/posts/20230217-vscode-undocumented-contexts/
 // for the valid contexts (when key)
+// Avoid trailing commas: VSCode reads them fine but removes them on save
 [
     // ###############################################################################
     // ##                                                                           ##
