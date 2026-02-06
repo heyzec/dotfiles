@@ -95,6 +95,7 @@ set foldmethod=marker
 set linebreak
 set confirm                                     " ask instead of failing for some operations (e.g. saving)
 set updatetime=250                              " decrease update time (writing to swapfile) and CursorHold time
+set exrc                                        " allow project-specific vimrc/init files
 " }}} Editing: Search, splits and indentation
 
 " }}} 2. BASIC VIM CONFIGURATIONS
@@ -204,30 +205,6 @@ vnoremap <A-k> :m '<-2<CR>gv=gv
 if !has('nvim')
     noremap <leader>W :w !sudo tee %:p >/dev/null<CR>
 endif
-
-" TO DO: only do subst within selected visual-line lines
-" vmap <expr> <leader>q mode() == 'v' ? "j" : "k"
 " }}}
 
 " }}} 3. KEYMAPPINGS
-
-" 4. THINGS THAT SHOULD BE PLUGINS {{{
-" ###############################################################################
-" ##                                                                           ##
-" ##                      4. THINGS THAT SHOULD BE PLUGINS                     ##
-" ##                                                                           ##
-" ###############################################################################
-" A useful function
-"
-" explore the update command (:h update)
-command WriteIfModified if getbufinfo(bufnr('%'))[0].changed | w | endif
-function WriteIfModified()
-    if getbufinfo(bufnr('%'))[0].changed
-        " return execute('w')->split('\n')[0]
-        return split(execute('w'), '\n')[0]
-    endif
-    return ''
-endfunction
-
-
-" }}} 4. THINGS THAT SHOULD BE PLUGINS
