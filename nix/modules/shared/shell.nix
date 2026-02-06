@@ -66,6 +66,7 @@
         ##### Development #####
         git #   # (F.3.2) the information manager from hell
         jq #    # (F.3.12) JSON processor
+        ijq #   # interactive jq
         lazygit # (Git#Graphical_front-ends) TUI for git
         just #  # Makefile alternative to save project-specific commands
         pet #   # CLI snippet manager
