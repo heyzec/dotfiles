@@ -1,6 +1,10 @@
-# NixOS
+# Nix Configuration (NixOS + macOS)
 
-Here lies my NixOS configs. To build a virtual machine and test it out, do this:
+This folder contains my configurations for running Nix on NixOS and macOS machines.
+
+## Testing out virtual machine
+
+To build a virtual machine and test it out, do this:
 
 1. `cd` into this directory
 
@@ -10,7 +14,7 @@ Here lies my NixOS configs. To build a virtual machine and test it out, do this:
     ```
     _--impure is needed for now, to fix next time_
 
-1. Start the NixOS VM. On first boot, a QEMU image `.qcow` file will be created.
+1. Start the VM. On first boot, a QEMU image `.qcow` file will be created.
     ```
     result/bin/run-*-vm
     ```
