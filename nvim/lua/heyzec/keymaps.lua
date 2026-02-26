@@ -259,6 +259,10 @@ local mappings = {
 
   ['<C-w>m'] = zoom,
 
+  ['-'] = action('Switch', function()
+    vim.call 'switch#Switch'
+  end),
+
   ['<leader>'] = {
     ['w'] = save_or_format,
 
