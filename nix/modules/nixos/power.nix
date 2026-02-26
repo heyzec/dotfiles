@@ -64,7 +64,7 @@ in {
     services.logind.settings.Login.HandleLidSwitch = "suspend-then-hibernate";
 
     environment.etc =
-      if ! cfg.enable
+      if !cfg.enable
       then {}
       else {
         # Refer to https://github.com/hyprwm/hypridle/issues/176 for file location
@@ -114,25 +114,19 @@ in {
 
     environment.systemPackages = [
       # wlogout, patched with our commands
-      (pkgs.runCommand "wlogout"
-        {
-          buildInputs = [pkgs.makeWrapper];
-        } ''
-          mkdir $out
-          ln -s ${pkgs.wlogout}/* $out
-          rm $out/etc
-          mkdir -p $out/etc/wlogout
-          ln -s ${pkgs.wlogout}/etc/wlogout/* $out/etc/wlogout
-          rm $out/etc/wlogout/layout
-          cp ${pkgs.wlogout}/etc/wlogout/layout $out/etc/wlogout/layout
-
+      # We cannot use pkgs.runCommand and copy the original binary because
+      # postPatch has overriden the etc config files to the original $out
+      (pkgs.wlogout.overrideAttrs (oldAttrs: {
+        postInstall = ''
           substituteInPlace $out/etc/wlogout/layout \
             --replace "systemctl suspend" "systemctl suspend-then-hibernate"
 
+          # Add sleep to wait for wlogout to fade out first, otherwise hyprlock will screenshot it
           # TODO: Try to make swaylock respond to loginctl instead
           substituteInPlace $out/etc/wlogout/layout \
-            --replace "loginctl lock-session" commandLock
-        '')
+            --replace "loginctl lock-session" "sh -c 'sleep 0.5 && ${cfg.commandLockScreen}'"
+        '';
+      }))
     ];
   };
 }
