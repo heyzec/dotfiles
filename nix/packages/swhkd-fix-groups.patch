@@ -1,0 +1,39 @@
+diff --git a/swhkd/src/daemon.rs b/swhkd/src/daemon.rs
+index 0b0d0c1..ca96bf1 100644
+--- a/swhkd/src/daemon.rs
++++ b/swhkd/src/daemon.rs
+@@ -4,7 +4,7 @@ use config::Hotkey;
+ use evdev::{AttributeSet, Device, InputEventKind, Key};
+ use nix::{
+     sys::stat::{umask, Mode},
+-    unistd::{setgid, setuid, Gid, Uid, User},
++    unistd::{setgid, setuid, initgroups, Gid, Uid, User},
+ };
+ use signal_hook::consts::signal::*;
+ use signal_hook_tokio::Signals;
+@@ -209,8 +209,6 @@ async fn main() -> Result<(), Box<dyn Error>> {
+             let mut cmd = Command::new("sh");
+             cmd.arg("-c")
+                 .arg(command)
+-                .uid(invoking_uid)
+-                .gid(user.gid.as_raw())
+                 .stdin(Stdio::null())
+                 .stdout(match File::open(&log) {
+                     Ok(file) => file,
+@@ -229,6 +227,16 @@ async fn main() -> Result<(), Box<dyn Error>> {
+                     }
+                 });
+ 
++            unsafe {
++                cmd.pre_exec(move || {
++                    // The order needs to be setgid -> initgroups -> setuid
++                    setgid(Gid::from_raw(user.gid.as_raw()))?;
++                    initgroups(&username, Gid::from_raw(user.gid.as_raw()))?;
++                    setuid(Uid::from_raw(1000))?;
++                    Ok(())
++                });
++            }
++
+             // Set the environment variables for the command
+             for (key, value) in pairs.lock().unwrap().iter() {
+                 cmd.env(key, value);

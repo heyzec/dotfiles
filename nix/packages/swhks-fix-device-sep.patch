@@ -1,0 +1,15 @@
+diff --git a/swhkd/src/daemon.rs b/swhkd/src/daemon.rs
+index dce2fcd..f71a85e 100644
+--- a/swhkd/src/daemon.rs
++++ b/swhkd/src/daemon.rs
+@@ -61,7 +61,9 @@ struct Args {
+     debug: bool,
+ 
+     /// Take a list of devices from the user
+-    #[arg(short = 'D', long, num_args = 0.., value_delimiter = ' ')]
++    // PATCHED: Change '.*' to ',' to separate multiple devices
++    // See https://github.com/waycrate/swhkd/issues/309
++    #[arg(short = 'D', long, num_args = 0.., value_delimiter = ',')]
+     device: Vec<String>,
+ 
+     /// Set a custom log file. (Defaults to ${XDG_DATA_HOME:-$HOME/.local/share}/swhks-current_unix_time.log)
