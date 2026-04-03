@@ -1,6 +1,5 @@
 {
   pkgs,
-  config,
   ...
 }: {
   services.home-assistant = {
@@ -20,8 +19,8 @@
         samsungctl
         samsungtvws
       ];
-    customComponents = [
-      pkgs.custom.samsungtv-tizen
+    customComponents = with pkgs;[
+      home-assistant-custom-components.samsungtv-smart
     ];
 
     # Your configuration.yaml as a Nix attribute set.
