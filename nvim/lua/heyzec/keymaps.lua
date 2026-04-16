@@ -44,15 +44,28 @@ local function write()
 end
 
 local function format()
-  return require('conform').format { async = true, lsp_format = 'fallback' }
+  local conform = require 'conform'
+  local formatters, lsp_used = conform.list_formatters_to_run()
+  local output = {}
+  for i, e in ipairs(formatters) do
+    if e.available then
+      output[i] = e.name
+    end
+  end
+  if #output == 0 and lsp_used then
+    output[1] = 'LSP'
+  end
+  local ok = conform.format { async = true }
+  return ok, table.concat(output, ', ')
 end
 
 local save_or_format = action('Save/Format', function()
   local message = write()
   if message then
-    local ok = format()
+    local ok, formatters = format()
     if ok then
-      message = message .. ' (formatted)'
+      -- fix inaccuracy: we display formatted with XXX before the async formatting actually completes
+      message = message .. ' (formatted with ' .. formatters .. ')'
     end
     vim.notify(message, vim.log.levels.INFO)
   end
@@ -64,7 +77,7 @@ end, write)
 -- Vim Pickers
 local find_buffers = action('󰈔 Buffers', '<Cmd>Telescope buffers<CR>')
 local find_oldfiles = action(' Oldfiles', '<Cmd>Telescope oldfiles<CR>', vscode 'workbench.action.openRecent')
-local find_commands = action('Command History', '<Cmd>Telescope commands<CR>')
+local find_commands = action('Command History', '<Cmd>Telescope command_history<CR>')
 local marks = action('Marks', '<Cmd>Telescope marks<CR>')
 local jumplist = action('Jumplist', '<Cmd>Telescope jumplist<CR>')
 local keymaps = action('Keymaps', '<Cmd>Telescope keymaps<CR>')
@@ -77,6 +90,7 @@ local search_diagnostics = action('Diagnostics', '<Cmd>Telescope diagnostics<CR>
 local find_files = action('󰈔 Find files', '<Cmd>Telescope find_files<CR>', vscode 'workbench.action.quickOpen')
 -- this requires the Periscope VS Code extension (JoshMu.periscope)
 local search_files = action(' Grep files', '<Cmd>Telescope live_grep<CR>', vscode 'periscope.search')
+local search_current_file = action(' Grep current file', '<Cmd>Telescope current_buffer_fuzzy_find<CR>', vscode 'periscope.searchCurrentFile')
 local search_by_word = action(' Grep files by word', '<Cmd>Telescope grep_string<CR>')
 local search_vim_configs = action('Neovim Configs', function()
   require('telescope.builtin').live_grep { cwd = vim.fn.stdpath 'config' }
@@ -194,6 +208,21 @@ local toggle_wrap = toggle 'wrap'
 local toggle_auto_save = toggle('auto_save', 'g')
 local toggle_completion = toggle('completion', 'g')
 
+local toggle_inlay_hints = action('Toggle inlay hints', function()
+  vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { 0 }, { 0 })
+end)
+
+local toggle_copilot = action('hi', function()
+  local output = vim.api.nvim_exec2('Copilot status', { output = true }).output
+  if output:find 'Disabled globally' then
+    vim.cmd 'Copilot enable'
+    vim.notify 'Copilot enabled'
+  else
+    vim.cmd 'Copilot disable'
+    vim.notify 'Copilot disabled'
+  end
+end)
+
 -- ###############################################################################
 -- ##                                                                           ##
 -- ##                             3. DEFINE MAPPINGS                            ##
@@ -235,6 +264,7 @@ local mappings = {
     -- Some telescope actions
     ['<leader>'] = find_files,
     ['/'] = search_files,
+    ['?'] = search_current_file,
     [':'] = find_commands,
     ['.'] = find_oldfiles,
     ['r'] = resume,
@@ -298,6 +328,8 @@ local mappings = {
       ['w'] = toggle_wrap,
       ['z'] = toggle_spell,
       ['c'] = toggle_completion,
+      ['i'] = toggle_inlay_hints,
+      ['p'] = toggle_copilot,
     },
   }, -- <leader>
 }
