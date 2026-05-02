@@ -1,4 +1,8 @@
 -- Save buffer automatically
+local excluded_filetypes = {
+  'fyler',
+}
+
 return {
   -- Fork of pocco81/auto-save.nvim that is maintained
   'okuuva/auto-save.nvim',
@@ -9,8 +13,8 @@ return {
     vim.g.auto_save = true
   end,
   opts = {
-    condition = function()
-      return vim.g.auto_save
+    condition = function(buf)
+      return vim.g.auto_save and not vim.tbl_contains(excluded_filetypes, vim.fn.getbufvar(buf, '&filetype'))
     end,
   },
 }
