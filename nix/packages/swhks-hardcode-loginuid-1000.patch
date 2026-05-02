@@ -1,0 +1,30 @@
+diff --git a/swhkd/src/daemon.rs b/swhkd/src/daemon.rs
+index f71a85e..0b0d0c1 100644
+--- a/swhkd/src/daemon.rs
++++ b/swhkd/src/daemon.rs
+@@ -657,14 +657,17 @@ pub async fn send_command(
+ 
+ /// Get the UID of the user that is not a system user
+ fn get_uid() -> Result<u32, Box<dyn Error>> {
+-    let status_content = fs::read_to_string(format!("/proc/{}/loginuid", std::process::id()))?;
+-    let uid = status_content.trim().parse::<u32>()?;
+-    if uid == u32::MAX {
+-        // loginuid == u32::MAX ('-1' in unsigned long), means the value is unset
+-        return Err(format!("loginuid not set for process {}", std::process::id()).into());
+-    }
+-
+-    Ok(uid)
++    // let status_content = fs::read_to_string(format!("/proc/{}/loginuid", std::process::id()))?;
++    // let uid = status_content.trim().parse::<u32>()?;
++    // if uid == u32::MAX {
++    //     // loginuid == u32::MAX ('-1' in unsigned long), means the value is unset
++    //     return Err(format!("loginuid not set for process {}", std::process::id()).into());
++    // }
++
++    // Ok(uid)
++    // PATCHED: Hardcoded to user 1000
++    // See https://github.com/waycrate/swhkd/issues/319
++    Ok(1000)
+ }
+ 
+ fn get_file_paths(runtime_dir: &str) -> (String, String) {
