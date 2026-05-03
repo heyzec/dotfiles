@@ -9,7 +9,7 @@
     bluez # bluetooth related commands (e.g. bluetoothctl)
   ];
 
-  nixpkgs.hostPlatform = lib.mkDefault "aarch64-linux";
+  hardware.firmware = [pkgs.linux-firmware];
 
   powerManagement.cpuFreqGovernor = lib.mkDefault "ondemand";
 }

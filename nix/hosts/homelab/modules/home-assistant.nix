@@ -1,16 +1,16 @@
 {
   pkgs,
-  config,
   ...
 }: {
   services.home-assistant = {
     enable = true;
 
     extraComponents = [
-      "xiaomi_ble"
       "zha"
       "mqtt"
       "samsungtv"
+      "broadlink"
+      "kegtron"
     ];
     extraPackages = ps:
       with ps; [
@@ -19,8 +19,8 @@
         samsungctl
         samsungtvws
       ];
-    customComponents = [
-      pkgs.custom.samsungtv-tizen
+    customComponents = with pkgs;[
+      home-assistant-custom-components.samsungtv-smart
     ];
 
     # Your configuration.yaml as a Nix attribute set.
@@ -36,8 +36,11 @@
         trusted_proxies = ["127.0.0.1" "::1"];
       };
 
+      # These features have their configs stored as YAML in /var/lib/hass/
+      # THey are also to be modified by HA itself (file as state)
       automation = "!include automations.yaml";
       script = "!include scripts.yaml";
+      template = "!include templates.yaml";
     };
   };
 

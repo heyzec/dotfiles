@@ -11,12 +11,14 @@ then let
   wireguardPort = 51820;
   # Address of this host ("server"-ish) within the VPN subnet
   ipv4Address = "192.168.2.253/24";
+  # Interface to use
+  iface = "eth0";
 in {
   # Enable NAT
   networking.nat = {
     enable = true;
     enableIPv6 = true;
-    externalInterface = "eth0";
+    externalInterface = iface;
     internalInterfaces = ["wg0"];
   };
   # Open ports in the firewall
@@ -41,17 +43,17 @@ in {
       # This allows the wireguard server to route your traffic to the internet and hence be like a VPN
       postUp = ''
         ${pkgs.iptables}/bin/iptables -A FORWARD -i wg0 -j ACCEPT
-        ${pkgs.iptables}/bin/iptables -t nat -A POSTROUTING -s ${ipv4Address} -o eth0 -j MASQUERADE
+        ${pkgs.iptables}/bin/iptables -t nat -A POSTROUTING -s ${ipv4Address} -o ${iface} -j MASQUERADE
         # ${pkgs.iptables}/bin/ip6tables -A FORWARD -i wg0 -j ACCEPT
-        # ${pkgs.iptables}/bin/ip6tables -t nat -A POSTROUTING -s fdc9:281f:04d7:9ee9::1/64 -o eth0 -j MASQUERADE
+        # ${pkgs.iptables}/bin/ip6tables -t nat -A POSTROUTING -s fdc9:281f:04d7:9ee9::1/64 -o ${iface} -j MASQUERADE
       '';
 
       # Undo the above
       preDown = ''
         ${pkgs.iptables}/bin/iptables -D FORWARD -i wg0 -j ACCEPT
-        ${pkgs.iptables}/bin/iptables -t nat -D POSTROUTING -s ${ipv4Address} -o eth0 -j MASQUERADE
+        ${pkgs.iptables}/bin/iptables -t nat -D POSTROUTING -s ${ipv4Address} -o ${iface} -j MASQUERADE
         # ${pkgs.iptables}/bin/ip6tables -D FORWARD -i wg0 -j ACCEPT
-        # ${pkgs.iptables}/bin/ip6tables -t nat -D POSTROUTING -s fdc9:281f:04d7:9ee9::1/64 -o eth0 -j MASQUERADE
+        # ${pkgs.iptables}/bin/ip6tables -t nat -D POSTROUTING -s fdc9:281f:04d7:9ee9::1/64 -o ${iface} -j MASQUERADE
       '';
 
       # Each peer to be specified on a different subnet

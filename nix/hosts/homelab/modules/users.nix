@@ -9,11 +9,16 @@
     then expr
     else [];
 in {
-  users.users."pi" = {
+  users.users."bee" = {
     isNormalUser = true;
-    uid = 1000;
-    extraGroups = ["wheel" "video"];
-    openssh.authorizedKeys.keys = ifHasPrivate authorizedKeys.pi;
+    # uid = 1000;
+    extraGroups = [
+      "wheel"
+      "video"
+      "hass" # to access /var/lib/hass/
+    ];
+
+    openssh.authorizedKeys.keys = ifHasPrivate authorizedKeys.bee;
   };
   users.users."restic" = {
     isNormalUser = true;

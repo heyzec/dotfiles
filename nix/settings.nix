@@ -19,8 +19,11 @@
   # ----- Override SYSTEM and USER SETTINGS on a per-host basis here ----- #
   specificSettings = {
     "homelab" = {
-      systemSettings.system = "aarch64-linux";
-      userSettings = {}; # don't remove this line without testing build of homelab
+      systemSettings.system = "x86_64-linux";
+      # don't remove the next line without testing build of homelab
+      userSettings = {
+        flakeDir = "/home/bee/dotfiles"; # path to flake repo, used by nh
+      };
     };
     "darwin" = {
       systemSettings.system = "aarch64-darwin";
