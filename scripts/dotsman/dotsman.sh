@@ -171,8 +171,19 @@ gen_dmenu_cmd() {
     # Parse section headers in config file
     all_sections="$(parse_sections "$items_file")"
 
+    # Hide entries without key "file" from dmenu mode
+    for section in $all_sections; do
+        # This part requires reading of $items_file n times overall, making the loop super slow
+        key_value_pairs=$(extract_section "$section" "$items_file")
+        file=$(extract_value file "$key_value_pairs")
+        if [ -n "$file" ]; then
+            filtered="${filtered}${section}
+" # literal newline
+        fi
+    done
+
     # Let user select which config using a dmenu-compatible program
-    selected_config_name=$( (echo "$all_sections") | "$@" )
+    selected_config_name=$( (echo "$filtered") | "$@" )
     if [ -z "$selected_config_name" ]; then
         exit
     fi
