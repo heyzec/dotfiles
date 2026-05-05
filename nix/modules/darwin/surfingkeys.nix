@@ -14,6 +14,9 @@ in {
           KeepAlive = true;
           RunAtLoad = true;
         };
+        environment = {
+          PORT = toString cfg.port;
+        };
       };
     };
   };

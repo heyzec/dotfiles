@@ -14,7 +14,7 @@
       };
       port = lib.mkOption {
         type = lib.types.int;
-        default = 8123;
+        default = 8125;
         description = "Port for the surfingkeys local server";
       };
       command = lib.mkOption {

@@ -8,6 +8,7 @@ const config = esbuild.context({
   bundle: true,
   outfile: "dist/surfingkeys.js",
   loader: { ".css": "text" },
+  // sourcemap: "inline", // sourcemap idea doesn't work because surfingkeys runs user code via Function
 });
 
 main();
@@ -18,7 +19,7 @@ async function main() {
 
   let { hosts, port } = await ctx.serve({
     servedir: "dist",
-    port: 8123,
+    port: parseInt(process.env.PORT),
   });
   console.log(`Serving on http://${hosts[0]}:${port}`);
 }

@@ -1,5 +1,16 @@
 {
   "include": [
     "src"
-  ]
+  ],
+  "compilerOptions": {
+    // default: target="es3", lib=["dom", "es5"]
+    // defines the syntax
+    "target": "es2020",
+    // defines the globals, if omitted, TS picks based on target
+    "lib": [
+      "dom", // for document, window, etc
+      "es2020"
+    ],
+    "strict": true // without this, T | null is simplified to T
+  }
 }

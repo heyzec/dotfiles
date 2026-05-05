@@ -15,5 +15,8 @@ in {
     serviceConfig = {
       WorkingDirectory = cfg.cwd;
     };
+    environment = {
+      PORT = toString cfg.port;
+    };
   };
 }
