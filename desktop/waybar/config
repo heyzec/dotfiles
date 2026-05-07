@@ -1,3 +1,4 @@
+// For NerdFont icons, refer to https://www.nerdfonts.com/cheat-sheet
 {
     "layer": "top",    // Waybar at top layer
     "position": "top", // Waybar position (top|bottom|left|right)
@@ -8,12 +9,13 @@
     // Choose the order of the modules
     "modules-left": [
         "hyprland/workspaces",
-        "hyprland/submap"
+        "hyprland/submap" /*,*/ // jsoncpp library used by waybar breaks for trailing commas before comment in array
         // "custom/mode"
         // "custom/media",
     ],
     "modules-center": [
         "hyprland/window",
+        "systemd-failed-units",
     ],
     "modules-right": [
         "privacy",
@@ -30,7 +32,7 @@
         "on-click": "activate",
         "on-scroll-up": "hyprctl dispatch workspace e+1",
         "on-scroll-down": "hyprctl dispatch workspace e-1",
-        "sort-by-number": true
+        "sort-by-number": true,
     },
 
     "hyprland/window": {
@@ -49,7 +51,7 @@
             // nf-md-lock
             "locked": "",
             // nf-md-lock_open_variant
-            "unlocked": "󰿆"
+            "unlocked": "󰿆",
         },
     },
 
@@ -60,24 +62,24 @@
         "unknown-tag": "N/A",
         "interval": 2,
         "consume-icons": {
-            "on": " "
+            "on": " ",
         },
         "random-icons": {
             "off": "<span color=\"#f53c3c\"></span> ",
-            "on": " "
+            "on": " ",
         },
         "repeat-icons": {
-            "on": " "
+            "on": " ",
         },
         "single-icons": {
-            "on": "1 "
+            "on": "1 ",
         },
         "state-icons": {
             "paused": "",
-            "playing": ""
+            "playing": "",
         },
         "tooltip-format": "MPD (connected)",
-        "tooltip-format-disconnected": "MPD (disconnected)"
+        "tooltip-format-disconnected": "MPD (disconnected)",
     },
 
     "idle_inhibitor": {
@@ -86,13 +88,13 @@
             // nf-md-eye_outline
             "activated": "󰛐",
             // nf-md-eye_off_outline
-            "deactivated": "󰛑"
+            "deactivated": "󰛑",
         }
     },
 
     "tray": {
         // "icon-size": 21,
-        "spacing": 10
+        "spacing": 10,
     },
 
     "clock": {
@@ -100,38 +102,43 @@
         "format-alt": "{:%Y-%m-%d}",
         "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
         "calendar": {
-                   "mode"          : "year",
-                   "mode-mon-col"  : 3,
-                   "weeks-pos"     : "right",
-                   "on-scroll"     : 1,
-                   "on-click-right": "mode",
-                   "format": {
-                             "months":     "<span color='#ffead3'><b>{}</b></span>",
-                             "days":       "<span color='#ecc6d9'><b>{}</b></span>",
-                             "weeks":      "<span color='#99ffdd'><b>W{}</b></span>",
-                             "weekdays":   "<span color='#ffcc66'><b>{}</b></span>",
-                             "today":      "<span color='#ff6699'><b><u>{}</u></b></span>"
-                             }
-                   },
+            "mode": "year",
+            "mode-mon-col": 3,
+            "weeks-pos": "right",
+            "on-scroll": 1,
+            "on-click-right": "mode",
+            "format": {
+                "months": "<span color='#ffead3'><b>{}</b></span>",
+                "days": "<span color='#ecc6d9'><b>{}</b></span>",
+                "weeks": "<span color='#99ffdd'><b>W{}</b></span>",
+                "weekdays": "<span color='#ffcc66'><b>{}</b></span>",
+                "today": "<span color='#ff6699'><b><u>{}</u></b></span>",
+            }
+        },
+        "actions":  {
+            "on-click-right": "mode",
+            "on-scroll-up": "shift_down",
+            "on-scroll-down": "shift_up",
+        },
         "interval": 1,
     },
 
     "cpu": {
         // nf-oct-cpu
         "format": " {usage}%",
-        "tooltip": true
+        "tooltip": true,
     },
 
     "memory": {
         // nf-md-chip
-        "format": "󰘚 {}%"
+        "format": "󰘚 {}%",
     },
 
     "disk": {
         "interval": 30,
         // nf-fa-files_o
         "format": " {percentage_used}%",
-        "path": "/"
+        "path": "/",
     },
 
     "temperature": {
@@ -165,7 +172,9 @@
             "charging": ["󰢟", "󰢜", "󰂆", "󰂇", "󰂈", "󰢝", "󰂉", "󰢞", "󰂊", "󰂋", "󰂅"],
             // nf-fa-plug
             "plugged": "",
-        }
+            // nf-md-battery
+            "full": "󰁹",
+        },
     },
 
     "network": {
@@ -179,7 +188,7 @@
         // nf-md-wifi_strength_off_outline
         "format-disconnected": "󰤮 Disconnected",
         // nf-md-wifi_strength_{outline, 1, 2, 3, 4}
-        "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"]
+        "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"],
     },
 
     "pulseaudio#speaker": {
@@ -202,7 +211,7 @@
             // nf-fa-car
             "car": "",
             // nf-fa-volume_{off,down,up}
-            "default": ["", "", ""]
+            "default": ["", "", ""],
         },
     },
     "pulseaudio#microphone": {
@@ -222,7 +231,7 @@
         "orientation": "inherit",
         "modules": [
             "tray",
-            "custom/wlogout"
+            "custom/wlogout",
         ]
     },
 
@@ -239,7 +248,7 @@
             "idle_inhibitor",
             "pulseaudio#speaker",
             "pulseaudio#microphone",
-        ]
+        ],
     },
 
     "group/hardware": {
@@ -250,7 +259,7 @@
             "temperature",
             "backlight",
             "keyboard-state",
-        ]
+        ],
     },
 
     "privacy": {
@@ -259,37 +268,14 @@
             {
                 "type": "screenshare",
                 "tooltip": true,
-                "tooltip-icon-size": 24
-            },
-            {
-                "type": "audio-out",
-                "tooltip": true,
-                "tooltip-icon-size": 24
+                "tooltip-icon-size": 24,
             },
             {
                 "type": "audio-in",
                 "tooltip": true,
-                "tooltip-icon-size": 24
+                "tooltip-icon-size": 24,
             },
         ]
     },
-
-    // "custom/mode": {
-
-    // }
-
-    // "custom/media": {
-    //     "format": "{icon} {}",
-    //     "return-type": "json",
-    //     "max-length": 40,
-    //     "format-icons": {
-    //         "spotify": "",
-    //         "default": "🎜"
-    //     },
-    //     "escape": true,
-    //     "exec": "$HOME/.config/waybar/mediaplayer.py 2> /dev/null" // Script in resources folder
-    //     // "exec": "$HOME/.config/waybar/mediaplayer.py --player spotify 2> /dev/null" // Filter player based on name
-    // }
 }
-// vim: set filetype=javascript:
-
+// vim: set filetype=json5:
