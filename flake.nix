@@ -34,10 +34,17 @@
       "homelab" = mkNixosSystem "homelab" {modules = [./nix/hosts/homelab];};
     };
 
-    homeConfigurations = {
-      "heyzec" = mkHmConfig "heyzec" {modules = [./nix/home];};
-      "darwin" = mkHmConfig "darwin" {modules = [./nix/home];};
-    };
+    homeConfigurations =
+      {
+        "heyzec" = mkHmConfig "heyzec" {modules = [./nix/home];};
+      }
+      // (
+        if (builtins.hasAttr "private" inputs)
+        then {
+          "${(import nix/settings.crypt.nix).darwin.username}" = mkHmConfig "darwin" {modules = [./nix/home];};
+        }
+        else {}
+      );
 
     darwinConfigurations = {
       "darwin" = mkDarwinSystem "darwin" {modules = [./nix/hosts/darwin];};

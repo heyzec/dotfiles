@@ -5,5 +5,6 @@
     }
     ++ [
       ./linux
+      ./darwin
     ];
 }

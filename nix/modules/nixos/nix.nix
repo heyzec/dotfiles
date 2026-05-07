@@ -32,6 +32,11 @@
     };
   };
 
+  # Add insecure packages if needed
+  nixpkgs.config.permittedInsecurePackages = [
+    # e.g. "openssl-1.1.1w"
+  ];
+
   environment.systemPackages = with pkgs; [
     git-crypt #        # Needed to decrypt our dotfiles repo
     comma #            # Run software without installing

@@ -11,7 +11,7 @@
 in {
   users.users."bee" = {
     isNormalUser = true;
-    # uid = 1000;
+    uid = 1000;
     extraGroups = [
       "wheel"
       "video"
