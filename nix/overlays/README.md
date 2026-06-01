@@ -35,3 +35,11 @@ in {
 }
 ```
 See thunar.nix for an example of using `symlinkJoin` for patching without rebuilding.
+
+**Override src when using buildNpmPackage**
+It is likely that you will need to update the hash for the npm dependencies.
+
+However, since `buildNpmPackage` is a wrapper around `mkDerivation`, and `overrideAttrs`
+only works for `mkDerivation`, it is too late to change `npmDepsHash`.
+
+Instead, we need to `npmDeps` directly. See `overlays/bruno.nix` for an example of how to do this.
