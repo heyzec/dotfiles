@@ -44,6 +44,8 @@
     localsend
     gnupg
     pinentry-tty
+    claude-code
+    custom.happy-coder
   ];
 
   # NixOS System Version (Do not touch!!)

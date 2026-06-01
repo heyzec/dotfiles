@@ -7,5 +7,7 @@
     terminal-notifier # alternative to notify-send
     choose-gui # current alternative to rofi
     flameshot
+    claude-code
+    custom.happy-coder
   ];
 }
