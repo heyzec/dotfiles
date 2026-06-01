@@ -18,7 +18,7 @@
     ##### B. Internet #####
     # (B.5.5.9) Instant messaging clients (Other IM clients)
     telegram-desktop #     # Telegram client (patched to use GTK3 over QT filepicker, see overlays)
-    wasistlos #            # unofficial client
+    karere #               # Unofficial WhatsApp client
     webcord #              # Alternative Discord client
     teams-for-linux
     zoom
@@ -37,7 +37,8 @@
     # (F.3) Development
     bruno # REST API client
 
-    bottles # (F.6.21) graphical Wine manager
+    # broken on 26.05
+    # bottles # (F.6.21) graphical Wine manager
 
     ##### G. Other #####
     ticktick # (G.1.6.2) graphical task management

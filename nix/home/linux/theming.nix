@@ -1,5 +1,8 @@
-{ pkgs, ... }:
 {
+  pkgs,
+  config,
+  ...
+}: {
   # Use inline modules to merge home.packages automatically
   imports = [
     #############################################################
@@ -11,6 +14,7 @@
       ];
 
       # https://wiki.archlinux.org/title/GTK
+      # gtk.theme sets theme for GTK 2/3
       gtk = {
         theme = {
           name = "Materia-light";
@@ -21,6 +25,7 @@
           package = pkgs.vimix-icon-theme;
         };
       };
+      gtk.gtk4.theme = config.gtk.theme;
 
       qt.enable = true;
       qt.style.name = "adwaita";
@@ -40,7 +45,6 @@
         # Enable config generation for specific backends
         gtk.enable = true;
       };
-
     })
   ];
 }

@@ -48,8 +48,12 @@
   in {
     enable = true;
     settings = {
-      preload = [image];
-      wallpaper = [",${image}"];
+      wallpaper = [
+        {
+          monitor = ""; # fallback
+          path = image;
+        }
+      ];
     };
   };
 

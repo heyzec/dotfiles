@@ -105,12 +105,12 @@ in {
       };
 
     # Added to [Sleep] section
-    systemd.sleep.extraConfig =
+    systemd.sleep.settings.Sleep =
       if cfg.enable && cfg.hibernateAfter != null
-      then ''
-        HibernateDelaySec=${builtins.toString cfg.hibernateAfter}
-      ''
-      else "";
+      then {
+        HibernateDelaySec = builtins.toString cfg.hibernateAfter;
+      }
+      else {};
 
     environment.systemPackages = [
       # wlogout, patched with our commands

@@ -1,6 +1,7 @@
 {
   lib,
   pkgs,
+  config,
   ...
 }: let
   # Obtain extension ID from about:support
@@ -114,5 +115,7 @@ in {
         search.force = true;
       };
     };
+    # To silence warning because `home.stateVersion` is less than "26.05"
+    configPath = "${config.xdg.configHome}/mozilla/firefox";
   };
 }

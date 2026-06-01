@@ -53,6 +53,7 @@
     "documents" = {
       device = "${config.fileSystems."/mnt/D".mountPoint}/@data/Documents";
       mountPoint = "${config.fileSystems."home".mountPoint}/Documents";
+      fsType = "btrfs";
       options = ["bind" "nofail"];
     };
     "D" = {

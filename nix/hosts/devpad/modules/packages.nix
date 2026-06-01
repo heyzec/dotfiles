@@ -93,7 +93,7 @@
     ];
 
   programs = {
-    wireshark.enable = true;
+    wireshark.enable = false;  # hash mismatch in master, hopefully fixed by 26.05
     wireshark.package = pkgs.wireshark;
 
     obs-studio.enable = true;

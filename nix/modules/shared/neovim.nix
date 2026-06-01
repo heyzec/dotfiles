@@ -19,10 +19,10 @@
     yaml-language-server # server
 
     # Others
-    nodePackages.prettier # formatter
+    prettier # formatter
 
     # # Shell
-    # nodePackages.bash-language-server # LSP
+    # bash-language-server # LSP
     # shellcheck           # linter
   ];
   extraPackages = with pkgs;
