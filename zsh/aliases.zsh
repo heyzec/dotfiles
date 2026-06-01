@@ -78,6 +78,16 @@ fi
 alias dots="$HOME/dotfiles/edit -here fzf"
 
 
+# Find process by name
+alias psg='ps aux | grep -v grep | grep -i'
+
+# Check which process is using a port (TCP)
+if has lsof; then
+	port() { lsof -i ":$1"; }
+elif has ss; then
+	port() { ss -ltnp "sport = :$1"; }
+fi
+
 ###############################################################################
 # 4. Useful functions
 ###############################################################################
@@ -109,6 +119,5 @@ function mergerequests() {
 function back() {
 	nohup "$@" &> /dev/null &
 }
-
 
 # vim: set noexpandtab:
