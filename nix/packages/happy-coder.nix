@@ -90,8 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
       --add-flags "--no-warnings" \
       --add-flags "--no-deprecation" \
       --add-flags "$packageOut/bin/happy.mjs" \
-      --prefix PATH : ${lib.makeBinPath [ nodejs ]} \
-      --set HAPPY_CLAUDE_PATH /run/current-system/sw/bin/claude
+      --prefix PATH : ${lib.makeBinPath [ nodejs ]}
 
     makeBinaryWrapper ${lib.getExe nodejs} "$out/bin/happy-mcp" \
       --add-flags "--no-warnings" \
