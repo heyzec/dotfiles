@@ -1,3 +1,4 @@
+// This file's contents will take effect for all VS Code profiles, via symlinks + inherit-profile
 // Avoid trailing commas: VSCode reads them fine but removes them on save
 {
   // ###############################################################################
@@ -5,35 +6,29 @@
   // ##                        1. VSCODE-NEOVIM INTEGRATION                       ##
   // ##                                                                           ##
   // ###############################################################################
-
   // -----------------------Escape mapping------------------------
   // See https://github.com/vscode-neovim/vscode-neovim#composite-escape-keys
   "vscode-neovim.compositeKeys": {
     "jk": {
-      "command": "vscode-neovim.escape"
-    }
+      "command": "vscode-neovim.escape",
+    },
   },
-
   // Make vscode-neovim extension run in a separate thread
   // https://github.com/vscode-neovim/vscode-neovim/issues/1051
-  "extensions.experimental.affinity": {
-    "asvetliakov.vscode-neovim": 1
-  },
-
+  // inherit-profile not merging correctly, manually copy this to each profile for now
+  // "extensions.experimental.affinity": {
+  //   "asvetliakov.vscode-neovim": 1,
+  // },
   // Required for mapping alt shortcuts in keybindings.json
   "window.enableMenuBarMnemonics": false,
   "window.customMenuBarAltFocus": false,
-
   // Cursors don't blink in neovim
   "editor.cursorBlinking": "solid",
-
   // Similar to `set relativenumber`
   "editor.lineNumbers": "relative",
-
   // Similar to nvim-treesitter-context
   "editor.stickyScroll.enabled": true,
   "editor.guides.bracketPairs": "active",
-
   // ###############################################################################
   // ##                                                                           ##
   // ##                             2. VSCODE SETTINGS                            ##
@@ -41,75 +36,60 @@
   // ###############################################################################
   // Some explanation of useful settings here:
   // https://blog.danskingdom.com/Visual-Studio-Code-default-settings-to-change
-
   // Use system font; make it smaller (the default is 14)
-  "editor.fontFamily": "monospace",
-  "editor.fontSize": 13,
-
+  "editor.fontFamily": "JetBrainsMono Nerd Font",
+  // Too used to original VSCode's theme
+  "workbench.colorTheme": "Dark Modern",
   // Autosave, by default after 1000ms
   "files.autoSave": "afterDelay",
-
   // Automatically deal with whitespaces
-  "files.trimTrailingWhitespace": true,
-  "files.insertFinalNewline": true,
-  "files.trimFinalNewlines": true,
-
+  "files.trimTrailingWhitespace": false,
+  "files.insertFinalNewline": false,
+  "files.trimFinalNewlines": false,
   // This makes vscode use their own sidebar, which looks nicer on linux
   "window.titleBarStyle": "custom",
-
   // Use minimap as a large scrollbar
   "editor.minimap.size": "fill",
-  "editor.minimap.autohide": true,
-
+  "editor.minimap.autohide": "mouseover",
   // Debug toolbar is very annoying
   "debug.toolBarLocation": "commandCenter",
-
-  // VSCode asking for updates too frequently, we disable auto-update checks
-  "update.mode": "manual",
-
   // Version of VSCode installed by NixOS may not be the latest, and extensions may not backward compatible
   "extensions.autoCheckUpdates": false,
   "extensions.autoUpdate": false,
-
+  "update.mode": "none",
   // Tell vscode not to intercept some control sequences used by vim
   "terminal.integrated.commandsToSkipShell": [
-    "-workbench.action.quickOpen" // Ctrl-E
+    "-workbench.action.quickOpen", // Ctrl-E
   ],
-
   // Exclude certain files from explorer
-  "files.exclude": {
-    "**/.direnv": true
-  },
-
+  // inherit-profile not merging correctly, manually copy this to each profile for now
+  // "files.exclude": {
+  //   "**/.direnv": true,
+  // },
   // Don't show this annoying warning, we'll open manually via the Git sidebar if needed
   "git.openRepositoryInParentFolders": "never",
-
   // Others
   "workbench.editor.pinnedTabsOnSeparateRow": true,
   "workbench.tree.enableStickyScroll": true,
-
   // ###############################################################################
   // ##                                                                           ##
   // ##                       3. FILETYPE SPECIFIC SETTINGS                       ##
   // ##                                                                           ##
   // ###############################################################################
-
   // In web dev, prettier is a common standard
   "[javascript][javascriptreact][typescript][typescriptreact]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.formatOnSave": true
+    "editor.formatOnSave": true,
   },
   "[json][jsonc]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.formatOnSave": true
+    "editor.formatOnSave": true,
   },
-
   // ###############################################################################
   // ##                                                                           ##
   // ##                           4. EXTENSIONS SETTINGS                          ##
   // ##                                                                           ##
   // ###############################################################################
-
   // ext install waderyan.gitblame
   "gitblame.inlineMessageEnabled": true,
   "gitblame.inlineMessageFormat": "${author.name} (${time.ago})",
@@ -117,6 +97,3 @@
   "gitblame.statusBarMessageFormat": "${commit.summary}",
   "gitblame.delayBlame": 250,
 }
-
-// Unfortunately we cannot rename the file extension to jsonc
-// vim: filetype=jsonc

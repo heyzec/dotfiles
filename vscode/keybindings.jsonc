@@ -1,0 +1,195 @@
+// This file is shared across all VS Code profiles, via symlinks
+// ------------------------------ ------------------------------
+// Place your key bindings in this file to override the defaults
+// See https://www.whitphx.info/posts/20230217-vscode-undocumented-contexts/
+// for the valid contexts (when key)
+// Avoid trailing commas: VSCode reads them fine but removes them on save
+[
+    // ###############################################################################
+    // ##                                                                           ##
+    // ##                        1. VSCODE-NEOVIM INTEGRATION                       ##
+    // ##                                                                           ##
+    // ###############################################################################
+    // --------------------Restore Ctrl+C as copy-------------------
+    // This makes insert mode behave more like VSCode without neovim plugin
+    {
+        "key": "ctrl+c",
+        "command": "editor.action.clipboardCopyAction",
+        "when": "neovim.mode != visual",
+    },
+    // ----------------------Special shortcuts----------------------
+    // Alt keyboard shortcut must be explicitly defined here
+    // See https://github.com/vscode-neovim/vscode-neovim#add-keybindings
+    // Mapping alt in vscode also requires additional settings:
+    // - window.enableMenuBarMnemonics: false (if not macos)
+    // - window.titleBarStyle: native (if in linux)
+    {
+        "key": "ctrl+j",
+        "command": "workbench.action.navigateDown",
+    },
+    {
+        "key": "ctrl+k",
+        "command": "workbench.action.navigateUp",
+    },
+    {
+        "key": "ctrl+h",
+        "command": "workbench.action.navigateLeft",
+        "when": "!terminalFocus",
+    },
+    {
+        "key": "ctrl+h",
+        "command": "workbench.action.terminal.focusPreviousPane",
+        "when": "terminalFocus",
+    },
+    {
+        "key": "ctrl+l",
+        "command": "workbench.action.navigateRight",
+        "when": "!terminalFocus",
+    },
+    {
+        "key": "ctrl+l",
+        "command": "workbench.action.terminal.focusNextPane",
+        "when": "terminalFocus",
+    },
+    // ----------------------Other workarounds----------------------
+    // Workaround for mapping n to nzz
+    // https://github.com/vscode-neovim/vscode-neovim/issues/1222
+    // {
+    //     "key": "n",
+    //     "when": "editorTextFocus && neovim.mode && neovim.mode != insert",
+    //     "command": "runCommands",
+    //     "args": {
+    //         "commands": [
+    //             {
+    //                 "command": "vscode-neovim.send",
+    //                 "args": "n",
+    //             },
+    //             {
+    //                 "command": "vscode-neovim.send-blocking",
+    //                 "args": ":sleep 100m<CR>",
+    //             },
+    //             {
+    //                 "command": "vscode-neovim.send",
+    //                 "args": "zz",
+    //             },
+    //         ]
+    //     }
+    // },
+    // {
+    //     "key": "shift+n",
+    //     "when": "editorTextFocus && neovim.mode && neovim.mode != insert",
+    //     "command": "runCommands",
+    //     "args": {
+    //         "commands": [
+    //             {
+    //                 "command": "vscode-neovim.send",
+    //                 "args": "N",
+    //             },
+    //             {
+    //                 "command": "vscode-neovim.send-blocking",
+    //                 "args": ":sleep 100m<CR>",
+    //             },
+    //             {
+    //                 "command": "vscode-neovim.send",
+    //                 "args": "zz",
+    //             },
+    //         ]
+    //     }
+    // },
+    // Moving lines up and down faster is less laggy if we do it in vscode
+    {
+        "command": "editor.action.moveLinesDownAction",
+        "when": "editorTextFocus && neovim.mode != insert",
+        "key": "alt+j",
+    },
+    {
+        "command": "editor.action.moveLinesUpAction",
+        "when": "editorTextFocus && neovim.mode != insert",
+        "key": "alt+k",
+    },
+    // ###############################################################################
+    // ##                                                                           ##
+    // ##                             2. VSCODE KEYBINDS                            ##
+    // ##                                                                           ##
+    // ###############################################################################
+    // // The default behaviour of tab in vscode is to accept current suggestion,
+    // // let's change it to select the next one instead.
+    // {
+    //     "key": "tab",
+    //     "command": "selectNextSuggestion",
+    //     "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus"
+    // },
+    // {
+    //     "key": "shift+tab",
+    //     "command": "selectPrevSuggestion",
+    //     "when": "suggestWidgetMultipleSuggestions && suggestWidgetVisible && textInputFocus"
+    // },
+    // Use tab solely for autocompletion of suggestions (e.g. GitHub Copilot)
+    {
+        "key": "tab",
+        "command": "editor.action.inlineSuggest.commit",
+        "when": "textInputFocus && inlineSuggestionHasIndentationLessThanTabSize && inlineSuggestionVisible && !editorTabMovesFocus",
+    },
+    {
+        "key": "\\",
+        "command": "workbench.action.toggleSidebarVisibility",
+        "when": "sideBarFocus && !inputFocus",
+    },
+    {
+        "key": "space space",
+        // Otherwise, we can't use this shortcut when all editors are closed
+        "when": "!inputFocus && editorTextFocus",
+        "command": "runCommands",
+        "args": {
+            "commands": [
+                {
+                    "command": "vscode-neovim.send",
+                    "args": "<space><space>",
+                },
+            ],
+        },
+    },
+    // Press Cmd+, again to open JSON settings instead of the default UI
+    {
+        "key": "cmd+,",
+        "when": "inSettingsSearch",
+        "command": "workbench.action.openSettingsJson",
+    },
+    // For tmux-like splits
+    {
+        "key": "ctrl+space",
+        "command": "-editor.action.triggerSuggest",
+        "when": "editorHasCompletionItemProvider && textInputFocus && !editorReadonly && !suggestWidgetVisible",
+    },
+    {
+        "key": "ctrl+space shift+'",
+        "command": "runCommands",
+        "args": {
+            "commands": [
+                "workbench.action.createTerminalEditor",
+                "workbench.action.moveEditorToBelowGroup",
+            ],
+        },
+    },
+    {
+        "key": "ctrl+space shift+5",
+        "command": "runCommands",
+        "args": {
+            "commands": [
+                "workbench.action.createTerminalEditor",
+                "workbench.action.moveEditorToRightGroup",
+            ],
+        },
+    },
+    {
+        "key": "ctrl+space z",
+        "command": "runCommands",
+        "args": {
+            "commands": [
+                "workbench.action.toggleMaximizeEditorGroup"
+            ],
+        },
+    },
+]
+// Unfortunately we cannot rename the file extension to jsonc
+// vim: filetype=jsonc

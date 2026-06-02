@@ -1,0 +1,84 @@
+{
+  "go.alternateTools": {
+    // GOTOOLS is a custom variable set from Nix shell
+    // We can't find a better solution to make vscode-go extension to use our Nix binaries
+    "gopls": "${env:GOTOOLS}/gopls",
+    "golangci-lint": "${env:GOTOOLS}/golangci-lint",
+    "dlv": "${env:GOTOOLS}/dlv",
+  },
+  "go.lintTool": "golangci-lint",
+  "go.lintFlags": [
+    "--fast"
+  ],
+  "go.formatFlags": [
+    "fmt",
+    "--stdin"
+  ],
+  "go.testFlags": [
+    "-ldflags=-checklinkname=0"
+  ],
+  "gopls": {
+    // "formatting.gofumpt": true,
+    "analyses": {
+      // because golangci-lint will also run staticcheck with custom settings
+      "default": false,
+      "staticcheck": false,
+      "unusedparams": false,
+      "shadow": false,
+      "nilness": false,
+      "structtag": false,
+      "fieldalignment": false,
+      "unusedwrite": false,
+      "unusedresult": false,
+      "QF1003": false,
+    },
+  },
+  // SETTINGS FROM DEFAULT PROFILE {{{
+  "inheritProfile.parents": [
+    "Default"
+  ],
+  "files.exclude": {
+    "**/.direnv": true,
+  },
+  "extensions.experimental.affinity": {
+    "asvetliakov.vscode-neovim": 1,
+  },
+  // --- INHERITED SETTINGS MARKER START --- //
+  // WARNING: Do not remove the inherited settings start and end markers.
+  //          The markers are used to identify inserted inherited settings.
+  "[javascript][javascriptreact][typescript][typescriptreact].editor.defaultFormatter": "esbenp.prettier-vscode",
+  "[javascript][javascriptreact][typescript][typescriptreact].editor.formatOnSave": true,
+  "[json][jsonc].editor.defaultFormatter": "esbenp.prettier-vscode",
+  "[json][jsonc].editor.formatOnSave": true,
+  "debug.toolBarLocation": "commandCenter",
+  "editor.cursorBlinking": "solid",
+  "editor.fontFamily": "JetBrainsMono Nerd Font",
+  "editor.guides.bracketPairs": "active",
+  "editor.lineNumbers": "relative",
+  "editor.minimap.autohide": "mouseover",
+  "editor.minimap.size": "fill",
+  "editor.stickyScroll.enabled": true,
+  "extensions.autoCheckUpdates": false,
+  "extensions.autoUpdate": false,
+  "files.autoSave": "afterDelay",
+  "files.insertFinalNewline": false,
+  "files.trimFinalNewlines": false,
+  "files.trimTrailingWhitespace": false,
+  "git.openRepositoryInParentFolders": "never",
+  "gitblame.delayBlame": 250,
+  "gitblame.inlineMessageEnabled": true,
+  "gitblame.inlineMessageFormat": "${author.name} (${time.ago})",
+  "gitblame.inlineMessageMargin": 2,
+  "gitblame.statusBarMessageFormat": "${commit.summary}",
+  "terminal.integrated.commandsToSkipShell": ["-workbench.action.quickOpen"],
+  "update.mode": "none",
+  "vscode-neovim.compositeKeys.jk.command": "vscode-neovim.escape",
+  "window.customMenuBarAltFocus": false,
+  "window.enableMenuBarMnemonics": false,
+  "window.titleBarStyle": "custom",
+  "workbench.colorTheme": "Dark Modern",
+  "workbench.editor.pinnedTabsOnSeparateRow": true,
+  "workbench.tree.enableStickyScroll": true,
+  // --- INHERITED SETTINGS MARKER END --- //
+  "inheritProfile._insertionBoundary": false
+}
