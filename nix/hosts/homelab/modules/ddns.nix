@@ -1,6 +1,5 @@
 {
   config,
-  pkgs,
   hasPrivate,
   ...
 }:
@@ -18,9 +17,6 @@ then {
     username = "heyzec.dedyn.io";
     passwordFile = config.age.secrets.ddns.path;
     domains = ["heyzec.dedyn.io"];
-
-    # Fix for NixOS ddclient module
-    usev4 = "cmd, cmd='${pkgs.curl}/bin/curl https://checkipv4.dedyn.io/'";
   };
 }
 else {}
