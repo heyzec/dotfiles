@@ -41,7 +41,7 @@
     # bottles # (F.6.21) graphical Wine manager
 
     ##### G. Other #####
-    ticktick # (G.1.6.2) graphical task management
+    # ticktick # (G.1.6.2) graphical task management # build failure
     claude-code # (G.7.5) agentic coding assistant
     happy-coder # (G.7.5) remote wrapper over claude
 

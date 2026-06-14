@@ -15,10 +15,10 @@
       "image/png" = ["qimgv.desktop"];
       "image/jpeg" = ["qimgv.desktop"];
       "video/*" = ["vlc.desktop"];
+      "audio/mpeg" = ["vlc.desktop"];
       "application/pdf" = ["atril.desktop"];
-      "application/x-archive" = [ "gnome-file-roller.desktop" ];
+      "application/x-archive" = ["gnome-file-roller.desktop"];
     };
   };
   xdg.configFile."mimeapps.list".force = true;
 }
-
