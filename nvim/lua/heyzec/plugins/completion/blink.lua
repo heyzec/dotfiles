@@ -1,7 +1,7 @@
 -- Provides auto-completion
 return {
   'saghen/blink.cmp',
-  event = {'InsertEnter', 'CmdlineEnter'},
+  event = { 'InsertEnter', 'CmdlineEnter' },
   -- use a release tag to download pre-built binaries
   version = '1.*',
   ---@module 'blink.cmp'
@@ -50,6 +50,8 @@ return {
         ['<S-Tab>'] = { 'select_prev' },
         ['<Down>'] = { 'select_next', 'fallback' },
         ['<Up>'] = { 'select_prev', 'fallback' },
+        ['<Left>'] = {},
+        ['<Right>'] = {},
       },
       completion = {
         list = { selection = { preselect = false, auto_insert = true } },
@@ -57,7 +59,7 @@ return {
       },
     },
     enabled = function()
-      return vim.g.completion
+      return vim.g.completion and not vim.tbl_contains({ 'AvanteInput' }, vim.bo.filetype)
     end,
   },
 }
