@@ -16,5 +16,11 @@ return {
     condition = function(buf)
       return vim.g.auto_save and not vim.tbl_contains(excluded_filetypes, vim.fn.getbufvar(buf, '&filetype'))
     end,
+    -- debounce_delay = 0.0,
+    -- trigger_events = {
+    --   immediate_save = {
+    --     { 'BufLeave', pattern = { '*.plantuml' } },
+    --   },
+    -- },
   },
 }

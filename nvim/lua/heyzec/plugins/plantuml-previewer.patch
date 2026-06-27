@@ -1,0 +1,50 @@
+diff --git a/autoload/plantuml_previewer.vim b/autoload/plantuml_previewer.vim
+index f48f143..83872b2 100644
+--- a/autoload/plantuml_previewer.vim
++++ b/autoload/plantuml_previewer.vim
+@@ -23,10 +23,6 @@ let s:started = v:false
+ let s:extensions = get(g:, "plantuml_previewer#file_pattern", "*.pu,*.uml,*.plantuml,*.puml,*.iuml")
+ 
+ function! plantuml_previewer#start() "{{{
+-  if !executable(s:java_path())
+-    echoerr 'require java command'
+-    return v:false
+-  endif
+   let viewer_path = s:viewer_path()
+   if !isdirectory(viewer_path) && !filereadable(viewer_path)
+     call plantuml_previewer#copy_viewer_directory()
+@@ -214,10 +210,6 @@ function! plantuml_previewer#refresh(bufnr) "{{{
+ endfunction "}}}
+ 
+ function! plantuml_previewer#save_as(...) "{{{
+-  if !executable(s:java_path())
+-    echoerr 'require java command'
+-    return
+-  endif
+ 
+   let save_path = get(a:000, 0, 0)
+   let image_type = get(a:000, 1, 0)
+diff --git a/script/save-as.sh b/script/save-as.sh
+index 3c45f2e..055d796 100755
+--- a/script/save-as.sh
++++ b/script/save-as.sh
+@@ -9,5 +9,5 @@ save_path=${6}
+ image_type=${7}
+ include_path=${8}
+ 
+-$java -Dapple.awt.UIElement=true -Djava.awt.headless=true -Dplantuml.include.path="$include_path" -jar "$jar_path" "$puml_src_path" -t$image_type -o "$output_dir_path"
++plantuml "$puml_src_path" -t$image_type -o "$output_dir_path"
+ cp "$output_path" "$save_path"
+diff --git a/script/update-viewer.sh b/script/update-viewer.sh
+index 521fe05..51f71d5 100755
+--- a/script/update-viewer.sh
++++ b/script/update-viewer.sh
+@@ -13,6 +13,6 @@ timestamp=${8}
+ update_js_path=${9}
+ include_path=${10}
+ 
+-$java -Dapple.awt.UIElement=true -Djava.awt.headless=true -Dplantuml.include.path="$include_path" -jar "$jar_path" "$puml_src_path" -t$image_type -o "$output_dir_path"
++plantuml "$puml_src_path" -t$image_type -o "$output_dir_path"
+ cp "$output_path" "$finial_path"
+ echo "window.updateDiagramURL('$timestamp')" > "$update_js_path"
+
