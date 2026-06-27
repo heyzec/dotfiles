@@ -71,6 +71,10 @@
   // Others
   "workbench.editor.pinnedTabsOnSeparateRow": true,
   "workbench.tree.enableStickyScroll": true,
+  // Hide the ugly "Sign In" button after AI enshittification
+  "chat.disableAIFeatures": true,
+  // Don't open settings / keybindings in a modal
+  "workbench.editor.useModal": "off",
   // ###############################################################################
   // ##                                                                           ##
   // ##                       3. FILETYPE SPECIFIC SETTINGS                       ##
