@@ -112,9 +112,6 @@ local goto_def = action('💬 [G]oto [D]efinition', '<Cmd>Telescope lsp_definiti
 local goto_ref = action('💬 Goto [R]eferences', '<Cmd>Telescope lsp_references<CR>', vscode 'editor.action.goToReferences')
 local goto_impl = action('💬 Goto [I]mplementation', '<Cmd>Telescope lsp_implementations<CR>', vscode 'editor.action.goToImplementation')
 local goto_type_def = action('💬 Goto [T]ype Definition', '<Cmd>Telescope lsp_type_definitions<CR>', vscode 'editor.action.goToTypeDefinition')
-local goto_prev_diagnostic = action('💬 Goto Prev Diagnostic', nil, vscode 'editor.action.marker.next')
-
-local goto_next_diagnostic = action('💬 Goto Next Diagnostic', nil, vscode 'editor.action.marker.next')
 
 -- Info
 local show_hover = action('💬 Hover', function()
@@ -135,6 +132,34 @@ local code_refactor = action('💬 Code Action (Re[f]actor)', vim.lsp.buf.code_a
 local code_rename = action('💬 Code Re[n]ame', vim.lsp.buf.rename, vscode 'editor.action.rename')
 
 local code_format = action('Format Document', format, vscode 'editor.action.formatDocument')
+
+-- Prioritized diagnostics (idea: 5long)
+local severity_order = {
+  vim.diagnostic.severity.ERROR,
+  vim.diagnostic.severity.WARN,
+  vim.diagnostic.severity.INFO,
+  vim.diagnostic.severity.HINT,
+}
+local function get_highest_severity(count)
+  count = count or vim.diagnostic.count()
+
+  for _, s in ipairs(severity_order) do
+    if count[s] and count[s] > 0 then
+      return s
+    end
+  end
+
+  return nil
+end
+
+local goto_next_diagnostic = action('💬 Goto Next Diagnostic', function()
+  local severity = get_highest_severity()
+  vim.diagnostic.jump { count = vim.v.count1, severity = severity }
+end, vscode 'editor.action.marker.next')
+local goto_prev_diagnostic = action('💬 Goto Prev Diagnostic', function()
+  local severity = get_highest_severity()
+  vim.diagnostic.jump { count = -vim.v.count1, severity = severity }
+end, vscode 'editor.action.marker.next')
 
 --------------------------2.3. Git----------------------------
 -- Git Pickers
@@ -258,6 +283,10 @@ local mappings = {
   ['\\'] = explorer,
 
   ['<C-w>m'] = zoom,
+
+  ['-'] = action('Switch', function()
+    vim.call 'switch#Switch'
+  end),
 
   ['<leader>'] = {
     ['w'] = save_or_format,

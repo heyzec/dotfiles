@@ -8,7 +8,7 @@ local should_disable = function(ctx, notify)
   else
     bufnr = ctx.buf
   end
-  local MAX_FILESIZE = 100 * 1024 -- 100 KB
+  local MAX_FILESIZE = 250 * 1024 -- 250 KB
   local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(bufnr))
   local disable = ok and stats and stats.size > MAX_FILESIZE
   if disable and not notify then

@@ -2,6 +2,9 @@
 return {
   'lewis6991/gitsigns.nvim',
   event = 'VeryLazy',
+  ---@module "gitsigns"
+  ---@class (partial) Gitsigns.Config.P: Gitsigns.Config
+  ---@type Gitsigns.Config.P
   opts = {
     -- 1. Signs
     signs = {}, -- use defaults
