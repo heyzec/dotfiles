@@ -168,19 +168,17 @@ link_section() (
 )
 
 gen_dmenu_cmd() {
-    # Parse section headers in config file
-    all_sections="$(parse_sections "$items_file")"
-
-    # Hide entries without key "file" from dmenu mode
-    for section in $all_sections; do
-        # This part requires reading of $items_file n times overall, making the loop super slow
-        key_value_pairs=$(extract_section "$section" "$items_file")
-        file=$(extract_value file "$key_value_pairs")
-        if [ -n "$file" ]; then
-            filtered="${filtered}${section}
-" # literal newline
-        fi
-    done
+    # Single-pass: collect sections that have a "file" key
+    filtered="$(awk '
+        /^\[[a-z-]+\]$/ {
+            if (section != "" && has_file) print section  # flush previous
+            section = substr($0, 2, length($0) - 2)       # strip brackets
+            has_file = 0
+            next
+        }
+        /^file=/ { has_file = 1 }
+        END { if (section != "" && has_file) print section }  # flush last
+    ' "$items_file")"
 
     # Let user select which config using a dmenu-compatible program
     selected_config_name=$( (echo "$filtered") | "$@" )
