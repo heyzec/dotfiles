@@ -1,22 +1,23 @@
 # User fonts
-{ pkgs, ... }:
-{
+{pkgs, ...}: {
   home.packages = with pkgs; [
-    noto-fonts         # Google's fonts
-    noto-fonts-color-emoji   # Google's open-source Emoji 14.0
+    noto-fonts # Google's fonts
+    noto-fonts-color-emoji # Google's open-source Emoji 14.0
 
-    jetbrains-mono     # JetBrain's fonts for IDEs
+    jetbrains-mono # JetBrain's fonts for IDEs
 
     # Only install a selection of fonts from nerdfonts repository
     nerd-fonts.jetbrains-mono
+
+    source-han-serif
   ];
   fonts = {
     fontconfig.enable = true;
     fontconfig.defaultFonts = {
-      serif = [ "Noto Serif" ];
-      sansSerif = [ "Noto Sans" ];
-      monospace = [ "JetBrainsMono Nerd Font" ];
-      emoji = [ "Noto Color Emoji" ];
+      serif = ["Noto Serif"];
+      sansSerif = ["Noto Sans"];
+      monospace = ["JetBrainsMono Nerd Font"];
+      emoji = ["Noto Color Emoji"];
     };
   };
 }
