@@ -71,6 +71,64 @@ in {
         # Schema: https://github.com/gorhill/uBlock/blob/master/platform/common/managed_storage.json
         "uBlock0@raymondhill.net".adminSettings = ublockSettings;
       };
+
+      # Replicate DuckDuckGo bangs
+      "SearchEngines" = {
+        "Add" = [
+          {
+            "Name" = "Wikipedia";
+            "URLTemplate" = "https://en.wikipedia.org/w/index.php?title=Special:Search&search={searchTerms}";
+            "IconURL" = "https://en.wikipedia.org/favicon.ico";
+            "Alias" = "!w";
+            "SuggestURLTemplate" = "https://en.wikipedia.org/w/api.php?action=opensearch&search={searchTerms}&limit=10&namespace=0&format=json";
+          }
+          {
+            "Name" = "YouTube";
+            "URLTemplate" = "https://www.youtube.com/results?search_query={searchTerms}";
+            "IconURL" = "https://www.youtube.com/favicon.ico";
+            "Alias" = "!yt";
+            "SuggestURLTemplate" = "https://suggestqueries.google.com/complete/search?client=firefox&ds=yt&q={searchTerms}";
+          }
+          {
+            "Name" = "Google Maps";
+            "URLTemplate" = "https://www.google.com/maps/search/?api=1&query={searchTerms}";
+            "IconURL" = "https://www.google.com/images/branding/product/ico/web_maps_icon_32dp.ico";
+            "Alias" = "!maps";
+          }
+          {
+            "Name" = "Nix Packages";
+            "URLTemplate" = "https://search.nixos.org/packages?channel=unstable&query={searchTerms}";
+            "IconURL" = "https://search.nixos.org/images/nixos-logomark-default-gradient-none.svg";
+            "Alias" = "!np";
+          }
+          {
+            "Name" = "Nix Options";
+            "URLTemplate" = "https://search.nixos.org/options?channel=unstable&query={searchTerms}";
+            "IconURL" = "https://search.nixos.org/images/nixos-logomark-default-gradient-none.svg";
+            "Alias" = "!no";
+          }
+          {
+            "Name" = "Reddit";
+            "URLTemplate" = "https://www.google.com/search?q=site:reddit.com+{searchTerms}";
+            "IconURL" = "https://www.reddit.com/favicon.ico";
+            "Alias" = "!r";
+            "SuggestURLTemplate" = "https://suggestqueries.google.com/complete/search?output=firefox&q=site:reddit.com+{searchTerms}";
+          }
+          {
+            "Name" = "Sourcegraph";
+            "URLTemplate" = "https://sourcegraph.com/search?q=context:global+{searchTerms}";
+            "IconURL" = "https://sourcegraph.com/favicon.ico";
+            "Alias" = "!sg";
+          }
+          {
+            "Name" = "Wikivoyage";
+            "URLTemplate" = "https://en.wikivoyage.org/w/index.php?title=Special:Search&search={searchTerms}";
+            "IconURL" = "https://en.wikivoyage.org/favicon.ico";
+            "Alias" = "!wv";
+            "SuggestURLTemplate" = "https://en.wikivoyage.org/w/api.php?action=opensearch&search={searchTerms}&limit=10&namespace=0&format=json";
+          }
+        ];
+      };
     };
     profiles = {
       "default" = {
@@ -84,35 +142,7 @@ in {
           "middlemouse.paste" = false;
         };
         # userContent = "/* CSS content */";
-        search.engines = {
-          google = {
-            name = "Google";
-            definedAliases = ["@g"];
-          };
-          nix-packages = {
-            name = "Nix Packages";
-            urls = [
-              {
-                template = "https://search.nixos.org/packages";
-                params = [
-                  {
-                    name = "type";
-                    value = "packages";
-                  }
-                  {
-                    name = "query";
-                    value = "{searchTerms}";
-                  }
-                ];
-              }
-            ];
-            icon = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
-            definedAliases = ["@np"];
-          };
-        };
-        # Force replacement of config file
-        # See https://github.com/nix-community/home-manager/issues/3698
-        search.force = true;
+        # search.engines = { ... } # replaced with ExtensionSettings policy
       };
     };
     # To silence warning because `home.stateVersion` is less than "26.05"
