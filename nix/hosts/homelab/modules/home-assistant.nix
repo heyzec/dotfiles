@@ -28,10 +28,10 @@
     config = {
       # This enables some defaults, see https://www.home-assistant.io/integrations/default_config
       default_config = {};
-      homeassistant = {
-        internal_url = "http://homelab.local:8123";
-        external_url = "https://home.heyzec.dedyn.io";
-      };
+      # homeassistant = {
+      #   internal_url = "http://homelab.local:8123";
+      #   external_url = "https://home.heyzec.dedyn.io";
+      # };
       http = {
         # Setup for reverse proxy to properly accept connections
         use_x_forwarded_for = true;

@@ -1,6 +1,7 @@
 {
   pkgs,
   inputs,
+  userSettings,
   ...
 }: {
   # Refer to https://wiki.archlinux.org/title/List_of_applications
@@ -43,6 +44,7 @@
       brightnessctl # (F.6.11) backlight control
       ddcutil #     # change monitor settings using DDC/CI
       # Screenshotting
+      flameshot
       grimblast #           # (C.2.13/1.1) wrapper script for grim (grab an image) and slurp (select a region)
       swappy #              # Wayland native snapshot editing tool
       # Everything else
@@ -93,6 +95,10 @@
       ##### Containerisation and Virtualisation #####
       virt-manager # frontend for qemu (virtualisation.libvirtd.enable)
       virtiofsd # additional driver for shared directory virtualisation (VMs)
+
+      phoronix-test-suite
+
+      nodejs
     ];
 
   programs = {
@@ -103,4 +109,12 @@
 
     localsend.enable = true;
   };
+
+  # For brightnessctl
+  # Thw package installs a udev rule allowing members of video group to access /sys/class/backlight/%k/brightness
+  # Outside swhkd actraully works because brighrness ctl can use dbus
+  services.udev.packages = [
+    pkgs.brightnessctl
+  ];
+  users.users.${userSettings.username}.extraGroups = ["video"];
 }

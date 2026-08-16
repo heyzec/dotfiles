@@ -205,6 +205,10 @@ vnoremap <A-k> :m '<-2<CR>gv=gv
 if !has('nvim')
     noremap <leader>W :w !sudo tee %:p >/dev/null<CR>
 endif
+
+" toggle between current and alternate buffer
+nnoremap <Backspace> <C-^>
+
 " }}}
 
 " }}} 3. KEYMAPPINGS

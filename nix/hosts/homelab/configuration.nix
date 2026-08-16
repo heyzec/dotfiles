@@ -22,6 +22,8 @@
   security.polkit.enable = true;
 
   # Uncomment to resolve "Failure to copy closures: ... lacks a valid signature"
+  # Trusted-uesrs = root. Be careful!
+  # NIX_CONFIG="post-build-hook = whoami" nix build nixpkgs#hello --rebuild --print-build-logs
   # nix.settings.trusted-users = ["bee"]; # https://github.com/NixOS/nix/issues/2127#issuecomment-1465191608
 
   programs.nh = {

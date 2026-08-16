@@ -41,6 +41,7 @@ else
   })
 end
 define_formatter('nix', 'alejandra')
+-- define_formatter('nix', 'nixfmt')
 
 -- Config files
 -- from hrsh7th/vscode-langservers-extracted

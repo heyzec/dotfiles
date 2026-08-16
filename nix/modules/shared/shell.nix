@@ -55,6 +55,7 @@
 
         ##### Shell utilities #####
         tmux #         # (F.1.4) terminal multiplexer
+        # One of the commands that make sense to bundle config into the program itself
         lf #           # (F.2.1.1) terminal file manager
         zip #          # (F.2.4.1) archiving (Info-Zip)
         unzip #        # (F.2.4.1) more archiving (Info-Zip)

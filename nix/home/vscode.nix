@@ -65,7 +65,7 @@
 in {
   programs.vscode = {
     enable = true;
-    mutableExtensionsDir = false; # Whether extensions can be modified by Visual Studio Code
+    mutableExtensionsDir = true; # Whether extensions can be modified by Visual Studio Code
 
     # Ensure for each non-default profile, ${root}/settings-<profile>.jsonc has been created
     profiles = {

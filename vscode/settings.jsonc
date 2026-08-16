@@ -1,6 +1,7 @@
 // This file's contents will take effect for all VS Code profiles, via symlinks + inherit-profile
 // Avoid trailing commas: VSCode reads them fine but removes them on save
 {
+  // "$schema": "https://json.schemastore.org/coffeelint",
   // ###############################################################################
   // ##                                                                           ##
   // ##                        1. VSCODE-NEOVIM INTEGRATION                       ##

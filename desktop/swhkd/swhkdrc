@@ -38,8 +38,15 @@ super + ;
 {XF86AudioLowerVolume, XF86AudioRaiseVolume}
     wpctl set-volume @DEFAULT_SINK@ {5%\-, 5%+ \-\-limit 1.5} && wpctl get-volume @DEFAULT_SINK@ | sed 's/[^0-9]//g' > $XDG_RUNTIME_DIR/wob.sock
 
-control + alt + super + {x, c}
-    wpctl set-volume @DEFAULT_SINK@ {5%\-, 5%+ \-\-limit 1.5} && wpctl get-volume @DEFAULT_SINK@ | sed 's/[^0-9]//g' > $XDG_RUNTIME_DIR/wob.sock
+control + alt + super + c
+    notify-send "Volume" Lowering
+
+control + alt + super + x
+    notify-send "Volume" Raising
+
+# control + alt + super + {x, c}
+#     notify-send "Volume" {"Lowering", "Raising"}
+    # && wpctl set-volume @DEFAULT_SINK@ {5%\-, 5%+ \-\-limit 1.5} && wpctl get-volume @DEFAULT_SINK@ | sed 's/[^0-9]//g' > $XDG_RUNTIME_DIR/wob.sock
 
 Shift + {XF86AudioLowerVolume, XF86AudioRaiseVolume}
     wpctl set-volume @DEFAULT_SOURCE@ {5%\-, 5%+ \-\-limit 1.5}
@@ -93,4 +100,7 @@ mode applications
         @escape && bash -c '(cd ~/.local/share/applications/; gtk-launch $(basename $(find ~/.local/share/applications/ -iname "*joplin*")))' && echo "" > /tmp/mode && pkill -35 waybar
     escape
         @escape && echo "" > /tmp/mode && pkill -35 waybar
-endmode
+    endmode
+
+# super + m
+#     wl-paste | /nix/store/wibna12nx4v5bph95l9a2xrslb9rxqcc-python3-3.12.4-env/bin/python -c "from openlocationcode import openlocationcode as olc;print(','.join(str(x) for x in olc.decode(input()).latlng()),end='')" | wl-copy

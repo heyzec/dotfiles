@@ -240,7 +240,7 @@ local toggle_inlay_hints = action('Toggle inlay hints', function()
   vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { 0 }, { 0 })
 end)
 
-local toggle_copilot = action('hi', function()
+local toggle_copilot = action('Toggle copilot', function()
   local output = vim.api.nvim_exec2('Copilot status', { output = true }).output
   if output:find 'Disabled globally' then
     vim.cmd 'Copilot enable'
@@ -284,7 +284,7 @@ local mappings = {
 
   ['<C-w>m'] = zoom,
 
-  ['-'] = action('Switch', function()
+  ['-'] = action('Toggle Zoom', function()
     vim.call 'switch#Switch'
   end),
 

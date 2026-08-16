@@ -7,7 +7,8 @@
   nixpkgs.config.allowUnfree = true;
 
   nix = {
-    # Refer to man nix.conf for setting explainations
+    # Refer to man nix.conf for setting explanations
+    # Generates /etc/nix/nix.conf
     settings = {
       experimental-features = ["nix-command" "flakes"];
       auto-optimise-store = true; # hard links duplicate files
@@ -15,6 +16,10 @@
       tarball-ttl = 604800; # refresh tarballs once a week instead of every hour
       warn-dirty = false; # don't warn about dirty git trees
     };
+    extraOptions = ''
+      !include /etc/nix/extra.conf
+    '';
+
     gc = {
       automatic = true;
       dates = "weekly";
