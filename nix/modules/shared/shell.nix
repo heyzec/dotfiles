@@ -70,6 +70,8 @@
         lazygit # (Git#Graphical_front-ends) TUI for git
         just #  # Makefile alternative to save project-specific commands
         pet #   # CLI snippet manager
+
+        jj
       ];
     # note1: don't use `pstree` package on nixpkgs,
     # it seems to fail for process on running on other ttys, e.g. tmux
