@@ -16,6 +16,10 @@
     };
 
     nix-colors.url = "github:misterio77/nix-colors";
+    wayland-displays = {
+      url = "github:heyzec/wayland-displays/next";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = {self, ...} @ inputs: let

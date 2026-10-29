@@ -1,5 +1,6 @@
 {
   pkgs,
+  inputs,
   ...
 }: {
   # Refer to https://wiki.archlinux.org/title/List_of_applications
@@ -86,6 +87,7 @@
       wl-color-picker # simple color picker with GUI
       custom.gocryptfs-scripts
       custom.wasg
+      inputs.wayland-displays.packages.${pkgs.system}.default
 
       ##### Containerisation and Virtualisation #####
       virt-manager # frontend for qemu (virtualisation.libvirtd.enable)

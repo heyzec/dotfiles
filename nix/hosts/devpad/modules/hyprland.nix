@@ -1,4 +1,8 @@
-{pkgs, ...}: {
+{
+  pkgs,
+  inputs,
+  ...
+}: {
   programs.hyprland = {
     withUWSM = true; # Otherwise, we will not reach graphical-session.target
     enable = true;
@@ -14,5 +18,14 @@
       xdg-desktop-portal-hyprland
     ];
     wlr.enable = true;
+  };
+  systemd.user.services = {
+    "wayland-displays" = {
+      script = ''
+        ${inputs.wayland-displays.packages.${pkgs.system}.default}/bin/wayland-displays --server
+      '';
+      wantedBy = ["graphical-session.target"];
+      after = ["graphical-session.target"];
+    };
   };
 }
