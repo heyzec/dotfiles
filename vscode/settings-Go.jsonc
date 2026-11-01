@@ -50,6 +50,7 @@
   "[javascript][javascriptreact][typescript][typescriptreact].editor.formatOnSave": true,
   "[json][jsonc].editor.defaultFormatter": "esbenp.prettier-vscode",
   "[json][jsonc].editor.formatOnSave": true,
+  "chat.disableAIFeatures": true,
   "debug.toolBarLocation": "commandCenter",
   "editor.cursorBlinking": "solid",
   "editor.fontFamily": "JetBrainsMono Nerd Font",
@@ -57,6 +58,7 @@
   "editor.lineNumbers": "relative",
   "editor.minimap.autohide": "mouseover",
   "editor.minimap.size": "fill",
+  "editor.smoothScrolling": true,
   "editor.stickyScroll.enabled": true,
   "extensions.autoCheckUpdates": false,
   "extensions.autoUpdate": false,
@@ -78,6 +80,7 @@
   "window.titleBarStyle": "custom",
   "workbench.colorTheme": "Dark Modern",
   "workbench.editor.pinnedTabsOnSeparateRow": true,
+  "workbench.editor.useModal": "off",
   "workbench.tree.enableStickyScroll": true,
   // --- INHERITED SETTINGS MARKER END --- //
   "inheritProfile._insertionBoundary": false

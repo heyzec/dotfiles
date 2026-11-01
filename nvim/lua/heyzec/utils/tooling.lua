@@ -40,10 +40,9 @@ end
 
 ---Add a formatter.
 ---@param ft string Filetype
----@param formatter string Name of formatter
-M.define_formatter = function(ft, formatter)
-  -- For now only allow one formatter per ft for simplicity
-  formatters[ft] = { formatter }
+---@vararg string Formatter names
+M.define_formatter = function(ft, ...)
+  formatters[ft] = { ... }
 end
 
 -- ========== Tooling-facing APIs ==========

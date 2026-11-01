@@ -1,0 +1,10 @@
+--- a/extension/out/profileSettings.js
++++ b/extension/out/profileSettings.js
+@@ -91,6 +91,7 @@
+     "terminal.integrated.profiles.osx",
+     "terminal.integrated.profiles.windows",
+     "workbench.editor.customLabels.patterns",
++    "extensions.experimental.affinity",
+ ]);
+ /**
+  * Recursively flattens settings into a single record that maps the setting key

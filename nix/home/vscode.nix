@@ -23,9 +23,12 @@
       mktplcRef = {
         name = "inherit-profile";
         publisher = "alexthomson";
-        version = "0.6.0";
-        hash = "sha256-mKic9Sjarpm6JPSzzTzPUxL4knq6YEVA1QwtpYE48EI=";
+        version = "1.0.0";
+        hash = "sha256-BLSqyI6fQrioP7B0GcFWy5Lb8MbT36xOaizqedeY1+Y=";
       };
+      postUnpack = ''
+        patch -p1 < ${./vscode-inherit-profile.patch} # patch generated just for bundled vsix
+      '';
     };
     vscode-pbkit = pkgs.vscode-utils.buildVscodeMarketplaceExtension {
       # pbkit.vscode-pbkit
@@ -46,6 +49,7 @@
     esbenp.prettier-vscode
     mkhl.direnv
     extra.periscope
+    anthropic.claude-code
   ];
 
   mkProfile = profile: extensions: {
@@ -68,11 +72,11 @@ in {
       "default" = {
         extensions = defaultExtensions;
       };
-      # "Python" = mkProfile "Python" (with pkgs.vscode-extensions; [
-      #   ms-python.python
-      #   ms-python.vscode-pylance
-      #   ms-python.debugpy
-      # ]);
+      "Python" = mkProfile "Python" (with pkgs.vscode-extensions; [
+        ms-python.python
+        ms-python.vscode-pylance
+        ms-python.debugpy
+      ]);
       # "TypeScript" = mkProfile "TypeScript" (with pkgs.vscode-extensions; [
       #   yoavbls.pretty-ts-errors
       # ]);

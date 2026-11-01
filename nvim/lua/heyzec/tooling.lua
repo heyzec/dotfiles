@@ -72,6 +72,8 @@ define_server('yamlls', function()
   }
 end)
 
+define_formatter('python', 'isort', 'black')
+
 -- C++
 define_server 'clangd'
 define_formatter('cpp', 'clang-format')

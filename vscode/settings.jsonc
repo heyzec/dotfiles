@@ -16,9 +16,9 @@
   // Make vscode-neovim extension run in a separate thread
   // https://github.com/vscode-neovim/vscode-neovim/issues/1051
   // inherit-profile not merging correctly, manually copy this to each profile for now
-  // "extensions.experimental.affinity": {
-  //   "asvetliakov.vscode-neovim": 1,
-  // },
+  "extensions.experimental.affinity": {
+    "asvetliakov.vscode-neovim": 1,
+  },
   // Required for mapping alt shortcuts in keybindings.json
   "window.enableMenuBarMnemonics": false,
   "window.customMenuBarAltFocus": false,
@@ -71,6 +71,11 @@
   // Others
   "workbench.editor.pinnedTabsOnSeparateRow": true,
   "workbench.tree.enableStickyScroll": true,
+  // Hide the ugly "Sign In" button after AI enshittification
+  "chat.disableAIFeatures": true,
+  // Don't open settings / keybindings in a modal
+  "workbench.editor.useModal": "off",
+  "editor.smoothScrolling": true, // Follow neovim's smooth scrolling plugin
   // ###############################################################################
   // ##                                                                           ##
   // ##                       3. FILETYPE SPECIFIC SETTINGS                       ##
